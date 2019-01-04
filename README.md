@@ -4,7 +4,7 @@
 
 There are my public/private [GNU Emacs](https://www.gnu.org/software/emacs/) configuration files in `~/.emacs.d/` directory (**not supported other "*emacsen*"**).
 
-I writing these files for "**macOS**" and "**Microsoft Windows**" environments, probably works "**GNU/Linux**** and other "**UNIX**" environments.
+I writing these files for "**macOS**" and "**Microsoft Windows**" environments, probably works "**GNU/Linux** and other "**UNIX**" environments.
 
 
 # Software License
