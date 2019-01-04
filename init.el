@@ -1,12 +1,12 @@
 ;;; init.el --- "GNU Emacs" main config file
 
-;; Copyright (C) 2013-2018 Taku Watabe
-;; Time-stamp: <2018-12-01T23:30:02+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-04T15:35:46+09:00>
 
 ;;; Commentary:
 
 ;; This config file can use "GNU Emacs" ONLY,
-;; not compatible with "XEmacs" and other Emacsen.
+;; not compatible with "XEmacs" and other emacsens.
 
 ;;; Code:
 
