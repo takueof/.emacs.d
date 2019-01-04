@@ -1,15 +1,15 @@
 # -----------------------------------------------------------------
 # Git ignored resource file
 # Copyright (C) 2014-2019 Taku Watabe
-# Time-stamp: <2019-01-04T06:57:48+09:00>
+# Time-stamp: <2019-01-04T16:53:00+09:00>
 # -----------------------------------------------------------------
-.lsp-session*
-custom.el
-el-get/
-elpa/
-network-security.data
-projectile*
-site-lisp/
-snippets/
-tramp
-url/
+/.lsp-session-*
+/custom.el
+/el-get/
+/elpa/
+/network-security.data
+/projectile*
+/site-lisp/
+/snippets/
+/tramp
+/url/
