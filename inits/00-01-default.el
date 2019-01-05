@@ -1,7 +1,7 @@
 ;;; 00-01-default.el --- 設定 - 共通
 
-;; Copyright (C) 2013-2018 Taku Watabe
-;; Time-stamp: <2018-11-02T12:22:40+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-06T06:04:35+09:00>
 
 ;;; Commentary:
 
@@ -54,8 +54,11 @@
  ;;
  ;; クリップボードと `kill-ring' を同期させる
  ;;
- '(x-select-enable-clipboard t)
+ '(x-select-enable-clipboard t) ; NOTE: obsolete sinse v25.1
+ '(select-enable-clipboard t)
+ ;;
  ;; 同一（重複）文字列は `kill-ring' に保存しない
+ ;;
  '(kill-do-not-save-duplicates t)
  ;;
  ;; ページ単位スクロール時に重複させる行数を少し増やす
