@@ -1,7 +1,7 @@
 ;;; 00-keybinds.el --- 設定 - グローバル キーバインド
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2018-12-01T23:54:17+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-05T11:34:16+09:00>
 
 ;;; Commentary:
 
@@ -13,22 +13,26 @@
 ;; DEL を C-d にする
 (keyboard-translate ?\C-? ?\C-d)
 
-;; ヘルプ表示を割り当てなおす
-(global-set-key (kbd "C-x ?") #'help-command)
-
 ;; `ido-undo-merge-work-directory' 実行のため C-z を押しすぎた場合、
 ;; `suspend-frame' が起動しないよう配慮
 (global-unset-key (kbd "C-z"))
 
+;; ヘルプ表示を割り当てなおす
+(if (fboundp 'help-command)
+    (global-set-key (kbd "C-x ?") #'help-command))
+
 ;; ウインドウ中央表示はもっともシンプルなものを用いる
 ;; `recenter-top-bottom' は使わない
-(global-set-key (kbd "C-l") #'recenter)
+(if (fboundp 'recenter)
+    (global-set-key (kbd "C-l") #'recenter))
 
 ;; リージョン範囲をソート
-(global-set-key (kbd "C-c C-c C-s") #'sort-lines)
+(if (fboundp 'sort-lines)
+    (global-set-key (kbd "C-c C-c C-s") #'sort-lines))
 
 ;; 1つ前のエラーを表示
-(global-set-key (kbd "C-x \\") #'previous-error)
+(if (fboundp 'previous-error)
+    (global-set-key (kbd "C-x \\") #'previous-error))
 
 
 ;; ----------------------------------------------------------------------------
