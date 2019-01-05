@@ -1,7 +1,7 @@
 ;;; 20-major-coffee.el --- 設定 - メジャーモード - CoffeeScript
 
-;; Copyright (C) 2014-2015 Taku Watabe
-;; Time-stamp: <2015-02-18T17:56:47+09:00>
+;; Copyright (C) 2014-2019 Taku Watabe
+;; Time-stamp: <2019-01-05T19:09:13+09:00>
 
 ;;; Commentary:
 
@@ -26,7 +26,19 @@
 (defun my-coffee-mode-initialize ()
   "Initialize `coffee-mode' before file load."
   (setq-local indent-tabs-mode nil)
-  (setq-local require-final-newline nil))
+  (setq-local require-final-newline nil)
+
+  ;; EditorConfig 対応
+  (eval-after-load 'editorconfig
+    '(if (boundp 'editorconfig-properties-hash)
+         (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                (indent-style (equal indent-style-data "tab"))
+                (insert-final-newline-data (gethash 'insert_final_newline editorconfig-properties-hash))
+                (insert-final-newline (equal insert-final-newline-data "true")))
+           (if (not (equal indent-tabs-mode indent-style))
+               (setq-local indent-tabs-mode indent-style))
+           (if (not (equal require-final-newline insert-final-newline))
+               (setq-local require-final-newline insert-final-newline))))))
 
 (add-hook 'coffee-mode-hook #'my-coffee-mode-initialize)
 

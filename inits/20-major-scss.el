@@ -1,7 +1,7 @@
 ;;; 20-major-scss.el --- 設定 - メジャーモード - Sass (Type: .scss)
 
-;; Copyright (C) 2013-2018 Taku Watabe
-;; Time-stamp: <2018-06-12T14:20:35+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-05T17:24:00+09:00>
 
 ;;; Commentary:
 
@@ -29,7 +29,19 @@
 (defun my-scss-mode-initialize ()
   "Initialize `scss-mode' before file load."
   (setq-local indent-tabs-mode nil)
-  (setq-local require-final-newline nil))
+  (setq-local require-final-newline nil)
+
+  ;; EditorConfig 対応
+  (eval-after-load 'editorconfig
+    '(if (boundp 'editorconfig-properties-hash)
+         (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                (indent-style (equal indent-style-data "tab"))
+                (insert-final-newline-data (gethash 'insert_final_newline editorconfig-properties-hash))
+                (insert-final-newline (equal insert-final-newline-data "true")))
+           (if (not (equal indent-tabs-mode indent-style))
+               (setq-local indent-tabs-mode indent-style))
+           (if (not (equal require-final-newline insert-final-newline))
+               (setq-local require-final-newline insert-final-newline))))))
 
 (add-hook 'scss-mode-hook #'my-scss-mode-initialize)
 

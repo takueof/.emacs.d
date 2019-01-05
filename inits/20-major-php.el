@@ -1,7 +1,7 @@
 ;;; 20-major-php.el --- 設定 - メジャーモード - PHP
 
-;; Copyright (C) 2014-2015 Taku Watabe
-;; Time-stamp: <2015-02-18T17:57:19+09:00>
+;; Copyright (C) 2014-2019 Taku Watabe
+;; Time-stamp: <2019-01-05T17:17:49+09:00>
 
 ;;; Commentary:
 
@@ -20,7 +20,19 @@
   (setq-local require-final-newline nil)
 
   (if (fboundp 'php-eldoc-enable)
-      (php-eldoc-enable)))
+      (php-eldoc-enable))
+
+  ;; EditorConfig 対応
+  (eval-after-load 'editorconfig
+    '(if (boundp 'editorconfig-properties-hash)
+         (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                (indent-style (equal indent-style-data "tab"))
+                (insert-final-newline-data (gethash 'insert_final_newline editorconfig-properties-hash))
+                (insert-final-newline (equal insert-final-newline-data "true")))
+           (if (not (equal indent-tabs-mode indent-style))
+               (setq-local indent-tabs-mode indent-style))
+           (if (not (equal require-final-newline insert-final-newline))
+               (setq-local require-final-newline insert-final-newline))))))
 
 (add-hook 'php-mode-hook #'my-php-mode-initialize)
 

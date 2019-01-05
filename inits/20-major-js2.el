@@ -1,7 +1,7 @@
 ;;; 20-major-js2.el --- 設定 - メジャーモード - JavaScript
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2016-06-10T10:00:18+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-05T17:27:10+09:00>
 
 ;;; Commentary:
 
@@ -59,7 +59,19 @@
   (setq-local indent-tabs-mode nil)
   (setq-local require-final-newline nil)
 
-  (require 'js2-refactor nil :noerror))
+  (require 'js2-refactor nil :noerror)
+
+  ;; EditorConfig 対応
+  (eval-after-load 'editorconfig
+    '(if (boundp 'editorconfig-properties-hash)
+         (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                (indent-style (equal indent-style-data "tab"))
+                (insert-final-newline-data (gethash 'insert_final_newline editorconfig-properties-hash))
+                (insert-final-newline (equal insert-final-newline-data "true")))
+           (if (not (equal indent-tabs-mode indent-style))
+               (setq-local indent-tabs-mode indent-style))
+           (if (not (equal require-final-newline insert-final-newline))
+               (setq-local require-final-newline insert-final-newline))))))
 
 (add-hook 'js2-mode-hook #'my-js2-mode-initialize)
 
