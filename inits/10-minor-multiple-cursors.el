@@ -1,11 +1,9 @@
 ;;; 10-minor-multiple-cursors.el --- 設定 - マイナーモード - 複数カーソル同時編集
 
-;; Copyright (C) 2014-2015 Taku Watabe
-;; Time-stamp: <2015-02-12T13:59:34+09:00>
+;; Copyright (C) 2014-2019 Taku Watabe
+;; Time-stamp: <2019-01-06T10:11:59+09:00>
 
 ;;; Commentary:
-
-;; TODO: 未設定。
 
 ;;; Code:
 

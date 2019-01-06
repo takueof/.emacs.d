@@ -1,11 +1,9 @@
 ;;; 10-minor-migemo.el --- 設定 - マイナーモード - ローマ字入力から日本語をインクリメンタル検索
 
-;; Copyright (C) 2013-2018 Taku Watabe
-;; Time-stamp: <2018-11-26T18:47:20+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-06T10:12:32+09:00>
 
 ;;; Commentary:
-
-;; TODO: 未設定。
 
 ;;; Code:
 

@@ -1,11 +1,9 @@
 ;;; 10-minor-ispell.el --- 設定 - マイナーモード - スペルチェック
 
-;; Copyright (C) 2014-2015 Taku Watabe
-;; Time-stamp: <2015-02-12T13:58:59+09:00>
+;; Copyright (C) 2014-2019 Taku Watabe
+;; Time-stamp: <2019-01-06T10:10:44+09:00>
 
 ;;; Commentary:
-
-;; TODO: 未設定。
 
 ;;; Code:
 
