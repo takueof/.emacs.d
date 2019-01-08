@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-04T15:35:46+09:00>
+;; Time-stamp: <2019-01-08T14:21:20+09:00>
 
 ;;; Commentary:
 
@@ -38,7 +38,7 @@
 
 
 ;; ----------------------------------------------------------------------------
-;; カスタマイズ
+;; デフォルト値
 ;; ----------------------------------------------------------------------------
 (custom-set-variables
  ;; `custom-set-variables' と `custom-set-faces' に `user-init-file' への

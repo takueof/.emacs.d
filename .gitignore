@@ -1,17 +1,14 @@
 # -----------------------------------------------------------------
 # Git ignored resource file
 # Copyright (C) 2014-2019 Taku Watabe
-# Time-stamp: <2019-01-05T14:47:13+09:00>
+# Time-stamp: <2019-01-08T15:44:21+09:00>
 # -----------------------------------------------------------------
 .AppleDouble
 .DS_Store
 .LSOverride
-/.lsp-session-*
 /custom.el
 /el-get/
 /elpa/
-/network-security.data
-/projectile*
 /site-lisp/
 /snippets/
 /tramp

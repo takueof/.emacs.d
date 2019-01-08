@@ -1,7 +1,7 @@
 ;;; 10-minor-lsp-mode.el --- 設定 - マイナーモード - LSP クライアント
 
 ;; Copyright (C) 2018 Taku Watabe
-;; Time-stamp: <2018-12-17T18:19:33+09:00>
+;; Time-stamp: <2019-01-08T15:40:16+09:00>
 
 ;;; Commentary:
 
@@ -19,6 +19,8 @@
  ;; Defaults
  '(lsp-auto-guess-root t)
  '(lsp-restart nil)
+ ;; ローカル環境にのみ保存
+ '(lsp-session-file (convert-standard-filename "~/.emacs.lsp-session"))
  ;; With `lsp-ui-flycheck'
  '(lsp-ui-flycheck-list-position 'right)
  ;; With `company-mode'

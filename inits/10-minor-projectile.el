@@ -1,7 +1,7 @@
 ;;; 10-minor-projectile.el --- 設定 - マイナーモード - 汎用プロジェクト管理
 
-;; Copyright (C) 2018 Taku Watabe
-;; Time-stamp: <2018-12-08T02:00:08+09:00>
+;; Copyright (C) 2018-2019 Taku Watabe
+;; Time-stamp: <2019-01-08T15:17:56+09:00>
 
 ;;; Commentary:
 
@@ -13,7 +13,12 @@
 (custom-set-variables
  '(projectile-enable-caching t)
  '(projectile-completion-system 'ido)
- '(projectile-mode-line-prefix " P"))
+ '(projectile-mode-line-prefix "")
+ ;; ローカル環境にのみ保存
+ '(projectile-cache-file (convert-standard-filename
+                          "~/.emacs.projectile.cache"))
+ '(projectile-known-projects-file (convert-standard-filename
+                                   "~/.emacs.projectile-bookmarks.eld")))
 
 
 ;; ----------------------------------------------------------------------------
