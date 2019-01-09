@@ -1,7 +1,7 @@
 ;;; windows-00-browse-url.el --- 設定 - Windows - Web ブラウザ
 
-;; Copyright (C) 2014-2015 Taku Watabe
-;; Time-stamp: <2015-02-10T17:33:12+09:00>
+;; Copyright (C) 2014-2019 Taku Watabe
+;; Time-stamp: <2019-01-09T15:00:06+09:00>
 
 ;;; Commentary:
 
@@ -11,8 +11,6 @@
 ;; デフォルト値
 ;; ----------------------------------------------------------------------------
 (custom-set-variables
- ;; FIXME: 変更してもブラウザ起動しない
- ;;        原因をつきとめること
  '(browse-url-browser-function 'browse-url-default-windows-browser))
 
 

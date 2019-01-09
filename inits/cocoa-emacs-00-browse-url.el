@@ -1,7 +1,7 @@
-;;; 10-minor-tramp.el --- 設定 - マイナーモード - TRAMP (Transparent Remote Access, Multiple Protocols)
+;;; cocoa-emacs-00-browse-url.el --- 設定 - Windows - Web ブラウザ
 
 ;; Copyright (C) 2019 Taku Watabe
-;; Time-stamp: <2019-01-09T15:29:54+09:00>
+;; Time-stamp: <2019-01-09T15:02:00+09:00>
 
 ;;; Commentary:
 
@@ -10,9 +10,8 @@
 ;; ----------------------------------------------------------------------------
 ;; デフォルト値
 ;; ----------------------------------------------------------------------------
-(eval-after-load 'tramp
-  '(custom-set-variables
-    '(tramp-persistency-file-name (convert-standard-filename "~/.emacs.tramp"))))
+(custom-set-variables
+ '(browse-url-browser-function 'browse-url-default-macosx-browser))
 
 
 ;; ----------------------------------------------------------------------------
@@ -22,4 +21,4 @@
 ;; no-byte-compile: t
 ;; End:
 
-;;; 10-minor-tramp.el ends here
+;;; cocoa-emacs-00-browse-url.el ends here

@@ -1,7 +1,7 @@
 ;;; 10-minor-whitespace.el --- 設定 - マイナーモード - 空白文字強調
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-09T11:42:40+09:00>
+;; Time-stamp: <2019-01-09T14:54:58+09:00>
 
 ;;; Commentary:
 
@@ -74,7 +74,7 @@
        ;; 表示置換しないようにする
        (custom-set-variables
         `(whitespace-display-mappings ',(delete '(space-mark ?\  [?\u00B7] [?.])
-                                                whitespace-display-mappings))))))
+                                                whitespace-display-mappings)))))
 
 
 ;; ----------------------------------------------------------------------------
