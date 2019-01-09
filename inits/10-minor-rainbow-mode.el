@@ -1,7 +1,7 @@
 ;;; 10-minor-rainbow-mode.el --- 設定 - マイナーモード - 自動カラー表示
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-15T20:06:18+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-09T11:36:01+09:00>
 
 ;;; Commentary:
 
@@ -11,12 +11,11 @@
 ;; デフォルト値
 ;; ----------------------------------------------------------------------------
 (eval-after-load 'rainbow-mode
-  '(progn
-     (when (boundp 'rainbow-html-colors-major-mode-list)
-       ;; (X)HTML & CSS カラー
-       (add-to-list 'rainbow-html-colors-major-mode-list 'sass-mode)
-       (add-to-list 'rainbow-html-colors-major-mode-list 'scss-mode)
-       (add-to-list 'rainbow-html-colors-major-mode-list 'less-mode))))
+  '(when (boundp 'rainbow-html-colors-major-mode-list)
+     ;; (X)HTML & CSS カラー
+     (add-to-list 'rainbow-html-colors-major-mode-list 'sass-mode)
+     (add-to-list 'rainbow-html-colors-major-mode-list 'scss-mode)
+     (add-to-list 'rainbow-html-colors-major-mode-list 'less-mode)))
 
 (eval-after-load 'my-utils
   '(eval-after-load 'rainbow-mode

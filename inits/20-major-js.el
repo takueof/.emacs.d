@@ -1,7 +1,7 @@
 ;;; 20-major-js.el --- 設定 - メジャーモード - JavaScript
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-05T17:26:47+09:00>
+;; Time-stamp: <2019-01-09T11:45:52+09:00>
 
 ;;; Commentary:
 
@@ -53,6 +53,7 @@
 ;; ----------------------------------------------------------------------------
 ;; 起動
 ;; ----------------------------------------------------------------------------
+;; WARNING: `js2-mode' を利用するため起動させない
 ;; (when (fboundp 'js-mode)
 ;;   (add-to-list 'auto-mode-alist '("\\.js\\'" . js-mode))
 ;;   (add-to-list 'auto-mode-alist '("\\.pac\\'" . js-mode)))

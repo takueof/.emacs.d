@@ -1,7 +1,7 @@
 ;;; 10-minor-eldoc.el --- 設定 - マイナーモード - Emacs Lisp ドキュメント表示
 
-;; Copyright (C) 2013-2018 Taku Watabe
-;; Time-stamp: <2018-11-15T19:50:07+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-09T11:26:21+09:00>
 
 ;;; Commentary:
 
@@ -19,11 +19,11 @@
 ;; ----------------------------------------------------------------------------
 ;; 起動
 ;; ----------------------------------------------------------------------------
-;; (when (fboundp 'eldoc-mode)
-;;   (add-hook 'lisp-mode-hook #'eldoc-mode)
-;;   (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
-;;   (add-hook 'lisp-interaction-mode-hook #'eldoc-mode)
-;;   (add-hook 'ielm-mode-hook #'eldoc-mode))
+(when (fboundp 'eldoc-mode)
+  (add-hook 'lisp-mode-hook #'eldoc-mode)
+  (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
+  (add-hook 'lisp-interaction-mode-hook #'eldoc-mode)
+  (add-hook 'ielm-mode-hook #'eldoc-mode))
 
 
 ;; ----------------------------------------------------------------------------

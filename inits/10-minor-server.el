@@ -1,14 +1,14 @@
 ;;; 10-minor-server.el --- 設定 - マイナーモード - サーバ化
 
-;; Copyright (C) 2013-2017 Taku Watabe
-;; Time-stamp: <2017-04-14T14:04:25+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-09T11:37:42+09:00>
 
 ;;; Commentary:
 
 ;; Windows 環境では `server-auth-dir' の「所有者」が：
 ;;   * Administrator (RID=500)
 ;;   * Administrators (RID=544)
-;; である場合、`server-ensure-safe-dir' の評価が nil になる。
+;; である場合、`server-ensure-safe-dir' の評価が `nil' になる。
 ;;
 ;; `server-auth-dir' で指定したフォルダの「プロパティ」→「セキュリティ」→
 ;; 「詳細設定」→「所有者」→「編集」から、所有者をログオンユーザ自身に

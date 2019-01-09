@@ -1,7 +1,7 @@
 ;;; 10-minor-migemo.el --- 設定 - マイナーモード - ローマ字入力から日本語をインクリメンタル検索
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-06T10:12:32+09:00>
+;; Time-stamp: <2019-01-09T11:35:01+09:00>
 
 ;;; Commentary:
 
@@ -23,10 +23,8 @@
  '(migemo-pattern-alist-length 1024)
  '(migemo-use-frequent-pattern-alist t)
  ;; キャッシュはユーザ別基礎ディレクトリにまとめる
- '(migemo-pattern-alist-file
-   (expand-file-name ".migemo-patterns" migemo-directory))
- '(migemo-frequent-pattern-alist-file
-   (expand-file-name ".migemo-frequent-patterns" migemo-directory))
+ '(migemo-pattern-alist-file (expand-file-name ".migemo-patterns" migemo-directory))
+ '(migemo-frequent-pattern-alist-file (expand-file-name ".migemo-frequent-patterns" migemo-directory))
  ;; 辞書エンコーディングを明示
  '(migemo-coding-system 'utf-8-unix))
 

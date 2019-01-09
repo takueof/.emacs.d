@@ -1,7 +1,7 @@
 ;;; 10-minor-scroll-bar.el --- 設定 - マイナーモード - スクロールバー
 
-;; Copyright (C) 2013-2016 Taku Watabe
-;; Time-stamp: <2016-10-13T16:49:36+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-09T11:37:04+09:00>
 
 ;;; Commentary:
 
@@ -11,9 +11,8 @@
 ;; 起動
 ;; ----------------------------------------------------------------------------
 (eval-after-load 'scroll-bar
-  '(progn
-     ;; ウインドウシステム上では、あらゆるスクロールバーを非表示化
-     (set-scroll-bar-mode (if window-system nil 'right))))
+  ;; ウインドウシステム上では、あらゆるスクロールバーを非表示化
+  '(set-scroll-bar-mode (if window-system nil 'right)))
 
 ;; GNU Emacs 25 以降用
 (defun my-scroll-bar-initilalize ()

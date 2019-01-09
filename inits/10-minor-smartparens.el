@@ -1,7 +1,7 @@
 ;;; 10-minor-smartparens.el --- 設定 - マイナーモード - 各種カッコ関連機能拡張
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-03-26T14:50:04+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-09T11:40:53+09:00>
 
 ;;; Commentary:
 
@@ -25,7 +25,9 @@
 ;; ----------------------------------------------------------------------------
 ;; 起動
 ;; ----------------------------------------------------------------------------
-(when (require 'smartparens-config nil :noerror)
+(when (and (require 'smartparens-config nil :noerror)
+           (fboundp 'smartparens-global-mode)
+           (fboundp 'show-smartparens-global-mode))
   (smartparens-global-mode +1)
   (show-smartparens-global-mode +1))
 

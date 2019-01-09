@@ -1,7 +1,7 @@
-;;; 10-minor-ispell.el --- 設定 - マイナーモード - スペルチェック
+;;; 10-minor-tramp.el --- 設定 - マイナーモード - TRAMP (Transparent Remote Access, Multiple Protocols)
 
-;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-06T10:10:44+09:00>
+;; Copyright (C) 2019 Taku Watabe
+;; Time-stamp: <2019-01-09T11:19:05+09:00>
 
 ;;; Commentary:
 
@@ -10,9 +10,8 @@
 ;; ----------------------------------------------------------------------------
 ;; デフォルト値
 ;; ----------------------------------------------------------------------------
-;; (eval-after-load 'ispell
-;;   '(progn
-;;      (add-to-list 'ispell-skip-region-alist "")))
+(custom-set-variables
+ '(tramp-persistency-file-name (convert-standard-filename "~/.emacs.tramp")))
 
 
 ;; ----------------------------------------------------------------------------
@@ -22,4 +21,4 @@
 ;; no-byte-compile: t
 ;; End:
 
-;;; 10-minor-ispell.el ends here
+;;; 10-minor-tramp.el ends here

@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-08T14:21:20+09:00>
+;; Time-stamp: <2019-01-09T11:17:33+09:00>
 
 ;;; Commentary:
 
@@ -58,11 +58,10 @@
   ;; 初期化
   ;; ----------------------------------
   ;; 確実に定義された後で追加
-  ;;
-  ;; もはやメンテナンスされていないため、削除
-  ;; (add-to-list 'package-archives '("ELPA" . "http://tromey.com/elpa/"))
-  (add-to-list 'package-archives '("MELPA" . "https://melpa.org/packages/"))
-  (add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
+  (add-to-list 'package-archives
+               '("MELPA" . "https://melpa.org/packages/"))
+  (add-to-list 'package-archives
+               '("marmalade" . "https://marmalade-repo.org/packages/"))
 
   ;; あらゆるパッケージロードに先んじて記述しなければならない
   (package-initialize)

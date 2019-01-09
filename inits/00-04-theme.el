@@ -1,7 +1,7 @@
 ;;; 00-04-theme.el --- 設定 - カラーテーマ
 
-;; Copyright (C) 2014-2015 Taku Watabe
-;; Time-stamp: <2015-02-19T22:27:18+09:00>
+;; Copyright (C) 2014-2019 Taku Watabe
+;; Time-stamp: <2019-01-09T11:19:35+09:00>
 
 ;;; Commentary:
 
@@ -14,8 +14,7 @@
 (let ((required-themes '(;; 利用したいカラーテーマの一覧
                          ;; 優先度が高い順に降順ソートしておくこと
                          my-default
-                         wheatgrass
-                         ))
+                         wheatgrass))
       (availabled-themes (custom-available-themes)))
   ;; 利用したいカラーテーマが見つからなければ、何もしない
   (catch 'required-theme-found

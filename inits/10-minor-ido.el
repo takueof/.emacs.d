@@ -1,7 +1,7 @@
 ;;; 10-minor-ido.el --- 設定 - マイナーモード - ファイル操作の簡略化
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-12T13:57:14+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-09T11:30:05+09:00>
 
 ;;; Commentary:
 
@@ -29,9 +29,8 @@
     (ido-mode +1))
 
 (eval-after-load 'ido
-  '(progn
-     (if (fboundp 'ido-everywhere)
-         (ido-everywhere +1))))
+  '(if (fboundp 'ido-everywhere)
+      (ido-everywhere +1)))
 
 
 ;; ----------------------------------------------------------------------------

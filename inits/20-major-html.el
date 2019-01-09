@@ -1,7 +1,7 @@
 ;;; 20-major-html.el --- 設定 - メジャーモード - (X)HTML
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-05T17:24:59+09:00>
+;; Time-stamp: <2019-01-09T11:44:33+09:00>
 
 ;;; Commentary:
 
@@ -15,24 +15,23 @@
 
 ;; Dreamweaver のような、終了タグ前コメント挿入を実装
 (eval-after-load 'sgml-mode
-  '(progn
-     (when (and (fboundp 'sgml-close-tag)
-                (require 'close-comment-tag nil :noerror)
-                (fboundp 'close-comment-tag)
-                (boundp 'sgml-mode-map))
-       (defun my-sgml-close-tag-with-comment ()
-         (concat (documentation 'sgml-close-tag) "\n"
-                 "Then, if close tag is element having id or class attribute, insert special comment before close tag.")
-         (interactive)
-         ;; コメント挿入時、カーソルは終了タグ開始直前に位置していなければならない
-         (let ((sgml-close-tag-result (save-excursion (sgml-close-tag))))
-           (indent-according-to-mode)
-           (close-comment-tag)
-           sgml-close-tag-result))
+  '(when (and (fboundp 'sgml-close-tag)
+              (require 'close-comment-tag nil :noerror)
+              (fboundp 'close-comment-tag)
+              (boundp 'sgml-mode-map))
+     (defun my-sgml-close-tag-with-comment ()
+       (concat (documentation 'sgml-close-tag) "\n"
+               "Then, if close tag is element having id or class attribute, insert special comment before close tag.")
+       (interactive)
+       ;; コメント挿入時、カーソルは終了タグ開始直前に位置していなければならない
+       (let ((sgml-close-tag-result (save-excursion (sgml-close-tag))))
+         (indent-according-to-mode)
+         (close-comment-tag)
+         sgml-close-tag-result))
 
-       (define-key sgml-mode-map (kbd "C-c C-c e") 'my-sgml-close-tag-with-comment)
-       (define-key sgml-mode-map (kbd "C-c C-c C-e") 'my-sgml-close-tag-with-comment)
-       (define-key sgml-mode-map (kbd "C-c e") 'close-comment-tag))))
+     (define-key sgml-mode-map (kbd "C-c C-c e") 'my-sgml-close-tag-with-comment)
+     (define-key sgml-mode-map (kbd "C-c C-c C-e") 'my-sgml-close-tag-with-comment)
+     (define-key sgml-mode-map (kbd "C-c e") 'close-comment-tag)))
 
 
 ;; ----------------------------------------------------------------------------
