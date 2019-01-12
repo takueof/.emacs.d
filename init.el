@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-09T11:17:33+09:00>
+;; Time-stamp: <2019-01-12T23:20:27+09:00>
 
 ;;; Commentary:
 
@@ -18,16 +18,17 @@
 ;; ----------------------------------------------------------------------------
 ;; ファイルとバッファのデフォルトだけ決める（他は変えない）
 ;;
-;; (prefer-coding-system 'utf-8-unix) は使わない
-;; システムごとに最適化された、デフォルト定義自動設定の結果を破壊するため
+;; (prefer-coding-system 'utf-8-unix) は絶対に使わないこと！
+;; システムごとに最適化された、デフォルト定義（自動設定）の結果を破壊するため
 ;;
 ;; 他の設定は `00-02-coding.el' を参照
 (set-coding-system-priority 'utf-8)
-(set-buffer-file-coding-system 'utf-8-unix)
+(setq-default buffer-file-coding-system 'utf-8-unix)
 
 ;; macOS ONLY
 (when (equal system-type 'darwin)
-  (set-terminal-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8-unix)
+  (set-keyboard-coding-system 'utf-8-unix)
   (setq-default default-process-coding-system '(utf-8 . utf-8)))
 
 
