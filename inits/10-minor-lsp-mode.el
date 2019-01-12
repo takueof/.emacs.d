@@ -1,7 +1,7 @@
 ;;; 10-minor-lsp-mode.el --- 設定 - マイナーモード - LSP クライアント
 
-;; Copyright (C) 2018 Taku Watabe
-;; Time-stamp: <2019-01-08T15:40:16+09:00>
+;; Copyright (C) 2018-2019 Taku Watabe
+;; Time-stamp: <2019-01-12T13:35:42+09:00>
 
 ;;; Commentary:
 
@@ -18,12 +18,12 @@
 (custom-set-variables
  ;; Defaults
  '(lsp-auto-guess-root t)
- '(lsp-restart nil)
+ '(lsp-restart 'ignore)
  ;; ローカル環境にのみ保存
  '(lsp-session-file (convert-standard-filename "~/.emacs.lsp-session"))
- ;; With `lsp-ui-flycheck'
+ ;; With `lsp-ui'
  '(lsp-ui-flycheck-list-position 'right)
- ;; With `company-mode'
+ ;; With `company-lsp'
  '(company-lsp-enable-recompletion t))
 
 
@@ -34,7 +34,13 @@
     (add-hook 'prog-mode-hook #'lsp))
 
 (eval-after-load 'lsp
-  '(require 'lsp-clients nil :noerror))
+  '(progn
+     (require 'lsp-clients nil :noerror)
+
+     (if (and (boundp 'lsp-after-open-hook)
+              (require 'lsp-ui-flycheck nil :noerror)
+              (fboundp 'lsp-ui-flycheck-enable))
+         (add-hook 'lsp-after-open-hook #'lsp-ui-flycheck-enable))))
 
 
 ;; ----------------------------------------------------------------------------
