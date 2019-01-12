@@ -1,7 +1,7 @@
-;;; 20-major-lisp.el --- 設定 - メジャーモード - 各種 Lisp 方言
+;;; 20-major-lisp.el --- 設定 - メジャーモード - 各種 Lisp 方言 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-05T19:10:15+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

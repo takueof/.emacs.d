@@ -1,7 +1,7 @@
-;;; my-default-theme.el --- My original defaut themes
+;;; my-default-theme.el --- My original defaut themes -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2017 Taku Watabe
-;; Time-stamp: <2017-10-16T15:43:00+09:00>
+;; Time-stamp: <2019-01-13T00:00:36+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: faces

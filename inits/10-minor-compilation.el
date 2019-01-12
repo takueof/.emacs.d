@@ -1,7 +1,7 @@
-;;; 10-minor-compilation.el --- 設定 - マイナーモード - コンパイル
+;;; 10-minor-compilation.el --- 設定 - マイナーモード - コンパイル -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2018 Taku Watabe
-;; Time-stamp: <2018-12-01T23:54:52+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

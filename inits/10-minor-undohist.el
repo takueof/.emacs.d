@@ -1,7 +1,7 @@
-;;; 10-minor-undohist.el --- 設定 - マイナーモード - `undo' 履歴の記憶
+;;; 10-minor-undohist.el --- 設定 - マイナーモード - `undo' 履歴の記憶 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2017-2019 Taku Watabe
-;; Time-stamp: <2019-01-09T11:41:25+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

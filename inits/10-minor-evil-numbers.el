@@ -1,7 +1,7 @@
-;;; 10-minor-evil-numbers.el --- 設定 - マイナーモード - カーソル下の数値を増減
+;;; 10-minor-evil-numbers.el --- 設定 - マイナーモード - カーソル下の数値を増減 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-04-21T17:29:13+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

@@ -1,7 +1,7 @@
-;;; 20-major-php.el --- 設定 - メジャーモード - PHP
+;;; 20-major-php.el --- 設定 - メジャーモード - PHP -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-05T17:17:49+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

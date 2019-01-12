@@ -1,7 +1,7 @@
-;;; 10-minor-cua.el --- 設定 - マイナーモード - 矩形選択
+;;; 10-minor-cua.el --- 設定 - マイナーモード - 矩形選択 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-12T13:52:30+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

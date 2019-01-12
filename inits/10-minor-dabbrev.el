@@ -1,7 +1,7 @@
-;;; 10-minor-dabbrev.el --- 設定 - マイナーモード - バッファ内マッチ補完
+;;; 10-minor-dabbrev.el --- 設定 - マイナーモード - バッファ内マッチ補完 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-12T13:52:38+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

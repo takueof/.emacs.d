@@ -1,7 +1,7 @@
-;;; 10-minor-hl-line.el --- 設定 - マイナーモード - カレントカーソル行強調
+;;; 10-minor-hl-line.el --- 設定 - マイナーモード - カレントカーソル行強調 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-19T22:35:11+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

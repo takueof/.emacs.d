@@ -1,7 +1,7 @@
-;;; 20-major-html.el --- 設定 - メジャーモード - (X)HTML
+;;; 20-major-html.el --- 設定 - メジャーモード - (X)HTML -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-09T11:44:33+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

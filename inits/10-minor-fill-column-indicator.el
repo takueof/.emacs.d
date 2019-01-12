@@ -1,7 +1,7 @@
-;;; 10-minor-fill-column-indicator.el --- 設定 - マイナーモード - デフォルト行文字数の位置にインジケータを表示
+;;; 10-minor-fill-column-indicator.el --- 設定 - マイナーモード - デフォルト行文字数の位置にインジケータを表示 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2015 Taku Watabe
-;; Time-stamp: <2015-02-12T13:54:50+09:00>
+;; Copyright (C) 2014-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

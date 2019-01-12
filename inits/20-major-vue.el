@@ -1,7 +1,7 @@
-;;; 20-major-vue.el --- 設定 - メジャーモード - Vue.js
+;;; 20-major-vue.el --- 設定 - メジャーモード - Vue.js -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018 Taku Watabe
-;; Time-stamp: <2018-06-12T14:33:53+09:00>
+;; Copyright (C) 2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

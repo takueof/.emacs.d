@@ -1,7 +1,7 @@
-;;; 10-minor-dired.el --- 設定 - マイナーモード - `dired' 拡張
+;;; 10-minor-dired.el --- 設定 - マイナーモード - `dired' 拡張 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-18T17:56:10+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

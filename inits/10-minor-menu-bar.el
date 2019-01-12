@@ -1,7 +1,7 @@
-;;; 10-minor-menu-bar.el --- 設定 - マイナーモード - メニューバー
+;;; 10-minor-menu-bar.el --- 設定 - マイナーモード - メニューバー -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2015 Taku Watabe
-;; Time-stamp: <2015-02-12T13:58:08+09:00>
+;; Copyright (C) 2014-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

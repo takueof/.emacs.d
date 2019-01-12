@@ -1,7 +1,7 @@
-;;; 10-minor-undo-tree.el --- 設定 - マイナーモード - `undo' 拡張、`redo' 機能追加ならびに分岐履歴実装
+;;; 10-minor-undo-tree.el --- 設定 - マイナーモード - `undo' 拡張、`redo' 機能追加ならびに分岐履歴実装 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2017-2019 Taku Watabe
-;; Time-stamp: <2019-01-06T05:31:47+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

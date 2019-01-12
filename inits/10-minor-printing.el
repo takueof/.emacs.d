@@ -1,7 +1,7 @@
-;;; 10-minor-printing.el --- 設定 - マイナーモード - 印刷
+;;; 10-minor-printing.el --- 設定 - マイナーモード - 印刷 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-05-01T09:19:52+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

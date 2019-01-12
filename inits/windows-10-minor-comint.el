@@ -1,7 +1,7 @@
-;;; windows-10-minor-comint.el --- 設定 - Windows - 共通コマンドインタプリタ
+;;; windows-10-minor-comint.el --- 設定 - Windows - 共通コマンドインタプリタ -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2015 Taku Watabe
-;; Time-stamp: <2015-02-15T19:34:17+09:00>
+;; Copyright (C) 2014-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

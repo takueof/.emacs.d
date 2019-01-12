@@ -1,7 +1,7 @@
-;;; 10-minor-flycheck.el --- 設定 - マイナーモード - 自動静的解析ランナー
+;;; 10-minor-flycheck.el --- 設定 - マイナーモード - 自動静的解析ランナー -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2018 Taku Watabe
-;; Time-stamp: <2018-12-01T23:56:45+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

@@ -1,7 +1,7 @@
-;;; 00-modeline.el --- 設定 - モードライン
+;;; 00-modeline.el --- 設定 - モードライン -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-01T12:08:43+09:00>
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

@@ -1,7 +1,7 @@
-;;; 10-minor-scroll-bar.el --- 設定 - マイナーモード - スクロールバー
+;;; 10-minor-scroll-bar.el --- 設定 - マイナーモード - スクロールバー -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-09T11:37:04+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

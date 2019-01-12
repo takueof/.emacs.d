@@ -1,7 +1,7 @@
-;;; 10-minor-saveplace.el --- 設定 - マイナーモード - ファイルごとにカーソル位置を保存
+;;; 10-minor-saveplace.el --- 設定 - マイナーモード - ファイルごとにカーソル位置を保存 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-12T14:01:33+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

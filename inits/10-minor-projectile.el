@@ -1,7 +1,7 @@
-;;; 10-minor-projectile.el --- 設定 - マイナーモード - 汎用プロジェクト管理
+;;; 10-minor-projectile.el --- 設定 - マイナーモード - 汎用プロジェクト管理 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Taku Watabe
-;; Time-stamp: <2019-01-08T15:17:56+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

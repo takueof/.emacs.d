@@ -1,7 +1,7 @@
-;;; 10-minor-timestamp.el --- 設定 - マイナーモード - タイムスタンプ記述
+;;; 10-minor-timestamp.el --- 設定 - マイナーモード - タイムスタンプ記述 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-12T14:05:08+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

@@ -1,7 +1,7 @@
-;;; 10-minor-eldoc.el --- 設定 - マイナーモード - Emacs Lisp ドキュメント表示
+;;; 10-minor-eldoc.el --- 設定 - マイナーモード - Emacs Lisp ドキュメント表示 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-09T11:26:21+09:00>
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

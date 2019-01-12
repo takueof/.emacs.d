@@ -1,7 +1,7 @@
-;;; 20-major-indium.el --- 設定 - メジャーモード - JavaScript 開発環境
+;;; 20-major-indium.el --- 設定 - メジャーモード - JavaScript 開発環境 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018 Taku Watabe
-;; Time-stamp: <2018-11-29T12:01:45+09:00>
+;; Copyright (C) 2018-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

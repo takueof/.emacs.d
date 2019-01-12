@@ -1,7 +1,7 @@
-;;; 10-minor-exec-path-from-shell.el --- 設定 - マイナーモード - GNU/Linux, Unix, macOS 環境変数 $PATH 自動取得・設定
+;;; 10-minor-exec-path-from-shell.el --- 設定 - マイナーモード - GNU/Linux, Unix, macOS 環境変数 $PATH 自動取得・設定 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018 Taku Watabe
-;; Time-stamp: <2018-12-17T16:16:39+09:00>
+;; Copyright (C) 2018-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

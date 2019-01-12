@@ -1,7 +1,7 @@
-;;; windows-00-02-im.el --- 設定 - Windows - インプットメソッド
+;;; windows-00-02-im.el --- 設定 - Windows - インプットメソッド -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-10T17:33:04+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

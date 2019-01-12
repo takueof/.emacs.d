@@ -1,7 +1,7 @@
-;;; cocoa-emacs-00-00-environment.el --- 設定 - macOS (Cocoa) - 環境
+;;; cocoa-emacs-00-00-environment.el --- 設定 - macOS (Cocoa) - 環境 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018 Taku Watabe
-;; Time-stamp: <2018-11-15T19:29:08+09:00>
+;; Copyright (C) 2018-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

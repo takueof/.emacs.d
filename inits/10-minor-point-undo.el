@@ -1,7 +1,7 @@
-;;; 10-minor-point-undo.el --- 設定 - マイナーモード - カーソルの移動履歴
+;;; 10-minor-point-undo.el --- 設定 - マイナーモード - カーソルの移動履歴 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017 Taku Watabe
-;; Time-stamp: <2017-09-25T17:39:05+09:00>
+;; Copyright (C) 2017-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

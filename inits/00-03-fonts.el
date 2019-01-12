@@ -1,7 +1,7 @@
-;;; 00-03-fonts.el --- 設定 - フォント
+;;; 00-03-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2018 Taku Watabe
-;; Time-stamp: <2018-11-12T16:51:36+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

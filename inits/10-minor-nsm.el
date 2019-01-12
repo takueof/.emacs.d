@@ -1,7 +1,7 @@
-;;; 10-minor-nsm.el --- 設定 - マイナーモード - Network Security Manager
+;;; 10-minor-nsm.el --- 設定 - マイナーモード - Network Security Manager -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2019 Taku Watabe
-;; Time-stamp: <2019-01-08T15:32:48+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

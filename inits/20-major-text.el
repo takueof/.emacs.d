@@ -1,7 +1,7 @@
-;;; 20-major-text.el --- 設定 - メジャーモード - プレーンテキスト
+;;; 20-major-text.el --- 設定 - メジャーモード - プレーンテキスト -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-10T19:55:24+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

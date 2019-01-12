@@ -1,7 +1,7 @@
-;;; 00-01-default.el --- 設定 - 共通
+;;; 00-01-default.el --- 設定 - 共通 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-06T06:04:35+09:00>
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

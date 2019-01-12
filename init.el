@@ -1,7 +1,8 @@
-;;; init.el --- "GNU Emacs" main config file
+;;; init.el --- "GNU Emacs" main config file -*- lexical-binding: t; -*-
+
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-12T23:20:27+09:00>
+;; Time-stamp: <2019-01-12T23:43:55+09:00>
 
 ;;; Commentary:
 

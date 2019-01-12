@@ -1,7 +1,7 @@
-;;; 10-minor-company.el --- 設定 - マイナーモード - 補完フレームワーク
+;;; 10-minor-company.el --- 設定 - マイナーモード - 補完フレームワーク -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015 Taku Watabe
-;; Time-stamp: <2015-03-17T09:40:21+09:00>
+;; Copyright (C) 2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

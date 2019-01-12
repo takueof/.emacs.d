@@ -1,7 +1,7 @@
-;;; 10-minor-codic.el --- 設定 - マイナーモード - プログラマ向けネーミング辞書
+;;; 10-minor-codic.el --- 設定 - マイナーモード - プログラマ向けネーミング辞書 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2015 Taku Watabe
-;; Time-stamp: <2015-02-12T13:49:07+09:00>
+;; Copyright (C) 2014-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

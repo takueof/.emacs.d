@@ -1,7 +1,7 @@
-;;; 10-minor-auto-dim-other-buffers.el --- 設定 - マイナーモード - 他ウインドウ弱調化
+;;; 10-minor-auto-dim-other-buffers.el --- 設定 - マイナーモード - 他ウインドウ弱調化 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015-2018 Taku Watabe
-;; Time-stamp: <2018-12-08T05:11:23+09:00>
+;; Copyright (C) 2015-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

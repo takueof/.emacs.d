@@ -1,7 +1,7 @@
-;;; 10-minor-uniquify.el --- 設定 - マイナーモード - ファイル名を元に、より唯一性の高いバッファ名を生成
+;;; 10-minor-uniquify.el --- 設定 - マイナーモード - ファイル名を元に、より唯一性の高いバッファ名を生成 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-12T14:05:26+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

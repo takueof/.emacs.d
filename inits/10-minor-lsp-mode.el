@@ -1,7 +1,7 @@
-;;; 10-minor-lsp-mode.el --- 設定 - マイナーモード - LSP クライアント
+;;; 10-minor-lsp-mode.el --- 設定 - マイナーモード - LSP クライアント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Taku Watabe
-;; Time-stamp: <2019-01-12T13:35:42+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

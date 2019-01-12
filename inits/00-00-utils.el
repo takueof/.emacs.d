@@ -1,7 +1,7 @@
-;;; 00-00-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t -*-
+;;; 00-00-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2018 Taku Watabe
-;; Time-stamp: <2018-12-01T23:53:35+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:26:43+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -29,6 +29,7 @@
 ;;; Code:
 
 (require 'fontset nil :noerror)
+
 
 ;; ----------------------------------------------------------------------------
 ;; Display
@@ -133,6 +134,8 @@ This feature seems to `car-safe' and `cdr-safe'."
 
 
 (provide 'my-utils)
+
+
 ;; ----------------------------------------------------------------------------
 ;; Local Variables:
 ;; coding: utf-8-unix

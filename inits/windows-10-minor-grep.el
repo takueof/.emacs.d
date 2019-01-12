@@ -1,7 +1,7 @@
-;;; windows-10-minor-grep.el --- 設定 - Windows - マイナーモード - grep
+;;; windows-10-minor-grep.el --- 設定 - Windows - マイナーモード - grep -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2017 Taku Watabe
-;; Time-stamp: <2017-09-22T14:18:51+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

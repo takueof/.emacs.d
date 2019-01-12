@@ -1,7 +1,7 @@
-;;; windows-00-browse-url.el --- 設定 - Windows - Web ブラウザ
+;;; windows-00-browse-url.el --- 設定 - Windows - Web ブラウザ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-09T15:00:06+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

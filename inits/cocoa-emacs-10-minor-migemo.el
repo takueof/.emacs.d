@@ -1,7 +1,7 @@
-;;; cocoa-emacs-10-minor-migemo.el --- 設定 - macOS (Cocoa) - マイナーモード - ローマ字入力から日本語をインクリメンタル検索
+;;; cocoa-emacs-10-minor-migemo.el --- 設定 - macOS (Cocoa) - マイナーモード - ローマ字入力から日本語をインクリメンタル検索 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Taku Watabe
-;; Time-stamp: <2019-01-12T12:44:15+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

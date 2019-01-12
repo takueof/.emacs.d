@@ -1,7 +1,7 @@
-;;; 00-ansi-color.el --- 設定 - ANSI エスケープシーケンス
+;;; 00-ansi-color.el --- 設定 - ANSI エスケープシーケンス -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2015 Taku Watabe
-;; Time-stamp: <2015-02-13T00:47:02+09:00>
+;; Copyright (C) 2014-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

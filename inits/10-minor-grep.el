@@ -1,7 +1,7 @@
-;;; 10-minor-grep.el --- 設定 - マイナーモード - `grep'
+;;; 10-minor-grep.el --- 設定 - マイナーモード - `grep' -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2017 Taku Watabe
-;; Time-stamp: <2017-10-11T18:09:02+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

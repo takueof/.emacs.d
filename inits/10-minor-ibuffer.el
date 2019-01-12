@@ -1,7 +1,7 @@
-;;; 10-minor-ibuffer.el --- 設定 - マイナーモード - 拡張バッファ一覧
+;;; 10-minor-ibuffer.el --- 設定 - マイナーモード - 拡張バッファ一覧 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-09T11:29:35+09:00>
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

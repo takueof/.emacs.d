@@ -1,7 +1,7 @@
-;;; 20-major-css.el --- 設定 - メジャーモード - CSS
+;;; 20-major-css.el --- 設定 - メジャーモード - CSS -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-05T17:26:00+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

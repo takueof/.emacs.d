@@ -1,7 +1,7 @@
-;;; 10-minor-ido.el --- 設定 - マイナーモード - ファイル操作の簡略化
+;;; 10-minor-ido.el --- 設定 - マイナーモード - ファイル操作の簡略化 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-09T11:30:05+09:00>
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

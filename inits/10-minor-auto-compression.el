@@ -1,7 +1,7 @@
-;;; 10-minor-auto-compression.el --- 設定 - マイナーモード - アーカイブファイルを直接編集
+;;; 10-minor-auto-compression.el --- 設定 - マイナーモード - アーカイブファイルを直接編集 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-12T13:45:40+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

@@ -1,7 +1,7 @@
-;;; 20-major-sass.el --- 設定 - メジャーモード - Sass (Type: .sass)
+;;; 20-major-sass.el --- 設定 - メジャーモード - Sass (Type: .sass) -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-05T17:24:07+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

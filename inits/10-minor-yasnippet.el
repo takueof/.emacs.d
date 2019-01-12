@@ -1,7 +1,7 @@
-;;; 10-minor-yasnippet.el --- 設定 - マイナーモード - スニペット挿入
+;;; 10-minor-yasnippet.el --- 設定 - マイナーモード - スニペット挿入 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2015 Taku Watabe
-;; Time-stamp: <2015-02-15T20:05:55+09:00>
+;; Copyright (C) 2014-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

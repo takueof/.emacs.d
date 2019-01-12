@@ -1,7 +1,7 @@
-;;; 20-major-nxml-mode.el --- 設定 - メジャーモード - 汎用 XML 文書
+;;; 20-major-nxml-mode.el --- 設定 - メジャーモード - 汎用 XML 文書 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-05T19:10:34+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

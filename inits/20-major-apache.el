@@ -1,7 +1,7 @@
-;;; 20-major-apache.el --- 設定 - メジャーモード - Apache
+;;; 20-major-apache.el --- 設定 - メジャーモード - Apache -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-18T17:57:41+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

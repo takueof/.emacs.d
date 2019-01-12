@@ -1,7 +1,7 @@
-;;; 00-04-theme.el --- 設定 - カラーテーマ
+;;; 00-04-theme.el --- 設定 - カラーテーマ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-09T11:19:35+09:00>
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

@@ -1,7 +1,7 @@
-;;; windows-00-01-fonts.el --- 設定 - Windows - フォント
+;;; windows-00-01-fonts.el --- 設定 - Windows - フォント -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-13T00:37:34+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

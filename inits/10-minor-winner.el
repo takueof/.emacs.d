@@ -1,7 +1,7 @@
-;;; 10-minor-winner.el --- 設定 - マイナーモード - ウインドウの状態履歴を undo/redo
+;;; 10-minor-winner.el --- 設定 - マイナーモード - ウインドウの状態履歴を undo/redo -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Taku Watabe
-;; Time-stamp: <2015-02-12T14:07:54+09:00>
+;; Copyright (C) 2013-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

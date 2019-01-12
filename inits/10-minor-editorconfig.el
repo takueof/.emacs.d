@@ -1,7 +1,7 @@
-;;; 10-minor-editorconfig.el --- 設定 - マイナーモード - EditorConfig
+;;; 10-minor-editorconfig.el --- 設定 - マイナーモード - EditorConfig -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018 Taku Watabe
-;; Time-stamp: <2018-11-22T19:57:50+09:00>
+;; Copyright (C) 2018-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

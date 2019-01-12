@@ -1,7 +1,7 @@
-;;; 20-major-haml.el --- 設定 - メジャーモード - Haml
+;;; 20-major-haml.el --- 設定 - メジャーモード - Haml -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-05T19:09:25+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

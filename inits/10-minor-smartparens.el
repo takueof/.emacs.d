@@ -1,7 +1,7 @@
-;;; 10-minor-smartparens.el --- 設定 - マイナーモード - 各種カッコ関連機能拡張
+;;; 10-minor-smartparens.el --- 設定 - マイナーモード - 各種カッコ関連機能拡張 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-09T11:40:53+09:00>
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

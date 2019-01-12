@@ -1,7 +1,7 @@
-;;; 10-minor-desktop.el --- 設定 - マイナーモード - デスクトップ環境保存・復旧
+;;; 10-minor-desktop.el --- 設定 - マイナーモード - デスクトップ環境保存・復旧 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-09T11:25:06+09:00>
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

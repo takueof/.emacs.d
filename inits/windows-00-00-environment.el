@@ -1,7 +1,7 @@
-;;; windows-00-00-environment.el --- 設定 - Windows - 環境
+;;; windows-00-00-environment.el --- 設定 - Windows - 環境 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014-2017 Taku Watabe
-;; Time-stamp: <2017-09-06T14:33:44+09:00>
+;; Copyright (C) 2014-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

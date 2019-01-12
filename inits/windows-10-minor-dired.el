@@ -1,7 +1,7 @@
-;;; windows-10-minor-dired.el --- 設定 - Windows - マイナーモード - `dired'
+;;; windows-10-minor-dired.el --- 設定 - Windows - マイナーモード - `dired' -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015 Taku Watabe
-;; Time-stamp: <2015-02-13T00:37:06+09:00>
+;; Copyright (C) 2015-2019 Taku Watabe
+;; Time-stamp: <2019-01-13T00:25:23+09:00>
 
 ;;; Commentary:
 

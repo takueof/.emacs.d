@@ -1,7 +1,7 @@
-;;; 00-keybinds.el --- 設定 - グローバル キーバインド
+;;; 00-keybinds.el --- 設定 - グローバル キーバインド -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-05T11:34:16+09:00>
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

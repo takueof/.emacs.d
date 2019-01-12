@@ -1,7 +1,7 @@
-;;; 10-minor-enriched.el --- 設定 - マイナーモード - `text/enriched' フォーマットファイル
+;;; 10-minor-enriched.el --- 設定 - マイナーモード - `text/enriched' フォーマットファイル -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2017-2019 Taku Watabe
-;; Time-stamp: <2019-01-09T11:26:57+09:00>
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 

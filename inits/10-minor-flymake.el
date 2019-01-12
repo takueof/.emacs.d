@@ -1,7 +1,7 @@
-;;; 10-minor-flymake.el --- 設定 - マイナーモード - 自動静的解析ランナー
+;;; 10-minor-flymake.el --- 設定 - マイナーモード - 自動静的解析ランナー -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Taku Watabe
-;; Time-stamp: <2019-01-08T14:13:33+09:00>
+;; Time-stamp: <2019-01-13T00:25:22+09:00>
 
 ;;; Commentary:
 
