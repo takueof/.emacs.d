@@ -1,7 +1,7 @@
 ;;; 20-major-lisp.el --- 設定 - メジャーモード - 各種 Lisp 方言 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:23+09:00>
+;; Time-stamp: <2019-01-13T20:11:48+09:00>
 
 ;;; Commentary:
 
@@ -15,7 +15,8 @@
 ;; ----------------------------------------------------------------------------
 (eval-after-load 'my-utils
   '(eval-after-load 'elisp-slime-nav
-     '(my-change-lighter elisp-slime-nav-mode nil)))
+     '(if (fboundp 'elisp-slime-nav-mode)
+          (my-change-lighter elisp-slime-nav-mode nil))))
 
 
 ;; ----------------------------------------------------------------------------

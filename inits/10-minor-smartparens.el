@@ -1,7 +1,7 @@
 ;;; 10-minor-smartparens.el --- 設定 - マイナーモード - 各種カッコ関連機能拡張 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:23+09:00>
+;; Time-stamp: <2019-01-13T20:10:19+09:00>
 
 ;;; Commentary:
 
@@ -20,6 +20,11 @@
  '(sp-undo-pairs-separately t)
  ;; show-smartparens-mode
  '(sp-show-pair-from-inside t))
+
+(eval-after-load 'my-utils
+  '(eval-after-load 'smartparens
+     '(if (fboundp 'smartparens-mode)
+          (my-change-lighter smartparens-mode nil))))
 
 
 ;; ----------------------------------------------------------------------------

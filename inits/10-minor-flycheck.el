@@ -1,7 +1,7 @@
 ;;; 10-minor-flycheck.el --- 設定 - マイナーモード - 自動静的解析ランナー -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-13T20:14:36+09:00>
 
 ;;; Commentary:
 
@@ -27,8 +27,8 @@
                                ((featurep 'grizzl) 'grizzl)
                                ((featurep 'ido) 'ido)
                                (t nil)))
- ;; 省スペース化
- '(flycheck-mode-line " FC")
+ ;; 非表示化
+ '(flycheck-mode-line "")
  ;; 無効化
  '(flycheck-disabled-checkers '(javascript-jscs)))
 

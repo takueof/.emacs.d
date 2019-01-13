@@ -1,7 +1,7 @@
 ;;; 10-minor-rainbow-mode.el --- 設定 - マイナーモード - 自動カラー表示 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:23+09:00>
+;; Time-stamp: <2019-01-13T20:11:20+09:00>
 
 ;;; Commentary:
 
@@ -19,7 +19,8 @@
 
 (eval-after-load 'my-utils
   '(eval-after-load 'rainbow-mode
-     '(my-change-lighter rainbow-mode nil)))
+     '(if (fboundp 'rainbow-mode)
+          (my-change-lighter rainbow-mode nil))))
 
 
 ;; ----------------------------------------------------------------------------

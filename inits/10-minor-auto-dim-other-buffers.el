@@ -1,7 +1,7 @@
 ;;; 10-minor-auto-dim-other-buffers.el --- 設定 - マイナーモード - 他ウインドウ弱調化 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2015-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-13T20:10:49+09:00>
 
 ;;; Commentary:
 
@@ -17,7 +17,8 @@
 ;; ----------------------------------------------------------------------------
 (eval-after-load 'my-utils
   '(eval-after-load 'auto-dim-other-buffers
-     '(my-change-lighter auto-dim-other-buffers-mode nil)))
+     '(if (fboundp 'auto-dim-other-buffers-mode)
+          (my-change-lighter auto-dim-other-buffers-mode nil))))
 
 
 ;; ----------------------------------------------------------------------------

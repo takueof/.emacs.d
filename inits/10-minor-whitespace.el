@@ -1,7 +1,7 @@
 ;;; 10-minor-whitespace.el --- 設定 - マイナーモード - 空白文字強調 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:23+09:00>
+;; Time-stamp: <2019-01-13T20:08:49+09:00>
 
 ;;; Commentary:
 
@@ -28,6 +28,18 @@
  ;; フェイス強調しないようにする
  '(whitespace-space ((t
                       (:background nil)))))
+
+(eval-after-load 'my-utils
+  '(eval-after-load 'whitespace
+     '(progn
+        (if (fboundp 'whitespace-mode)
+            (my-change-lighter whitespace-mode nil))
+        (if (fboundp 'whitespace-newline-mode)
+            (my-change-lighter whitespace-newline-mode nil))
+        (if (fboundp 'global-whitespace-mode)
+            (my-change-lighter global-whitespace-mode nil))
+        (if (fboundp 'global-whitespace-newline-mode)
+            (my-change-lighter global-whitespace-newline-mode nil)))))
 
 
 ;; ----------------------------------------------------------------------------
