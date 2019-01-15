@@ -1,7 +1,7 @@
 ;;; 00-keybinds.el --- 設定 - グローバル キーバインド -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-15T13:00:02+09:00>
+;; Time-stamp: <2019-01-15T13:11:47+09:00>
 
 ;;; Commentary:
 
@@ -43,7 +43,7 @@
 ;; ----------------------------------------------------------------------------
 (defmacro visual-line-beginning-position (&optional n)
   "Get cursor point of visual line beginning position.
-N is same meaning of `beginning-of-visual-line'."
+N is same meaning of `beginning-of-visual-line' argument."
   `(save-excursion
      (beginning-of-visual-line ,n)
      (point)))
