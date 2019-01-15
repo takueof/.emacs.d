@@ -1,7 +1,7 @@
 ;;; 00-keybinds.el --- 設定 - グローバル キーバインド -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-15T13:00:02+09:00>
 
 ;;; Commentary:
 
@@ -42,26 +42,28 @@
 ;; http://gifnksm.hatenablog.jp/entry/20100131/1264956220
 ;; ----------------------------------------------------------------------------
 (defmacro visual-line-beginning-position (&optional n)
-  "TODO: ドキュメント書く。"
+  "Get cursor point of visual line beginning position.
+N is same meaning of `beginning-of-visual-line'."
   `(save-excursion
      (beginning-of-visual-line ,n)
      (point)))
 
 (defun beginning-of-smart-indented-line ()
-  "インデント先頭に移動する。インデント先頭・インデント途中なら行頭に移動する。"
+  "Move curosr to beginning of indent.
+Move to the beginning of the line if the cursor is at the beginning or middle of the indent."
   (interactive)
 
   ;; テスト:
   ;; あああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ
 
   ;; x 行目の先頭 (1 < x)
-  (if (and (not (eq (visual-line-beginning-position) (line-beginning-position)))
-           (eq (visual-line-beginning-position) (point)))
+  (if (and (not (equal (visual-line-beginning-position) (line-beginning-position)))
+           (equal (visual-line-beginning-position) (point)))
       ;; x - 1 行目の行末とみなして判定を再開
       (backward-char))
 
-  (if (and (eq (visual-line-beginning-position) (line-beginning-position)) ; 1行目
-           (not (string-match                                              ; インデント途中でない
+  (if (and (equal (visual-line-beginning-position) (line-beginning-position)) ; 1行目
+           (not (string-match                                                 ; インデント途中でない
                  ;; Syntax Table で定義される空白文字 ([:space:]) だけでは
                  ;; インデント途中か否か判定できない場合もある
                  ;; 仕方ないので Emacs の正規表現が認識する全空白文字 (\s-) も包含
@@ -77,11 +79,11 @@
 ;; ----------------------------------------------------------------------------
 ;; 前のウインドウに移動
 ;; ----------------------------------------------------------------------------
-(defun other-window-reverse (arg)
-  "前のウインドウに移動する。
-`other-window' と逆の挙動をとる。"
+(defun other-window-reverse (count &optional all-frames)
+  "Move before window, reverse behavior of `other-window'.
+COUNT and ALL-FRAMES are same meaning of `other-window' arguments."
   (interactive "p")
-  (other-window (- arg)))
+  (other-window (- arg) all-frames))
 
 (global-set-key (kbd "C-x p") #'other-window-reverse)
 
@@ -90,8 +92,8 @@
 ;; 前のフレームに移動
 ;; ----------------------------------------------------------------------------
 (defun other-frame-reverse (arg)
-  "前のフレームに移動する。
-`other-frame' と逆の挙動をとる。"
+  "Move before frame, reverse behavior of `other-frame'.
+ARG is same meaning of `other-frame' argument."
   (interactive "p")
   (other-frame (- arg)))
 
@@ -102,8 +104,9 @@
 ;; 折り返し表示を強制切替
 ;; ----------------------------------------------------------------------------
 (defun toggle-truncate-lines-force (&optional arg)
-  "カレントバッファの折り返し表示を `truncate-partial-width-windows' に依存せず強制的に切り替える。
-`toggle-truncate-lines' の `truncate-partial-width-windows' に依存しない。"
+  "Force switch the current buffer's display wrapping.
+ARG is non-nil to wrapping, or nil to no wrapping.
+It doesn't depend on `truncate-partial-width-windows' of `toggle-truncate-lines'."
   (interactive "P")
   (let ((after (if (null arg)
                    (not truncate-lines)
@@ -114,10 +117,10 @@
     ;; see also:
     ;; `fill-column-indicator.el'
     (setq-local line-move-visual (not after))
-    ;; toggle-truncate-lines は truncate-partial-width-windows が non-nil だと
+    ;; `toggle-truncate-lines' は `truncate-partial-width-windows' が non-nil だと
     ;; 何もしない
-    ;; ゆえに truncate-partial-width-windows を truncate-lines の切替予定値と
-    ;; 同値に変更し、toggle-truncate-lines を強制的に機能させるように準備する
+    ;; ゆえに `truncate-partial-width-windows' を `truncate-lines' の切替予定値と
+    ;; 同値に変更し `toggle-truncate-lines' を強制的に機能させるように準備する
     (setq-local truncate-partial-width-windows after)
     ;; 残りは任せる
     (toggle-truncate-lines after)))
@@ -129,10 +132,10 @@
 ;; カーソル位置にファイル名を挿入
 ;; ----------------------------------------------------------------------------
 (defun insert-file-name (&optional name)
-  "カーソル位置にカレントバッファのファイル名を挿入する。
-NAME が文字列ならば、ファイルパスとして扱い、抽出したファイル名を対象とする。
-NAME がバッファならば、バッファのファイル名を対象とする。
-NAME がその他のシンボルならば、カレントバッファ `current-buffer' のファイル名を対象とする。"
+  "Insert current buffer's file name to cursor position.
+If NAME is string, it is treated as a file path.
+If NAME is buffer, it targets the file name of the buffer.
+If NAME is other symbol, it targets file name of the `current-buffer'."
   (interactive)
   (insert (convert-standard-filename
            (file-name-nondirectory
@@ -151,10 +154,10 @@ NAME がその他のシンボルならば、カレントバッファ `current-bu
 ;; カーソル位置にファイルパスを挿入
 ;; ----------------------------------------------------------------------------
 (defun insert-file-path (&optional name)
-  "カーソル位置にカレントバッファのファイルパス（フルパス）を挿入する。
-NAME が未指定ならば、カレントバッファ `current-buffer' のファイルパスを対象とする。
-NAME がバッファならば、NAME バッファのファイルパスを対象とする。
-NAME が文字列ならば、ファイルパスとして扱う。"
+  "Insert current buffer's file path (full path) to cursor position.
+If NAME is string, it is treated as a file path.
+If NAME is buffer, it targets the file name of the buffer.
+If NAME is other symbol, it targets file name of the `current-buffer'."
   (interactive)
   (insert (convert-standard-filename
            (cond
@@ -172,14 +175,14 @@ NAME が文字列ならば、ファイルパスとして扱う。"
 ;; 一括エンコーディング変換
 ;; ----------------------------------------------------------------------------
 (defun my-change-files-coding-system (dir regexp coding-system recursive)
-  "ディレクトリ DIR に存在し、ファイル名が正規表現 REGEXP にマッチする全ファイルを、一括でエンコーディング CODING-SYSTEM に変換する。
-RECURSIVE が non-nil ならば、ファイルを再帰検索する。
-返値は、変換したファイルの数。"
+  "Convert CODING-SYSTEM for all files matched REGEXP in DIR.
+If RECURSIVE is non-nil, find files for recursive.
+Return file numbers of converted."
   (interactive
    (list (read-directory-name "Target directory: ")
          (read-regexp "File name (RegExp): ")
          (read-coding-system "Coding system: ")
-         (y-or-n-p "Recursive search: ")))
+         (y-or-n-p "Recursive search? ")))
   (let* ((target-files (if recursive
                            (progn
                              (require 'find-lisp nil :noerror)
