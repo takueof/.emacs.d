@@ -1,7 +1,7 @@
 ;;; 00-keybinds.el --- 設定 - グローバル キーバインド -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-15T13:11:47+09:00>
+;; Time-stamp: <2019-01-17T11:47:41+09:00>
 
 ;;; Commentary:
 
@@ -139,13 +139,12 @@ If NAME is other symbol, it targets file name of the `current-buffer'."
   (interactive)
   (insert (convert-standard-filename
            (file-name-nondirectory
-            (cond
-             ((stringp name)
-              name)
-             (t
-              (buffer-file-name (if (bufferp name)
-                                    name
-                                  (current-buffer)))))))))
+            (cond ((stringp name)
+                   name)
+                  (t
+                   (buffer-file-name (if (bufferp name)
+                                         name
+                                       (current-buffer)))))))))
 
 (global-set-key (kbd "C-c i f") #'insert-file-name)
 
@@ -160,13 +159,12 @@ If NAME is buffer, it targets the file name of the buffer.
 If NAME is other symbol, it targets file name of the `current-buffer'."
   (interactive)
   (insert (convert-standard-filename
-           (cond
-            ((stringp name)
-             name)
-            (t
-             (buffer-file-name (if (bufferp name)
-                                   name
-                                 (current-buffer))))))))
+           (cond ((stringp name)
+                  name)
+                 (t
+                  (buffer-file-name (if (bufferp name)
+                                        name
+                                      (current-buffer))))))))
 
 (global-set-key (kbd "C-c i p") #'insert-file-path)
 
