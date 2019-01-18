@@ -2,7 +2,7 @@
 
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-12T23:43:55+09:00>
+;; Time-stamp: <2019-01-17T18:32:53+09:00>
 
 ;;; Commentary:
 
@@ -55,7 +55,9 @@
 ;; `defcustom' によって定義されたリストヘシンボルを追加したいため、
 ;; あえて明示的にロード
 (when (and (require 'package nil :noerror)
-           (fboundp 'package-initialize))
+           (boundp 'package-archives)
+           (fboundp 'package-initialize)
+           (fboundp 'package-list-packages-no-fetch))
   ;; ----------------------------------
   ;; 初期化
   ;; ----------------------------------

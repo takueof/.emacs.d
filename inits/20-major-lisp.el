@@ -1,7 +1,7 @@
 ;;; 20-major-lisp.el --- 設定 - メジャーモード - 各種 Lisp 方言 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T20:11:48+09:00>
+;; Time-stamp: <2019-01-18T11:47:49+09:00>
 
 ;;; Commentary:
 
@@ -33,7 +33,7 @@
 
   ;; EditorConfig 対応
   (eval-after-load 'editorconfig
-    '(if (boundp 'editorconfig-properties-hash)
+    '(if (hash-table-p editorconfig-properties-hash)
          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
                 (indent-style (equal indent-style-data "tab"))
                 (insert-final-newline-data (gethash 'insert_final_newline editorconfig-properties-hash))

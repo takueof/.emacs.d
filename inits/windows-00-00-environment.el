@@ -1,7 +1,7 @@
 ;;; windows-00-00-environment.el --- 設定 - Windows - 環境 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:23+09:00>
+;; Time-stamp: <2019-01-18T01:33:52+09:00>
 
 ;;; Commentary:
 
@@ -23,7 +23,7 @@
 (when (gnutls-available-p)
   ;; グローバル変数未定義の場合に備える
   (if (not (boundp 'gnutls-trustfiles))
-      (setq gnutls-trustfiles nil))
+      (defvar gnutls-trustfiles nil))
   ;; 追加開始
   (let ((trust-files '("C:/programs/cygwin/usr/ssl/certs/ca-bundle.crt")))
     (dolist (trust-file trust-files)
