@@ -1,7 +1,7 @@
-;;; cocoa-emacs-10-minor-migemo.el --- 設定 - macOS (Cocoa) - マイナーモード - ローマ字入力から日本語をインクリメンタル検索 -*- lexical-binding: t; -*-
+;;; windows-10-minor-migemo.el --- 設定 - Windows - マイナーモード - ローマ字入力から日本語をインクリメンタル検索 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T14:08:23+09:00>
+;; Copyright (C) 2019 Taku Watabe
+;; Time-stamp: <2019-01-19T22:04:54+09:00>
 
 ;;; Commentary:
 
@@ -12,7 +12,7 @@
 ;; デフォルト値
 ;; ----------------------------------------------------------------------------
 (let ((cmd (executable-find "cmigemo"))
-      (dict (convert-standard-filename "/usr/local/share/migemo/utf-8/migemo-dict")))
+      (dict (convert-standard-filename "C:/programs/cmigemo/share/migemo/utf-8/migemo-dict")))
   (if (and (file-exists-p cmd)
            (file-exists-p dict))
       (custom-set-variables
@@ -32,4 +32,4 @@
 ;; no-byte-compile: t
 ;; End:
 
-;;; cocoa-emacs-10-minor-migemo.el ends here
+;;; windows-10-minor-migemo.el ends here

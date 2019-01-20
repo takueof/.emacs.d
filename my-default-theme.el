@@ -1,7 +1,7 @@
 ;;; my-default-theme.el --- My original defaut themes -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:45:16+09:00>
+;; Time-stamp: <2019-01-19T13:23:02+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: faces
@@ -30,6 +30,7 @@
 ;;   * TODO: より詳細な、環境ごとの分岐設定も用意したい（コンソールなど）
 
 ;;; Code:
+
 
 (deftheme my-default
   "My original default faces based on \"black\" (#000000) background.")

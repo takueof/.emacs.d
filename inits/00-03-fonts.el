@@ -1,7 +1,7 @@
 ;;; 00-03-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-19T13:47:29+09:00>
 
 ;;; Commentary:
 
@@ -135,6 +135,7 @@
 
 ;;; Code:
 
+
 ;; ----------------------------------------------------------------------------
 ;; スケール変換
 ;;
@@ -143,10 +144,11 @@
 ;; ----------------------------------------------------------------------------
 (eval-after-load 'my-utils
   '(progn
-     (add-to-list 'face-font-rescale-alist '("-YuGothic-" . 1.24))
-     (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.917))
-     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.91))
-     (add-to-list 'face-font-rescale-alist '("-Consolas-" . 0.98))))
+     (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.240))
+     (add-to-list 'face-font-rescale-alist '("-YuGothic-" . 1.240)) ;; macOS
+     (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.917)) ;; macOS (FIXME)
+     (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.850)) ;; Windows
+     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))))
 
 
 ;; ----------------------------------------------------------------------------

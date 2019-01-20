@@ -1,11 +1,12 @@
 ;;; 00-keybinds.el --- 設定 - グローバル キーバインド -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-17T11:47:41+09:00>
+;; Time-stamp: <2019-01-19T13:12:09+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
+
 
 ;; Backspace と DEL を 交換
 (keyboard-translate ?\C-h ?\C-?)

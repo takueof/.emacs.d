@@ -1,16 +1,18 @@
 ;;; windows-00-00-environment.el --- 設定 - Windows - 環境 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-18T01:33:52+09:00>
+;; Time-stamp: <2019-01-19T13:59:03+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
+
 ;; 環境変数 PATH では不足している分の追加
 (let* ((program-files-dir-x86 (or (getenv "PROGRAMFILES\(X86\)")
                                   (getenv "PROGRAMFILES")))
        (paths `(,(concat program-files-dir-x86 "/Aspell/bin")
+                "C:/programs/cmigemo/bin"
                 "C:/programs/cygwin/bin")))
   (dolist (path paths)
     (setq path (convert-standard-filename path))

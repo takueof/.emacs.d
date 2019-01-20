@@ -1,13 +1,14 @@
 ;;; 00-02-coding.el --- 設定 - 文字セット・コーディングシステム -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-19T13:11:29+09:00>
 
 ;;; Commentary:
 
 ;; WARNING: `set-language-environment' 実行よりも後で設定すること。
 
 ;;; Code:
+
 
 ;; ----------------------------------------------------------------------------
 ;; 「UTF-8（BOM 有）」のエイリアスを作成

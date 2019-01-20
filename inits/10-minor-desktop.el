@@ -1,7 +1,7 @@
 ;;; 10-minor-desktop.el --- 設定 - マイナーモード - デスクトップ環境保存・復旧 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-19T13:13:14+09:00>
 
 ;;; Commentary:
 
@@ -9,6 +9,7 @@
 ;; http://www.emacswiki.org/emacs/DeskTop
 
 ;;; Code:
+
 
 ;; ----------------------------------------------------------------------------
 ;; デフォルト値

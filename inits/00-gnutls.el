@@ -1,7 +1,7 @@
 ;;; 00-gnutls.el --- 設定 - GnuTLS -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T12:18:52+09:00>
+;; Time-stamp: <2019-01-19T13:12:04+09:00>
 
 ;;; Commentary:
 
@@ -11,6 +11,7 @@
 ;; https://twitter.com/robario/statuses/364694728299659264
 
 ;;; Code:
+
 
 ;; ----------------------------------------------------------------------------
 ;; デフォルト値

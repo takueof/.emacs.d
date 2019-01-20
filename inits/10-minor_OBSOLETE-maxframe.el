@@ -1,7 +1,7 @@
 ;;; 10-minor_OBSOLETE-maxframe.el --- 設定 - マイナーモード - 環境に依存しないフレーム状態復元 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:23+09:00>
+;; Time-stamp: <2019-01-19T13:17:53+09:00>
 
 ;;; Commentary:
 
@@ -14,6 +14,7 @@
 ;; `10-minor_OBSOLETE-frame-restore.el'
 
 ;;; Code:
+
 
 (unless (and (require 'desktop nil :no-error)
              (boundp 'desktop-restore-frames))

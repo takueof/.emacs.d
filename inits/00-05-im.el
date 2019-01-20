@@ -1,7 +1,7 @@
 ;;; 00-05-im.el --- 設定 - インプットメソッド -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-19T13:11:51+09:00>
 
 ;;; Commentary:
 
@@ -10,6 +10,7 @@
 ;;          カラーテーマ設定よりも後で設定すること。
 
 ;;; Code:
+
 
 ;; 各種シンボル（`current-input-method' など）が `mule-cmds' で定義されている
 ;; 例外を出さず、確実に初期化する

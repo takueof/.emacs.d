@@ -1,12 +1,16 @@
 ;;; 00-01-default.el --- 設定 - 共通 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-19T22:04:22+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
+
+;; ----------------------------------------------------------------------------
+;; デフォルト値
+;; ----------------------------------------------------------------------------
 (custom-set-variables
  ;;
  ;; フレームタイトルはカレントバッファ名を基準にする
@@ -73,7 +77,7 @@
  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Scrolling.html
  '(scroll-margin 10)
  ;;
- ;; 行間調整は行わない
+ ;; 行間調整はしない
  ;;
  '(line-spacing nil)
  ;;

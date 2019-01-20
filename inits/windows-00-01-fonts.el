@@ -1,7 +1,7 @@
 ;;; windows-00-01-fonts.el --- 設定 - Windows - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:23+09:00>
+;; Time-stamp: <2019-01-19T13:20:49+09:00>
 
 ;;; Commentary:
 
@@ -9,6 +9,7 @@
 ;; `00-03-fonts.el'
 
 ;;; Code:
+
 
 (custom-set-variables
  ;; 人為的に italic/bold フォントを選択

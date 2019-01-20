@@ -1,7 +1,7 @@
 ;;; 00-04-theme.el --- 設定 - カラーテーマ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-19T13:11:45+09:00>
 
 ;;; Commentary:
 
@@ -9,6 +9,7 @@
 ;;          フォント設定よりも後で設定すること。
 
 ;;; Code:
+
 
 ;; 利用可能なカラーテーマを設定
 (let ((required-themes '(;; 利用したいカラーテーマの一覧
