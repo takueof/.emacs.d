@@ -1,7 +1,7 @@
 ;;; 00-03-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-21T22:54:57+09:00>
+;; Time-stamp: <2019-01-21T23:15:01+09:00>
 
 ;;; Commentary:
 
@@ -450,14 +450,14 @@
        ;; ---------------------------------------------------------------------
        ;; フォントセット設定
        ;; ---------------------------------------------------------------------
-       (let ((fontset (if (< (car (my-real-display-pixels-per-inch)) 97)
+       (let ((fontset (if (< (car (my-real-display-pixels-per-inch)) 97.0)
                           "fontset-programmingBMP"
                         "fontset-programming")))
          (modify-all-frames-parameters `((font . ,fontset)))
 
          ;; TODO: ダイアログの face も変えたい
          ;;       シンボル名不明
-         ;;       (face-list) で一覧出しても、それらしきものがなかった
+         ;;       `face-list' で一覧を出しても、それらしきものがなかった
          (custom-set-faces
           `(tooltip ((t
                       (:font ,fontset)))))))))
