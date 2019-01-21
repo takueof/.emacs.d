@@ -1,7 +1,7 @@
 ;;; my-default-theme.el --- My original defaut themes -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T13:23:02+09:00>
+;; Time-stamp: <2019-01-21T22:59:57+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: faces
@@ -21,13 +21,12 @@
 
 ;;; Commentary:
 
-;; 自分用 GNU Emacs テーマ（黒背景）。
+;; 自分用 GNU Emacs テーマ（黒背景）
 ;; 作成方針は次の通り：
 ;;
 ;;   * 基本フェイスのみ変更する
 ;;   * 各メジャー＆マイナーモードの独自フェイスは「なるべく」変更しない
-;;       * ただし、(background dark) 用の定義がない場合を除く
-;;   * TODO: より詳細な、環境ごとの分岐設定も用意したい（コンソールなど）
+;;       * ただし (background dark) 用の定義がない場合を除く
 
 ;;; Code:
 
@@ -218,6 +217,8 @@
 
 
 (provide-theme 'my-default)
+
+
 ;; ----------------------------------------------------------------------------
 ;; Local Variables:
 ;; coding: utf-8-unix
