@@ -1,11 +1,11 @@
 ;;; 00-02-coding.el --- 設定 - 文字セット・コーディングシステム -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T13:11:29+09:00>
+;; Time-stamp: <2019-01-21T22:55:09+09:00>
 
 ;;; Commentary:
 
-;; WARNING: `set-language-environment' 実行よりも後で設定すること。
+;; WARNING: `set-language-environment' 実行より後に設定すること
 
 ;;; Code:
 

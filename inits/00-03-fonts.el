@@ -1,11 +1,11 @@
 ;;; 00-03-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-21T21:25:11+09:00>
+;; Time-stamp: <2019-01-21T22:54:57+09:00>
 
 ;;; Commentary:
 
-;; WARNING: 文字セット・コーディングシステム設定よりも後で設定すること。
+;; WARNING: `00-02-coding.el' より後に設定すること
 
 ;; 文字幅調整テスト:
 ;;   aa

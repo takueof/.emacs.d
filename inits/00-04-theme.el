@@ -1,12 +1,12 @@
 ;;; 00-04-theme.el --- 設定 - カラーテーマ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T13:11:45+09:00>
+;; Time-stamp: <2019-01-21T22:54:50+09:00>
 
 ;;; Commentary:
 
-;; WARNING: 文字セット・コーディングシステム設定よりも後で設定すること。
-;;          フォント設定よりも後で設定すること。
+;; WARNING: `00-02-coding.el' より後に設定すること
+;;          `00-03-fonts.el' より後に設定すること
 
 ;;; Code:
 
@@ -17,7 +17,7 @@
                          my-default
                          wheatgrass))
       (availabled-themes (custom-available-themes)))
-  ;; 利用したいカラーテーマが見つからなければ、何もしない
+  ;; 利用したいカラーテーマが見つからなければ何もしない
   (catch 'required-theme-found
     (dolist (theme required-themes)
       (when (member theme availabled-themes)
