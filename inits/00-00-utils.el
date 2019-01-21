@@ -1,7 +1,7 @@
 ;;; 00-00-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-21T21:54:41+09:00>
+;; Time-stamp: <2019-01-21T23:01:53+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -21,10 +21,10 @@
 
 ;;; Commentary:
 
-;; 独自定義した関数・マクロの集合。
-;; `feature' 名 `my-utils'。
+;; 独自定義した関数・マクロの集合
+;; `feature' 名 `my-utils'
 ;;
-;; 疑似名前空間プレフィクスは `my-'。
+;; 疑似名前空間プレフィクスは `my-'
 
 ;;; Code:
 
