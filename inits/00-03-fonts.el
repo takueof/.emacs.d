@@ -1,7 +1,7 @@
 ;;; 00-03-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-21T20:29:27+09:00>
+;; Time-stamp: <2019-01-21T21:25:11+09:00>
 
 ;;; Commentary:
 
@@ -137,331 +137,330 @@
 
 
 ;; ----------------------------------------------------------------------------
-;; スケール変換
-;;
-;; 多バイト文字の認識に支障がある場合の書法:
-;;   `(,(encode-coding-string "-フォント名-" 'emacs-mule) . 倍率)
+;; ウインドウシステム上でのみ動作させる
+;;   → ターミナルエミュレータ上では何もしない
 ;; ----------------------------------------------------------------------------
-(eval-after-load 'my-utils
-  '(progn
-     (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.240))
-     (add-to-list 'face-font-rescale-alist '("-YuGothic-" . 1.240)) ;; macOS
-     (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.917)) ;; macOS (FIXME)
-     (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.850)) ;; Windows
-     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))))
+(when window-system
+  ;; --------------------------------------------------------------------------
+  ;; シンボルや句読点などを表示するフォントを、フォント設定に応じて選択させる
+  ;;   → GNU Emacs 25 より前のふるまいに戻す
+  ;; --------------------------------------------------------------------------
+  (custom-set-variables
+   '(use-default-font-for-symbols nil))
+
+  (eval-after-load 'my-utils
+    '(progn
+       ;; ---------------------------------------------------------------------
+       ;; スケール変換
+       ;;
+       ;; 多バイト文字の認識に支障がある場合の書法:
+       ;;   `(,(encode-coding-string "-フォント名-" 'emacs-mule) . 倍率)
+       ;; ---------------------------------------------------------------------
+       (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.240))
+       (add-to-list 'face-font-rescale-alist '("-YuGothic-" . 1.240)) ;; macOS
+       (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.917)) ;; macOS (FIXME)
+       (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.850)) ;; Windows
+       (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))
 
 
-;; ----------------------------------------------------------------------------
-;; シンボルや句読点などを表示するフォントを、フォント設定に応じて選択させる
-;;   → GNU Emacs 25 より前のふるまいに戻す
-;; ----------------------------------------------------------------------------
-(custom-set-variables
- '(use-default-font-for-symbols nil))
-
-
-;; ----------------------------------------------------------------------------
-;; フォントセット: プログラミング用
-;; ----------------------------------------------------------------------------
-(eval-after-load 'my-utils
-  '(progn
-     (my-create-fontset-from-spec "programming"
-                                  (font-spec :size 12.0 ; デフォルトフォントサイズ (pt)
-                                             :family (my-fallback-font-family "Consolas"
-                                                                              "Inconsolata"
-                                                                              "Menlo"
-                                                                              "Monaco"
-                                                                              "Courier New"
-                                                                              "Monospace")))
-     ;; 最終フォールバック
-     (my-set-fontset-font-safe "fontset-programming"
-                               nil
-                               (font-spec :family (my-fallback-font-family "Consolas"
-                                                                           "Inconsolata"
-                                                                           "Menlo"
-                                                                           "Monaco"
-                                                                           "Courier New"
-                                                                           "Monospace")))
-     ;; Emoji
-     (my-set-fontset-font-safe "fontset-programming"
-                               nil
-                               (font-spec :family (my-fallback-font-family "Segoe UI Emoji"
-                                                                           "Segoe UI Symbol"
-                                                                           "Apple Color Emoji"
-                                                                           "AndroidEmoji"
-                                                                           "Symbola")))
-     ;; 中国語（簡体字）: Code page 936 (cp936) 相当
-     (my-set-fontset-font-safe "fontset-programming"
-                               'chinese-gbk
-                               (font-spec :family (my-fallback-font-family "PingFang SC"
-                                                                           "Microsoft YaHei"
-                                                                           "SimHei")))
-     ;; 中国語（繁体字）: Code page 937 (cp937) 相当
-     (my-set-fontset-font-safe "fontset-programming"
-                               'big5
-                               (font-spec :family (my-fallback-font-family "PingFang TC"
-                                                                           "BiauKai"
-                                                                           "Microsoft JhengHei"
-                                                                           "MingLiU")))
-     ;; 日本語: JIS X 0213:2004
-     ;;
-     ;; japanese-jisx0213-2 を明示しているのは、
-     ;; japanese-jisx0213.2004-1 が2面を含まないため
-     (my-set-fontset-font-safe "fontset-programming"
-                               'japanese-jisx0213-2 ; 2面
-                               (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                           "VL Gothic"
-                                                                           "游ゴシック Medium"
-                                                                           "YuGothic Medium"
-                                                                           "メイリオ")))
-     (my-set-fontset-font-safe "fontset-programming"
-                               'japanese-jisx0213.2004-1 ; 1面＋第3水準追加文字
-                               (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                           "VL Gothic"
-                                                                           "游ゴシック Medium"
-                                                                           "YuGothic Medium"
-                                                                           "メイリオ")))
-     ;; 日本語: Code page 932 (cp932)
-     (my-set-fontset-font-safe "fontset-programming"
-                               'cp932
-                               (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                           "VL Gothic"
-                                                                           "游ゴシック Medium"
-                                                                           "YuGothic Medium"
-                                                                           "メイリオ")))
-     ;; ラテン文字: Code page 858 (`cp858')
-     (my-set-fontset-font-safe "fontset-programming"
-                               'cp858
-                               (font-spec :family (my-fallback-font-family "Consolas"
-                                                                           "Inconsolata"
-                                                                           "Monaco"
-                                                                           "Courier New"
-                                                                           "Monospace")))
-     (my-set-fontset-font-safe "fontset-programming"
-                               (cons (string-to-char "░") (string-to-char "▓"))
-                               (font-spec ;; PATCH: 次のフォントは U+2591, U+2592, U+2593 未実装:
-                                          ;;          * "Consolas"
-                                          ;;          * "Inconsolata"
-                                          ;;        ゆえに、他フォントによるフォールバックが必要
-                                :family (my-fallback-font-family "Menlo"
-                                                                 "Monaco"
-                                                                 "Courier New"
-                                                                 "Monospace")))
-     ;; Unicode "Box Drawing"（罫線素片）
-     ;;
-     ;; see also:
-     ;; http://www.unicode.org/charts/PDF/U2500.pdf
-     (my-set-fontset-font-safe "fontset-programming"
-                               (cons (string-to-char "─") (string-to-char "╿"))
-                               ;; TODO: MacOS で YuGothic Medium だと、
-                               ;;       半角で表示されてしまう文字がある
-                               (font-spec :family (my-fallback-font-family "YuGothic Medium"
-                                                                           "ＭＳ ゴシック"
-                                                                           "さざなみフォント"
-                                                                           "東雲フォント")))
-     ;; "§" (U+00A7: SECTION SIGN)
-     ;; "¨" (U+00A8: DIAERESIS)
-     ;; "°" (U+00B0: DEGREE SIGN)
-     ;; "±" (U+00B1: PLUS-MINUS SIGN)
-     ;; "´" (U+00B4: ACUTE ACCENT)
-     ;; "¶" (U+00B6: PILCROW SIGN)
-     ;; "×" (U+00D7: LATIN CAPITAL LETTER O WITH STROKE)
-     ;; "÷" (U+00F7: DIVISION SIGN)
-     ;; "─" (U+2500: BOX DRAWINGS LIGHT HORIZONTAL)
-     ;; "│" (U+2502: BOX DRAWINGS LIGHT VERTICAL)
-     ;; "┌" (U+250c: BOX DRAWINGS LIGHT DOWN AND RIGHT)
-     ;; "┐" (U+2510: BOX DRAWINGS LIGHT DOWN AND LEFT)
-     ;; "└" (U+2514: BOX DRAWINGS LIGHT UP AND RIGHT)
-     ;; "┘" (U+2518: BOX DRAWINGS LIGHT UP AND LEFT)
-     ;; "├" (U+251c: BOX DRAWINGS LIGHT VERTICAL AND RIGHT)
-     ;; "┤" (U+2524: BOX DRAWINGS LIGHT VERTICAL AND LEFT)
-     ;; "┬" (U+252c: BOX DRAWINGS LIGHT DOWN AND HORIZONTAL)
-     ;; "┴" (U+2534: BOX DRAWINGS LIGHT UP AND HORIZONTAL)
-     ;; "┼" (U+253c: BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL)
-     ;; "■" (U+25A0: BLACK SQUARE)
-     ;;
-     ;; `cp858' に含まれているため、半角フォントが利用されてしまう問題を回避
-     (dolist (code (mapcar 'string-to-char
-                           (split-string "§¨°±´¶×÷─│┌┐└┘├┤┬┴┼■" "" t)))
+       ;; ---------------------------------------------------------------------
+       ;; フォントセット: プログラミング用
+       ;; ---------------------------------------------------------------------
+       (my-create-fontset-from-spec "programming"
+                                    (font-spec :size 12.0 ; デフォルトフォントサイズ (pt)
+                                               :family (my-fallback-font-family "Consolas"
+                                                                                "Inconsolata"
+                                                                                "Menlo"
+                                                                                "Monaco"
+                                                                                "Courier New"
+                                                                                "Monospace")))
+       ;; 最終フォールバック
        (my-set-fontset-font-safe "fontset-programming"
-                                 (cons code code)
+                                 nil
+                                 (font-spec :family (my-fallback-font-family "Consolas"
+                                                                             "Inconsolata"
+                                                                             "Menlo"
+                                                                             "Monaco"
+                                                                             "Courier New"
+                                                                             "Monospace")))
+       ;; Emoji
+       (my-set-fontset-font-safe "fontset-programming"
+                                 nil
+                                 (font-spec :family (my-fallback-font-family "Segoe UI Emoji"
+                                                                             "Segoe UI Symbol"
+                                                                             "Apple Color Emoji"
+                                                                             "AndroidEmoji"
+                                                                             "Symbola")))
+       ;; 中国語（簡体字）: Code page 936 (cp936) 相当
+       (my-set-fontset-font-safe "fontset-programming"
+                                 'chinese-gbk
+                                 (font-spec :family (my-fallback-font-family "PingFang SC"
+                                                                             "Microsoft YaHei"
+                                                                             "SimHei")))
+       ;; 中国語（繁体字）: Code page 937 (cp937) 相当
+       (my-set-fontset-font-safe "fontset-programming"
+                                 'big5
+                                 (font-spec :family (my-fallback-font-family "PingFang TC"
+                                                                             "BiauKai"
+                                                                             "Microsoft JhengHei"
+                                                                             "MingLiU")))
+       ;; 日本語: JIS X 0213:2004
+       ;;
+       ;; japanese-jisx0213-2 を明示しているのは、
+       ;; japanese-jisx0213.2004-1 が2面を含まないため
+       (my-set-fontset-font-safe "fontset-programming"
+                                 'japanese-jisx0213-2 ; 2面
                                  (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                             "YuGothic Medium"
                                                                              "VL Gothic"
-                                                                             "メイリオ"))))
-     ;; ASCII
-     (my-set-fontset-font-safe "fontset-programming"
-                               'ascii
-                               (font-spec :size 12.0 ; デフォルトフォントサイズ (pt)
-                                          :family (my-fallback-font-family "Consolas"
-                                                                           "Inconsolata"
-                                                                           "Menlo"
-                                                                           "Monaco"
-                                                                           "Courier New"
-                                                                           "Monospace")))))
+                                                                             "游ゴシック Medium"
+                                                                             "YuGothic Medium"
+                                                                             "メイリオ")))
+       (my-set-fontset-font-safe "fontset-programming"
+                                 'japanese-jisx0213.2004-1 ; 1面＋第3水準追加文字
+                                 (font-spec :family (my-fallback-font-family "Migu 1M"
+                                                                             "VL Gothic"
+                                                                             "游ゴシック Medium"
+                                                                             "YuGothic Medium"
+                                                                             "メイリオ")))
+       ;; 日本語: Code page 932 (cp932)
+       (my-set-fontset-font-safe "fontset-programming"
+                                 'cp932
+                                 (font-spec :family (my-fallback-font-family "Migu 1M"
+                                                                             "VL Gothic"
+                                                                             "游ゴシック Medium"
+                                                                             "YuGothic Medium"
+                                                                             "メイリオ")))
+       ;; ラテン文字: Code page 858 (`cp858')
+       (my-set-fontset-font-safe "fontset-programming"
+                                 'cp858
+                                 (font-spec :family (my-fallback-font-family "Consolas"
+                                                                             "Inconsolata"
+                                                                             "Monaco"
+                                                                             "Courier New"
+                                                                             "Monospace")))
+       (my-set-fontset-font-safe "fontset-programming"
+                                 (cons (string-to-char "░") (string-to-char "▓"))
+                                 (font-spec ;; PATCH: 次のフォントは U+2591, U+2592, U+2593 未実装:
+                                  ;;          * "Consolas"
+                                  ;;          * "Inconsolata"
+                                  ;;        ゆえに、他フォントによるフォールバックが必要
+                                  :family (my-fallback-font-family "Menlo"
+                                                                   "Monaco"
+                                                                   "Courier New"
+                                                                   "Monospace")))
+       ;; Unicode "Box Drawing"（罫線素片）
+       ;;
+       ;; see also:
+       ;; http://www.unicode.org/charts/PDF/U2500.pdf
+       (my-set-fontset-font-safe "fontset-programming"
+                                 (cons (string-to-char "─") (string-to-char "╿"))
+                                 ;; TODO: MacOS で YuGothic Medium だと、
+                                 ;;       半角で表示されてしまう文字がある
+                                 (font-spec :family (my-fallback-font-family "YuGothic Medium"
+                                                                             "ＭＳ ゴシック"
+                                                                             "さざなみフォント"
+                                                                             "東雲フォント")))
+       ;; "§" (U+00A7: SECTION SIGN)
+       ;; "¨" (U+00A8: DIAERESIS)
+       ;; "°" (U+00B0: DEGREE SIGN)
+       ;; "±" (U+00B1: PLUS-MINUS SIGN)
+       ;; "´" (U+00B4: ACUTE ACCENT)
+       ;; "¶" (U+00B6: PILCROW SIGN)
+       ;; "×" (U+00D7: LATIN CAPITAL LETTER O WITH STROKE)
+       ;; "÷" (U+00F7: DIVISION SIGN)
+       ;; "─" (U+2500: BOX DRAWINGS LIGHT HORIZONTAL)
+       ;; "│" (U+2502: BOX DRAWINGS LIGHT VERTICAL)
+       ;; "┌" (U+250c: BOX DRAWINGS LIGHT DOWN AND RIGHT)
+       ;; "┐" (U+2510: BOX DRAWINGS LIGHT DOWN AND LEFT)
+       ;; "└" (U+2514: BOX DRAWINGS LIGHT UP AND RIGHT)
+       ;; "┘" (U+2518: BOX DRAWINGS LIGHT UP AND LEFT)
+       ;; "├" (U+251c: BOX DRAWINGS LIGHT VERTICAL AND RIGHT)
+       ;; "┤" (U+2524: BOX DRAWINGS LIGHT VERTICAL AND LEFT)
+       ;; "┬" (U+252c: BOX DRAWINGS LIGHT DOWN AND HORIZONTAL)
+       ;; "┴" (U+2534: BOX DRAWINGS LIGHT UP AND HORIZONTAL)
+       ;; "┼" (U+253c: BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL)
+       ;; "■" (U+25A0: BLACK SQUARE)
+       ;;
+       ;; `cp858' に含まれているため、半角フォントが利用されてしまう問題を回避
+       (dolist (code (mapcar 'string-to-char
+                             (split-string "§¨°±´¶×÷─│┌┐└┘├┤┬┴┼■" "" t)))
+         (my-set-fontset-font-safe "fontset-programming"
+                                   (cons code code)
+                                   (font-spec :family (my-fallback-font-family "Migu 1M"
+                                                                               "YuGothic Medium"
+                                                                               "VL Gothic"
+                                                                               "メイリオ"))))
+       ;; ASCII
+       (my-set-fontset-font-safe "fontset-programming"
+                                 'ascii
+                                 (font-spec :size 12.0 ; デフォルトフォントサイズ (pt)
+                                            :family (my-fallback-font-family "Consolas"
+                                                                             "Inconsolata"
+                                                                             "Menlo"
+                                                                             "Monaco"
+                                                                             "Courier New"
+                                                                             "Monospace")))
 
 
-;; ----------------------------------------------------------------------------
-;; フォントセット: プログラミング用
-;;                 ビットマップフォント主体・96dpi 環境向け
-;; ----------------------------------------------------------------------------
-;; see also:
-;;   http://tobiasjung.name/profont/
-;;   http://osaka.is.land.to/
-;;   http://emk.name/2003/12/osakattf.html
-;; ----------------------------------------------------------------------------
-(eval-after-load 'my-utils
-  '(progn
-     (my-create-fontset-from-spec "programmingBMP"
-                                  (font-spec :size 12 ; デフォルトフォントサイズ (px)
-                                             :family (my-fallback-font-family "ProFontWindows"
-                                                                              "Consolas"
-                                                                              "Inconsolata"
-                                                                              "Courier New"
-                                                                              "Monospace")))
-     ;; 最終フォールバック
-     (my-set-fontset-font-safe "fontset-programmingBMP"
-                               nil
-                               (font-spec :family (my-fallback-font-family "Consolas"
-                                                                           "Inconsolata"
-                                                                           "Courier New"
-                                                                           "Monospace")))
-     ;; Emoji
-     (my-set-fontset-font-safe "fontset-programmingBMP"
-                               nil
-                               (font-spec :family (my-fallback-font-family "Segoe UI Emoji"
-                                                                           "Segoe UI Symbol"
-                                                                           "AndroidEmoji"
-                                                                           "Symbola")))
-     ;; 中国語（簡体字）: Code page 936 (cp936) 相当
-     (my-set-fontset-font-safe "fontset-programmingBMP"
-                               'chinese-gbk
-                               (font-spec :family (my-fallback-font-family "SimHei")))
-     ;; 中国語（繁体字）: Code page 12.0 (cp937) 相当
-     (my-set-fontset-font-safe "fontset-programmingBMP"
-                               'big5
-                               (font-spec :family (my-fallback-font-family "MingLiU")))
-     ;; 日本語: JIS X 0213:2004
-     ;;
-     ;; japanese-jisx0213-2 を明示しているのは、
-     ;; japanese-jisx0213.2004-1 が2面を含まないため
-     (my-set-fontset-font-safe "fontset-programmingBMP"
-                               'japanese-jisx0213.2004-1 ; 1面＋第3水準追加文字
-                               (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
-                                                                           "さざなみフォント"
-                                                                           "東雲フォント")))
-     (my-set-fontset-font-safe "fontset-programmingBMP"
-                               'japanese-jisx0213-2 ; 2面
-                               (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
-                                                                           "さざなみフォント"
-                                                                           "東雲フォント")))
-     ;; 日本語: cp932
-     (my-set-fontset-font-safe "fontset-programmingBMP"
-                               'cp932
-                               (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
-                                                                           "さざなみフォント"
-                                                                           "東雲フォント")))
-     ;; 日本語: JIS X 0208
-     ;;
-     ;; "Osaka－等幅" で対応している文字はできるだけ利用
-     (my-set-fontset-font-safe "fontset-programmingBMP"
-                               'japanese-jisx0208
-                               (font-spec :family (my-fallback-font-family "Osaka－等幅"
-                                                                           "ＭＳ ゴシック"
-                                                                           "さざなみフォント"
-                                                                           "東雲フォント")))
-     ;; ラテン文字: `cp858'
-     ;;
-     ;; "ProFontWindows" の readme.txt には次の記述がある:
-     ;;
-     ;;   * € サポートを投入
-     ;;   * cp585 フルサポート
-     ;;
-     ;; ゆえに、明示はないものの "ProFontWindows" の範囲は
-     ;; `cp858' と同一であると仮定・設定する
-     (my-set-fontset-font-safe "fontset-programmingBMP"
-                               'cp858
-                               (font-spec :family (my-fallback-font-family "ProFontWindows"
-                                                                           "Consolas"
-                                                                           "Inconsolata"
-                                                                           "Courier New"
-                                                                           "Monospace")))
-     ;; Unicode "Box Drawing"（罫線素片）
-     ;;
-     ;; see also:
-     ;; http://www.unicode.org/charts/PDF/U2500.pdf
-     (my-set-fontset-font-safe "fontset-programmingBMP"
-                               (cons (string-to-char "─") (string-to-char "╿"))
-                               (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
-                                                                           "さざなみフォント"
-                                                                           "東雲フォント")))
-     ;; "§" (U+00A7: SECTION SIGN)
-     ;; "¨" (U+00A8: DIAERESIS)
-     ;; "°" (U+00B0: DEGREE SIGN)
-     ;; "±" (U+00B1: PLUS-MINUS SIGN)
-     ;; "´" (U+00B4: ACUTE ACCENT)
-     ;; "¶" (U+00B6: PILCROW SIGN)
-     ;; "×" (U+00D7: LATIN CAPITAL LETTER O WITH STROKE)
-     ;; "÷" (U+00F7: DIVISION SIGN)
-     ;; "─" (U+2500: BOX DRAWINGS LIGHT HORIZONTAL)
-     ;; "│" (U+2502: BOX DRAWINGS LIGHT VERTICAL)
-     ;; "┌" (U+250c: BOX DRAWINGS LIGHT DOWN AND RIGHT)
-     ;; "┐" (U+2510: BOX DRAWINGS LIGHT DOWN AND LEFT)
-     ;; "└" (U+2514: BOX DRAWINGS LIGHT UP AND RIGHT)
-     ;; "┘" (U+2518: BOX DRAWINGS LIGHT UP AND LEFT)
-     ;; "├" (U+251c: BOX DRAWINGS LIGHT VERTICAL AND RIGHT)
-     ;; "┤" (U+2524: BOX DRAWINGS LIGHT VERTICAL AND LEFT)
-     ;; "┬" (U+252c: BOX DRAWINGS LIGHT DOWN AND HORIZONTAL)
-     ;; "┴" (U+2534: BOX DRAWINGS LIGHT UP AND HORIZONTAL)
-     ;; "┼" (U+253c: BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL)
-     ;; "■" (U+25A0: BLACK SQUARE)
-     ;;
-     ;; `cp858' に含まれているため、半角フォントが利用されてしまう問題を回避
-     (dolist (code (mapcar 'string-to-char
-                           (split-string "§¨°±´¶×÷─│┌┐└┘├┤┬┴┼■" "" t)))
+       ;; ---------------------------------------------------------------------
+       ;; フォントセット: プログラミング用
+       ;;                 ビットマップフォント主体・96dpi 環境向け
+       ;; ---------------------------------------------------------------------
+       ;; see also:
+       ;;   http://tobiasjung.name/profont/
+       ;;   http://osaka.is.land.to/
+       ;;   http://emk.name/2003/12/osakattf.html
+       ;; ---------------------------------------------------------------------
+       (my-create-fontset-from-spec "programmingBMP"
+                                    (font-spec :size 12 ; デフォルトフォントサイズ (px)
+                                               :family (my-fallback-font-family "ProFontWindows"
+                                                                                "Consolas"
+                                                                                "Inconsolata"
+                                                                                "Courier New"
+                                                                                "Monospace")))
+       ;; 最終フォールバック
        (my-set-fontset-font-safe "fontset-programmingBMP"
-                                 (cons code code)
+                                 nil
+                                 (font-spec :family (my-fallback-font-family "Consolas"
+                                                                             "Inconsolata"
+                                                                             "Courier New"
+                                                                             "Monospace")))
+       ;; Emoji
+       (my-set-fontset-font-safe "fontset-programmingBMP"
+                                 nil
+                                 (font-spec :family (my-fallback-font-family "Segoe UI Emoji"
+                                                                             "Segoe UI Symbol"
+                                                                             "AndroidEmoji"
+                                                                             "Symbola")))
+       ;; 中国語（簡体字）: Code page 936 (cp936) 相当
+       (my-set-fontset-font-safe "fontset-programmingBMP"
+                                 'chinese-gbk
+                                 (font-spec :family (my-fallback-font-family "SimHei")))
+       ;; 中国語（繁体字）: Code page 12.0 (cp937) 相当
+       (my-set-fontset-font-safe "fontset-programmingBMP"
+                                 'big5
+                                 (font-spec :family (my-fallback-font-family "MingLiU")))
+       ;; 日本語: JIS X 0213:2004
+       ;;
+       ;; japanese-jisx0213-2 を明示しているのは、
+       ;; japanese-jisx0213.2004-1 が2面を含まないため
+       (my-set-fontset-font-safe "fontset-programmingBMP"
+                                 'japanese-jisx0213.2004-1 ; 1面＋第3水準追加文字
+                                 (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
+                                                                             "さざなみフォント"
+                                                                             "東雲フォント")))
+       (my-set-fontset-font-safe "fontset-programmingBMP"
+                                 'japanese-jisx0213-2 ; 2面
+                                 (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
+                                                                             "さざなみフォント"
+                                                                             "東雲フォント")))
+       ;; 日本語: cp932
+       (my-set-fontset-font-safe "fontset-programmingBMP"
+                                 'cp932
+                                 (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
+                                                                             "さざなみフォント"
+                                                                             "東雲フォント")))
+       ;; 日本語: JIS X 0208
+       ;;
+       ;; "Osaka－等幅" で対応している文字はできるだけ利用
+       (my-set-fontset-font-safe "fontset-programmingBMP"
+                                 'japanese-jisx0208
                                  (font-spec :family (my-fallback-font-family "Osaka－等幅"
                                                                              "ＭＳ ゴシック"
                                                                              "さざなみフォント"
-                                                                             "東雲フォント"))))
-     ;; "Ø" (U+00D8: LATIN CAPITAL LETTER O WITH STROKE)
-     ;;
-     ;; フォントによっては "0" (U+0030: DIGIT ZERO) と判別しにくいため、
-     ;; 他のフォントに変更（判別しにくいフォントの例："ProFontWindows"）
-     (my-set-fontset-font-safe "fontset-programmingBMP"
-                               (cons (string-to-char "Ø") (string-to-char "Ø"))
-                               (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
-                                                                           "さざなみフォント"
-                                                                           "東雲フォント"
-                                                                           "Consolas"
-                                                                           "Inconsolata"
-                                                                           "Courier New")))
-     ;; ASCII
-     (my-set-fontset-font-safe "fontset-programmingBMP"
-                               'ascii
-                               (font-spec :size 12 ; デフォルトフォントサイズ (px)
-                                          :family (my-fallback-font-family "ProFontWindows"
-                                                                           "Consolas"
-                                                                           "Inconsolata"
-                                                                           "Courier New"
-                                                                           "Monospace")))))
+                                                                             "東雲フォント")))
+       ;; ラテン文字: `cp858'
+       ;;
+       ;; "ProFontWindows" の readme.txt には次の記述がある:
+       ;;
+       ;;   * € サポートを投入
+       ;;   * cp585 フルサポート
+       ;;
+       ;; ゆえに、明示はないものの "ProFontWindows" の範囲は
+       ;; `cp858' と同一であると仮定・設定する
+       (my-set-fontset-font-safe "fontset-programmingBMP"
+                                 'cp858
+                                 (font-spec :family (my-fallback-font-family "ProFontWindows"
+                                                                             "Consolas"
+                                                                             "Inconsolata"
+                                                                             "Courier New"
+                                                                             "Monospace")))
+       ;; Unicode "Box Drawing"（罫線素片）
+       ;;
+       ;; see also:
+       ;; http://www.unicode.org/charts/PDF/U2500.pdf
+       (my-set-fontset-font-safe "fontset-programmingBMP"
+                                 (cons (string-to-char "─") (string-to-char "╿"))
+                                 (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
+                                                                             "さざなみフォント"
+                                                                             "東雲フォント")))
+       ;; "§" (U+00A7: SECTION SIGN)
+       ;; "¨" (U+00A8: DIAERESIS)
+       ;; "°" (U+00B0: DEGREE SIGN)
+       ;; "±" (U+00B1: PLUS-MINUS SIGN)
+       ;; "´" (U+00B4: ACUTE ACCENT)
+       ;; "¶" (U+00B6: PILCROW SIGN)
+       ;; "×" (U+00D7: LATIN CAPITAL LETTER O WITH STROKE)
+       ;; "÷" (U+00F7: DIVISION SIGN)
+       ;; "─" (U+2500: BOX DRAWINGS LIGHT HORIZONTAL)
+       ;; "│" (U+2502: BOX DRAWINGS LIGHT VERTICAL)
+       ;; "┌" (U+250c: BOX DRAWINGS LIGHT DOWN AND RIGHT)
+       ;; "┐" (U+2510: BOX DRAWINGS LIGHT DOWN AND LEFT)
+       ;; "└" (U+2514: BOX DRAWINGS LIGHT UP AND RIGHT)
+       ;; "┘" (U+2518: BOX DRAWINGS LIGHT UP AND LEFT)
+       ;; "├" (U+251c: BOX DRAWINGS LIGHT VERTICAL AND RIGHT)
+       ;; "┤" (U+2524: BOX DRAWINGS LIGHT VERTICAL AND LEFT)
+       ;; "┬" (U+252c: BOX DRAWINGS LIGHT DOWN AND HORIZONTAL)
+       ;; "┴" (U+2534: BOX DRAWINGS LIGHT UP AND HORIZONTAL)
+       ;; "┼" (U+253c: BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL)
+       ;; "■" (U+25A0: BLACK SQUARE)
+       ;;
+       ;; `cp858' に含まれているため、半角フォントが利用されてしまう問題を回避
+       (dolist (code (mapcar 'string-to-char
+                             (split-string "§¨°±´¶×÷─│┌┐└┘├┤┬┴┼■" "" t)))
+         (my-set-fontset-font-safe "fontset-programmingBMP"
+                                   (cons code code)
+                                   (font-spec :family (my-fallback-font-family "Osaka－等幅"
+                                                                               "ＭＳ ゴシック"
+                                                                               "さざなみフォント"
+                                                                               "東雲フォント"))))
+       ;; "Ø" (U+00D8: LATIN CAPITAL LETTER O WITH STROKE)
+       ;;
+       ;; フォントによっては "0" (U+0030: DIGIT ZERO) と判別しにくいため、
+       ;; 他のフォントに変更（判別しにくいフォントの例："ProFontWindows"）
+       (my-set-fontset-font-safe "fontset-programmingBMP"
+                                 (cons (string-to-char "Ø") (string-to-char "Ø"))
+                                 (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
+                                                                             "さざなみフォント"
+                                                                             "東雲フォント"
+                                                                             "Consolas"
+                                                                             "Inconsolata"
+                                                                             "Courier New")))
+       ;; ASCII
+       (my-set-fontset-font-safe "fontset-programmingBMP"
+                                 'ascii
+                                 (font-spec :size 12 ; デフォルトフォントサイズ (px)
+                                            :family (my-fallback-font-family "ProFontWindows"
+                                                                             "Consolas"
+                                                                             "Inconsolata"
+                                                                             "Courier New"
+                                                                             "Monospace")))
 
 
-;; ----------------------------------------------------------------------------
-;; フォントセット設定
-;; ----------------------------------------------------------------------------
-(eval-after-load 'my-utils
-  '(let ((fontset (if (< (car (my-real-display-pixels-per-inch)) 97)
-                      "fontset-programmingBMP"
-                    "fontset-programming")))
-     (modify-all-frames-parameters `((font . ,fontset)))
+       ;; ---------------------------------------------------------------------
+       ;; フォントセット設定
+       ;; ---------------------------------------------------------------------
+       (let ((fontset (if (< (car (my-real-display-pixels-per-inch)) 97)
+                          "fontset-programmingBMP"
+                        "fontset-programming")))
+         (modify-all-frames-parameters `((font . ,fontset)))
 
-     ;; TODO: ダイアログの face も変えたい
-     ;;       シンボル名不明
-     ;;       (face-list) で一覧出しても、それらしきものがなかった
-     (custom-set-faces
-      `(tooltip ((t
-                  (:font ,fontset)))))))
+         ;; TODO: ダイアログの face も変えたい
+         ;;       シンボル名不明
+         ;;       (face-list) で一覧出しても、それらしきものがなかった
+         (custom-set-faces
+          `(tooltip ((t
+                      (:font ,fontset)))))))))
 
 
 ;; ----------------------------------------------------------------------------

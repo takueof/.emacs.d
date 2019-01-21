@@ -1,7 +1,7 @@
 ;;; 00-00-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-21T20:50:04+09:00>
+;; Time-stamp: <2019-01-21T21:54:41+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -44,6 +44,7 @@
 ;;;###autoload
 (defmacro my-visual-line-beginning-position (&optional n)
   "Get cursor point of visual line beginning position.
+
 N is same meaning of `beginning-of-visual-line' argument."
   `(save-excursion
      (beginning-of-visual-line ,n)
@@ -52,6 +53,7 @@ N is same meaning of `beginning-of-visual-line' argument."
 ;;;###autoload
 (defun my-beginning-of-smart-indented-line ()
   "Move curosr to beginning of indent.
+
 Move to the beginning of the line if the cursor is at the beginning or middle of the indent."
   (interactive)
 
@@ -82,7 +84,8 @@ Move to the beginning of the line if the cursor is at the beginning or middle of
 ;;;###autoload
 (defun my-other-window-reverse (count &optional all-frames)
   "Move before window, reverse behavior of `other-window'.
-COUNT and ALL-FRAMES are same meaning of `other-window' arguments."
+
+COUNT and ALL-FRAMES are same arguments of `other-window'."
   (interactive "p")
   (other-window (- arg) all-frames))
 
@@ -93,7 +96,8 @@ COUNT and ALL-FRAMES are same meaning of `other-window' arguments."
 ;;;###autoload
 (defun my-other-frame-reverse (arg)
   "Move before frame, reverse behavior of `other-frame'.
-ARG is same meaning of `other-frame' argument."
+
+ARG is same argument of `other-frame'."
   (interactive "p")
   (other-frame (- arg)))
 
@@ -104,7 +108,9 @@ ARG is same meaning of `other-frame' argument."
 ;;;###autoload
 (defun my-toggle-truncate-lines-force (&optional arg)
   "Force switch the current buffer's display wrapping.
+
 ARG is non-nil to wrapping, or nil to no wrapping.
+
 It doesn't depend on `truncate-partial-width-windows' of `toggle-truncate-lines'."
   (interactive "P")
   (let ((after (if (null arg)
@@ -131,9 +137,12 @@ It doesn't depend on `truncate-partial-width-windows' of `toggle-truncate-lines'
 ;;;###autoload
 (defun my-insert-file-name (&optional name)
   "Insert current buffer's file name to cursor position.
-If NAME is string, it is treated as a file path.
-If NAME is buffer, it targets the file name of the buffer.
-If NAME is other symbol, it targets file name of the `current-buffer'."
+
+NAME is string to target the string.
+NAME is buffer to target the buffer file name.
+NAME is other symbol to target the `current-buffer' file name.
+
+Return string of file name."
   (interactive)
   (insert (convert-standard-filename
            (file-name-nondirectory
@@ -147,9 +156,12 @@ If NAME is other symbol, it targets file name of the `current-buffer'."
 ;;;###autoload
 (defun my-insert-file-path (&optional name)
   "Insert current buffer's file path (full path) to cursor position.
-If NAME is string, it is treated as a file path.
-If NAME is buffer, it targets the file name of the buffer.
-If NAME is other symbol, it targets file name of the `current-buffer'."
+
+NAME is string to target the string.
+NAME is buffer to target the buffer file path.
+NAME is other symbol to target the `current-buffer' file path.
+
+Return string of file path."
   (interactive)
   (insert (convert-standard-filename
            (cond ((stringp name)
@@ -166,7 +178,8 @@ If NAME is other symbol, it targets file name of the `current-buffer'."
 ;;;###autoload
 (defmacro my-real-display-pixels-per-inch ()
   "Calculate real pixels per inch (ppi) by real display.
-Value is a cons: (WIDTH-DPI . HEIGHT-DPI).
+
+Return cons of (WIDTH-DPI . HEIGHT-DPI).
 
 `display-pixels-per-inch' has invalid value in high resolution display."
   (declare (indent 0)
@@ -184,8 +197,9 @@ Value is a cons: (WIDTH-DPI . HEIGHT-DPI).
 ;; ----------------------------------------------------------------------------
 ;;;###autoload
 (defmacro my-fallback-font-family (&rest families)
-  "Return a first matched avaliabled font-family in FAMILIES.
-If all FAMILIES are unavaliabled, return nil."
+  "Return a first matched avaliable font-family in FAMILIES.
+
+Return nil to all FAMILIES are unavaliabled."
   (declare (indent 0)
            (debug t))
   (let ((founded (make-symbol "founded"))
@@ -197,8 +211,9 @@ If all FAMILIES are unavaliabled, return nil."
 
 ;;;###autoload
 (defmacro my-fallback-font-xlfd (&rest xlfds)
-  "Return a first matched avaliabled font XLFD in XLFDS.
-If all XLFDS are unavaliabled, return nil."
+  "Return a first matched avaliable font XLFD in XLFDS.
+
+Return nil to all XLFDS are unavaliabled."
   (declare (indent 0)
            (debug t))
   (let ((founded (make-symbol "founded"))
@@ -208,8 +223,9 @@ If all XLFDS are unavaliabled, return nil."
          (if (find-font (font-spec :name ,xlfd))
              (throw ',founded ,xlfd))))))
 
+;;;###autoload
 (defun my-create-fontset-spec-string (name spec)
-  "Create string for 1st argument of `create-fontset-from-fontset-spec'.
+  "Return string for 1st argument of `create-fontset-from-fontset-spec'.
 
 NAME is fontset name without \"fontset-\" prefix (example: \"fontset-NAME\").
 SPEC is font object (`font-spec' return value)."
@@ -227,9 +243,11 @@ SPEC is font object (`font-spec' return value)."
   "Create a fontset from \"fontset-NAME\" and font object SPEC.
 
 NAME is fontset name (without \"fontset-\" prefix).
-SPEC is font object (ex. `font-spec' return value).
+SPEC is font object (ex. `font-spec' function's return value).
 
-OPTIONS are same arguments of `create-fontset-from-fontset-spec' after the 2nd."
+OPTIONS are same arguments of `create-fontset-from-fontset-spec' after the 2nd.
+
+Return the result of `create-fontset-from-fontset-spec'."
   (declare (indent 0)
            (debug t))
   `(create-fontset-from-fontset-spec (my-create-fontset-spec-string ,name ,spec)
@@ -253,7 +271,9 @@ This feature seems to `car-safe' and `cdr-safe'."
 ;; ----------------------------------------------------------------------------
 ;;;###autoload
 (defmacro my-change-lighter (minor-mode value)
-  "Change MINOR-MODE's lighter to VALUE."
+  "Change MINOR-MODE's lighter to VALUE.
+
+Return object of lignter."
   (declare (indent 0)
            (debug t))
   (let ((lighter (make-symbol "lighter")))
@@ -268,8 +288,10 @@ This feature seems to `car-safe' and `cdr-safe'."
 ;;;###autoload
 (defun my-change-files-coding-system (dir regexp coding-system recursive)
   "Convert CODING-SYSTEM for all files matched REGEXP in DIR.
-If RECURSIVE is non-nil, find files for recursive.
-Return file numbers of converted."
+
+RECURSIVE is non-nil to find files for recursive.
+
+Return converted file numbers."
   (interactive
    (list (read-directory-name "Target directory: ")
          (read-regexp "File name (RegExp): ")
