@@ -1,7 +1,7 @@
 ;;; 10-minor-migemo.el --- 設定 - マイナーモード - ローマ字入力から日本語をインクリメンタル検索 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:23+09:00>
+;; Time-stamp: <2019-01-21T10:23:17+09:00>
 
 ;;; Commentary:
 
@@ -35,13 +35,14 @@
 ;; ----------------------------------------------------------------------------
 ;; 起動
 ;; ----------------------------------------------------------------------------
-(when (require 'migemo nil :noerror)
-  (if (and (boundp 'isearch-mode-map)
-           (fboundp 'migemo-isearch-toggle-migemo))
-      (define-key isearch-mode-map (kbd "C-c C-s") #'migemo-isearch-toggle-migemo))
-
-  (if (fboundp 'migemo-init)
-      (migemo-init)))
+(if (and (require 'migemo nil :noerror)
+         (boundp 'isearch-mode-map)
+         (fboundp 'migemo-isearch-toggle-migemo))
+    ;; 関数 `migemo-init' の実行は、各環境ごとの設定ファイル内で行わせる
+    ;; 各環境ごとの設定ファイルでも `custom-set-variables' を実行しているため
+    ;;
+    ;; ここではキーバインドのみ設定
+    (define-key isearch-mode-map (kbd "C-c C-s") #'migemo-isearch-toggle-migemo))
 
 
 ;; ----------------------------------------------------------------------------
