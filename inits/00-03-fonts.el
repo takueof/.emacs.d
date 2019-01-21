@@ -1,7 +1,7 @@
 ;;; 00-03-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-21T20:13:23+09:00>
+;; Time-stamp: <2019-01-21T20:29:27+09:00>
 
 ;;; Commentary:
 
@@ -461,7 +461,7 @@
      ;;       (face-list) で一覧出しても、それらしきものがなかった
      (custom-set-faces
       `(tooltip ((t
-                  (:font ,fontset))))))))
+                  (:font ,fontset)))))))
 
 
 ;; ----------------------------------------------------------------------------
