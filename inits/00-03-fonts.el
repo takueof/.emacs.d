@@ -1,7 +1,7 @@
 ;;; 00-03-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-22T12:41:29+09:00>
+;; Time-stamp: <2019-01-22T15:16:23+09:00>
 
 ;;; Commentary:
 
@@ -13,7 +13,7 @@
 ;;   简| 簡体字
 ;;   粵| 繁体字
 ;;   한| ハングル
-;;   ไ| タイ文字
+;;   ไไ| タイ文字
 ;;   😊| 絵文字
 
 ;; 文字拡大・縮小モード
@@ -178,7 +178,6 @@
        (add-to-list 'face-font-rescale-alist '("-Heiti TC-" . 1.240)) ;; macOS
        (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.350)) ;; macOS
        (add-to-list 'face-font-rescale-alist '("-PCMyungjo-" . 1.240)) ;; macOS
-       (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 2.000)) ;; macOS
        (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.240)) ;; macOS
        (add-to-list 'face-font-rescale-alist '("-YuGothic-" . 1.240)) ;; macOS
        (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.917)) ;; macOS (Unadjusted)
