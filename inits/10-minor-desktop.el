@@ -1,7 +1,7 @@
 ;;; 10-minor-desktop.el --- 設定 - マイナーモード - デスクトップ環境保存・復旧 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T13:13:14+09:00>
+;; Time-stamp: <2019-01-22T17:30:18+09:00>
 
 ;;; Commentary:
 
@@ -16,6 +16,7 @@
 ;; -----------------------------------------------------------------------------
 (custom-set-variables
  '(desktop-restore-frames t)
+ '(desktop-load-locked-desktop t)
  ;; 必要最小限の情報のみ保存させる
  '(desktop-locals-to-save '(desktop-locals-to-save
                             truncate-lines
@@ -29,20 +30,20 @@
      ;; ローカル環境にのみ保存
      ;;
      ;; ホームディレクトリを最優先にすることで達成
-     (setq desktop-path (delete "~" desktop-path))
-     (push "~" desktop-path)
+     (add-to-list 'desktop-path "~")
 
      ;; 除外リスト
-     (add-to-list 'desktop-modes-not-to-save 'Info-mode)
-     (add-to-list 'desktop-modes-not-to-save 'comint-mode)
-     (add-to-list 'desktop-modes-not-to-save 'compilation-mode)
-     (add-to-list 'desktop-modes-not-to-save 'completion-list-mode)
-     (add-to-list 'desktop-modes-not-to-save 'dired-mode)
-     (add-to-list 'desktop-modes-not-to-save 'fundamental-mode)
-     (add-to-list 'desktop-modes-not-to-save 'ibuffer-mode)
-     (add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
-     (add-to-list 'desktop-modes-not-to-save 'lisp-interaction-mode)
-     (add-to-list 'desktop-modes-not-to-save 'shell-mode)
+     (dolist (mode '(Info-mode
+                     comint-mode
+                     compilation-mode
+                     completion-list-mode
+                     dired-mode
+                     fundamental-mode
+                     ibuffer-mode
+                     info-lookup-mode
+                     lisp-interaction-mode
+                     shell-mode))
+       (add-to-list 'desktop-modes-not-to-save mode))
 
      ;; キーバインド
      (global-set-key (kbd "C-c d c") #'desktop-clear)
