@@ -1,16 +1,20 @@
 ;;; 00-03-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-21T23:15:01+09:00>
+;; Time-stamp: <2019-01-22T12:41:29+09:00>
 
 ;;; Commentary:
 
 ;; WARNING: `00-02-coding.el' より後に設定すること
 
 ;; 文字幅調整テスト:
-;;   aa
-;;   あ
-;;   😊
+;;   aa| アルファベット
+;;   あ| ひらがな（日本語）
+;;   简| 簡体字
+;;   粵| 繁体字
+;;   한| ハングル
+;;   ไ| タイ文字
+;;   😊| 絵文字
 
 ;; 文字拡大・縮小モード
 ;;   C-x C-0
@@ -44,7 +48,7 @@
 
 ;; Microsoft Code page 858 (`cp858')
 ;;
-;; 概要:
+;; 概要：
 ;;   * ラテン文字
 ;;   * 基底である ISO/IEC 8859-1 にはない文字を補完するときに利用する
 ;;   * `cp858' は `cp850' の ı (U+0131) を € (U+20AC) に置換したもの
@@ -52,25 +56,25 @@
 ;; 追加文字:
 ;;   ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£Ø×ƒáíóúñÑªº¿®¬½¼¡«»░▒▓│┤ÁÂÀ©╣║╗╝¢¥┐└┴┬├─┼ãÃ╚╔╩╦╠═╬¤ðÐÊËÈ€ÍÎÏ┘┌█▄¦Ì▀ÓßÔÒõÕµþÞÚÛÙýÝ¯´±‗¾¶§÷¸°¨·¹³²■
 ;;
-;; 英字フォント（半角）で表示されてほしいもの:
+;; 英字フォント（半角）で表示されてほしいもの：
 ;;   ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£ØƒáíóúñÑªº¿®¬½¼¡«»░▒▓ÁÂÀ©╣║╗╝¢¥ãÃ╚╔╩╦╠═╬¤ðÐÊËÈ€ÍÎÏ█▄¦Ì▀ÓßÔÒõÕµþÞÚÛÙýÝ¯‗¾¸·¹³²
 ;;
-;; フォントによっては、他の文字と判別しにくいもの:
+;; フォントによっては、他の文字と判別しにくいもの：
 ;;   Ø (U+00d8: LATIN CAPITAL LETTER O WITH STROKE)
 ;;
-;; 日本語フォント（全角）で表示されてほしいもの:
+;; 日本語フォント（全角）で表示されてほしいもの：
 ;;   ×│┤┐└┴┬├─┼┘┌´±¶§÷°¨■
 ;;
 ;; see also:
-;;   http://en.wikipedia.org/wiki/Code_page_858
-;;   http://en.wikipedia.org/wiki/Code_page_850
+;;   https://en.wikipedia.org/wiki/Code_page_858
+;;   https://en.wikipedia.org/wiki/Code_page_850
 
-;; Microsoft Code page 932 (cp932)
+;; Microsoft Code page 932 (`cp932')
 ;;
 ;; 概要:
 ;;   * 日本語
 ;;   * 俗称「Microsoft Shift_JIS」
-;;   * cp932 にはあるが、JIS X 0213:2004 にはない文字群がある
+;;   * `cp932' にはあるが、JIS X 0213:2004 にはない文字群がある
 ;;     例：「カナダ漢字」
 ;;
 ;; 特殊文字（マップ順でソート済）:
@@ -87,13 +91,13 @@
 ;;   ￢￤＇＂
 ;;
 ;; see also:
-;;   http://ja.wikipedia.org/wiki/Cp932
-;;   http://internet.watch.impress.co.jp/www/column/ogata/news4.htm
+;;   https://ja.wikipedia.org/wiki/Cp932
+;;   https://internet.watch.impress.co.jp/www/column/ogata/news4.htm
 ;;   http://charset.7jp.net/sjis.html
 
 ;; JIS X 0213:2004
 ;;
-;; 字形変更:
+;; 字形変更：
 ;;   逢芦飴溢茨鰯淫迂厩噂餌襖迦牙廻恢晦蟹葛鞄釜翰翫徽
 ;;   祇汲灸笈卿饗僅喰櫛屑粂祁隙倦捲牽鍵諺巷梗膏鵠甑叉
 ;;   榊薩鯖錆鮫餐杓灼酋楯薯藷哨鞘杖蝕訊逗摺撰煎煽穿箭
@@ -102,34 +106,33 @@
 ;;   蔑篇娩鞭庖蓬鱒迄儲餅籾爺鑓愈猷漣煉簾榔屢冤叟咬嘲
 ;;   囀徘扁棘橙狡甕甦疼祟竈筵篝腱艘芒虔蜃蠅訝靄靱騙鴉
 ;;
-;; 平仮名・片仮名・記号など:
+;; 平仮名・片仮名・記号など：
 ;;   ゔヿヷヸヹヺㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽ
 ;;
-;; 第3水準（追加・1面）:
+;; 第3水準（追加・1面）：
 ;;   旧：倶剥叱呑嘘妍屏并痩繋
 ;;   新：俱剝𠮟吞噓姸屛幷瘦繫
 ;;
-;; 第4水準（一部・2面）:
+;; 第4水準（一部・2面）：
 ;;   𠂉𪚲
 
 ;; see also:
-;;   `00-utils.el': 各種サポート関数・マクロ定義あり
-;;   `mule-conf.el': 文字セット定義
-;;   `mule-diag.el': 文字セット・コーディングシステム汎用ツール群
-;;   `japanese.el': 日本語コーディングシステム定義
+;;   `00-utils.el': 独自サポート関数・マクロ定義
+;;   `mule-conf.el': 文字セット定義（`set-fontset-font' 第2引数の定義一覧）
+;;   `mule-diag.el': 文字セット・コーディングシステム用ツール定義
 ;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-Lookup.html
 ;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-Selection.html
 ;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Fontsets.html
 ;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Low_002dLevel-Font.html
 ;;   https://www.gnu.org/software/emacs/manual/html_node/efaq/Alternate-character-sets.html
 ;;   https://www.gnu.org/software/emacs/manual/html_node/efaq-w32/Fonts-and-text-translation.html
-;;   http://www.emacswiki.org/emacs/DisplayingNonAsciiCharacters
-;;   http://www.emacswiki.org/emacs/FontSets
+;;   https://www.emacswiki.org/emacs/DisplayingNonAsciiCharacters
+;;   https://www.emacswiki.org/emacs/FontSets
 ;;   http://d.hatena.ne.jp/setoryohei/20110117
 ;;   http://d.hatena.ne.jp/tomoya/20090519/1242687354
 ;;   http://d.hatena.ne.jp/tomoya/20090807/1249641049
-;;   http://emacs.g.hatena.ne.jp/sakito/20100127
-;;   http://macemacsjp.sourceforge.jp/matsuan/FontSettingJp.html
+;;   https://emacs.g.hatena.ne.jp/sakito/20100127
+;;   http://macemacsjp.osdn.jp/matsuan/FontSettingJp.html
 ;;   http://www.shuiren.org/chuden/teach/code/main5.htm
 ;;   http://lioon.net/emacs-change-font-size-quickly
 
@@ -138,128 +141,160 @@
 
 ;; ----------------------------------------------------------------------------
 ;; ウインドウシステム上でのみ動作させる
-;;   → ターミナルエミュレータ上では何もしない
+;;   → ターミナルエミュレータ上では何もしない（設定する意味がないため）
 ;; ----------------------------------------------------------------------------
 (when window-system
   ;; --------------------------------------------------------------------------
-  ;; シンボルや句読点などを表示するフォントを、フォント設定に応じて選択させる
-  ;;   → GNU Emacs 25 より前のふるまいに戻す
+  ;; デフォルト値
   ;; --------------------------------------------------------------------------
   (custom-set-variables
-   '(use-default-font-for-symbols nil))
+   ;;
+   ;; シンボルや句読点などを表示するフォントを、フォント設定に応じて選択させる
+   ;;   → GNU Emacs 25 より前のふるまいに戻す
+   ;;
+   '(use-default-font-for-symbols nil)
+   ;;
+   ;; フォント表示高速化（v25.2 以上で有効）
+   ;;
+   '(inhibit-compacting-font-caches t))
 
+
+  ;; --------------------------------------------------------------------------
+  ;; 独自定義
+  ;; --------------------------------------------------------------------------
   (eval-after-load 'my-utils
     '(progn
        ;; ---------------------------------------------------------------------
        ;; スケール変換
        ;;
-       ;; 多バイト文字の認識に支障がある場合の書法:
-       ;;   `(,(encode-coding-string "-フォント名-" 'emacs-mule) . 倍率)
+       ;; 多バイト文字の認識に支障がある場合の書法：
+       ;; (add-to-list 'face-font-rescale-alist `(,(encode-coding-string "-フォント名-" 'emacs-mule) . 倍率))
        ;; ---------------------------------------------------------------------
-       (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.240))
+       (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.185))
+       (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.240)) ;; macOS
+       (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.240)) ;; macOS
+       (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.240)) ;; macOS
+       (add-to-list 'face-font-rescale-alist '("-Lantinghei TC-" . 1.167)) ;; macOS (Unadjsuted)
+       (add-to-list 'face-font-rescale-alist '("-Heiti TC-" . 1.240)) ;; macOS
+       (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.350)) ;; macOS
+       (add-to-list 'face-font-rescale-alist '("-PCMyungjo-" . 1.240)) ;; macOS
+       (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 2.000)) ;; macOS
+       (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.240)) ;; macOS
        (add-to-list 'face-font-rescale-alist '("-YuGothic-" . 1.240)) ;; macOS
-       (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.917)) ;; macOS (FIXME)
-       (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.850)) ;; Windows
+       (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.917)) ;; macOS (Unadjusted)
+       (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.185)) ;; Windows
+       (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.185)) ;; Windows
+       (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.185)) ;; Windows
+       (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.870)) ;; Windows
        (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))
 
 
        ;; ---------------------------------------------------------------------
-       ;; フォントセット: プログラミング用
+       ;; フォントセット：プログラミング用（高 dpi 環境向け）
        ;; ---------------------------------------------------------------------
        (my-create-fontset-from-spec "programming"
                                     (font-spec :size 12.0 ; デフォルトフォントサイズ (pt)
-                                               :family (my-fallback-font-family "Consolas"
-                                                                                "Inconsolata"
-                                                                                "Menlo"
+                                               :family (my-fallback-font-family "Menlo"
                                                                                 "Monaco"
+                                                                                "Consolas"
+                                                                                "Inconsolata"
                                                                                 "Courier New"
                                                                                 "Monospace")))
-       ;; 最終フォールバック
-       (my-set-fontset-font-safe "fontset-programming"
-                                 nil
-                                 (font-spec :family (my-fallback-font-family "Consolas"
-                                                                             "Inconsolata"
-                                                                             "Menlo"
-                                                                             "Monaco"
-                                                                             "Courier New"
-                                                                             "Monospace")))
        ;; Emoji
        (my-set-fontset-font-safe "fontset-programming"
                                  nil
-                                 (font-spec :family (my-fallback-font-family "Segoe UI Emoji"
+                                 (font-spec :family (my-fallback-font-family "Apple Color Emoji"
+                                                                             "Segoe UI Emoji"
                                                                              "Segoe UI Symbol"
-                                                                             "Apple Color Emoji"
                                                                              "AndroidEmoji"
                                                                              "Symbola")))
-       ;; 中国語（簡体字）: Code page 936 (cp936) 相当
+       ;; 簡体字：GB 18030
        (my-set-fontset-font-safe "fontset-programming"
-                                 'chinese-gbk
+                                 'gb18030
                                  (font-spec :family (my-fallback-font-family "PingFang SC"
                                                                              "Microsoft YaHei"
-                                                                             "SimHei")))
-       ;; 中国語（繁体字）: Code page 937 (cp937) 相当
+                                                                             "SimHei"
+                                                                             "SimSun")))
+       ;; 繁体字（香港・マカオ）：HKSCS-2016
+       (my-set-fontset-font-safe "fontset-programming"
+                                 'big5-hkscs
+                                 (font-spec :family (my-fallback-font-family "PingFang HK"
+                                                                             "MingLiU-ExtB")))
+       ;; 繁体字：Big5
        (my-set-fontset-font-safe "fontset-programming"
                                  'big5
                                  (font-spec :family (my-fallback-font-family "PingFang TC"
+                                                                             "Lantinghei TC"
+                                                                             "Heiti TC"
                                                                              "BiauKai"
                                                                              "Microsoft JhengHei"
                                                                              "MingLiU")))
-       ;; 日本語: JIS X 0213:2004
-       ;;
-       ;; japanese-jisx0213-2 を明示しているのは、
-       ;; japanese-jisx0213.2004-1 が2面を含まないため
+       ;; ハングル：KS C 5601-1987 (a.k.a. KS X 1001:1998)
        (my-set-fontset-font-safe "fontset-programming"
-                                 'japanese-jisx0213-2 ; 2面
+                                 'korean-ksc5601
+                                 (font-spec :family (my-fallback-font-family "Apple SD Gothic Neo"
+                                                                             "PCMyungjo"
+                                                                             "Malgun Gothic"
+                                                                             "Gulim"
+                                                                             "Dotum"
+                                                                             "Batang")))
+       ;; タイ文字：Thai Industrial Standard 620-2533 (TIS-620)
+       (my-set-fontset-font-safe "fontset-programming"
+                                 'thai-tis620
+                                 (font-spec :family (my-fallback-font-family "Ayuthaya"
+                                                                             "Droid Sans Mono"
+                                                                             "Tahoma"
+                                                                             "Monospace")))
+       ;; 日本語：JIS X 0213:2004
+       (my-set-fontset-font-safe "fontset-programming"
+                                 'japanese-jisx0213.2004-1
                                  (font-spec :family (my-fallback-font-family "Migu 1M"
                                                                              "VL Gothic"
+                                                                             "ヒラギノ角ゴシック"
                                                                              "游ゴシック Medium"
                                                                              "YuGothic Medium"
                                                                              "メイリオ")))
        (my-set-fontset-font-safe "fontset-programming"
-                                 'japanese-jisx0213.2004-1 ; 1面＋第3水準追加文字
+                                 'japanese-jisx0213-2
                                  (font-spec :family (my-fallback-font-family "Migu 1M"
                                                                              "VL Gothic"
+                                                                             "ヒラギノ角ゴシック"
                                                                              "游ゴシック Medium"
                                                                              "YuGothic Medium"
                                                                              "メイリオ")))
-       ;; 日本語: Code page 932 (cp932)
-       (my-set-fontset-font-safe "fontset-programming"
-                                 'cp932
-                                 (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                             "VL Gothic"
-                                                                             "游ゴシック Medium"
-                                                                             "YuGothic Medium"
-                                                                             "メイリオ")))
-       ;; ラテン文字: Code page 858 (`cp858')
+       ;; ラテン文字：Code page 858 (`cp858')
        (my-set-fontset-font-safe "fontset-programming"
                                  'cp858
-                                 (font-spec :family (my-fallback-font-family "Consolas"
-                                                                             "Inconsolata"
+                                 (font-spec :family (my-fallback-font-family "Menlo"
                                                                              "Monaco"
+                                                                             "Consolas"
+                                                                             "Inconsolata"
                                                                              "Courier New"
                                                                              "Monospace")))
        (my-set-fontset-font-safe "fontset-programming"
                                  (cons (string-to-char "░") (string-to-char "▓"))
-                                 (font-spec ;; PATCH: 次のフォントは U+2591, U+2592, U+2593 未実装:
-                                  ;;          * "Consolas"
-                                  ;;          * "Inconsolata"
-                                  ;;        ゆえに、他フォントによるフォールバックが必要
-                                  :family (my-fallback-font-family "Menlo"
-                                                                   "Monaco"
-                                                                   "Courier New"
-                                                                   "Monospace")))
+                                 ;; 次のフォントは U+2591, U+2592, U+2593 未実装：
+                                 ;;
+                                 ;;   * "Consolas"
+                                 ;;   * "Inconsolata"
+                                 ;;
+                                 ;; ゆえに、他フォントによるフォールバックが必要
+                                 (font-spec :family (my-fallback-font-family "Menlo"
+                                                                             "Monaco"
+                                                                             "Courier New"
+                                                                             "Monospace")))
        ;; Unicode "Box Drawing"（罫線素片）
        ;;
        ;; see also:
-       ;; http://www.unicode.org/charts/PDF/U2500.pdf
+       ;; https://www.unicode.org/charts/PDF/U2500.pdf
        (my-set-fontset-font-safe "fontset-programming"
                                  (cons (string-to-char "─") (string-to-char "╿"))
-                                 ;; TODO: MacOS で YuGothic Medium だと、
-                                 ;;       半角で表示されてしまう文字がある
-                                 (font-spec :family (my-fallback-font-family "YuGothic Medium"
-                                                                             "ＭＳ ゴシック"
-                                                                             "さざなみフォント"
-                                                                             "東雲フォント")))
+                                 (font-spec :family (my-fallback-font-family "Migu 1M"
+                                                                             "VL Gothic"
+                                                                             "ヒラギノ角ゴシック"
+                                                                             "游ゴシック Medium"
+                                                                             "YuGothic Medium"
+                                                                             "メイリオ")))
        ;; "§" (U+00A7: SECTION SIGN)
        ;; "¨" (U+00A8: DIAERESIS)
        ;; "°" (U+00B0: DEGREE SIGN)
@@ -286,9 +321,15 @@
                              (split-string "§¨°±´¶×÷─│┌┐└┘├┤┬┴┼■" "" t)))
          (my-set-fontset-font-safe "fontset-programming"
                                    (cons code code)
+                                   ;; 次のフォントは一部記号が全角にならない：
+                                   ;;
+                                   ;;   * "ヒラギノ角ゴシック"
+                                   ;;
+                                   ;; ゆえに、明示的な除外が必要
                                    (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                               "YuGothic Medium"
                                                                                "VL Gothic"
+                                                                               "游ゴシック Medium"
+                                                                               "YuGothic Medium"
                                                                                "メイリオ"))))
        ;; ASCII
        (my-set-fontset-font-safe "fontset-programming"
@@ -303,11 +344,11 @@
 
 
        ;; ---------------------------------------------------------------------
-       ;; フォントセット: プログラミング用
-       ;;                 ビットマップフォント主体・96dpi 環境向け
+       ;; フォントセット：プログラミング用（低 dpi 環境向け）
+       ;;                 ビットマップフォント主体・96dpi 環境で設定済
        ;; ---------------------------------------------------------------------
        ;; see also:
-       ;;   http://tobiasjung.name/profont/
+       ;;   https://github.com/chrissimpkins/codeface/tree/master/fonts/pro-font-windows
        ;;   http://osaka.is.land.to/
        ;;   http://emk.name/2003/12/osakattf.html
        ;; ---------------------------------------------------------------------
@@ -328,39 +369,55 @@
        ;; Emoji
        (my-set-fontset-font-safe "fontset-programmingBMP"
                                  nil
-                                 (font-spec :family (my-fallback-font-family "Segoe UI Emoji"
+                                 (font-spec :family (my-fallback-font-family "Apple Color Emoji"
                                                                              "Segoe UI Symbol"
                                                                              "AndroidEmoji"
                                                                              "Symbola")))
-       ;; 中国語（簡体字）: Code page 936 (cp936) 相当
+       ;; 簡体字：GB 18030
        (my-set-fontset-font-safe "fontset-programmingBMP"
-                                 'chinese-gbk
-                                 (font-spec :family (my-fallback-font-family "SimHei")))
-       ;; 中国語（繁体字）: Code page 12.0 (cp937) 相当
+                                 'gb18030
+                                 (font-spec :family (my-fallback-font-family "PingFang SC"
+                                                                             "SimHei"
+                                                                             "SimSun")))
+       ;; 繁体字（香港・マカオ）：HKSCS-2016
+       (my-set-fontset-font-safe "fontset-programmingBMP"
+                                 'big5-hkscs
+                                 (font-spec :family (my-fallback-font-family "PingFang HK"
+                                                                             "Heiti TC"
+                                                                             "MingLiU-ExtB")))
+       ;; 繁体字：Big5
        (my-set-fontset-font-safe "fontset-programmingBMP"
                                  'big5
-                                 (font-spec :family (my-fallback-font-family "MingLiU")))
-       ;; 日本語: JIS X 0213:2004
-       ;;
-       ;; japanese-jisx0213-2 を明示しているのは、
-       ;; japanese-jisx0213.2004-1 が2面を含まないため
+                                 (font-spec :family (my-fallback-font-family "PingFang TC"
+                                                                             "BiauKai"
+                                                                             "MingLiU"
+                                                                             "Microsoft JhengHei")))
+       ;; ハングル：KS C 5601-1987 (a.k.a. KS X 1001:1998)
        (my-set-fontset-font-safe "fontset-programmingBMP"
-                                 'japanese-jisx0213.2004-1 ; 1面＋第3水準追加文字
+                                 'korean-ksc5601
+                                 (font-spec :family (my-fallback-font-family "Apple SD Gothic Neo"
+                                                                             "Malgun Gothic"
+                                                                             "Gulim"
+                                                                             "Dotum"
+                                                                             "Batang")))
+       ;; タイ文字：Thai Industrial Standard 620-2533 (TIS-620)
+       (my-set-fontset-font-safe "fontset-programmingBMP"
+                                 'thai-tis620
+                                 (font-spec :family (my-fallback-font-family "Ayuthaya"
+                                                                             "Droid Sans Mono"
+                                                                             "Tahoma")))
+       ;; 日本語：JIS X 0213:2004
+       (my-set-fontset-font-safe "fontset-programmingBMP"
+                                 'japanese-jisx0213.2004-1
                                  (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
                                                                              "さざなみフォント"
                                                                              "東雲フォント")))
        (my-set-fontset-font-safe "fontset-programmingBMP"
-                                 'japanese-jisx0213-2 ; 2面
+                                 'japanese-jisx0213-2
                                  (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
                                                                              "さざなみフォント"
                                                                              "東雲フォント")))
-       ;; 日本語: cp932
-       (my-set-fontset-font-safe "fontset-programmingBMP"
-                                 'cp932
-                                 (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
-                                                                             "さざなみフォント"
-                                                                             "東雲フォント")))
-       ;; 日本語: JIS X 0208
+       ;; 日本語：JIS X 0208
        ;;
        ;; "Osaka－等幅" で対応している文字はできるだけ利用
        (my-set-fontset-font-safe "fontset-programmingBMP"
@@ -369,15 +426,17 @@
                                                                              "ＭＳ ゴシック"
                                                                              "さざなみフォント"
                                                                              "東雲フォント")))
-       ;; ラテン文字: `cp858'
+       ;; ラテン文字：Code page 858 (`cp858')
        ;;
        ;; "ProFontWindows" の readme.txt には次の記述がある:
        ;;
-       ;;   * € サポートを投入
-       ;;   * cp585 フルサポート
+       ;;   * 「€」サポートを投入
+       ;;   * `cp585' フルサポート
        ;;
        ;; ゆえに、明示はないものの "ProFontWindows" の範囲は
        ;; `cp858' と同一であると仮定・設定する
+       ;;
+       ;; `cp858' は `cp585' に「€」を追加した集合である
        (my-set-fontset-font-safe "fontset-programmingBMP"
                                  'cp858
                                  (font-spec :family (my-fallback-font-family "ProFontWindows"
@@ -388,7 +447,7 @@
        ;; Unicode "Box Drawing"（罫線素片）
        ;;
        ;; see also:
-       ;; http://www.unicode.org/charts/PDF/U2500.pdf
+       ;; https://www.unicode.org/charts/PDF/U2500.pdf
        (my-set-fontset-font-safe "fontset-programmingBMP"
                                  (cons (string-to-char "─") (string-to-char "╿"))
                                  (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
@@ -421,13 +480,16 @@
          (my-set-fontset-font-safe "fontset-programmingBMP"
                                    (cons code code)
                                    (font-spec :family (my-fallback-font-family "Osaka－等幅"
+                                                                               "Osaka"
                                                                                "ＭＳ ゴシック"
                                                                                "さざなみフォント"
                                                                                "東雲フォント"))))
        ;; "Ø" (U+00D8: LATIN CAPITAL LETTER O WITH STROKE)
        ;;
        ;; フォントによっては "0" (U+0030: DIGIT ZERO) と判別しにくいため、
-       ;; 他のフォントに変更（判別しにくいフォントの例："ProFontWindows"）
+       ;; 他のフォントに変更
+       ;;
+       ;; 判別しにくいフォントの例："ProFontWindows"
        (my-set-fontset-font-safe "fontset-programmingBMP"
                                  (cons (string-to-char "Ø") (string-to-char "Ø"))
                                  (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
