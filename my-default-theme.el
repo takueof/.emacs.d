@@ -1,7 +1,7 @@
 ;;; my-default-theme.el --- My original defaut themes -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-22T21:01:40+09:00>
+;; Time-stamp: <2019-01-22T23:18:55+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: faces
@@ -78,21 +78,25 @@
  ;;
  '(highlight
    ((((class color))
-     (:foreground "white" :background "dark green"))))
+     (:background "dark green" :foreground "white"))))
  '(region
    ((((class color))
-     (:foreground "white" :background "dark green"))))
+     (:background "dark green" :foreground "white"))))
  '(secondary-selection
    ((((class color))
      (:background "dark slate gray"))))
  ;;
  ;; モードライン
  ;;
- ;; TODO: まだ未定義
- ;;
- ;; mode-line
- ;; mode-line-inactive
- ;; mode-line-highlight
+ '(mode-line
+   ((((class color))
+     (:background "dark green" :foreground "white" :box nil))))
+ '(mode-line-inactive
+   ((((class color))
+     (:background "gray40" :foreground "white" :box nil))))
+ '(mode-line-highlight
+   ((((class color))
+     (:background "dark olive green" :foreground "white" :box nil))))
 
 
  ;; ---------------------------------
@@ -153,18 +157,18 @@
  ;; ---------------------------------
  '(flycheck-color-mode-line-error-face
    ((((class color))
-     :foreground "white" :background "red4")))
+     :background "red4" :foreground "white")))
  '(flycheck-color-mode-line-warning-face
    ((((class color))
-     :foreground "white" :background "orange4")))
+     :background "orange4" :foreground "white")))
  '(flycheck-color-mode-line-info-face
    ((((class color))
-     :foreground "white" :background "RoyalBlue4")))
+     :background "RoyalBlue4" :foreground "white")))
  '(flycheck-color-mode-line-success-face
-   ((t))) ; モードラインデフォルトの face を利用
+   ((t))) ; デフォルトを利用
  '(flycheck-color-mode-line-running-face
    ((((class color))
-     :foreground "white" :background "green4")))
+     :background "green4" :foreground "white")))
 
 
  ;; ---------------------------------
@@ -180,7 +184,7 @@
  ;; ---------------------------------
  '(anzu-mode-line
    ((((class color))
-     (:inherit 'error))))
+     (:background "black" :inherit 'error))))
 
 
  ;; ---------------------------------
