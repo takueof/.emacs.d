@@ -1,7 +1,7 @@
 ;;; 00-01-default.el --- 設定 - 共通 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T22:04:22+09:00>
+;; Time-stamp: <2019-01-22T21:24:54+09:00>
 
 ;;; Commentary:
 
@@ -65,17 +65,31 @@
  ;;
  '(kill-do-not-save-duplicates t)
  ;;
- ;; ページ単位スクロール時に重複させる行数を少し増やす
- ;;
- '(next-screen-context-lines 3)
- ;;
- ;; カーソル移動によるスクロール時の挙動を、次の仕様に変更する:
- ;;
- ;;   * ウインドウ上下から10行目でスクロール開始
+ ;; スクロール時、自動スクロールの挙動を一切アグレッシブにしない
  ;;
  ;; see also:
  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Scrolling.html
+ '(scroll-conservatively 0) ; default
+ '(scroll-step 0) ; default
+ '(scroll-up-aggressively 0.0)
+ '(scroll-down-aggressively 0.0)
+ ;;
+ ;; なるべくウインドウ上下から10行目でスクロール開始
+ ;;
  '(scroll-margin 10)
+ '(maximum-scroll-margin 10)
+ ;;
+ ;; ページ単位スクロール時に行を重複させない
+ ;;
+ '(next-screen-context-lines 0)
+ ;;
+ ;; スクロール時、なるべく先頭ないし最後の文字にポイントを移動させる
+ ;;
+ '(scroll-error-top-bottom t)
+ ;;
+ ;; スクロール時、なるべくポイントを同一スクリーン位置に留まらせる
+ ;;
+ '(scroll-preserve-screen-position t)
  ;;
  ;; 行間調整はしない
  ;;

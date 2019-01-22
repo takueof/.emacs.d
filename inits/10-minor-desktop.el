@@ -1,7 +1,7 @@
 ;;; 10-minor-desktop.el --- 設定 - マイナーモード - デスクトップ環境保存・復旧 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-22T17:30:18+09:00>
+;; Time-stamp: <2019-01-22T21:25:59+09:00>
 
 ;;; Commentary:
 
@@ -15,14 +15,23 @@
 ;; デフォルト値
 ;; -----------------------------------------------------------------------------
 (custom-set-variables
- '(desktop-restore-frames t)
+ '(desktop-save 'ask-if-new)
  '(desktop-load-locked-desktop t)
+ '(desktop-missing-file-warning nil)
  ;; 必要最小限の情報のみ保存させる
- '(desktop-locals-to-save '(desktop-locals-to-save
-                            truncate-lines
-                            case-fold-search
+ '(desktop-locals-to-save '(case-fold-search
                             case-replace
-                            fill-column)))
+                            desktop-locals-to-save
+                            fill-column
+                            truncate-lines))
+ '(desktop-restore-frames t)
+ '(desktop-restore-in-current-display t)
+ '(desktop-restore-forces-onscreen t)
+ '(desktop-restore-reuses-frames t)
+ '(desktop-file-name-format 'absolute)
+ '(desktop-restore-eager t)
+ '(desktop-lazy-verbose t)
+ '(desktop-lazy-idle-delay 5))
 
 (eval-after-load 'desktop
   '(when (and (boundp 'desktop-path)
@@ -30,6 +39,7 @@
      ;; ローカル環境にのみ保存
      ;;
      ;; ホームディレクトリを最優先にすることで達成
+     (delete "~" desktop-path)
      (add-to-list 'desktop-path "~")
 
      ;; 除外リスト

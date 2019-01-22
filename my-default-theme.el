@@ -1,7 +1,7 @@
 ;;; my-default-theme.el --- My original defaut themes -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-21T22:59:57+09:00>
+;; Time-stamp: <2019-01-22T21:01:40+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: faces
@@ -172,9 +172,7 @@
  ;; ---------------------------------
  '(tooltip
    ((((class color))
-     ;; 配色は各ウインドウシステムのデフォルトに合わせる
-     ;; フォントは別途定義したいので、あえて未指定のまま
-     (:background "SystemInfoWindow" :foreground "SystemInfoText"))))
+     (:foreground "white" :background "black"))))
 
 
  ;; ---------------------------------
