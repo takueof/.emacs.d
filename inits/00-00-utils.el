@@ -1,7 +1,7 @@
 ;;; 00-00-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-21T23:01:53+09:00>
+;; Time-stamp: <2019-01-22T17:50:23+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -124,8 +124,9 @@ It doesn't depend on `truncate-partial-width-windows' of `toggle-truncate-lines'
     (setq-local line-move-visual (not after))
     ;; `toggle-truncate-lines' は `truncate-partial-width-windows' が
     ;; non-nil だと何もしない
-    ;; ゆえに `truncate-partial-width-windows' を `truncate-lines' の切替予定値と
-    ;; 同値に変更し `toggle-truncate-lines' を強制的に機能させるように準備する
+    ;; ゆえに `truncate-partial-width-windows' を `truncate-lines' の
+    ;; 切替予定値と同値に変更して `toggle-truncate-lines' を強制的に
+    ;; 機能させるよう準備する
     (setq-local truncate-partial-width-windows after)
     ;; 残りは任せる
     (toggle-truncate-lines after)))
