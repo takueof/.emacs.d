@@ -1,7 +1,7 @@
 ;;; 00-01-default.el --- 設定 - 共通 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-22T21:24:54+09:00>
+;; Time-stamp: <2019-01-23T10:52:20+09:00>
 
 ;;; Commentary:
 
@@ -164,17 +164,13 @@
 ;; YES/NO 選択を簡略化
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; ベル音はなし
+;; Windows: ベル音はなし
 (if (fboundp 'set-message-beep)
     (set-message-beep 'silent))
 
 ;; リージョンの大文字・小文字変換で、実行の是非を問わせない
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
-
-;; 暫定マークを使用
-(if (fboundp 'transient-mark-mode)
-    (transient-mark-mode +1))
 
 
 ;; ----------------------------------------------------------------------------
