@@ -1,7 +1,7 @@
 ;;; 00-01-default.el --- 設定 - 共通 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-23T11:54:09+09:00>
+;; Time-stamp: <2019-01-23T19:13:21+09:00>
 
 ;;; Commentary:
 
@@ -70,14 +70,14 @@
  '(x-select-enable-clipboard t) ; NOTE: obsolete sinse v25.1
  '(select-enable-clipboard t)
  ;;
- ;; スクロール時、自動スクロールの挙動を一切アグレッシブにしない
+ ;; スクロール時、自動スクロールをアグレッシブにする
  ;;
  ;; see also:
  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Scrolling.html
  '(scroll-conservatively 0) ; default
  '(scroll-step 0) ; default
- '(scroll-up-aggressively 0.0)
- '(scroll-down-aggressively 0.0)
+ '(scroll-up-aggressively nil) ; default
+ '(scroll-down-aggressively nil) ; default
  ;;
  ;; なるべくウインドウ上下から10行目でスクロール開始
  ;;
