@@ -1,7 +1,7 @@
 ;;; 00-01-default.el --- 設定 - 共通 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-23T10:52:20+09:00>
+;; Time-stamp: <2019-01-23T11:54:09+09:00>
 
 ;;; Commentary:
 
@@ -52,6 +52,15 @@
  ;;
  '(kill-whole-line t)
  ;;
+ ;; 読取専用バッファにおける `kill-line' 実行時、
+ ;; エコーエリアに関連メッセージが表示されるようにする
+ ;;
+ '(kill-read-only-ok t)
+ ;;
+ ;; 同一（重複）文字列は `kill-ring' に保存しない
+ ;;
+ '(kill-do-not-save-duplicates t)
+ ;;
  ;; `undo' 時に `redo' 履歴は無視する
  ;;
  '(undo-no-redo t)
@@ -60,10 +69,6 @@
  ;;
  '(x-select-enable-clipboard t) ; NOTE: obsolete sinse v25.1
  '(select-enable-clipboard t)
- ;;
- ;; 同一（重複）文字列は `kill-ring' に保存しない
- ;;
- '(kill-do-not-save-duplicates t)
  ;;
  ;; スクロール時、自動スクロールの挙動を一切アグレッシブにしない
  ;;
@@ -146,7 +151,7 @@
  ;;
  '(auto-save-default nil)
  '(make-backup-files nil)
- '(auto-save-list-file-prefix "~/.emacs.auto-save-list/.saves-") ; ローカル環境化
+ '(auto-save-list-file-prefix (convert-standard-filename "~/.emacs.auto-save-list/.saves-")) ; ローカル環境化
  ;;
  ;; `eval-expression' 時の出力を省略させない
  ;;
@@ -159,18 +164,22 @@
  ;;
  ;; 補完表示は縦にする
  ;;
- '(completions-format 'vertical))
+ '(completions-format 'vertical)
+ ;;
+ ;; エコーエリアの最大行数を増やす
+ ;;
+ '(message-log-max 2000))
 
 ;; YES/NO 選択を簡略化
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; Windows: ベル音はなし
-(if (fboundp 'set-message-beep)
-    (set-message-beep 'silent))
-
 ;; リージョンの大文字・小文字変換で、実行の是非を問わせない
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
+
+;; Windows: ベル音はなし
+(if (fboundp 'set-message-beep)
+    (set-message-beep 'silent))
 
 
 ;; ----------------------------------------------------------------------------
