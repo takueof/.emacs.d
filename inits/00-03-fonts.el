@@ -1,7 +1,7 @@
 ;;; 00-03-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-22T23:20:45+09:00>
+;; Time-stamp: <2019-01-23T14:34:21+09:00>
 
 ;;; Commentary:
 
@@ -51,7 +51,8 @@
 ;; 概要：
 ;;   * ラテン文字
 ;;   * 基底である ISO/IEC 8859-1 にはない文字を補完するときに利用する
-;;   * `cp858' は `cp850' の ı (U+0131) を € (U+20AC) に置換したもの
+;;   * `cp858' は `cp850' の "ı" (U+0131) を "€" (U+20AC) に置換したもの
+;;   * `cp858' は `cp585' に "€" (U+20AC) を追加したもの
 ;;
 ;; 追加文字:
 ;;   ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£Ø×ƒáíóúñÑªº¿®¬½¼¡«»░▒▓│┤ÁÂÀ©╣║╗╝¢¥┐└┴┬├─┼ãÃ╚╔╩╦╠═╬¤ðÐÊËÈ€ÍÎÏ┘┌█▄¦Ì▀ÓßÔÒõÕµþÞÚÛÙýÝ¯´±‗¾¶§÷¸°¨·¹³²■
@@ -60,7 +61,7 @@
 ;;   ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£ØƒáíóúñÑªº¿®¬½¼¡«»░▒▓ÁÂÀ©╣║╗╝¢¥ãÃ╚╔╩╦╠═╬¤ðÐÊËÈ€ÍÎÏ█▄¦Ì▀ÓßÔÒõÕµþÞÚÛÙýÝ¯‗¾¸·¹³²
 ;;
 ;; フォントによっては、他の文字と判別しにくいもの：
-;;   Ø (U+00d8: LATIN CAPITAL LETTER O WITH STROKE)
+;;   "Ø" (U+00d8: LATIN CAPITAL LETTER O WITH STROKE)
 ;;
 ;; 日本語フォント（全角）で表示されてほしいもの：
 ;;   ×│┤┐└┴┬├─┼┘┌´±¶§÷°¨■
@@ -430,13 +431,11 @@
        ;;
        ;; "ProFontWindows" の readme.txt には次の記述がある:
        ;;
-       ;;   * 「€」サポートを投入
+       ;;   * "€" (U+20AC) サポートを投入
        ;;   * `cp585' フルサポート
        ;;
        ;; ゆえに、明示はないものの "ProFontWindows" の範囲は
        ;; `cp858' と同一であると仮定・設定する
-       ;;
-       ;; `cp858' は `cp585' に「€」を追加した集合である
        (my-set-fontset-font-safe "fontset-programmingBMP"
                                  'cp858
                                  (font-spec :family (my-fallback-font-family "ProFontWindows"
@@ -486,10 +485,11 @@
                                                                                "東雲フォント"))))
        ;; "Ø" (U+00D8: LATIN CAPITAL LETTER O WITH STROKE)
        ;;
-       ;; フォントによっては "0" (U+0030: DIGIT ZERO) と判別しにくいため、
-       ;; 他のフォントに変更
+       ;; 次のフォントは "Ø" と "0" (U+0030: DIGIT ZERO) が判別しにくい：
        ;;
-       ;; 判別しにくいフォントの例："ProFontWindows"
+       ;;     * "ProFontWindows"
+       ;;
+       ;; ゆえに、他フォントで表示させる
        (my-set-fontset-font-safe "fontset-programmingBMP"
                                  (cons (string-to-char "Ø") (string-to-char "Ø"))
                                  (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
