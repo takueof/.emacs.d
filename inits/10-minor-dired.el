@@ -1,7 +1,7 @@
 ;;; 10-minor-dired.el --- 設定 - マイナーモード - `dired' 拡張 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-24T11:39:49+09:00>
 
 ;;; Commentary:
 
@@ -14,8 +14,6 @@
 ;; デフォルト値
 ;; ----------------------------------------------------------------------------
 (custom-set-variables
- ;; 常にすべての情報を表示（簡易モードにしない）
- '(dired-hide-details-mode -1)
  '(diredp-hide-details-initially-flag nil)
  '(diredp-hide-details-propagate-flag nil))
 
@@ -25,8 +23,9 @@
 ;; ----------------------------------------------------------------------------
 (defun my-dired-mode-initialize ()
   "Initialize `dired-mode'."
-  ;; EMPTY
-  )
+  ;; 常にすべての情報を表示（簡易モードにしない）
+  (if (fboundp 'dired-hide-details-mode)
+      (dired-hide-details-mode -1)))
 
 (add-hook 'dired-mode-hook #'my-dired-mode-initialize)
 

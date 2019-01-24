@@ -1,7 +1,7 @@
 ;;; 00-01-default.el --- 設定 - 共通 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-24T11:29:55+09:00>
+;; Time-stamp: <2019-01-24T23:11:04+09:00>
 
 ;;; Commentary:
 
@@ -119,6 +119,10 @@
  ;;
  '(indent-tabs-mode nil)
  ;;
+ ;; タブは常にインデントのみ実施
+ ;;
+ '(tab-always-indent t)
+ ;;
  ;; 自分用デフォルトタブ文字表示幅
  ;; 必要なら各メジャーモードごとに設定しなおす
  ;;
@@ -172,7 +176,11 @@
  ;;
  ;; エコーエリアの最大行数を増やす
  ;;
- '(message-log-max 2000))
+ '(message-log-max 2000)
+ ;;
+ ;; Trash（「ごみ箱」など）が使える場合はそちらへ廃棄
+ ;;
+ '(delete-by-moving-to-trash t))
 
 ;; YES/NO 選択を簡略化
 (fset 'yes-or-no-p 'y-or-n-p)
