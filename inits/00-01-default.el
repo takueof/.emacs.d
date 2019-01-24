@@ -1,7 +1,7 @@
 ;;; 00-01-default.el --- 設定 - 共通 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-23T19:13:21+09:00>
+;; Time-stamp: <2019-01-24T11:29:55+09:00>
 
 ;;; Commentary:
 
@@ -152,6 +152,10 @@
  '(auto-save-default nil)
  '(make-backup-files nil)
  '(auto-save-list-file-prefix (convert-standard-filename "~/.emacs.auto-save-list/.saves-")) ; ローカル環境化
+ ;;
+ ;; ロックファイルは生成させる
+ ;;
+ '(create-lockfiles t)
  ;;
  ;; `eval-expression' 時の出力を省略させない
  ;;
