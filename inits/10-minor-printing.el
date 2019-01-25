@@ -1,9 +1,14 @@
 ;;; 10-minor-printing.el --- 設定 - マイナーモード - 印刷 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T13:15:03+09:00>
+;; Time-stamp: <2019-01-25T20:50:02+09:00>
 
 ;;; Commentary:
+
+;; see also:
+;;   `ps-print.el'
+;;   `ps-mule.el'
+;;   `printing.el'
 
 ;;; Code:
 
@@ -12,13 +17,16 @@
 ;; デフォルト値
 ;; ----------------------------------------------------------------------------
 (custom-set-variables
- '(ps-multibyte-buffer 'non-latin-printer)
- '(ps-lpr-switches '("-dBATCH" "-dNOPAUSE" "-dWINKANJI"))
+ ;;
+ ;; 用紙
+ ;;
  '(ps-paper-type 'a4)
+ '(ps-landscape-mode nil) ; 縦剥き
  ;;
  ;; 本文フォント
  ;;
- '(ps-font-size '(10 . 10))
+ '(ps-font-family 'Courier)
+ '(ps-font-size '(10.0 . 10.0)) ; 縦：10.0pt、横：10.0pt
  ;;
  ;; 色
  ;;
@@ -27,9 +35,13 @@
  '(ps-default-bg t)
  '(ps-use-face-background t)
  ;;
+ ;; プリンターに対する命令
+ ;;
+ '(ps-multibyte-buffer 'non-latin-printer)
+ ;;
  ;; 行調整
  ;;
- '(ps-line-spacing 2)
+ '(ps-line-spacing 2.0)
  ;;
  ;; 行番号
  ;;
@@ -96,8 +108,14 @@
 ;; ----------------------------------------------------------------------------
 ;; 起動
 ;; ----------------------------------------------------------------------------
+(when (and (require 'printing nil :noerror)
+           (fboundp 'pr-update-menus)
+           (fboundp 'pr-interface))
+  (pr-update-menus +1)
+  (global-set-key (kbd "C-c p p") #'pr-interface))
+
 (if (fboundp 'ps-print-buffer)
-    (global-set-key (kbd "C-c p p") #'ps-print-buffer))
+    (global-set-key (kbd "C-c p b") #'ps-print-buffer))
 
 (if (fboundp 'ps-print-buffer-with-faces)
     (global-set-key (kbd "C-c p c") #'ps-print-buffer-with-faces))
