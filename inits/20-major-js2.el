@@ -1,7 +1,7 @@
 ;;; 20-major-js2.el --- 設定 - メジャーモード - JavaScript -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-18T11:45:43+09:00>
+;; Time-stamp: <2019-01-27T22:56:46+09:00>
 
 ;;; Commentary:
 
@@ -48,7 +48,7 @@
  '(js2-mode-indent-ignore-first-tab nil)
  '(js2-highlight-external-variables t)
  ;; JSLint
- '(js2-include-jslint-globals nil)) ; 他ツールに任せるため無効化
+ '(js2-include-jslint-globals nil)) ; 他ツールに任せるため、無効化
 
 
 ;; ----------------------------------------------------------------------------
