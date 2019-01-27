@@ -1,7 +1,7 @@
 ;;; 20-major-markdown.el --- 設定 - メジャーモード - Markdown ドキュメント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-18T11:47:49+09:00>
+;; Time-stamp: <2019-01-27T18:07:22+09:00>
 
 ;;; Commentary:
 
@@ -19,12 +19,17 @@
                         "markdown"))
  '(markdown-command-needs-filename (equal markdown-command
                                           (executable-find "github-markup")))
- '(markdown-coding-system 'utf-8-unix))
+ '(markdown-coding-system 'utf-8-unix)
+ ;; プレビュー用に生成した実 HTML ファイルの残存を防ぐ
+ '(markdown-live-preview-delete-export 'delete-on-export))
 
 
 ;; ----------------------------------------------------------------------------
 ;; 初期化
 ;; ----------------------------------------------------------------------------
+(if (fboundp 'markdown-live-preview-mode)
+    (my-change-lighter markdown-live-preview-mode nil))
+
 (defun my-markdown-mode-initialize ()
   "Initialize `markdown-mode' before file load."
   (setq-local indent-tabs-mode nil)
