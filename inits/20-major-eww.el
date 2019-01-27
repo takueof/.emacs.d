@@ -1,7 +1,7 @@
 ;;; 20-major-eww.el --- 設定 - メジャーモード - EWW (Emacs Web Wowser) -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2019 Taku Watabe
-;; Time-stamp: <2019-01-27T22:33:22+09:00>
+;; Time-stamp: <2019-01-27T23:50:10+09:00>
 
 ;;; Commentary:
 
@@ -13,7 +13,6 @@
 ;; ----------------------------------------------------------------------------
 (custom-set-variables
  '(eww-search-prefix "https://www.google.co.jp/search?&q=")
- '(eww-restore-desktop t)
  '(eww-history-limit 100))
 
 
