@@ -1,7 +1,7 @@
 ;;; 20-major-indium.el --- 設定 - メジャーモード - JavaScript 開発環境 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:23+09:00>
+;; Time-stamp: <2019-01-27T22:48:22+09:00>
 
 ;;; Commentary:
 
@@ -13,8 +13,10 @@
 ;; ----------------------------------------------------------------------------
 ;; 起動
 ;; ----------------------------------------------------------------------------
-(eval-after-load 'indium
-  '(when (fboundp 'indium-interaction-mode)
+(eval-after-load 'my-utils
+  '(when (and (require 'indium nil :noerror)
+              (fboundp 'indium-interaction-mode))
+     (my-change-lighter indium-interaction-mode nil)
      (add-hook 'js-mode-hook #'indium-interaction-mode)))
 
 
