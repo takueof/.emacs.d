@@ -1,7 +1,7 @@
 ;;; 20-major-markdown.el --- 設定 - メジャーモード - Markdown ドキュメント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-27T18:07:22+09:00>
+;; Time-stamp: <2019-01-27T23:47:44+09:00>
 
 ;;; Commentary:
 
@@ -27,9 +27,6 @@
 ;; ----------------------------------------------------------------------------
 ;; 初期化
 ;; ----------------------------------------------------------------------------
-(if (fboundp 'markdown-live-preview-mode)
-    (my-change-lighter markdown-live-preview-mode nil))
-
 (defun my-markdown-mode-initialize ()
   "Initialize `markdown-mode' before file load."
   (setq-local indent-tabs-mode nil)
