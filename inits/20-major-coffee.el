@@ -1,7 +1,7 @@
 ;;; 20-major-coffee.el --- 設定 - メジャーモード - CoffeeScript -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-18T11:47:48+09:00>
+;; Time-stamp: <2019-01-27T22:35:57+09:00>
 
 ;;; Commentary:
 
@@ -14,10 +14,9 @@
 ;; デフォルト値
 ;; ----------------------------------------------------------------------------
 (eval-after-load 'coffee-mode
-  '(progn
-     (if (boundp 'coffee-mode-map)
-         ;; バッティング解除
-         (define-key coffee-mode-map (kbd "C-c C-l") nil))))
+  '(if (boundp 'coffee-mode-map)
+       ;; バッティング解除
+       (define-key coffee-mode-map (kbd "C-c C-l") nil)))
 
 
 ;; ----------------------------------------------------------------------------
