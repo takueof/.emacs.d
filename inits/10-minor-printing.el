@@ -1,14 +1,14 @@
 ;;; 10-minor-printing.el --- 設定 - マイナーモード - 印刷 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-25T20:50:02+09:00>
+;; Time-stamp: <2019-01-30T11:21:23+09:00>
 
 ;;; Commentary:
 
 ;; see also:
-;;   `ps-print.el'
-;;   `ps-mule.el'
-;;   `printing.el'
+;; `ps-print.el'
+;; `ps-mule.el'
+;; `printing.el'
 
 ;;; Code:
 

@@ -1,7 +1,7 @@
 ;;; 10-minor-compilation.el --- 設定 - マイナーモード - コンパイル -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-30T15:12:27+09:00>
 
 ;;; Commentary:
 
@@ -43,23 +43,22 @@
 ;; HACK: ウインドウの状態を問わず、常にリサイズをかける
 ;; ----------------------------------------------------------------------------
 (eval-after-load 'compile
-  '(progn
-     ;; オーバーライド
-     (defun compilation-set-window-height (window)
-       "Set the height of WINDOW according to `compilation-window-height'."
-       (let ((height (buffer-local-value 'compilation-window-height
-                                         (window-buffer window))))
-         (and height
-              ;; `window-full-width-p' は用いない
-              ;;
-              ;; If window is alone in its frame, aside from a minibuffer,
-              ;; don't change its height.
-              (not (eq window (frame-root-window (window-frame window))))
-              ;; Stef said that doing the saves in this order is safer:
-              (save-excursion
-                (save-selected-window
-                  (select-window window)
-                  (enlarge-window (- height (window-height))))))))))
+  ;; オーバーライド
+  '(defun compilation-set-window-height (window)
+     "Set the height of WINDOW according to `compilation-window-height'."
+     (let ((height (buffer-local-value 'compilation-window-height
+                                       (window-buffer window))))
+       (and height
+            ;; `window-full-width-p' は用いない
+            ;;
+            ;; If window is alone in its frame, aside from a minibuffer,
+            ;; don't change its height.
+            (not (eq window (frame-root-window (window-frame window))))
+            ;; Stef said that doing the saves in this order is safer:
+            (save-excursion
+              (save-selected-window
+                (select-window window)
+                (enlarge-window (- height (window-height)))))))))
 
 
 ;; ----------------------------------------------------------------------------
@@ -96,9 +95,7 @@
      ;; `process-status' と `exit-status' の値も得たいので、アドバイスを利用
      ;; `compilation-finish-functions' にフックした関数では `msg' しか
      ;; 参照できないため
-     (defadvice compilation-handle-exit (after
-                                         my-compilation-auto-quit-window
-                                         activate)
+     (defun my-compilation-auto-quit-window (process-status exit-status msg)
        "Run `quit-window' when `compile' successed."
        (if (and (member (buffer-name)
                         my-compilation-auto-quit-window-enable-buffer-name)
@@ -106,14 +103,16 @@
                          (zerop exit-status))
                     ;; 改行文字が含まれうる問題を回避
                     (string-equal "finished" (string-trim msg))))
-           (quit-window nil (get-buffer-window))))))
+           (quit-window nil (get-buffer-window))))
+
+     (if (fboundp 'compilation-handle-exit)
+         (advice-add 'compilation-handle-exit
+                     :after
+                     #'my-compilation-auto-quit-window))))
 
 
 ;; ----------------------------------------------------------------------------
 ;; HACK: ANSI エスケープシーケンスが正しく解釈されない問題を回避
-;;
-;; see also:
-;; http://www.moreslowly.jp/mw/index.php/Emacs_%E3%81%AE_compilation-mode_%E3%81%A7_ansi_color_%E3%81%8C%E5%8C%96%E3%81%91%E3%81%A6%E3%81%97%E3%81%BE%E3%81%86%E3%81%93%E3%81%A8%E3%81%B8%E3%81%AE%E5%AF%BE%E5%87%A6
 ;; ----------------------------------------------------------------------------
 (defun my-ansi-color-apply-on-compilation ()
   "Recognize ASCII color escape sequences for `compilation-mode' buffer."

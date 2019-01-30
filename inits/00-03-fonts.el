@@ -1,7 +1,7 @@
 ;;; 00-03-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-23T14:34:21+09:00>
+;; Time-stamp: <2019-01-30T11:21:07+09:00>
 
 ;;; Commentary:
 
@@ -67,8 +67,8 @@
 ;;   ×│┤┐└┴┬├─┼┘┌´±¶§÷°¨■
 ;;
 ;; see also:
-;;   https://en.wikipedia.org/wiki/Code_page_858
-;;   https://en.wikipedia.org/wiki/Code_page_850
+;; https://en.wikipedia.org/wiki/Code_page_858
+;; https://en.wikipedia.org/wiki/Code_page_850
 
 ;; Microsoft Code page 932 (`cp932')
 ;;
@@ -92,9 +92,9 @@
 ;;   ￢￤＇＂
 ;;
 ;; see also:
-;;   https://ja.wikipedia.org/wiki/Cp932
-;;   https://internet.watch.impress.co.jp/www/column/ogata/news4.htm
-;;   http://charset.7jp.net/sjis.html
+;; https://ja.wikipedia.org/wiki/Cp932
+;; https://internet.watch.impress.co.jp/www/column/ogata/news4.htm
+;; http://charset.7jp.net/sjis.html
 
 ;; JIS X 0213:2004
 ;;
@@ -118,24 +118,24 @@
 ;;   𠂉𪚲
 
 ;; see also:
-;;   `00-utils.el': 独自サポート関数・マクロ定義
-;;   `mule-conf.el': 文字セット定義（`set-fontset-font' 第2引数の定義一覧）
-;;   `mule-diag.el': 文字セット・コーディングシステム用ツール定義
-;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-Lookup.html
-;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-Selection.html
-;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Fontsets.html
-;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Low_002dLevel-Font.html
-;;   https://www.gnu.org/software/emacs/manual/html_node/efaq/Alternate-character-sets.html
-;;   https://www.gnu.org/software/emacs/manual/html_node/efaq-w32/Fonts-and-text-translation.html
-;;   https://www.emacswiki.org/emacs/DisplayingNonAsciiCharacters
-;;   https://www.emacswiki.org/emacs/FontSets
-;;   http://d.hatena.ne.jp/setoryohei/20110117
-;;   http://d.hatena.ne.jp/tomoya/20090519/1242687354
-;;   http://d.hatena.ne.jp/tomoya/20090807/1249641049
-;;   https://emacs.g.hatena.ne.jp/sakito/20100127
-;;   http://macemacsjp.osdn.jp/matsuan/FontSettingJp.html
-;;   http://www.shuiren.org/chuden/teach/code/main5.htm
-;;   http://lioon.net/emacs-change-font-size-quickly
+;; `00-utils.el': 独自サポート関数・マクロ定義
+;; `mule-conf.el': 文字セット定義（`set-fontset-font' 第2引数の定義一覧）
+;; `mule-diag.el': 文字セット・コーディングシステム用ツール定義
+;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-Lookup.html
+;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-Selection.html
+;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Fontsets.html
+;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Low_002dLevel-Font.html
+;; https://www.gnu.org/software/emacs/manual/html_node/efaq/Alternate-character-sets.html
+;; https://www.gnu.org/software/emacs/manual/html_node/efaq-w32/Fonts-and-text-translation.html
+;; https://www.emacswiki.org/emacs/DisplayingNonAsciiCharacters
+;; https://www.emacswiki.org/emacs/FontSets
+;; http://d.hatena.ne.jp/setoryohei/20110117
+;; http://d.hatena.ne.jp/tomoya/20090519/1242687354
+;; http://d.hatena.ne.jp/tomoya/20090807/1249641049
+;; https://emacs.g.hatena.ne.jp/sakito/20100127
+;; http://macemacsjp.osdn.jp/matsuan/FontSettingJp.html
+;; http://www.shuiren.org/chuden/teach/code/main5.htm
+;; http://lioon.net/emacs-change-font-size-quickly
 
 ;;; Code:
 
@@ -349,9 +349,9 @@
        ;;                 ビットマップフォント主体・96dpi 環境で設定済
        ;; ---------------------------------------------------------------------
        ;; see also:
-       ;;   https://github.com/chrissimpkins/codeface/tree/master/fonts/pro-font-windows
-       ;;   http://osaka.is.land.to/
-       ;;   http://emk.name/2003/12/osakattf.html
+       ;; https://github.com/chrissimpkins/codeface/tree/master/fonts/pro-font-windows
+       ;; http://osaka.is.land.to/
+       ;; http://emk.name/2003/12/osakattf.html
        ;; ---------------------------------------------------------------------
        (my-create-fontset-from-spec "programmingBMP"
                                     (font-spec :size 12 ; デフォルトフォントサイズ (px)

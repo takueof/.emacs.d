@@ -1,7 +1,7 @@
 ;;; 00-05-im.el --- 設定 - インプットメソッド -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-21T22:54:35+09:00>
+;; Time-stamp: <2019-01-30T14:41:29+09:00>
 
 ;;; Commentary:
 
@@ -29,7 +29,7 @@
        "`current-input-method' が non-nil の場合に用いる `cursor' フェイス。"
        :group 'customize)
 
-     (defun my-change-cursor-faces-by-current-input-method ()
+     (defun my-change-cursor-faces-by-current-input-method (window &optional norecord)
        "`current-input-method' の評価値に応じ、カーソル色を変更する。"
        (set-cursor-color
         (face-attribute (if current-input-method
@@ -46,22 +46,20 @@
      (add-hook 'input-method-deactivate-hook
                #'my-change-cursor-faces-by-current-input-method)
 
-     (defadvice select-window (after
-                               my-change-cursor-faces
-                               activate)
-       "ウインドウ選択後、input-method の状態に応じてフェイス `cursor' を変更する。
-
-`cursor' はフレーム単位。
-しかし、`current-input-method' はバッファローカル変数。
-ゆえに、バッファ間で `current-input-method' 値が異なれば、`cursor' が意図せぬ状態になる。
-
-ゆえに、ウインドウ切替のタイミングで、`cursor' を明示的に変更しなければならない。
-
-バッファ切替時は、特に何もしない。
-ウインドウ切替時と異なり、ユーザに対する明示的なカーソル表示が発生しないため。
-
-`select-window' の実行後に起動するフックが存在しないため、`defadvice' でしのいでいる。"
-       (my-change-cursor-faces-by-current-input-method))))
+     ;; ウインドウ選択後、input-method の状態に応じてフェイス `cursor' を変更
+     ;; `cursor' はフレーム単位
+     ;; しかし、`current-input-method' はバッファローカル変数
+     ;; ゆえに、バッファ間で `current-input-method' 値が異なれば、
+     ;; `cursor' が意図せぬ状態になる
+     ;; ゆえに、ウインドウ切替のタイミングでの `cursor' 明示変更が必要
+     ;; バッファ切替時は、特に何もしない
+     ;; ウインドウ切替時と異なり、ユーザに対しては明示的カーソル表示は未発生
+     ;; `select-window' の実行後に起動するフックが存在しないため、
+     ;; アドバイスでしのぐ
+     (if (fboundp 'select-window)
+         (advice-add 'select-window
+                     :after
+                     #'my-change-cursor-faces-by-current-input-method))))
 
 
 ;; ----------------------------------------------------------------------------
