@@ -1,7 +1,7 @@
 ;;; 10-minor-hl-line.el --- 設定 - マイナーモード - カレントカーソル行強調 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T13:14:16+09:00>
+;; Time-stamp: <2019-01-30T15:58:53+09:00>
 
 ;;; Commentary:
 
@@ -33,7 +33,7 @@
       nil)))
 
 ;; TODO: `after-init-hook' 後に実行した `load-theme' に対応したい
-;;       `defadvice' で `enable-theme' の after 実行してもうまくいかない
+;;       `advice-add' で `enable-theme' の after 実行してもうまくいかない
 (add-hook 'after-init-hook #'my-hl-line-initialize)
 
 
