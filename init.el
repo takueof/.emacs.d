@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T22:52:55+09:00>
+;; Time-stamp: <2019-01-30T18:13:09+09:00>
 
 ;;; Commentary:
 
@@ -90,9 +90,10 @@
  '(init-loader-byte-compile nil))
 
 (eval-after-load 'package
-  ;; 全てのパッケージマネージャ関連機能が、必ず使える状況を前提とする
+  ;; パッケージマネージャ関連機能が、必ず使える状況を前提とする
   '(progn
-     (package-install 'init-loader)
+     (if (not (package-installed-p 'init-loader))
+         (package-install 'init-loader))
 
      ;; 起動
      (if (and (require 'init-loader nil :noerror)
