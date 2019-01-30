@@ -1,13 +1,14 @@
 ;;; 20-major-lisp.el --- 設定 - メジャーモード - 各種 Lisp 方言 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-18T11:47:49+09:00>
+;; Time-stamp: <2019-01-30T15:33:06+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'elisp-slime-nav)
+(if (not (package-installed-p 'elisp-slime-nav))
+    (package-install 'elisp-slime-nav))
 
 
 ;; ----------------------------------------------------------------------------

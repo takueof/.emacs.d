@@ -1,13 +1,14 @@
 ;;; 10-minor-migemo.el --- 設定 - マイナーモード - ローマ字入力から日本語をインクリメンタル検索 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-21T10:23:17+09:00>
+;; Time-stamp: <2019-01-30T15:27:13+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'migemo)
+(if (not (package-installed-p 'migemo))
+    (package-install 'migemo))
 
 
 ;; ----------------------------------------------------------------------------

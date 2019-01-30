@@ -1,13 +1,13 @@
 ;;; cocoa-emacs-00-00-environment.el --- 設定 - macOS (Cocoa) - 環境 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T13:10:40+09:00>
+;; Time-stamp: <2019-01-30T15:35:27+09:00>
 
 ;;; Commentary:
 
-
 ;;; Code:
-;;
+
+
 ;; GnuTLS trustfiles 追加
 (when (gnutls-available-p)
   ;; グローバル変数未定義の場合に備える

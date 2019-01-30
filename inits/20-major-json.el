@@ -1,13 +1,14 @@
 ;;; 20-major-json.el --- 設定 - メジャーモード - JSON -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-18T11:47:48+09:00>
+;; Time-stamp: <2019-01-30T15:32:51+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'json-mode)
+(if (not (package-installed-p 'json-mode))
+    (package-install 'json-mode))
 
 
 ;; ----------------------------------------------------------------------------

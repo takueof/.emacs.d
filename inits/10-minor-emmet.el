@@ -1,7 +1,7 @@
 ;;; 10-minor-emmet.el --- 設定 - マイナーモード - Emmet サポート -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-30T15:22:26+09:00>
 
 ;;; Commentary:
 
@@ -10,7 +10,8 @@
 
 ;;; Code:
 
-(package-install 'emmet-mode)
+(if (not (package-installed-p 'emmet-mode))
+    (package-install 'emmet-mode))
 
 
 ;; ----------------------------------------------------------------------------

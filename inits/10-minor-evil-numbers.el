@@ -1,13 +1,14 @@
 ;;; 10-minor-evil-numbers.el --- 設定 - マイナーモード - カーソル下の数値を増減 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-30T15:22:47+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'evil-numbers)
+(if (not (package-installed-p 'evil-numbers))
+    (package-install 'evil-numbers))
 
 
 ;; ----------------------------------------------------------------------------

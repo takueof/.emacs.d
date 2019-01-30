@@ -1,13 +1,14 @@
 ;;; 20-major-vue.el --- 設定 - メジャーモード - Vue.js -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:23+09:00>
+;; Time-stamp: <2019-01-30T15:34:45+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'vue-mode)
+(if (not (package-installed-p 'vue-mode))
+    (package-install 'vue-mode))
 
 
 ;; ----------------------------------------------------------------------------

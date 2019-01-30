@@ -1,13 +1,14 @@
 ;;; 10-minor-yasnippet.el --- 設定 - マイナーモード - スニペット挿入 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T20:09:49+09:00>
+;; Time-stamp: <2019-01-30T15:29:21+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'yasnippet)
+(if (not (package-installed-p 'yasnippet))
+    (package-install 'yasnippet))
 
 
 ;; ----------------------------------------------------------------------------

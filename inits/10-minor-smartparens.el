@@ -1,13 +1,14 @@
 ;;; 10-minor-smartparens.el --- 設定 - マイナーモード - 各種カッコ関連機能拡張 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T20:10:19+09:00>
+;; Time-stamp: <2019-01-30T15:28:13+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'smartparens)
+(if (not (package-installed-p 'smartparens))
+    (package-install 'smartparens))
 
 
 ;; ----------------------------------------------------------------------------

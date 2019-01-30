@@ -1,13 +1,14 @@
 ;;; 10-minor-undohist.el --- 設定 - マイナーモード - `undo' 履歴の記憶 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2017-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:23+09:00>
+;; Time-stamp: <2019-01-30T15:28:52+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'undohist)
+(if (not (package-installed-p 'undohist))
+    (package-install 'undohist))
 
 
 ;; ----------------------------------------------------------------------------

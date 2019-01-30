@@ -1,13 +1,14 @@
 ;;; 10-minor-editorconfig.el --- 設定 - マイナーモード - EditorConfig -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T20:00:51+09:00>
+;; Time-stamp: <2019-01-30T15:22:07+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'editorconfig)
+(if (not (package-installed-p 'editorconfig))
+    (package-install 'editorconfig))
 
 
 ;; ----------------------------------------------------------------------------

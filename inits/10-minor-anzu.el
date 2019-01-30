@@ -1,13 +1,14 @@
 ;;; 10-minor-anzu.el --- 設定 - マイナーモード - 各種検索・置換強化 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-30T15:37:44+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'anzu)
+(if (not (package-installed-p 'anzu))
+    (package-install 'anzu))
 
 
 ;; ----------------------------------------------------------------------------

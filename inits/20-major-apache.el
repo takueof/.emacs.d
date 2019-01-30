@@ -1,13 +1,14 @@
 ;;; 20-major-apache.el --- 設定 - メジャーモード - Apache -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:23+09:00>
+;; Time-stamp: <2019-01-30T15:30:54+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'apache-mode)
+(if (not (package-installed-p 'apache-mode))
+    (package-install 'apache-mode))
 
 
 ;; ----------------------------------------------------------------------------

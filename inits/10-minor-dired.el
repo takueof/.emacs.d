@@ -1,13 +1,14 @@
 ;;; 10-minor-dired.el --- 設定 - マイナーモード - `dired' 拡張 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-24T11:39:49+09:00>
+;; Time-stamp: <2019-01-30T15:21:39+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'dired+)
+(if (not (package-installed-p 'dired+))
+    (package-install 'dired+))
 
 
 ;; ----------------------------------------------------------------------------

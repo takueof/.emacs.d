@@ -1,15 +1,18 @@
 ;;; 10-minor-lsp-mode.el --- 設定 - マイナーモード - LSP クライアント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Taku Watabe
-;; Time-stamp: <2019-01-27T23:38:29+09:00>
+;; Time-stamp: <2019-01-30T15:26:45+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'lsp-mode)
-(package-install 'lsp-ui)
-(package-install 'company-lsp)
+(if (not (package-installed-p 'lsp-mode))
+    (package-install 'lsp-mode))
+(if (not (package-installed-p 'lsp-ui))
+    (package-install 'lsp-ui))
+(if (not (package-installed-p 'company-lsp))
+    (package-install 'company-lsp))
 
 
 ;; ----------------------------------------------------------------------------

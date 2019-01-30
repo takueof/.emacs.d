@@ -1,13 +1,14 @@
 ;;; 20-major-css.el --- 設定 - メジャーモード - CSS -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-18T11:47:48+09:00>
+;; Time-stamp: <2019-01-30T15:31:22+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'css-eldoc)
+(if (not (package-installed-p 'css-eldoc))
+    (package-install 'css-eldoc))
 
 
 ;; ----------------------------------------------------------------------------

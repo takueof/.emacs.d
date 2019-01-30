@@ -1,7 +1,7 @@
 ;;; 10-minor-fill-column-indicator.el --- 設定 - マイナーモード - デフォルト行文字数の位置にインジケータを表示 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-30T15:23:31+09:00>
 
 ;;; Commentary:
 
@@ -10,7 +10,8 @@
 
 ;;; Code:
 
-(package-install 'fill-column-indicator)
+(if (not (package-installed-p 'fill-column-indicator))
+    (package-install 'fill-column-indicator))
 
 
 ;; ----------------------------------------------------------------------------

@@ -1,14 +1,16 @@
 ;;; 20-major-js2.el --- 設定 - メジャーモード - JavaScript -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-27T22:56:46+09:00>
+;; Time-stamp: <2019-01-30T15:32:28+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'js2-mode)
-(package-install 'js2-refactor)
+(if (not (package-installed-p 'js2-mode))
+    (package-install 'js2-mode))
+(if (not (package-installed-p 'js2-refactor))
+    (package-install 'js2-refactor))
 
 
 ;; ----------------------------------------------------------------------------

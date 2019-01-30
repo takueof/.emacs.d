@@ -1,13 +1,14 @@
 ;;; 10-minor-bookmark+.el --- 設定 - マイナーモード - `bookmark' 拡張 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:22+09:00>
+;; Time-stamp: <2019-01-30T15:20:06+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'bookmark+)
+(if (not (package-installed-p 'bookmark+))
+    (package-install 'bookmark+))
 
 
 ;; ----------------------------------------------------------------------------

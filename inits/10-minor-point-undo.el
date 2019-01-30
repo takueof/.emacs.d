@@ -1,13 +1,14 @@
 ;;; 10-minor-point-undo.el --- 設定 - マイナーモード - カーソルの移動履歴 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2017-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T00:25:23+09:00>
+;; Time-stamp: <2019-01-30T15:27:34+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'point-undo)
+(if (not (package-installed-p 'point-undo))
+    (package-install 'point-undo))
 
 
 ;; ----------------------------------------------------------------------------

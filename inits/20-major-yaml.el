@@ -1,13 +1,14 @@
 ;;; 20-major-yaml.el --- 設定 - メジャーモード - YAML -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-18T11:47:49+09:00>
+;; Time-stamp: <2019-01-30T15:34:58+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'yaml-mode)
+(if (not (package-installed-p 'yaml-mode))
+    (package-install 'yaml-mode))
 
 
 ;; ----------------------------------------------------------------------------

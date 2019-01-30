@@ -1,13 +1,14 @@
 ;;; 20-major-scss.el --- 設定 - メジャーモード - Sass (Type: .scss) -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-18T11:35:50+09:00>
+;; Time-stamp: <2019-01-30T15:34:25+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'scss-mode)
+(if (not (package-installed-p 'scss-mode))
+    (package-install 'scss-mode))
 
 
 ;; ----------------------------------------------------------------------------

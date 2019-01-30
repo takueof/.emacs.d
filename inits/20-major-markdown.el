@@ -1,13 +1,14 @@
 ;;; 20-major-markdown.el --- 設定 - メジャーモード - Markdown ドキュメント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-27T23:47:44+09:00>
+;; Time-stamp: <2019-01-30T15:33:21+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'markdown-mode)
+(if (not (package-installed-p 'markdown-mode))
+    (package-install 'markdown-mode))
 
 
 ;; ----------------------------------------------------------------------------

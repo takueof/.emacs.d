@@ -1,14 +1,16 @@
 ;;; 10-minor-ibuffer.el --- 設定 - マイナーモード - 拡張バッファ一覧 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T22:17:47+09:00>
+;; Time-stamp: <2019-01-30T15:25:29+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'ibuffer-vc)
-(package-install 'ibuffer-projectile)
+(if (not (package-installed-p 'ibuffer-vc))
+    (package-install 'ibuffer-vc))
+(if (not (package-installed-p 'ibuffer-projectile))
+    (package-install 'ibuffer-projectile))
 
 
 ;; ----------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 ;;; 10-minor-flycheck.el --- 設定 - マイナーモード - 自動静的解析ランナー -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T20:14:36+09:00>
+;; Time-stamp: <2019-01-30T15:24:30+09:00>
 
 ;;; Commentary:
 
@@ -9,8 +9,10 @@
 
 ;;; Code:
 
-(package-install 'flycheck)
-(package-install 'flycheck-color-mode-line)
+(if (not (package-installed-p 'flycheck))
+    (package-install 'flycheck))
+(if (not (package-installed-p 'flycheck-color-mode-line))
+    (package-install 'flycheck-color-mode-line))
 
 
 ;; ----------------------------------------------------------------------------

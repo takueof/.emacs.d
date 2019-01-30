@@ -1,7 +1,7 @@
 ;;; 10-minor_OBSOLETE-frame-restore.el --- 設定 - マイナーモード - フレーム位置・サイズ復元 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T13:18:14+09:00>
+;; Time-stamp: <2019-01-30T15:30:20+09:00>
 
 ;;; Commentary:
 
@@ -19,7 +19,8 @@
 
 (unless (and (require 'desktop nil :no-error)
              (boundp 'desktop-restore-frames))
-  (package-install 'frame-restore)
+  (if (not (package-installed-p 'frame-restore))
+      (package-install 'frame-restore))
 
 
   ;; --------------------------------------------------------------------------

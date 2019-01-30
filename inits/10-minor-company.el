@@ -1,15 +1,18 @@
 ;;; 10-minor-company.el --- 設定 - マイナーモード - 補完フレームワーク -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2015-2019 Taku Watabe
-;; Time-stamp: <2019-01-13T20:12:06+09:00>
+;; Time-stamp: <2019-01-30T15:21:05+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'company)
-(package-install 'company-statistics)
-(package-install 'company-quickhelp)
+(if (not (package-installed-p 'company))
+    (package-install 'company))
+(if (not (package-installed-p 'company-statistics))
+    (package-install 'company-statistics))
+(if (not (package-installed-p 'company-quickhelp))
+    (package-install 'company-quickhelp))
 
 
 ;; ----------------------------------------------------------------------------

@@ -1,13 +1,14 @@
 ;;; 20-major-indium.el --- 設定 - メジャーモード - JavaScript 開発環境 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Taku Watabe
-;; Time-stamp: <2019-01-27T22:48:22+09:00>
+;; Time-stamp: <2019-01-30T15:32:00+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'indium)
+(if (not (package-installed-p 'indium))
+    (package-install 'indium))
 
 
 ;; ----------------------------------------------------------------------------

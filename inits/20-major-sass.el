@@ -1,13 +1,14 @@
 ;;; 20-major-sass.el --- 設定 - メジャーモード - Sass (Type: .sass) -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-18T11:47:49+09:00>
+;; Time-stamp: <2019-01-30T15:34:11+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'sass-mode)
+(if (not (package-installed-p 'sass-mode))
+    (package-install 'sass-mode))
 
 
 ;; ----------------------------------------------------------------------------

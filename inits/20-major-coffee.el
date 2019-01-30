@@ -1,13 +1,14 @@
 ;;; 20-major-coffee.el --- 設定 - メジャーモード - CoffeeScript -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-27T22:35:57+09:00>
+;; Time-stamp: <2019-01-30T15:31:09+09:00>
 
 ;;; Commentary:
 
 ;;; Code:
 
-(package-install 'coffee-mode)
+(if (not (package-installed-p 'coffee-mode))
+    (package-install 'coffee-mode))
 
 
 ;; ----------------------------------------------------------------------------
