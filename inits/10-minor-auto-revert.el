@@ -1,7 +1,7 @@
-;;; 10-minor-autorevert.el --- 設定 - マイナーモード - 自動バッファ再読込 -*- lexical-binding: t; -*-
+;;; 10-minor-auto-revert.el --- 設定 - マイナーモード - 自動バッファ再読込 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T13:12:42+09:00>
+;; Time-stamp: <2019-01-30T22:18:58+09:00>
 
 ;;; Commentary:
 
@@ -22,4 +22,4 @@
 ;; no-byte-compile: t
 ;; End:
 
-;;; 10-minor-autorevert.el ends here
+;;; 10-minor-auto-revert.el ends here

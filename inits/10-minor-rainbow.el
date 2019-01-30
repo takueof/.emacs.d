@@ -1,7 +1,7 @@
-;;; 10-minor-rainbow-mode.el --- 設定 - マイナーモード - 自動カラー表示 -*- lexical-binding: t; -*-
+;;; 10-minor-rainbow.el --- 設定 - マイナーモード - 自動カラー表示 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T13:15:15+09:00>
+;; Time-stamp: <2019-01-30T22:20:33+09:00>
 
 ;;; Commentary:
 
@@ -38,4 +38,4 @@
 ;; no-byte-compile: t
 ;; End:
 
-;;; 10-minor-rainbow-mode.el ends here
+;;; 10-minor-rainbow.el ends here

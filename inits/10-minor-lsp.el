@@ -1,7 +1,7 @@
-;;; 10-minor-lsp-mode.el --- 設定 - マイナーモード - LSP クライアント -*- lexical-binding: t; -*-
+;;; 10-minor-lsp.el --- 設定 - マイナーモード - LSP クライアント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Taku Watabe
-;; Time-stamp: <2019-01-30T17:52:52+09:00>
+;; Time-stamp: <2019-01-30T22:41:42+09:00>
 
 ;;; Commentary:
 
@@ -19,10 +19,9 @@
 ;; デフォルト値
 ;; ----------------------------------------------------------------------------
 (custom-set-variables
- ;; Defaults
  '(lsp-auto-guess-root t)
  '(lsp-restart 'ignore)
- '(lsp-prefer-flymake nil)
+ '(lsp-prefer-flymake t)
  ;; ローカル環境にのみ保存
  '(lsp-session-file (convert-standard-filename "~/.emacs.lsp-session"))
  ;; With `lsp-ui'
@@ -45,8 +44,7 @@
                        sass-mode-hook
                        scss-mode-hook
                        sh-mode-hook
-                       vue-mode-hook
-                       ))
+                       vue-mode-hook))
     (add-hook mode-hook #'lsp))
 
   (if (and (require 'lsp nil :noerror)
@@ -63,4 +61,4 @@
 ;; no-byte-compile: t
 ;; End:
 
-;;; 10-minor-lsp-mode.el ends here
+;;; 10-minor-lsp.el ends here
