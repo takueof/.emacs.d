@@ -1,7 +1,7 @@
 ;;; 00-01-default.el --- 設定 - 共通 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-24T23:11:04+09:00>
+;; Time-stamp: <2019-01-30T16:12:07+09:00>
 
 ;;; Commentary:
 
@@ -177,6 +177,10 @@
  ;; エコーエリアの最大行数を増やす
  ;;
  '(message-log-max 2000)
+ ;;
+ ;; ミニバッファで各種コマンドを利用できるようにする
+ ;;
+ '(enable-recursive-minibuffers t)
  ;;
  ;; Trash（「ごみ箱」など）が使える場合はそちらへ廃棄
  ;;

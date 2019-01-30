@@ -1,7 +1,7 @@
 ;;; windows-20-major-tex.el --- 設定 - Windows - メジャーモード - TeX -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T13:22:00+09:00>
+;; Time-stamp: <2019-01-30T17:28:35+09:00>
 
 ;;; Commentary:
 
@@ -105,9 +105,9 @@ Runs the shell command defined by `tex-pdf-print-command'."
             print-file-name-pdf
             t))))
 
-     (define-key tex-mode-map (kbd "C-c C-v") #'tex-pdf-view)
-     (define-key tex-mode-map (kbd "C-c C-p") #'tex-pdf-print)
-     (define-key tex-mode-map (kbd "C-c <kanji>") #'latex-insert-block)))
+     (define-key tex-mode-map (kbd "C-c C-t C-v") #'tex-pdf-view)
+     (define-key tex-mode-map (kbd "C-c C-t C-p") #'tex-pdf-print)
+     (define-key tex-mode-map (kbd "C-c C-t <kanji>") #'latex-insert-block)))
 
 
 ;; ----------------------------------------------------------------------------
