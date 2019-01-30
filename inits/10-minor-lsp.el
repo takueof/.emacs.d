@@ -1,7 +1,7 @@
 ;;; 10-minor-lsp.el --- 設定 - マイナーモード - LSP クライアント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Taku Watabe
-;; Time-stamp: <2019-01-30T22:41:42+09:00>
+;; Time-stamp: <2019-01-30T23:04:40+09:00>
 
 ;;; Commentary:
 
@@ -47,11 +47,16 @@
                        vue-mode-hook))
     (add-hook mode-hook #'lsp))
 
-  (if (and (require 'lsp nil :noerror)
-           (boundp 'lsp-after-open-hook)
-           (require 'lsp-ui-flycheck nil :noerror)
-           (fboundp 'lsp-ui-flycheck-enable))
-      (add-hook 'lsp-after-open-hook #'lsp-ui-flycheck-enable)))
+  ;; `gnutls-trustfiles' 未定義時対策
+  ;;
+  ;; `gnutls-trustfiles' は各環境向けの `my-environment' で定義しているため
+  ;; そのロードまで待たせることで回避
+  (eval-after-load 'my-environment
+    '(if (and (require 'lsp nil :noerror)
+              (boundp 'lsp-after-open-hook)
+              (require 'lsp-ui-flycheck nil :noerror)
+              (fboundp 'lsp-ui-flycheck-enable))
+         (add-hook 'lsp-after-open-hook #'lsp-ui-flycheck-enable))))
 
 
 ;; ----------------------------------------------------------------------------

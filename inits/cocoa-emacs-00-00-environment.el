@@ -1,9 +1,13 @@
 ;;; cocoa-emacs-00-00-environment.el --- 設定 - macOS (Cocoa) - 環境 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Taku Watabe
-;; Time-stamp: <2019-01-30T15:35:27+09:00>
+;; Time-stamp: <2019-01-30T23:01:48+09:00>
 
 ;;; Commentary:
+
+;; `feature' 名 `my-environment'
+;;
+;; 疑似名前空間プレフィクスは `my-'
 
 ;;; Code:
 
@@ -24,6 +28,9 @@
       (setq trust-file (convert-standard-filename trust-file))
       (if (file-exists-p trust-file)
           (add-to-list 'gnutls-trustfiles trust-file t)))))
+
+
+(provide 'my-environment)
 
 
 ;; ----------------------------------------------------------------------------

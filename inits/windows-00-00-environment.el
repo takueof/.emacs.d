@@ -1,9 +1,13 @@
 ;;; windows-00-00-environment.el --- 設定 - Windows - 環境 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-01-19T13:59:03+09:00>
+;; Time-stamp: <2019-01-30T23:01:44+09:00>
 
 ;;; Commentary:
+
+;; `feature' 名 `my-environment'
+;;
+;; 疑似名前空間プレフィクスは `my-'
 
 ;;; Code:
 
@@ -32,6 +36,9 @@
       (setq trust-file (convert-standard-filename trust-file))
       (if (file-exists-p trust-file)
           (add-to-list 'gnutls-trustfiles trust-file t)))))
+
+
+(provide 'my-environment)
 
 
 ;; ----------------------------------------------------------------------------
