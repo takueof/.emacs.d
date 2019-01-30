@@ -1,7 +1,7 @@
 ;;; 10-minor-lsp-mode.el --- 設定 - マイナーモード - LSP クライアント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Taku Watabe
-;; Time-stamp: <2019-01-30T15:26:45+09:00>
+;; Time-stamp: <2019-01-30T17:52:52+09:00>
 
 ;;; Commentary:
 
@@ -34,17 +34,26 @@
 ;; ----------------------------------------------------------------------------
 ;; 起動
 ;; ----------------------------------------------------------------------------
-(if (fboundp 'lsp)
-    (add-hook 'prog-mode-hook #'lsp))
+(when (fboundp 'lsp)
+  (dolist (mode-hook '(;; 対象モードの hook を列挙（降順ソート済）
+                       css-mode-hook
+                       html-mode-hook
+                       js-mode-hook
+                       js2-mode-hook
+                       json-mode-hook
+                       php-mode-hook
+                       sass-mode-hook
+                       scss-mode-hook
+                       sh-mode-hook
+                       vue-mode-hook
+                       ))
+    (add-hook mode-hook #'lsp))
 
-(eval-after-load 'lsp
-  '(progn
-     (require 'lsp-clients nil :noerror)
-
-     (if (and (boundp 'lsp-after-open-hook)
-              (require 'lsp-ui-flycheck nil :noerror)
-              (fboundp 'lsp-ui-flycheck-enable))
-         (add-hook 'lsp-after-open-hook #'lsp-ui-flycheck-enable))))
+  (if (and (require 'lsp nil :noerror)
+           (boundp 'lsp-after-open-hook)
+           (require 'lsp-ui-flycheck nil :noerror)
+           (fboundp 'lsp-ui-flycheck-enable))
+      (add-hook 'lsp-after-open-hook #'lsp-ui-flycheck-enable)))
 
 
 ;; ----------------------------------------------------------------------------
