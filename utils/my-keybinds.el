@@ -1,9 +1,14 @@
-;;; 00-keybinds.el --- 設定 - グローバル キーバインド -*- lexical-binding: t; -*-
+;;; my-keybinds.el --- 設定 - グローバルキーバインド -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-21T20:43:50+09:00>
+;; Time-stamp: <2019-01-31T17:58:51+09:00>
 
 ;;; Commentary:
+
+;; 独自定義したグローバルキーバインド設定の集合
+;; `feature' 名 `my-keybinds'
+;;
+;; 疑似名前空間プレフィクスは `my-'
 
 ;;; Code:
 
@@ -63,6 +68,9 @@
      (global-set-key (kbd "C-c RET f") #'my-change-files-coding-system)))
 
 
+(provide 'my-keybinds)
+
+
 ;; ----------------------------------------------------------------------------
 ;; Local Variables:
 ;; coding: utf-8-unix
@@ -70,4 +78,4 @@
 ;; no-byte-compile: t
 ;; End:
 
-;;; 00-keybinds.el ends here
+;;; my-keybinds.el ends here
