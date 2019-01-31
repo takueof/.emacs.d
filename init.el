@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-31T21:49:29+09:00>
+;; Time-stamp: <2019-02-01T00:41:47+09:00>
 
 ;;; Commentary:
 
@@ -511,7 +511,7 @@
 
 
 ;; ============================================================================
-;; 詳細設定補助ロード (by `use-package')
+;; 詳細設定補助 (by `use-package')
 ;; ============================================================================
 (eval-after-load 'package
   ;; パッケージマネージャ関連機能が、必ず使える状況を前提とする
@@ -528,8 +528,62 @@
 (eval-after-load 'use-package
   '(progn
      ;; -----------------------------------------------------------------------
-     ;; TODO: ここに設定を書いていく
+     ;; マイナーモード
      ;; -----------------------------------------------------------------------
+     ;; -------------------------------
+     ;; ローマ字入力から日本語をインクリメンタル検索
+     ;; -------------------------------
+     (use-package migemo
+       :ensure t
+       :bind (:map isearch-mode-map
+              ("C-c C-s" . #'migemo-isearch-toggle-migemo))
+       :init
+       (custom-set-variables
+        ;; C/Migemo 利用設定
+        `(migemo-command ,(executable-find "cmigemo"))
+        '(migemo-options '("-q" "--emacs"))
+        ;; 空白文字と認識させる対象を広げる
+        '(migemo-white-space-regexp "[[:space:]\s-]*")
+        ;; ユーザ別基礎ディレクトリは設定ディレクトリ内にまとめる
+        `(migemo-directory ,(convert-standard-filename "~"))
+        ;; `migemo' 側で定義されている `isearch' 関連キーバインドを使わせない
+        ;; ミニバッファ内で `yank' できない現象が発生する問題の対策
+        '(migemo-use-default-isearch-keybinding nil)
+        ;; 辞書ファイルはデフォルトのものを利用
+        `(migemo-dictionary ,(convert-standard-filename
+                              (cond ((or (equal system-type 'ms-dos)
+                                         (equal system-type 'windows-nt))
+                                     "C:/programs/cmigemo/share/migemo/utf-8/migemo-dict")
+                                    (t
+                                     "/usr/local/share/migemo/utf-8/migemo-dict"))))
+        '(migemo-user-dictionary nil)
+        '(migemo-regex-dictionary nil)
+        ;; 辞書エンコーディングを明示
+        '(migemo-coding-system 'utf-8-unix)
+        ;; キャッシュを使わせる
+        '(migemo-use-pattern-alist t)
+        '(migemo-use-frequent-pattern-alist t)
+        '(migemo-pattern-alist-length 1024)
+        ;; ローカル環境にのみ保存
+        '(migemo-pattern-alist-file (expand-file-name ".emacs.migemo-pattern" migemo-directory))
+        '(migemo-frequent-pattern-alist-file (expand-file-name ".emacs.migemo-frequent" migemo-directory)))
+       :config
+       (if (and (boundp 'migemo-command)
+                migemo-command
+                (boundp 'migemo-dictionary)
+                (file-exists-p 'migemo-dictionary))
+           (migemo-init)))
+
+
+     ;; -------------------------------
+     ;; TODO: ここに説明を書いていく
+     ;; -------------------------------
+     ;; -----------------------------------------------------------------------
+     ;; メジャーーモード
+     ;; -----------------------------------------------------------------------
+     ;; -------------------------------
+     ;; TODO: ここに説明を書いていく
+     ;; -------------------------------
      ))
 
 
