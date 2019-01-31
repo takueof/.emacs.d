@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-01-31T18:54:52+09:00>
+;; Time-stamp: <2019-01-31T21:49:29+09:00>
 
 ;;; Commentary:
 
@@ -211,7 +211,7 @@
 
 
 ;; ============================================================================
-;; ベル音 (Windows)
+;; ベル音 (Windows ONLY)
 ;; ============================================================================
 (if (fboundp 'set-message-beep)
     ;; なし
@@ -402,14 +402,51 @@
  ;;
  '(delete-by-moving-to-trash t)
  ;;
+ ;; 人為的に italic/bold フォントを選択 (Windows ONLY)
+ ;;
+ '(w32-enable-synthesized-fonts t)
+ ;;
+ ;; IM 設定 (Windows ONLY)
+ ;;
+ ;; 識別名 "W32-IME"' は、IME パッチが適用されていなければ使えない
+ ;; 他環境ではデフォルトのままとする
+ ;;
+ `(default-input-method ,(cond ((or (equal system-type 'ms-dos)
+                                    (equal system-type 'windows-nt))
+                                "W32-IME")
+                               (t
+                                default-input-method)))
+ ;;
+ ;; バッファ毎の IME 状態モードライン表示 (Windows ONLY)
+ ;;
+ '(w32-ime-mode-line-state-indicator "[Aa]")
+ ;;
+ ;; IM 状態モードライン表示の一覧 (Windows ONLY)
+ ;;
+ ;; 順に「IME OFF」「IME ON: 日本語入力」「IME ON: 英字入力」
+ ;;
+ '(w32-ime-mode-line-state-indicator-list '("[--]" "[あ]" "[Aa]"))
+ ;;
+ ;; バッファ切替時には IM 状態を引き継がない (Windows ONLY)
+ ;;
+ '(w32-ime-buffer-switch-p t)
+ ;;
+ ;; 右 <Alt> + 左 <Ctrl> で <AltGr> が発送されないようにする (Windows ONLY)
+ ;; <AltGr> は独自のキーコードであり、<C-M-> であるとみなされない
+ ;;
+ ;; see also:
+ ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Windows-Keyboard.html
+ ;;
+ '(w32-recognize-altgr nil)
+ ;;
  ;; Web ブラウザ
  ;;
- `(browse-url-browser-function ',(cond ((equal window-system 'w32)
-                                        'browse-url-default-windows-browser)
-                                       ((equal window-system 'mac)
-                                        'browse-url-default-macosx-browser)
-                                       (t
-                                        'browse-url-default-browser)))
+ `(browse-url-browser-function ,(cond ((equal window-system 'w32)
+                                       'browse-url-default-windows-browser)
+                                      ((equal window-system 'mac)
+                                       'browse-url-default-macosx-browser)
+                                      (t
+                                       'browse-url-default-browser)))
  ;;
  ;; GnuTLS trustfiles 追加
  ;;
@@ -424,7 +461,15 @@
 
 
 ;; ============================================================================
-;; 環境変数
+;; IM 設定 (windows ONLY)
+;; ============================================================================
+(if (and (require 'w32-ime nil :noerror)
+         (fboundp 'w32-ime-initialize))
+    (w32-ime-initialize))
+
+
+;; ============================================================================
+;; 環境変数 (Windows ONLY)
 ;; ============================================================================
 (if (or (equal system-type 'ms-dos)
         (equal system-type 'windows-nt))
