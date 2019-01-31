@@ -435,7 +435,7 @@
            (paths `(,(concat program-files-dir-x86 "/Aspell/bin")
                     "C:/programs/cmigemo/bin"
                     "C:/programs/cygwin/bin")))
-      (mapcar dolist (path paths)
+      (dolist (path paths)
         (setq path (convert-standard-filename path))
         (if (and (file-exists-p path)
                  (file-directory-p path))
