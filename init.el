@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-01T00:50:44+09:00>
+;; Time-stamp: <2019-02-01T01:09:11+09:00>
 
 ;;; Commentary:
 
@@ -441,12 +441,12 @@
  ;;
  ;; Web ブラウザ
  ;;
- `(browse-url-browser-function ,(cond ((equal window-system 'w32)
-                                       'browse-url-default-windows-browser)
-                                      ((equal window-system 'mac)
-                                       'browse-url-default-macosx-browser)
-                                      (t
-                                       'browse-url-default-browser)))
+ `(browse-url-browser-function ',(cond ((equal window-system 'w32)
+                                        'browse-url-default-windows-browser)
+                                       ((equal window-system 'mac)
+                                        'browse-url-default-macosx-browser)
+                                       (t
+                                        'browse-url-default-browser)))
  ;;
  ;; GnuTLS trustfiles 追加
  ;;
