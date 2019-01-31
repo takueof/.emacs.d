@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-01T00:41:47+09:00>
+;; Time-stamp: <2019-02-01T00:50:44+09:00>
 
 ;;; Commentary:
 
@@ -534,6 +534,7 @@
      ;; ローマ字入力から日本語をインクリメンタル検索
      ;; -------------------------------
      (use-package migemo
+       ;; :disabled t
        :ensure t
        :bind (:map isearch-mode-map
               ("C-c C-s" . #'migemo-isearch-toggle-migemo))
@@ -571,7 +572,7 @@
        (if (and (boundp 'migemo-command)
                 migemo-command
                 (boundp 'migemo-dictionary)
-                (file-exists-p 'migemo-dictionary))
+                (file-exists-p migemo-dictionary))
            (migemo-init)))
 
 
