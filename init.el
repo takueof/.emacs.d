@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-01T19:21:40+09:00>
+;; Time-stamp: <2019-02-02T00:44:27+09:00>
 
 ;;; Commentary:
 
@@ -568,6 +568,7 @@
      ;; -------------------------------
      (use-package jka-cmpr-hook
        ;; :disabled
+       :demand t
        :init
        ;;
        ;; 起動
@@ -624,6 +625,7 @@
      ;; -------------------------------
      (use-package bookmark
        ;; :disabled
+       :demand t
        :init
        (custom-set-variables
         '(bookmark-version-control t)
@@ -639,7 +641,8 @@
      (use-package bookmark+
        ;; :disabled
        :requires (bookmark)
-       :ensure t)
+       :ensure t
+       :demand t)
 
 
      ;; -------------------------------
@@ -656,7 +659,7 @@
        ;;
        (unless (fboundp 'codic-view-kill)
          ;; 専用ウインドウを `quit-window' する関数が
-         ;; 定義されていないなら、追加
+         ;; 定義されていないなら追加
          (defun my-codic-quit ()
            "Quit `codic' window and bury its buffer."
            (interactive)
@@ -720,7 +723,7 @@
        ;; :disabled
        :ensure t
        :defer t
-       :hook ((after-init-hook . global-company-mode))
+       :hook ((after-init . global-company-mode))
        :init
        ;;
        ;; デフォルト値
@@ -739,6 +742,7 @@
         '(company-abort-manual-when-too-short t)
         '(company-idle-delay 0.25)
         '(company-selection-wrap-around t)
+        '(company-lighter-base nil)
         ;;
         ;; `company-dabbrev'
         ;;
@@ -838,6 +842,7 @@
        :config
        (use-package subr-x
          ;; :disabled
+         :demand t
          :init
          ;;
          ;; HACK: ウインドウの状態を問わず、常にリサイズをかける
@@ -1035,6 +1040,7 @@
        ;; :disabled
        :requires (dired)
        :ensure t
+       :demand t
        :init
        ;;
        ;; デフォルト値
@@ -1073,10 +1079,10 @@
        :defer t
        :bind (("M-%" . anzu-query-replace)
               ("C-M-%" . anzu-query-replace-regexp))
-       :hook ((lisp-mode-hook . eldoc-mode)
-              (emacs-lisp-mode-hook . eldoc-mode)
-              (lisp-interaction-mode-hook . eldoc-mode)
-              (ielm-mode-hook . eldoc-mode))
+       :hook ((lisp-mode . eldoc-mode)
+              (emacs-lisp-mode . eldoc-mode)
+              (lisp-interaction-mode . eldoc-mode)
+              (ielm-mode . eldoc-mode))
        :init
        ;;
        ;; デフォルト値
@@ -1094,7 +1100,7 @@
        ;; :disabled
        :ensure t
        :defer t
-       :hook ((html-mode-hook . emmet-mode))
+       :hook ((html-mode . emmet-mode))
        :init
        ;;
        ;; デフォルト値
@@ -1178,7 +1184,7 @@
        ;; :disabled
        :defer t
        :bind (("C-c f" . flycheck-mode))
-       :hook ((after-init-hook . global-flycheck-mode))
+       :hook ((after-init . global-flycheck-mode))
        :init
        ;;
        ;; デフォルト値
@@ -1281,7 +1287,7 @@ See URL `https://github.com/validator/validator'."
        :requires (flycheck)
        :ensure t
        :defer t
-       :hook ((flycheck-mode-hook . flycheck-color-mode-line-mode)))
+       :hook ((flycheck-mode . flycheck-color-mode-line-mode)))
 
 
      ;; -------------------------------
@@ -1406,8 +1412,8 @@ See URL `https://github.com/validator/validator'."
      ;; -------------------------------
      (use-package grep
        ;; :disabled
-       :defer (not (or (equal system-type 'ms-dos)
-                       (equal system-type 'windows-nt)))
+       :demand (not (or (equal system-type 'ms-dos)
+                        (equal system-type 'windows-nt)))
        :bind (("C-M-g" . rgrep))
        :init
        ;;
@@ -1889,16 +1895,16 @@ Ordering is lexicographic."
        ;; :disabled
        :ensure t
        :defer t
-       :hook ((css-mode-hook . lsp)
-              (html-mode-hook . lsp)
-              (js-mode-hook . lsp)
-              (js2-mode-hook . lsp)
-              (json-mode-hook . lsp)
-              (php-mode-hook . lsp)
-              (sass-mode-hook . lsp)
-              (scss-mode-hook . lsp)
-              (sh-mode-hook . lsp)
-              (vue-mode-hook . lsp))
+       :hook ((css-mode . lsp)
+              (html-mode . lsp)
+              (js-mode . lsp)
+              (js2-mode . lsp)
+              (json-mode . lsp)
+              (php-mode . lsp)
+              (sass-mode . lsp)
+              (scss-mode . lsp)
+              (sh-mode . lsp)
+              (vue-mode . lsp))
        :init
        ;;
        ;; デフォルト値
@@ -1920,7 +1926,8 @@ Ordering is lexicographic."
        ;; :disabled
        :requires (lsp-mode)
        :ensure t
-       :hook ((lsp-after-open-hook . lsp-ui-flycheck-enable)))
+       :demand t
+       :hook ((lsp-after-open . lsp-ui-flycheck-enable)))
 
 
      ;; -------------------------------
@@ -1991,6 +1998,7 @@ Ordering is lexicographic."
      (use-package migemo
        ;; ;; :disabled
        :ensure t
+       :demand t
        :bind (:map isearch-mode-map
               ("C-c C-s" . migemo-isearch-toggle-migemo))
        :init
@@ -2073,6 +2081,7 @@ Ordering is lexicographic."
      (use-package point-undo
        ;; :disabled
        :ensure t
+       :demand t
        :bind (("M-]" . point-undo)
               ("M-[" . point-redo)))
 
@@ -2182,6 +2191,7 @@ Ordering is lexicographic."
      ;; -------------------------------
      (use-package printing
        ;; :disabled
+       :demand t
        :bind (("C-c p p" . pr-interface))
        :init
        ;;
@@ -2294,6 +2304,7 @@ Ordering is lexicographic."
      ;; -------------------------------
      (use-package saveplace
        ;; :disabled
+       :demand t
        :init
        ;;
        ;; デフォルト値
@@ -2359,6 +2370,7 @@ Ordering is lexicographic."
      ;; -------------------------------
      (use-package server
        ;; :disabled
+       :demand t
        :init
        ;;
        ;; デフォルト値
@@ -2399,6 +2411,7 @@ Ordering is lexicographic."
      (use-package smartparens
        ;; :disabled
        :ensure t
+       :demand t
        :init
        ;;
        ;; デフォルト値
@@ -2430,7 +2443,7 @@ Ordering is lexicographic."
      (use-package time-stamp
        ;; :disabled
        :defer t
-       :hook ((before-save-hook . time-stamp))
+       :hook ((before-save . time-stamp))
        :init
        ;;
        ;; デフォルト値
@@ -2540,6 +2553,7 @@ Ordering is lexicographic."
      (use-package undo-tree
        ;; :disabled
        :ensure t
+       :demand t
        :bind (("C-." . undo-tree-redo))
        :init
        ;;
@@ -2561,6 +2575,7 @@ Ordering is lexicographic."
      (use-package undohist
        ;; :disabled
        :ensure t
+       :demand t
        :init
        ;;
        ;; デフォルト値
@@ -2581,6 +2596,7 @@ Ordering is lexicographic."
      ;; -------------------------------
      (use-package uniquify
        ;; :disabled
+       :demand t
        :init
        ;;
        ;; デフォルト値
