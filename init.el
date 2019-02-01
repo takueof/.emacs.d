@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-01T16:43:38+09:00>
+;; Time-stamp: <2019-02-01T19:21:40+09:00>
 
 ;;; Commentary:
 
@@ -1244,13 +1244,11 @@ See URL `https://github.com/validator/validator'."
 
          ;; 有効化
          (let ((target-and-other-checkers (member 'html-tidy flycheck-checkers)))
-           (cond
-            ;; デフォルトの (X)HTML チェッカ `html-tidy' と入れ替える
-            (target-and-other-checkers
-             (setcar target-and-other-checkers 'vnu))
-            ;; 未追加ならリスト先頭に追加
-            (t
-             (add-to-list 'flycheck-checkers 'vnu)))))
+           (if target-and-other-checkers
+               ;; デフォルトの (X)HTML チェッカ `html-tidy' と入れ替える
+               (setcar target-and-other-checkers 'vnu)
+             ;; 未追加ならリスト先頭に追加
+             (add-to-list 'flycheck-checkers 'vnu))))
 
        ;;
        ;; PATCH: Sass（.scss/.sass 両形式）チェック時にキャッシュを使わせない
@@ -1669,7 +1667,7 @@ Set up `compilation-exit-message-function' and run `grep-setup-hook'."
                       (grep-find-command ,grep-find-command)
                       (grep-find-template ,grep-find-template)
                       (grep-find-use-xargs ,grep-find-use-xargs)
-                      (grep-highlight-matches ,grep-highlight-matches))))))))))
+                      (grep-highlight-matches ,grep-highlight-matches))))))))
 
 
      ;; -------------------------------
@@ -2431,7 +2429,6 @@ Ordering is lexicographic."
      ;; -------------------------------
      (use-package time-stamp
        ;; :disabled
-       :ensure t
        :defer t
        :hook ((before-save-hook . time-stamp))
        :init
