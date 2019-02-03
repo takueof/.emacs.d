@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-03T19:41:23+09:00>
+;; Time-stamp: <2019-02-03T20:10:02+09:00>
 
 ;;; Commentary:
 
@@ -640,7 +640,7 @@
      ;; -------------------------------
      (use-package bookmark+
        ;; :disabled
-       :requires (bookmark)
+       :after (:all bookmark)
        :ensure t
        :demand t)
 
@@ -775,7 +775,7 @@
      ;; -------------------------------
      (use-package company-statistics
        ;; :disabled
-       :requires (company)
+       :after (:all company)
        :ensure t
        :defer t
        :init
@@ -801,7 +801,7 @@
      ;; -------------------------------
      (use-package company-quickhelp
        ;; :disabled
-       :requires (company)
+       :after (:all company)
        :ensure t
        :defer t
        :init
@@ -1038,7 +1038,7 @@
      ;; -------------------------------
      (use-package dired+
        ;; :disabled
-       :requires (dired)
+       :after (:all dired)
        :ensure t
        :demand t
        :init
@@ -1284,7 +1284,7 @@ See URL `https://github.com/validator/validator'."
      ;; -------------------------------
      (use-package flycheck-color-mode-line
        ;; :disabled
-       :requires (flycheck)
+       :after (:all flycheck)
        :ensure t
        :defer t
        :hook ((flycheck-mode . flycheck-color-mode-line-mode)))
@@ -1803,7 +1803,7 @@ Ordering is lexicographic."
   ;; -------------------------------
   (use-package ibuffer-projectile
     ;; :disabled
-    :requires (ibuffer projectile)
+    :after (:all ibuffer projectile)
     :ensure t
     :defer t
     :init
@@ -1926,7 +1926,7 @@ Ordering is lexicographic."
   ;; -------------------------------
   (use-package lsp-ui
     ;; :disabled
-    :requires (lsp-mode)
+    :after (:all lsp-mode)
     :ensure t
     :demand t
     :hook ((lsp-after-open . lsp-ui-flycheck-enable)))
