@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-04T01:24:13+09:00>
+;; Time-stamp: <2019-02-04T08:19:50+09:00>
 
 ;;; Commentary:
 
@@ -1430,19 +1430,20 @@ See URL `https://github.com/validator/validator'."
      ;; -----------------------------------------------------------------------
      (use-package grep
        ;; :disabled
-       :demand (not (or (equal system-type 'ms-dos)
-                        (equal system-type 'windows-nt)))
+       :demand (or (equal system-type 'ms-dos)
+                   (equal system-type 'windows-nt))
        :bind (("C-M-g" . rgrep))
        :init
        ;; -----------------------------
        ;; デフォルト値
        ;;------------------------------
-       (custom-set-variables
-        ;; 例外が出るため NUL デバイスは使わせない (Windows ONLY)
-        `(grep-use-null-device ,(if (or (equal system-type 'ms-dos)
-                                        (equal system-type 'windows-nt))
-                                    nil
-                                  grep-use-null-device)))
+       (if (or (equal system-type 'ms-dos)
+               (equal system-type 'windows-nt))
+           (custom-set-variables
+            ;;
+            ;; 例外が出るため NUL デバイスは使わせない (Windows ONLY)
+            ;;
+            '(grep-use-null-device nil)))
 
        ;; -----------------------------
        ;; 初期化 (Windows ONLY)
