@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-04T01:06:31+09:00>
+;; Time-stamp: <2019-02-04T01:24:13+09:00>
 
 ;;; Commentary:
 
@@ -772,7 +772,7 @@
 
 
      ;; -----------------------------------------------------------------------
-     ;; 補完フレームワーク（補完候補のソート）
+     ;; 補完フレームワーク (`company') 拡張（補完候補のソート）
      ;; -----------------------------------------------------------------------
      (use-package company-statistics
        ;; :disabled
@@ -798,7 +798,7 @@
 
 
      ;; -----------------------------------------------------------------------
-     ;; 補完フレームワーク（補完候補のポップアップドキュメント）
+     ;; 補完フレームワーク (`company') 拡張（補完候補のポップアップドキュメント）
      ;; -----------------------------------------------------------------------
      (use-package company-quickhelp
        ;; :disabled
@@ -1198,6 +1198,7 @@
      ;; -----------------------------------------------------------------------
      (use-package flycheck
        ;; :disabled
+       :ensure t
        :defer t
        :bind (("C-c f" . flycheck-mode))
        :hook ((after-init . global-flycheck-mode))
@@ -1297,7 +1298,7 @@ See URL `https://github.com/validator/validator'."
 
 
      ;; -----------------------------------------------------------------------
-     ;; 自動静的解析モードライン変更
+     ;; 自動静的解析拡張（モードライン変更）
      ;; -----------------------------------------------------------------------
      (use-package flycheck-color-mode-line
        ;; :disabled
@@ -1698,7 +1699,6 @@ Set up `compilation-exit-message-function' and run `grep-setup-hook'."
      ;; -----------------------------------------------------------------------
      (use-package hippie-exp
        ;; :disabled
-       :ensure t
        :defer t
        :bind (("M-/" . hippie-expand)))
 
@@ -1940,7 +1940,7 @@ Ordering is lexicographic."
 
 
      ;; -----------------------------------------------------------------------
-     ;; LSP (Language Server Protocol) クライアント UI
+     ;; LSP (Language Server Protocol) クライアント拡張 (UI)
      ;; -----------------------------------------------------------------------
      (use-package lsp-ui
        ;; :disabled
@@ -2787,7 +2787,6 @@ Ordering is lexicographic."
      ;; -----------------------------------------------------------------------
      (use-package winner
        ;; :disabled
-       :ensure t
        :defer t
        :init
        ;; -----------------------------
