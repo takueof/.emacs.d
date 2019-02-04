@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-04T08:19:50+09:00>
+;; Time-stamp: <2019-02-04T12:19:35+09:00>
 
 ;;; Commentary:
 
@@ -1829,12 +1829,12 @@ Ordering is lexicographic."
        ;; -----------------------------
        ;; 初期化
        ;; -----------------------------
-       (defun my-ibuffer-initialize ()
+       (defun my-ibuffer-projectile-initialize ()
          "Initialize `ibuffer' settings."
          (if (fboundp 'ibuffer-projectile-set-filter-groups)
              (ibuffer-projectile-set-filter-groups)))
 
-       (add-hook 'ibuffer-hook #'my-ibuffer-initialize))
+       (add-hook 'ibuffer-hook #'my-ibuffer-projectile-initialize))
 
 
      ;; -----------------------------------------------------------------------
@@ -2234,7 +2234,8 @@ Ordering is lexicographic."
      ;; -----------------------------------------------------------------------
      (use-package projectile
        ;; :disabled
-       :defer t
+       :ensure t
+       :demand t
        :init
        ;; -----------------------------
        ;; デフォルト値
@@ -2251,7 +2252,13 @@ Ordering is lexicographic."
         ;; ローカル環境にのみ保存
         ;;
         `(projectile-cache-file ,(convert-standard-filename "~/.emacs.projectile.cache"))
-        `(projectile-known-projects-file ,(convert-standard-filename "~/.emacs.projectile-bookmarks.eld"))))
+        `(projectile-known-projects-file ,(convert-standard-filename "~/.emacs.projectile-bookmarks.eld")))
+
+       ;; -----------------------------
+       ;; 起動
+       ;; -----------------------------
+       (if (fboundp 'projectile-mode)
+           (projectile-mode +1)))
 
 
      ;; -----------------------------------------------------------------------
