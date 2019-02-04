@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-04T16:11:49+09:00>
+;; Time-stamp: <2019-02-04T20:11:16+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -370,7 +370,7 @@
  ;;
  ;; 最終行への改行（空行）挿入を強制
  ;;
- ;; 不要なら各メジャーモード毎に設定させる
+ ;; 不要なら各メジャーモードごとに設定させる
  ;;
  '(require-final-newline t)
  '(mode-require-final-newline t)
@@ -430,7 +430,7 @@
                                (t
                                 default-input-method)))
  ;;
- ;; バッファ毎の IME 状態モードライン表示 (Windows ONLY)
+ ;; バッファごとのインプットメソッド状態モードライン表示 (Windows ONLY)
  ;;
  '(w32-ime-mode-line-state-indicator "[Aa]")
  ;;
