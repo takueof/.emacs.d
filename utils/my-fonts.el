@@ -1,7 +1,7 @@
 ;;; my-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-04T17:50:09+09:00>
+;; Time-stamp: <2019-02-04T19:53:40+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -30,6 +30,7 @@
 
 ;; 文字幅調整テスト：
 ;;   aa| アルファベット
+;;   ıı| ラテン文字
 ;;   あ| ひらがな（日本語）
 ;;   简| 簡体字
 ;;   粵| 繁体字
@@ -38,35 +39,37 @@
 ;;   😊| 絵文字
 
 ;; 波ダッシュ字形テスト：
+;;   「〜」(U+301C: WAVE DASH)
+;;   「～」(U+FF5E: FULLWIDTH TILDE)
 
-;; 文字拡大・縮小モード
+;; 文字拡大・縮小モード：
 ;;   C-x C-0
 ;;
-;; カーソルがポイントしている文字の「簡易」情報を表示:
+;; カーソルがポイントしている文字の「簡易」情報を表示：
 ;;   C-x =
 ;;
-;; カーソルがポイントしている文字の「詳細」情報を表示:
+;; カーソルがポイントしている文字の「詳細」情報を表示：
 ;;   C-u C-x =
 ;;
-;; 各種フォントセットの詳細を、別バッファに表示:
+;; 各種フォントセットの詳細を、別バッファに表示：
 ;;   M-x describe-fontset
 ;;
-;; 定義されているフォントセットの一覧を、別バッファに表示:
+;; 定義されているフォントセットの一覧を、別バッファに表示：
 ;;   M-x list-fontsets
 ;;
-;; 利用可能なフォントの一覧:
+;; 利用可能なフォントの一覧：
 ;;   (dolist (xlfd (x-list-fonts "*")) (insert (format "%S" xlfd) "\n"))
 ;;
-;; 該当ファミリフォントの一覧:
+;; 該当ファミリフォントの一覧：
 ;;   (list-fonts (font-spec :family "ファミリ名"))
 ;;
-;; 定義されているフォントセットの一覧:
+;; 定義されているフォントセットの一覧：
 ;;   (fontset-list)
 ;;
-;; 定義されているフォントセットと、別名（短縮名、エイリアス）の alist:
+;; 定義されているフォントセットと、別名（短縮名、エイリアス）の alist：
 ;;   fontset-alias-alist
 ;;
-;; フレームが使用中のフォントを表示:
+;; フレームが使用中のフォントを表示：
 ;;   (frame-parameter nil 'font)
 
 ;; Microsoft Code page 858 (`cp858')
@@ -86,7 +89,7 @@
 ;; フォントによっては、他の文字と判別しにくいもの：
 ;;   "Ø" (U+00d8: LATIN CAPITAL LETTER O WITH STROKE)
 ;;
-;; 日本語フォント（全角）で表示されてほしいもの：
+;; 全角フォントで表示されてほしいもの：
 ;;   ×│┤┐└┴┬├─┼┘┌´±¶§÷°¨■
 ;;
 ;; see also:
@@ -95,13 +98,13 @@
 
 ;; Microsoft Code page 932 (`cp932')
 ;;
-;; 概要:
+;; 概要：
 ;;   * 日本語
 ;;   * 俗称「Microsoft Shift_JIS」
 ;;   * `cp932' にはあるが、JIS X 0213:2004 にはない文字群がある
 ;;     例：「カナダ漢字」
 ;;
-;; 特殊文字（マップ順でソート済）:
+;; 特殊文字（マップ順でソート済）：
 ;;   纊褜鍈銈蓜俉炻昱棈鋹曻彅丨仡仼伀伃伹佖侒侊侚侔俍偀倢俿倞偆偰偂傔僴僘兊兤冝
 ;;   冾凬刕劜劦勀勛匀匇匤卲厓厲叝﨎咜咊咩哿喆坙坥垬埈埇﨏塚增墲夋奓奛奝奣妤妺孖
 ;;   寀甯寘寬尞岦岺峵崧嵓﨑嵂嵭嶸嶹巐弡弴彧德忞恝悅悊惞惕愠惲愑愷愰憘戓抦揵摠撝
@@ -194,6 +197,7 @@
    ;; macOS (with "Inconsolata")
    ;;
    ((my-fallback-font-family "Inconsolata")
+    (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.100))
@@ -317,7 +321,19 @@
                             (cons (string-to-char "░") (string-to-char "▓"))
                             ;; 次のフォントは U+2591, U+2592, U+2593 未実装：
                             ;;
+                            ;;   * "Inconsolata"
                             ;;   * "Consolas"
+                            ;;
+                            ;; ゆえに、他フォントによるフォールバックが必要
+                            (font-spec :family (my-fallback-font-family "Menlo"
+                                                                        "Monaco"
+                                                                        "Courier New"
+                                                                        "Monospace")))
+  ;; "ı" (U+0131: LATIN SMALL LETTER DOTLESS I) フォント明示
+  (my-set-fontset-font-safe "fontset-programming"
+                            (cons (string-to-char "ı") (string-to-char "ı"))
+                            ;; 次のフォントは "ı" (U+0131) 未実装：
+                            ;;
                             ;;   * "Inconsolata"
                             ;;
                             ;; ゆえに、他フォントによるフォールバックが必要
