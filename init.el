@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-04T15:32:09+09:00>
+;; Time-stamp: <2019-02-04T16:11:49+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -43,8 +43,6 @@
 ;; `prefer-coding-system' は絶対に使わないこと！
 ;; 例：(prefer-coding-system 'utf-8-unix)
 ;; システムごとに最適化された、自動設定のデフォルト定義を破壊するため
-;;
-;; 他の設定は `00-02-coding.el' を参照
 (set-coding-system-priority 'utf-8)
 (setq-default buffer-file-coding-system 'utf-8-unix)
 

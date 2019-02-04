@@ -1,7 +1,7 @@
 ;;; my-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-04T15:25:11+09:00>
+;; Time-stamp: <2019-02-04T17:50:09+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -28,7 +28,7 @@
 ;;
 ;; 疑似名前空間プレフィクスは `my-'
 
-;; 文字幅調整テスト:
+;; 文字幅調整テスト：
 ;;   aa| アルファベット
 ;;   あ| ひらがな（日本語）
 ;;   简| 簡体字
@@ -36,6 +36,8 @@
 ;;   한| ハングル
 ;;   ไไ| タイ文字
 ;;   😊| 絵文字
+
+;; 波ダッシュ字形テスト：
 
 ;; 文字拡大・縮小モード
 ;;   C-x C-0
@@ -187,34 +189,57 @@
   ;; 多バイト文字の認識に支障がある場合の書法：
   ;; (add-to-list 'face-font-rescale-alist `(,(encode-coding-string "-フォント名-" 'emacs-mule) . 倍率))
   ;; --------------------------------------------------------------------------
-  (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.185))
-  (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.240)) ;; macOS
-  (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.240)) ;; macOS
-  (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.240)) ;; macOS
-  (add-to-list 'face-font-rescale-alist '("-Lantinghei TC-" . 1.167)) ;; macOS (Unadjsuted)
-  (add-to-list 'face-font-rescale-alist '("-Heiti TC-" . 1.240)) ;; macOS
-  (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.350)) ;; macOS
-  (add-to-list 'face-font-rescale-alist '("-PCMyungjo-" . 1.240)) ;; macOS
-  (add-to-list 'face-font-rescale-alist '("-Tahoma-" . 1.100)) ;; Windows
-  (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.240)) ;; macOS
-  (add-to-list 'face-font-rescale-alist '("-YuGothic-" . 1.240)) ;; macOS
-  (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.917)) ;; macOS (Unadjusted)
-  (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.185)) ;; Windows
-  (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.185)) ;; Windows
-  (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.185)) ;; Windows
-  (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.870)) ;; Windows
-  (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))
+  (cond
+   ;;
+   ;; macOS (with "Inconsolata")
+   ;;
+   ((my-fallback-font-family "Inconsolata")
+    (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.300))
+    (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 0.900))
+    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.840))) ; unadjusted
+   ;;
+   ;; macOS (with "Menlo")
+   ;;
+   ((my-fallback-font-family "Menlo")
+    (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.240))
+    (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.240))
+    (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.240))
+    (add-to-list 'face-font-rescale-alist '("-Lantinghei TC-" . 1.167))
+    (add-to-list 'face-font-rescale-alist '("-Heiti TC-" . 1.240))
+    (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.350))
+    (add-to-list 'face-font-rescale-alist '("-PCMyungjo-" . 1.240))
+    (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.240))
+    (add-to-list 'face-font-rescale-alist '("-YuGothic-" . 1.240))
+    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.917))) ; unadjusted
+   ;;
+   ;; Windows (with "Consolas")
+   ;;
+   ((my-fallback-font-family "Consolas")
+    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.185))
+    (add-to-list 'face-font-rescale-alist '("-Tahoma-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.185))
+    (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.185))
+    (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.185))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.870)))
+   ;;
+   ;; Default
+   ;;
+   (t
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))))
 
 
   ;; --------------------------------------------------------------------------
   ;; フォントセット：プログラミング用（高 dpi 環境向け）
   ;; --------------------------------------------------------------------------
   (my-create-fontset-from-spec "programming"
-                               (font-spec :size 12.0 ; デフォルトフォントサイズ (pt)
-                                          :family (my-fallback-font-family "Menlo"
+                               (font-spec :size 13.0 ; デフォルトフォントサイズ (pt)
+                                          :family (my-fallback-font-family "Inconsolata"
+                                                                           "Menlo"
                                                                            "Monaco"
                                                                            "Consolas"
-                                                                           "Inconsolata"
                                                                            "Courier New"
                                                                            "Monospace")))
   ;; Emoji
@@ -282,10 +307,10 @@
   ;; ラテン文字：Code page 858 (`cp858')
   (my-set-fontset-font-safe "fontset-programming"
                             'cp858
-                            (font-spec :family (my-fallback-font-family "Menlo"
+                            (font-spec :family (my-fallback-font-family "Inconsolata"
+                                                                        "Menlo"
                                                                         "Monaco"
                                                                         "Consolas"
-                                                                        "Inconsolata"
                                                                         "Courier New"
                                                                         "Monospace")))
   (my-set-fontset-font-safe "fontset-programming"
@@ -351,11 +376,11 @@
   ;; ASCII
   (my-set-fontset-font-safe "fontset-programming"
                             'ascii
-                            (font-spec :size 12.0 ; デフォルトフォントサイズ (pt)
-                                       :family (my-fallback-font-family "Consolas"
-                                                                        "Inconsolata"
+                            (font-spec :size 13.0 ; デフォルトフォントサイズ (pt)
+                                       :family (my-fallback-font-family "Inconsolata"
                                                                         "Menlo"
                                                                         "Monaco"
+                                                                        "Consolas"
                                                                         "Courier New"
                                                                         "Monospace")))
 
@@ -372,15 +397,15 @@
   (my-create-fontset-from-spec "programmingBMP"
                                (font-spec :size 12 ; デフォルトフォントサイズ (px)
                                           :family (my-fallback-font-family "ProFontWindows"
-                                                                           "Consolas"
                                                                            "Inconsolata"
+                                                                           "Consolas"
                                                                            "Courier New"
                                                                            "Monospace")))
   ;; 最終フォールバック
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             nil
-                            (font-spec :family (my-fallback-font-family "Consolas"
-                                                                        "Inconsolata"
+                            (font-spec :family (my-fallback-font-family "Inconsolata"
+                                                                        "Consolas"
                                                                         "Courier New"
                                                                         "Monospace")))
   ;; Emoji
@@ -455,8 +480,8 @@
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'cp858
                             (font-spec :family (my-fallback-font-family "ProFontWindows"
-                                                                        "Consolas"
                                                                         "Inconsolata"
+                                                                        "Consolas"
                                                                         "Courier New"
                                                                         "Monospace")))
   ;; Unicode "Box Drawing"（罫線素片）
@@ -511,16 +536,16 @@
                             (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
                                                                         "さざなみフォント"
                                                                         "東雲フォント"
-                                                                        "Consolas"
                                                                         "Inconsolata"
+                                                                        "Consolas"
                                                                         "Courier New")))
   ;; ASCII
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'ascii
                             (font-spec :size 12 ; デフォルトフォントサイズ (px)
                                        :family (my-fallback-font-family "ProFontWindows"
-                                                                        "Consolas"
                                                                         "Inconsolata"
+                                                                        "Consolas"
                                                                         "Courier New"
                                                                         "Monospace")))
 
