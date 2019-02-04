@@ -1,7 +1,22 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-04T12:19:35+09:00>
+;; Time-stamp: <2019-02-04T15:32:09+09:00>
+
+;; Author: Taku Watabe <taku.eof@gmail.com>
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -355,13 +370,12 @@
  ;;
  '(confirm-nonexistent-file-or-buffer nil)
  ;;
- ;; 最終行への改行（空行）挿入は、任意とする
+ ;; 最終行への改行（空行）挿入を強制
  ;;
- ;; 他人の書いたファイルが最終行に改行のないファイルだった場合、
- ;; 保存すると改行が入って差分となり、いちいち指摘が入りうる問題を回避
+ ;; 不要なら各メジャーモード毎に設定させる
  ;;
- '(require-final-newline nil)
- '(mode-require-final-newline nil)
+ '(require-final-newline t)
+ '(mode-require-final-newline t)
  ;;
  ;; `undo' 上限を引き上げ
  ;;
@@ -462,7 +476,7 @@
 
 
 ;; ============================================================================
-;; インプットメソッド初期化 (windows ONLY)
+;; インプットメソッド初期化 (Windows ONLY)
 ;; ============================================================================
 (if (and (require 'w32-ime nil :noerror)
          (fboundp 'w32-ime-initialize))
@@ -474,7 +488,7 @@
 ;; ============================================================================
 (if (or (equal system-type 'ms-dos)
         (equal system-type 'windows-nt))
-    ;; 環境変数 PATH では不足している分の追加
+    ;; 環境変数 %PATH% では不足している分の追加
     (let* ((program-files-dir-x86 (or (getenv "PROGRAMFILES\(X86\)")
                                       (getenv "PROGRAMFILES")
                                       "C:/programs"))
@@ -497,14 +511,11 @@
            (boundp 'package-archives)
            (fboundp 'package-initialize)
            (fboundp 'package-list-packages-no-fetch))
-  ;; --------------------------------------------------------------------------
-  ;; 初期化
-  ;; --------------------------------------------------------------------------
   ;; 確実に定義された後で追加
   (add-to-list 'package-archives '("MELPA" . "https://melpa.org/packages/"))
   (add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
 
-  ;; あらゆるパッケージロードに先んじて記述しなければならない
+  ;; あらゆるパッケージロードに先んじての記述が必須
   (package-initialize)
 
   ;; `list-packages' のような短縮版を用意
@@ -928,6 +939,21 @@
 
 
      ;; -----------------------------------------------------------------------
+     ;; CSS 用 `eldoc'
+     ;; -----------------------------------------------------------------------
+     (use-package css-eldoc
+       ;; :disabled
+       :ensure t
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; 起動
+       ;; -----------------------------
+       (if (fboundp 'css-eldoc-enable)
+           (css-eldoc-enable)))
+
+
+     ;; -----------------------------------------------------------------------
      ;; 矩形選択
      ;; -----------------------------------------------------------------------
      (use-package cua-base
@@ -1080,6 +1106,32 @@
 
 
      ;; -----------------------------------------------------------------------
+     ;; GNU Emacs Lisp 定義ジャンプ・バック・ドキュメント閲覧
+     ;; -----------------------------------------------------------------------
+     (use-package elisp-slime-nav
+       ;; :disabled
+       :after (:any emacs-lisp-mode
+                    lisp-interaction-mode
+                    lisp-mode
+                    ielm)
+       :ensure t
+       :defer t
+       :config
+       ;; -----------------------------
+       ;; 起動
+       ;;------------------------------
+       (if (fboundp 'elisp-slime-nav-mode)
+           (elisp-slime-nav-mode +1))
+
+       ;; -----------------------------
+       ;; lighter
+       ;;------------------------------
+       (eval-after-load 'my-utils
+         '(if (fboundp 'elisp-slime-nav-mode)
+              (my-change-lighter elisp-slime-nav-mode nil))))
+
+
+     ;; -----------------------------------------------------------------------
      ;; Emmet
      ;; -----------------------------------------------------------------------
      (use-package emmet-mode
@@ -1115,6 +1167,7 @@
            (defun enriched-decode-display-prop (start end &optional param)
              (list start end))))
 
+
      ;; -----------------------------------------------------------------------
      ;; カーソル下の数値を増減
      ;; -----------------------------------------------------------------------
@@ -1124,6 +1177,7 @@
        :defer t
        :bind (("C-2" . evil-numbers/inc-at-pt)
               ("C-1" . evil-numbers/dec-at-pt)))
+
 
      ;; -----------------------------------------------------------------------
      ;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得・設定
@@ -1822,7 +1876,8 @@ Ordering is lexicographic."
      ;; -----------------------------------------------------------------------
      (use-package ibuffer-projectile
        ;; :disabled
-       :after (:all ibuffer projectile)
+       :after (:all ibuffer
+                    projectile)
        :ensure t
        :defer t
        :init
@@ -1903,6 +1958,16 @@ Ordering is lexicographic."
         ;; 逆検索時に大小文字を区別しない
         ;;
         '(isearch-last-case-fold-search t)))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; JavaScript リファクタリング補助
+     ;; -----------------------------------------------------------------------
+     (use-package js2-refactor
+       ;; :disabled
+       :after (:all js2-mode)
+       :ensure t
+       :demand t)
 
 
      ;; -----------------------------------------------------------------------
@@ -2098,6 +2163,19 @@ Ordering is lexicographic."
         ;; ローカル環境にのみ保存
         ;;
         `(nsm-settings-file ,(convert-standard-filename "~/.emacs.network-security.data"))))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; PHP 用 `eldoc'
+     ;; -----------------------------------------------------------------------
+     (use-package php-eldoc
+       ;; :disabled
+       :after (:all php-mode)
+       :ensure t
+       :defer t
+       :config
+       (if (fboundp 'php-eldoc-enable)
+           (php-eldoc-enable)))
 
 
      ;; -----------------------------------------------------------------------
@@ -2655,20 +2733,6 @@ Ordering is lexicographic."
 
 
      ;; -----------------------------------------------------------------------
-     ;; URL ツール
-     ;; -----------------------------------------------------------------------
-     (use-package url
-       ;; :disabled
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(url-using-proxy t)))
-
-
-     ;; -----------------------------------------------------------------------
      ;; 空白文字強調
      ;; -----------------------------------------------------------------------
      (use-package whitespace
@@ -2840,9 +2904,584 @@ Ordering is lexicographic."
 (eval-after-load 'use-package
   '(progn
      ;; -----------------------------------------------------------------------
-     ;; TODO: 説明を書く
+     ;; Apache
      ;; -----------------------------------------------------------------------
+     (use-package apache-mode
+       ;; :disabled
+       :ensure t
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; 起動
+       ;; -----------------------------
+       (if (fboundp 'apache-mode)
+           (add-to-list 'auto-mode-alist '("\\.conf\\'" . apache-mode))))
 
+
+     ;; -----------------------------------------------------------------------
+     ;; CSS
+     ;; -----------------------------------------------------------------------
+     (use-package css-mode
+       ;; :disabled
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;; -----------------------------
+       (custom-set-variables
+        '(css-indent-offset 2))
+
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-css-mode-initialize ()
+         "Initialize `css-mode' before file load."
+         (setq-local indent-tabs-mode nil)
+
+         ;; EditorConfig 対応
+         (eval-after-load 'editorconfig
+           '(if (hash-table-p editorconfig-properties-hash)
+                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                       (indent-style (equal indent-style-data "tab")))
+                  (if (not (equal indent-tabs-mode indent-style))
+                      (setq-local indent-tabs-mode indent-style))))))
+
+       (add-hook 'css-mode-hook #'my-css-mode-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; GNU Emacs Lisp
+     ;; -----------------------------------------------------------------------
+     (use-package elisp-mode
+       ;; :disabled
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       ;;
+       ;; 共通
+       ;;
+       (defun my-emacs-lisp-mode-initialize ()
+         "Initialize `emacs-lisp-mode' and `lisp-interaction-mode' before file load."
+         (setq-local indent-tabs-mode nil)
+         (setq-local tab-width 8)
+
+         ;; EditorConfig 対応
+         ;;
+         ;; TODO: `tab-width' 対応
+         (eval-after-load 'editorconfig
+           '(if (hash-table-p editorconfig-properties-hash)
+                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                       (indent-style (equal indent-style-data "tab")))
+                  (if (not (equal indent-tabs-mode indent-style))
+                      (setq-local indent-tabs-mode indent-style))))))
+
+       (add-hook 'emacs-lisp-mode-hook #'my-emacs-lisp-mode-initialize)
+       (add-hook 'lisp-interaction-mode-hook #'my-emacs-lisp-mode-initialize)
+
+       ;;
+       ;; `lisp-interaction-mode' ONLY
+       ;;
+       (defun my-lisp-interaction-mode-initialize ()
+         "Initialize `lisp-interaction-mode-initialize' before file load."
+         ;; `whitespace-mode' 無効化
+         (eval-after-load 'whitespace
+           '(progn
+              (if (fboundp 'whitespace-mode)
+                  (whitespace-mode -1))
+              (when (boundp 'whitespace-style)
+                (setq-local whitespace-style (copy-tree whitespace-style))
+                (delete 'empty whitespace-style)))))
+
+       (add-hook 'lisp-interaction-mode-hook #'my-lisp-interaction-mode-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; Haml
+     ;; -----------------------------------------------------------------------
+     (use-package haml-mode
+       ;; :disabled
+       :ensure t
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-haml-mode-initialize ()
+         "Initialize `haml-mode' before file load."
+         (setq-local indent-tabs-mode nil)
+
+         ;; EditorConfig 対応
+         (eval-after-load 'editorconfig
+           '(if (hash-table-p editorconfig-properties-hash)
+                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                       (indent-style (equal indent-style-data "tab")))
+                  (if (not (equal indent-tabs-mode indent-style))
+                      (setq-local indent-tabs-mode indent-style))))))
+
+       (add-hook 'haml-mode-hook #'my-haml-mode-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; Emacs Lisp インタラクション
+     ;; -----------------------------------------------------------------------
+     (use-package ielm
+       ;; :disabled
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-ielm-mode-initialize ()
+         "Initialize `ielm' major mode before file load."
+         (setq-local indent-tabs-mode nil)
+         (setq-local tab-width 8))
+
+       (add-hook 'ielm-mode-hook #'my-ielm-mode-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; JavaScript
+     ;; -----------------------------------------------------------------------
+     (use-package js2-mode
+       ;; :disabled
+       :ensure t
+       :defer t
+       :mode (("\\.js\\'" . js2-mode)
+              ("\\.pac\\'" . js2-mode))
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;; -----------------------------
+       (custom-set-variables
+        '(js2-highlight-level 3) ; すべての構文強調を有効化
+        '(js2-basic-offset 4)
+        '(js2-bounce-indent-p nil)
+        '(js2-pretty-multiline-declarations t)
+        '(js2-indent-switch-body nil) ; case 文はインデントしない
+        '(js2-idle-timer-delay 0.2)
+        '(js2-dynamic-idle-timer-adjust 0)
+        '(js2-concat-multiline-strings t)
+        ;;
+        ;; 文法チェック関連
+        ;;
+        ;; 他ツールに任せるため、すべて無効化
+        '(js2-mode-show-parse-errors nil)
+        '(js2-mode-show-strict-warnings nil)
+        '(js2-strict-trailing-comma-warning nil)
+        '(js2-strict-missing-semi-warning nil)
+        '(js2-missing-semi-one-line-override nil)
+        '(js2-strict-inconsistent-return-warning nil)
+        '(js2-strict-cond-assign-warning nil)
+        '(js2-strict-var-redeclaration-warning nil)
+        '(js2-strict-var-hides-function-arg-warning nil)
+        ;;
+        ;; その他
+        ;;
+        '(js2-skip-preprocessor-directives t)
+        '(js2-language-version 200)
+        '(js2-instanceof-has-side-effects nil)
+        '(js2-move-point-on-right-click nil) ; 使わない
+        '(js2-allow-rhino-new-expr-initializer nil) ; 使わない
+        '(js2-allow-member-expr-as-function-name nil)
+        '(js2-include-browser-externs t)
+        '(js2-include-rhino-externs nil)
+        '(js2-include-node-externs nil)
+        '(js2-mode-indent-inhibit-undo nil)
+        '(js2-mode-indent-ignore-first-tab nil)
+        '(js2-highlight-external-variables t)
+        ;;
+        ;; JSLint
+        ;;
+        ;; 他ツールに任せるため、すべて無効化
+        '(js2-include-jslint-globals nil))
+
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-js2-mode-initialize ()
+         "Initialize `js2-mode' before file load."
+         (setq-local indent-tabs-mode nil)
+
+         ;; EditorConfig 対応
+         (eval-after-load 'editorconfig
+           '(if (hash-table-p editorconfig-properties-hash)
+                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                       (indent-style (equal indent-style-data "tab")))
+                  (if (not (equal indent-tabs-mode indent-style))
+                      (setq-local indent-tabs-mode indent-style))))))
+
+       (add-hook 'js2-mode-hook #'my-js2-mode-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; JSON
+     ;; -----------------------------------------------------------------------
+     (use-package json-mode
+       ;; :disabled
+       :ensure t
+       :defer t
+       :mode (("\\.bowerrc\\'" . json-mode)
+              ("\\.ftppass\\'" . json-mode)
+              ("\\.htmlhintrc\\'" . json-mode)
+              ("\\.htmllintrc\\'" . json-mode)
+              ("\\.jscsrc\\'" . json-mode)
+              ("\\.jshintrc\\'" . json-mode)
+              ("\\.json\\'" . json-mode)
+              ("\\.stylelintrc\\'" . json-mode))
+       :init
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-json-mode-initialize ()
+         "Initialize `json-mode' before file load."
+         (setq-local indent-tabs-mode nil)
+         (setq-local js-indent-level 2)
+         (setq-local tab-width 2)
+
+         ;; EditorConfig 対応
+         ;;
+         ;; TODO: `tab-width' と `js-indent-level' 対応
+         (eval-after-load 'editorconfig
+           '(if (hash-table-p editorconfig-properties-hash)
+                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                       (indent-style (equal indent-style-data "tab")))
+                  (if (not (equal indent-tabs-mode indent-style))
+                      (setq-local indent-tabs-mode indent-style))))))
+
+       (add-hook 'json-mode-hook #'my-json-mode-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; Lisp
+     ;; -----------------------------------------------------------------------
+     (use-package lisp-mode
+       ;; :disabled
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-lisp-mode-initialize ()
+         "Itialize `lisp-mode' before file load."
+         (setq-local indent-tabs-mode nil)
+         (setq-local tab-width 8)
+
+         ;; EditorConfig 対応
+         ;;
+         ;; TODO: `tab-width' 対応
+         (eval-after-load 'editorconfig
+           '(if (hash-table-p editorconfig-properties-hash)
+                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                       (indent-style (equal indent-style-data "tab")))
+                  (if (not (equal indent-tabs-mode indent-style))
+                      (setq-local indent-tabs-mode indent-style))))))
+
+       (add-hook 'lisp-mode-hook #'my-lisp-mode-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; Markdown
+     ;; -----------------------------------------------------------------------
+     (use-package markdown-mode
+       ;; :disabled
+       :ensure t
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;; -----------------------------
+       (custom-set-variables
+        '(markdown-command (or (executable-find "github-markup")
+                               (executable-find "markdown")
+                               "markdown"))
+        '(markdown-command-needs-filename (equal markdown-command
+                                                 (executable-find "github-markup")))
+        '(markdown-coding-system 'utf-8-unix)
+        ;;
+        ;; プレビュー用に生成した実 HTML ファイルの残存を防ぐ
+        ;;
+        '(markdown-live-preview-delete-export 'delete-on-export))
+
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-markdown-mode-initialize ()
+         "Initialize `markdown-mode' before file load."
+         (setq-local indent-tabs-mode nil)
+
+         ;; EditorConfig 対応
+         (eval-after-load 'editorconfig
+           '(if (hash-table-p editorconfig-properties-hash)
+                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                       (indent-style (equal indent-style-data "tab")))
+                  (if (not (equal indent-tabs-mode indent-style))
+                      (setq-local indent-tabs-mode indent-style))))))
+
+       (add-hook 'markdown-mode-hook #'my-markdown-mode-initialize)
+       :config
+       ;; -----------------------------
+       ;; 起動
+       ;; -----------------------------
+       ;;
+       ;; プレーンテキストファイルは除外
+       ;;
+       (setq auto-mode-alist
+             (delete '("\\.text\\'" . markdown-mode) auto-mode-alist)))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; PHP
+     ;; -----------------------------------------------------------------------
+     (use-package php-mode
+       ;; :disabled
+       :ensure t
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-php-mode-initialize ()
+         "Initialize `php-mode' before file load."
+         (setq-local indent-tabs-mode nil)
+
+         ;; EditorConfig 対応
+         (eval-after-load 'editorconfig
+           '(if (hash-table-p editorconfig-properties-hash)
+                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                       (indent-style (equal indent-style-data "tab")))
+                  (if (not (equal indent-tabs-mode indent-style))
+                      (setq-local indent-tabs-mode indent-style))))))
+
+       (add-hook 'php-mode-hook #'my-php-mode-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; Sass (extension: ".sass")
+     ;; -----------------------------------------------------------------------
+     (use-package sass-mode
+       ;; :disabled
+       :ensure t
+       :defer t
+       :mode (("\\.sass\\'" . sass-mode))
+       :init
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-sass-mode-initialize ()
+         "Initialize `sass-mode' before file load."
+         (setq-local indent-tabs-mode nil)
+
+         ;; EditorConfig 対応
+         (eval-after-load 'editorconfig
+           '(if (hash-table-p editorconfig-properties-hash)
+                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                       (indent-style (equal indent-style-data "tab")))
+                  (if (not (equal indent-tabs-mode indent-style))
+                      (setq-local indent-tabs-mode indent-style))))))
+
+       (add-hook 'sass-mode-hook #'my-sass-mode-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; Sass (extension: ".scss")
+     ;; -----------------------------------------------------------------------
+     (use-package scss-mode
+       ;; :disabled
+       :ensure t
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;; -----------------------------
+       (custom-set-variables
+        ;;
+        ;; コンパイルは常に手動（保存時は何もしない）
+        ;; 各種ツール経由でコンパイルされうるため
+        ;;
+        '(scss-compile-at-save nil))
+
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-scss-mode-initialize ()
+         "Initialize `scss-mode' before file load."
+         (setq-local indent-tabs-mode nil)
+
+         ;; EditorConfig 対応
+         (eval-after-load 'editorconfig
+           '(if (hash-table-p editorconfig-properties-hash)
+                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                       (indent-style (equal indent-style-data "tab")))
+                  (if (not (equal indent-tabs-mode indent-style))
+                      (setq-local indent-tabs-mode indent-style))))))
+
+       (add-hook 'scss-mode-hook #'my-scss-mode-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; SGML, (X)HTML
+     ;; -----------------------------------------------------------------------
+     (use-package sgml-mode
+       ;; :disabled
+       :defer t
+       :mode (("\\.[sx]?html?\\'" . html-mode))
+       :init
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       ;;
+       ;; SGML
+       ;;
+       (defun my-sgml-mode-initialize ()
+         "Initialize `sgml-mode' before file load."
+         (setq-local indent-tabs-mode nil)
+
+         (when (featurep 'sgml-electric-tag-pair-mode)
+           (declare-function sgml-electric-tag-pair-mode "sgml-mode")
+           (sgml-electric-tag-pair-mode +1))
+
+         ;; EditorConfig 対応
+         (eval-after-load 'editorconfig
+           '(if (hash-table-p editorconfig-properties-hash)
+                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                       (indent-style (equal indent-style-data "tab")))
+                  (if (not (equal indent-tabs-mode indent-style))
+                      (setq-local indent-tabs-mode indent-style))))))
+
+       (add-hook 'sgml-mode-hook #'my-sgml-mode-initialize)
+
+       ;;
+       ;; (X)HTML
+       ;;
+       (defun my-html-mode-initialize ()
+         "Initialize `html-mode' before file load."
+         (setq-local indent-tabs-mode nil)
+
+         ;; EditorConfig 対応
+         (eval-after-load 'editorconfig
+           '(if (hash-table-p editorconfig-properties-hash)
+                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                       (indent-style (equal indent-style-data "tab")))
+                  (if (not (equal indent-tabs-mode indent-style))
+                      (setq-local indent-tabs-mode indent-style))))))
+
+       (add-hook 'html-mode-hook #'my-html-mode-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; TeX
+     ;; -----------------------------------------------------------------------
+     (use-package tex-mode
+       ;; :disabled
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-tex-mode-initialize ()
+         "Initialize `tex-mode' before file load."
+         (setq-local truncate-lines nil))
+
+       (add-hook 'tex-mode-hook #'my-tex-mode-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; Text
+     ;; -----------------------------------------------------------------------
+     (use-package text-mode
+       ;; :disabled
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-text-mode-initialize ()
+         "Initialize `text-mode' before file load."
+         (setq-local truncate-lines nil))
+
+       (add-hook 'text-mode-hook #'my-text-mode-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; Vue.js
+     ;; -----------------------------------------------------------------------
+     (use-package vue-mode
+       ;; :disabled
+       :ensure t
+       :defer t)
+
+
+     ;; -----------------------------------------------------------------------
+     ;; XML
+     ;; -----------------------------------------------------------------------
+     (use-package nxml-mode
+       ;; :disabled
+       :defer t
+       :mode (("\\.xml\\'" . nxml-mode)
+              ("\\.plist\\'" . nxml-mode))
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;; -----------------------------
+       (custom-set-variables
+        '(nxml-child-indent 2)
+        '(nxml-attribute-indent 0)
+        '(nxml-slash-auto-complete-flag t)
+        '(nxml-bind-meta-tab-to-complete-flag t)
+        '(nxml-sexp-element-flag t)
+        '(nxml-char-ref-display-glyph-flag t))
+
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-nxml-mode-initialize ()
+         "Initialize `nxml-mode' before file load."
+         (setq-local indent-tabs-mode nil)
+
+         ;; EditorConfig 対応
+         (eval-after-load 'editorconfig
+           '(if (hash-table-p editorconfig-properties-hash)
+                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                       (indent-style (equal indent-style-data "tab")))
+                  (if (not (equal indent-tabs-mode indent-style))
+                      (setq-local indent-tabs-mode indent-style))))))
+
+       (add-hook 'nxml-mode-hook #'my-nxml-mode-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; YAML
+     ;; -----------------------------------------------------------------------
+     (use-package yaml-mode
+       ;; :disabled
+       :ensure t
+       :defer t
+       :mode (("\\.eslintrc\\'" . nxml-mode))
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;; -----------------------------
+       (custom-set-variables
+        '(yaml-indent-offset 2))
+
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-yaml-mode-initialize ()
+         "Initialize `yaml-mode' before file load."
+         (setq-local indent-tabs-mode nil)
+
+         ;; EditorConfig 対応
+         (eval-after-load 'editorconfig
+           '(if (hash-table-p editorconfig-properties-hash)
+                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                       (indent-style (equal indent-style-data "tab")))
+3                  (if (not (equal indent-tabs-mode indent-style))
+                      (setq-local indent-tabs-mode indent-style))))))
+
+       (add-hook 'yaml-mode-hook #'my-yaml-mode-initialize))
 
 
      ;; -----------------------------------------------------------------------
@@ -2852,29 +3491,62 @@ Ordering is lexicographic."
 
 
 ;; ============================================================================
-;; 詳細設定ロード (by `init-loader')
+;; 詳細設定（その他）
 ;; ============================================================================
-;; TODO: `use-package' を用いた「詳細設定」のほうに移していく
-;; ============================================================================
-(custom-set-variables
- '(init-loader-directory (locate-user-emacs-file "inits"))
- '(init-loader-show-log-after-init 'error-only)
- ;; 設定ファイルのバイトコンパイルは非推奨
- ;;
- ;; see also:
- ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-File.html
- '(init-loader-byte-compile nil))
-
-(eval-after-load 'package
-  ;; パッケージマネージャ関連機能が、必ず使える状況を前提とする
+(eval-after-load 'use-package
   '(progn
-     (if (not (package-installed-p 'init-loader))
-         (package-install 'init-loader))
+     ;; -----------------------------------------------------------------------
+     ;; EWW (Emacs Web Wowser)
+     ;; -----------------------------------------------------------------------
+     (use-package eww
+       ;; :disabled
+       :defer t
+       :bind (("C-c C-e" . eww))
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;; -----------------------------
+       (custom-set-variables
+        '(eww-search-prefix "https://www.google.co.jp/search?&q=")
+        '(eww-history-limit 100)))
 
-     ;; 起動
-     (if (and (require 'init-loader nil :noerror)
-              (fboundp 'init-loader-load))
-         (init-loader-load))))
+
+     ;; -----------------------------------------------------------------------
+     ;; JavaScript 開発環境
+     ;; -----------------------------------------------------------------------
+     (use-package indium
+       ;; :disabled
+       :ensure t
+       :demand t
+       :hook ((js-mode . indium-interaction-mode)
+              (js2-mode . indium-interaction-mode))
+       :config
+       ;; -----------------------------
+       ;; lighter
+       ;; -----------------------------
+       (eval-after-load 'my-utils
+         '(if (fboundp 'indium-interaction-mode)
+              (my-change-lighter indium-interaction-mode nil))))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; URL ツール
+     ;; -----------------------------------------------------------------------
+     (use-package url
+       ;; :disabled
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;;------------------------------
+       (custom-set-variables
+        '(url-using-proxy t)))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; END OF CONFIG: 詳細設定（その他）
+     ;; -----------------------------------------------------------------------
+     ))
 
 
 ;; ============================================================================
