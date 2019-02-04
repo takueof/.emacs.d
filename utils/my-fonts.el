@@ -1,7 +1,7 @@
 ;;; my-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-04T19:53:40+09:00>
+;; Time-stamp: <2019-02-04T23:22:28+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -37,6 +37,7 @@
 ;;   한| ハングル
 ;;   ไไ| タイ文字
 ;;   😊| 絵文字
+;;   ░▓| 記号
 
 ;; 波ダッシュ字形テスト：
 ;;   「〜」(U+301C: WAVE DASH)
@@ -196,7 +197,8 @@
    ;;
    ;; macOS (with "Inconsolata")
    ;;
-   ((my-fallback-font-family "Inconsolata")
+   ((and (my-fallback-font-family "Inconsolata")
+         (my-fallback-font-family "Menlo"))
     (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.100))
@@ -222,17 +224,19 @@
    ;; Windows (with "Consolas")
    ;;
    ((my-fallback-font-family "Consolas")
-    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.185))
+    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Tahoma-" . 1.100))
-    (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.185))
-    (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.185))
-    (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.185))
-    (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.870)))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.800))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910)))
    ;;
    ;; Default
    ;;
    (t
-    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))))
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))))
 
 
   ;; --------------------------------------------------------------------------
@@ -339,6 +343,7 @@
                             ;; ゆえに、他フォントによるフォールバックが必要
                             (font-spec :family (my-fallback-font-family "Menlo"
                                                                         "Monaco"
+                                                                        "Consolas"
                                                                         "Courier New"
                                                                         "Monospace")))
   ;; Unicode "Box Drawing"（罫線素片）
