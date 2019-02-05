@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-04T20:11:16+09:00>
+;; Time-stamp: <2019-02-05T14:36:46+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -47,7 +47,7 @@
 (setq-default buffer-file-coding-system 'utf-8-unix)
 
 ;; macOS ONLY
-(when (equal system-type 'darwin)
+(when (member system-type '(darwin))
   (set-terminal-coding-system 'utf-8-unix)
   (set-keyboard-coding-system 'utf-8-unix)
   (setq-default default-process-coding-system '(utf-8 . utf-8)))
@@ -424,8 +424,7 @@
  ;; 識別名 "W32-IME"' は、IME パッチが適用されていなければ使えない
  ;; 他環境ではデフォルトのままとする
  ;;
- `(default-input-method ,(cond ((or (equal system-type 'ms-dos)
-                                    (equal system-type 'windows-nt))
+ `(default-input-method ,(cond ((member system-type '(ms-dos windows-nt))
                                 "W32-IME")
                                (t
                                 default-input-method)))
@@ -464,8 +463,7 @@
  ;; GnuTLS trustfiles 追加
  ;;
  `(gnutls-trustfiles ',(mapcar 'convert-standard-filename
-                               (cond ((or (equal system-type 'ms-dos)
-                                          (equal system-type 'windows-nt))
+                               (cond ((member system-type '(ms-dos windows-nt))
                                       '("C:/programs/cygwin/usr/ssl/certs/ca-bundle.crt"))
                                      (t
                                       '("/usr/local/etc/libressl/cert.pem"
@@ -484,8 +482,7 @@
 ;; ============================================================================
 ;; 環境変数 (Windows ONLY)
 ;; ============================================================================
-(if (or (equal system-type 'ms-dos)
-        (equal system-type 'windows-nt))
+(if (member system-type '(ms-dos windows-nt))
     ;; 環境変数 %PATH% では不足している分の追加
     (let* ((program-files-dir-x86 (or (getenv "PROGRAMFILES\(X86\)")
                                       (getenv "PROGRAMFILES")
@@ -695,8 +692,7 @@
      ;; -----------------------------------------------------------------------
      (use-package comint
        ;; :disabled
-       :if (or (equal system-type 'ms-dos)
-               (equal system-type 'windows-nt))
+       :if (member system-type '(ms-dos windows-nt))
        :defer t
        :init
        (custom-set-variables
@@ -1228,8 +1224,7 @@
      ;; -----------------------------------------------------------------------
      (use-package find-dired
        ;; :disabled
-       :if (or (equal system-type 'ms-dos)
-               (equal system-type 'windows-nt))
+       :if (member system-type '(ms-dos windows-nt))
        :defer t
        :init
        ;; -----------------------------
@@ -1482,26 +1477,23 @@ See URL `https://github.com/validator/validator'."
      ;; -----------------------------------------------------------------------
      (use-package grep
        ;; :disabled
-       :demand (or (equal system-type 'ms-dos)
-                   (equal system-type 'windows-nt))
+       :demand (member system-type '(ms-dos windows-nt))
        :bind (("C-M-g" . rgrep))
        :init
        ;; -----------------------------
-       ;; デフォルト値
+       ;; デフォルト値 (Windows ONLY)
        ;;------------------------------
-       (if (or (equal system-type 'ms-dos)
-               (equal system-type 'windows-nt))
+       (if (member system-type '(ms-dos windows-nt))
            (custom-set-variables
             ;;
-            ;; 例外が出るため NUL デバイスは使わせない (Windows ONLY)
+            ;; 例外が出るため NUL デバイスは使わせない
             ;;
             '(grep-use-null-device nil)))
 
        ;; -----------------------------
        ;; 初期化 (Windows ONLY)
        ;; -----------------------------
-       (when (or (equal system-type 'ms-dos)
-                 (equal system-type 'windows-nt))
+       (when (member system-type '(ms-dos windows-nt))
          ;; PATH は通っていないが、`exec-path' は通っている場合を想定
          ;;
          ;; すべて `defvar' 定義なので、 `autoload' 前後での
@@ -2114,8 +2106,7 @@ Ordering is lexicographic."
         ;; 辞書ファイルはデフォルトのものを利用
         ;;
         `(migemo-dictionary ,(convert-standard-filename
-                              (if (or (equal system-type 'ms-dos)
-                                      (equal system-type 'windows-nt))
+                              (if (member system-type '(ms-dos windows-nt))
                                   "C:/programs/cmigemo/share/migemo/utf-8/migemo-dict"
                                 "/usr/local/share/migemo/utf-8/migemo-dict")))
         '(migemo-user-dictionary nil)
@@ -2873,8 +2864,6 @@ Ordering is lexicographic."
        ;; :disabled
        :ensure t
        :defer t
-       :bind (("M-%" . anzu-query-replace)
-              ("C-M-%" . anzu-query-replace-regexp))
        :init
        ;; -----------------------------
        ;; 起動
