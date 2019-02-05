@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-05T14:36:46+09:00>
+;; Time-stamp: <2019-02-05T14:37:43+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1470,6 +1470,33 @@ See URL `https://github.com/validator/validator'."
        ;; 全設定が完了してから実行しなければならない
        ;; 途中で追加される項目がありうるため
        (add-hook 'after-init-hook #'my-frameset-initialize))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; Google 翻訳インターフェース
+     ;; -----------------------------------------------------------------------
+     (use-package google-translate
+       ;; :disabled
+       :ensure t
+       :defer t
+       :bind (("C-c C-t p" . google-translate-at-point)
+              ("C-c C-t o" . google-translate-at-point-reverse)
+              ("C-c C-t q" . google-translate-query-translate)
+              ("C-c C-t w" . google-translate-query-translate-reverse)
+              ("C-c C-t s" . google-translate-smooth-translate))
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;; -----------------------------
+       (custom-set-variables
+        '(google-translate-default-source-language "auto")
+        '(google-translate-default-target-language "ja")
+        '(google-translate-enable-ido-completion t)
+        '(google-translate-show-phonetic nil)
+        '(google-translate-listen-program nil)
+        '(google-translate-output-destination 'popup)
+        '(google-translate-pop-up-buffer-set-focus nil)
+        '(google-translate-listen-button-label "[Listen]")))
 
 
      ;; -----------------------------------------------------------------------
