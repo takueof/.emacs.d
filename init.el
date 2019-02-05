@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-05T14:37:43+09:00>
+;; Time-stamp: <2019-02-05T19:21:49+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -314,17 +314,18 @@
  '(scroll-margin 10)
  '(maximum-scroll-margin 10)
  ;;
- ;; ページ単位スクロール時に行を重複させない
+ ;; ページ単位スクロール時に行を重複させる
  ;;
- '(next-screen-context-lines 0)
+ '(next-screen-context-lines 2)
  ;;
  ;; スクロール時、なるべく先頭ないし最後の文字にポイントを移動させる
  ;;
  '(scroll-error-top-bottom t)
  ;;
- ;; スクロール時、なるべくポイントを同一スクリーン位置に留まらせる
+ ;; スクロール時、ポイントを同一スクリーン位置に留まらせなくてもよい
+ ;; non-nil にするとスクロールが不安定になりがちなため、nil とする
  ;;
- '(scroll-preserve-screen-position t)
+ '(scroll-preserve-screen-position nil)
  ;;
  ;; 行間調整はしない
  ;;
@@ -463,12 +464,12 @@
  ;; GnuTLS trustfiles 追加
  ;;
  `(gnutls-trustfiles ',(mapcar 'convert-standard-filename
-                               (cond ((member system-type '(ms-dos windows-nt))
-                                      '("C:/programs/cygwin/usr/ssl/certs/ca-bundle.crt"))
-                                     (t
-                                      '("/usr/local/etc/libressl/cert.pem"
-                                        "/usr/local/etc/openssl/cert.pem"
-                                        "/etc/ssl/cert.pem"))))))
+                               (if (member system-type '(ms-dos windows-nt))
+                                   '("C:/programs/cygwin/usr/ssl/certs/ca-bundle.crt")
+                                 '("/usr/local/etc/libressl/cert.pem"
+                                   "/usr/local/etc/openssl/cert.pem"
+                                   "/private/etc/ssl/cert.pem"
+                                   "/etc/ssl/cert.pem")))))
 
 
 ;; ============================================================================
@@ -573,7 +574,7 @@
      (use-package jka-cmpr-hook
        ;; :disabled
        :demand t
-       :init
+       :config
        ;; -----------------------------
        ;; 起動
        ;; -----------------------------
@@ -591,6 +592,7 @@
        ;; :disabled
        :ensure t
        :defer t
+       :hook ((after-init . my-auto-dim-other-buffers-mode-initialize))
        :init
        ;; -----------------------------
        ;; 起動
@@ -599,8 +601,6 @@
          "Initialize `auto-dim-other-buffers-mode'."
          (if (fboundp 'auto-dim-other-buffers-mode)
              (auto-dim-other-buffers-mode +1)))
-
-       (add-hook 'after-init-hook #'my-auto-dim-other-buffers-mode-initialize)
        :config
        ;; -----------------------------
        ;; lighter
@@ -694,6 +694,7 @@
        ;; :disabled
        :if (member system-type '(ms-dos windows-nt))
        :defer t
+       :hook ((comint-mode . my-comint-mode-initialize))
        :init
        (custom-set-variables
         '(comint-scroll-to-bottom-on-input 'all)
@@ -717,9 +718,7 @@
        (defun my-comint-mode-initialize ()
          "Initialize `comint-mode' before file load."
          (if (boundp 'comint-input-sender-no-newline)
-             (setq-local comint-input-sender-no-newline t)))
-
-       (add-hook 'comint-mode-hook #'my-comint-mode-initialize))
+             (setq-local comint-input-sender-no-newline t))))
 
 
      ;; -----------------------------------------------------------------------
@@ -820,9 +819,8 @@
        ;; -----------------------------
        ;; 起動
        ;; -----------------------------
-       (eval-after-load 'company-mode
-         '(if (fboundp 'company-quickhelp-mode)
-              (company-quickhelp-mode +1))))
+       (if (fboundp 'company-quickhelp-mode)
+           (company-quickhelp-mode +1)))
 
 
      ;; -----------------------------------------------------------------------
@@ -930,21 +928,6 @@
                  (ansi-color-apply-on-region start-marker end-marker))))
 
          (add-hook 'compilation-filter-hook #'my-ansi-color-apply-on-compilation)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; CSS 用 `eldoc'
-     ;; -----------------------------------------------------------------------
-     (use-package css-eldoc
-       ;; :disabled
-       :ensure t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'css-eldoc-enable)
-           (css-eldoc-enable)))
 
 
      ;; -----------------------------------------------------------------------
@@ -1100,6 +1083,38 @@
 
 
      ;; -----------------------------------------------------------------------
+     ;; GNU Emacs Lisp ドキュメント表示 (`eldoc') 拡張（<M-:> による `eval'）
+     ;; -----------------------------------------------------------------------
+     (use-package eldoc-eval
+       ;; :disabled
+       :after (:any eldoc)
+       :ensure t
+       :defer t
+       :hook ((lisp-mode . my-eldoc-eval-initialize)
+              (emacs-lisp-mode . my-eldoc-eval-initialize)
+              (lisp-interaction-mode . my-eldoc-eval-initialize)
+              (ielm-mode . my-eldoc-eval-initialize))
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;;------------------------------
+       (custom-set-variables
+        '(eldoc-in-minibuffer-show-fn 'eldoc-show-in-mode-line)
+        '(eldoc-show-in-mode-line-delay 0.25)
+        '(eldoc-eval-preferred-function 'pp-eval-expression)
+        '(eldoc-in-minibuffer-own-frame-p nil)
+        '(eldoc-in-minibuffer-mode-lighter nil)
+        '(eldoc-mode-line-stop-rolling-on-input t))
+
+       ;; -----------------------------
+       ;; 起動
+       ;;------------------------------
+       (defun my-eldoc-eval-initialize ()
+         "Initialize `eldoc-eval' when Lisp languages major mode hooks."
+         (eldoc-in-minibuffer-mode +1)))
+
+
+     ;; -----------------------------------------------------------------------
      ;; GNU Emacs Lisp 定義ジャンプ・バック・ドキュメント閲覧
      ;; -----------------------------------------------------------------------
      (use-package elisp-slime-nav
@@ -1110,13 +1125,13 @@
                     ielm)
        :ensure t
        :defer t
-       :config
+       :init
        ;; -----------------------------
        ;; 起動
        ;;------------------------------
        (if (fboundp 'elisp-slime-nav-mode)
            (elisp-slime-nav-mode +1))
-
+       :config
        ;; -----------------------------
        ;; lighter
        ;;------------------------------
@@ -1132,14 +1147,22 @@
        ;; :disabled
        :ensure t
        :defer t
-       :hook ((html-mode . emmet-mode))
+       :hook ((html-mode . emmet-mode)
+              (php-mode . emmet-mode))
        :init
        ;; -----------------------------
        ;; デフォルト値
        ;;------------------------------
        (custom-set-variables
-        '(emmet-indentation 2)
-        '(emmet-move-cursor-between-quotes t)))
+        '(emmet-indentation 0)
+        '(emmet-indent-after-insert t)
+        '(emmet-use-style-tag-and-attr-detection t)
+        '(emmet-self-closing-tag-style "/")
+        '(emmet-preview-default t)
+        '(emmet-insert-flash-time 0.25)
+        '(emmet-move-cursor-after-expanding t)
+        '(emmet-move-cursor-between-quotes t)
+        '(emmet-postwrap-goto-edit-point t)))
 
 
      ;; -----------------------------------------------------------------------
@@ -1169,8 +1192,8 @@
        ;; :disabled
        :ensure t
        :defer t
-       :bind (("C-2" . evil-numbers/inc-at-pt)
-              ("C-1" . evil-numbers/dec-at-pt)))
+       :bind (("C-2" . evil-numbers/dec-at-pt)
+              ("C-1" . evil-numbers/inc-at-pt)))
 
 
      ;; -----------------------------------------------------------------------
@@ -1182,7 +1205,7 @@
        :ensure t
        :demand t
        :init
-       (if (and (fboundp 'exec-path-from-shell-initialize))
+       (if (fboundp 'exec-path-from-shell-initialize)
            (exec-path-from-shell-initialize)))
 
 
@@ -1450,6 +1473,9 @@ See URL `https://github.com/validator/validator'."
      (use-package frameset
        ;; :disabled
        :defer t
+       ;; 全設定が完了してから実行しなければならない
+       ;; 途中で追加される項目がありうるため
+       :hook ((after-init . my-frameset-initialize))
        :init
        ;; -----------------------------
        ;; 初期化
@@ -1465,11 +1491,7 @@ See URL `https://github.com/validator/validator'."
                              frameset--text-pixel-height
                              frameset--text-pixel-width
                              GUI:font))
-                (setcdr (assoc key frameset-filter-alist) :never)))))
-
-       ;; 全設定が完了してから実行しなければならない
-       ;; 途中で追加される項目がありうるため
-       (add-hook 'after-init-hook #'my-frameset-initialize))
+                (setcdr (assoc key frameset-filter-alist) :never))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -1495,7 +1517,7 @@ See URL `https://github.com/validator/validator'."
         '(google-translate-show-phonetic nil)
         '(google-translate-listen-program nil)
         '(google-translate-output-destination 'popup)
-        '(google-translate-pop-up-buffer-set-focus nil)
+        '(google-translate-pop-up-buffer-set-focus t)
         '(google-translate-listen-button-label "[Listen]")))
 
 
@@ -1781,6 +1803,9 @@ Set up `compilation-exit-message-function' and run `grep-setup-hook'."
      (use-package hl-line
        ;; :disabled
        :defer t
+       ;; FIXME: `after-init-hook' 後に実行した `load-theme' に対応したい
+       ;;        `advice-add' の after で `enable-theme' を実行してもダメ
+       :hook ((after-init . my-hl-line-initialize))
        :init
        ;; -----------------------------
        ;; 初期化
@@ -1803,12 +1828,7 @@ Set up `compilation-exit-message-function' and run `grep-setup-hook'."
                                                   L-diff)))
              (custom-set-faces
               `(hl-line ((((class color))
-                          (:inherit nil :background ,line-background-color)))))
-             nil)))
-
-       ;; FIXME: `after-init-hook' 後に実行した `load-theme' に対応したい
-       ;;        `advice-add' の after で `enable-theme' を実行してもダメ
-       (add-hook 'after-init-hook #'my-hl-line-initialize)
+                          (:background ,line-background-color :inherit nil))))))))
 
        ;; -----------------------------
        ;; 起動
@@ -1818,7 +1838,7 @@ Set up `compilation-exit-message-function' and run `grep-setup-hook'."
 
 
      ;; -----------------------------------------------------------------------
-     ;; 拡張バッファ一覧
+     ;; 強化バッファ一覧
      ;; -----------------------------------------------------------------------
      (use-package ibuffer
        ;; :disabled
@@ -1889,7 +1909,7 @@ Ordering is lexicographic."
 
 
      ;; -----------------------------------------------------------------------
-     ;; 拡張バッファ一覧 `projectile' 拡張
+     ;; 強化バッファ一覧 (`ibuffer') 拡張（`projectile' サポート）
      ;; -----------------------------------------------------------------------
      (use-package ibuffer-projectile
        ;; :disabled
@@ -1897,6 +1917,7 @@ Ordering is lexicographic."
                     projectile)
        :ensure t
        :defer t
+       :hook ((ibuffer . my-ibuffer-projectile-initialize))
        :init
        ;; -----------------------------
        ;; 初期化
@@ -1904,9 +1925,7 @@ Ordering is lexicographic."
        (defun my-ibuffer-projectile-initialize ()
          "Initialize `ibuffer' settings."
          (if (fboundp 'ibuffer-projectile-set-filter-groups)
-             (ibuffer-projectile-set-filter-groups)))
-
-       (add-hook 'ibuffer-hook #'my-ibuffer-projectile-initialize))
+             (ibuffer-projectile-set-filter-groups))))
 
 
      ;; -----------------------------------------------------------------------
@@ -2182,19 +2201,6 @@ Ordering is lexicographic."
 
 
      ;; -----------------------------------------------------------------------
-     ;; PHP 用 `eldoc'
-     ;; -----------------------------------------------------------------------
-     (use-package php-eldoc
-       ;; :disabled
-       :after (:all php-mode)
-       :ensure t
-       :defer t
-       :config
-       (if (fboundp 'php-eldoc-enable)
-           (php-eldoc-enable)))
-
-
-     ;; -----------------------------------------------------------------------
      ;; カーソルの移動履歴
      ;; -----------------------------------------------------------------------
      (use-package point-undo
@@ -2213,6 +2219,7 @@ Ordering is lexicographic."
        :defer t
        :bind (("C-c p b" . ps-print-buffer)
               ("C-c p f" . ps-print-buffer-with-faces))
+       :hook ((ps-print . my-ps-print-hook-listener))
        :init
        ;; -----------------------------
        ;; デフォルト値
@@ -2300,9 +2307,7 @@ Ordering is lexicographic."
 
          ;; 極限まで細くする
          (if (boundp 'ps-header-frame-alist)
-             (setcdr (assoc 'border-width ps-header-frame-alist) 0.1)))
-
-       (add-hook 'ps-print-hook #'my-ps-print-hook-listener))
+             (setcdr (assoc 'border-width ps-header-frame-alist) 0.1))))
 
 
      ;; -----------------------------------------------------------------------
@@ -2401,6 +2406,29 @@ Ordering is lexicographic."
 
 
      ;; -----------------------------------------------------------------------
+     ;; モードラインからマイナーモードの表示をを隠す
+     ;; -----------------------------------------------------------------------
+     (use-package rich-minority
+       ;; :disabled
+       :ensure t
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;;------------------------------
+       (custom-set-variables
+        '(rm-blacklist nil)
+        '(rm-whitelist nil)
+        '(rm-text-properties nil))
+
+       ;; -----------------------------
+       ;; 起動
+       ;;------------------------------
+       (if (fboundp 'rich-minority-mode)
+           (rich-minority-mode +1)))
+
+
+     ;; -----------------------------------------------------------------------
      ;; ミニバッファの履歴を残す
      ;; -----------------------------------------------------------------------
      (use-package savehist
@@ -2455,6 +2483,8 @@ Ordering is lexicographic."
      (use-package scroll-bar
        ;; :disabled
        :defer t
+       ;; `after-init-hook' で実行しないと適用されない問題がある
+       :hook ((after-init . my-scroll-bar-initilalize))
        :init
        ;; -----------------------------
        ;; 起動
@@ -2462,11 +2492,9 @@ Ordering is lexicographic."
        ;;
        ;; v24.x 以前
        ;;
-       (eval-after-load 'scroll-bar
-         ;;
-         ;; ウインドウシステム上では、あらゆるスクロールバーを非表示化
-         ;;
-         '(set-scroll-bar-mode (if window-system nil 'right)))
+       ;; ウインドウシステム上では、あらゆるスクロールバーを非表示化
+       ;;
+       (set-scroll-bar-mode (if window-system nil 'right))
 
        ;;
        ;; v25.x 以降
@@ -2478,10 +2506,7 @@ Ordering is lexicographic."
               (if (fboundp 'scroll-bar-mode)
                   (scroll-bar-mode -1))
               (if (fboundp 'horizontal-scroll-bar-mode)
-                  (horizontal-scroll-bar-mode -1)))))
-
-       ;; `after-init-hook' で実行しないと適用されない問題がある
-       (add-hook 'after-init-hook #'my-scroll-bar-initilalize))
+                  (horizontal-scroll-bar-mode -1))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -2679,12 +2704,16 @@ Ordering is lexicographic."
        :init
        ;; -----------------------------
        ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(tramp-persistency-file-name ,(convert-standard-filename "~/.emacs.tramp"))))
+       ;; -----------------------------
+       (eval-after-load 'tramp
+         ;;
+         ;; WARNING: 遅延ロード (`autoload') 後に実行しないと適用されない
+         ;;
+         '(custom-set-variables
+           ;;
+           ;; ローカル環境にのみ保存
+           ;;
+           `(tramp-persistency-file-name ,(convert-standard-filename "~/.emacs.tramp")))))
 
 
      ;; -----------------------------------------------------------------------
@@ -2924,12 +2953,14 @@ Ordering is lexicographic."
        ;; :disabled
        :ensure t
        :defer t
-       :init
+       :mode (("\\.conf\\'" . apache-mode))
+       :config
        ;; -----------------------------
-       ;; 起動
+       ;; デフォルト値
        ;; -----------------------------
-       (if (fboundp 'apache-mode)
-           (add-to-list 'auto-mode-alist '("\\.conf\\'" . apache-mode))))
+       (eval-after-load 'apache-mode
+         '(if (boundp 'apache-indent-level)
+              (setq-local apache-indent-level 4))))
 
 
      ;; -----------------------------------------------------------------------
@@ -2938,6 +2969,7 @@ Ordering is lexicographic."
      (use-package css-mode
        ;; :disabled
        :defer t
+       :hook ((css-mode . my-css-mode-initialize))
        :init
        ;; -----------------------------
        ;; デフォルト値
@@ -2958,9 +2990,7 @@ Ordering is lexicographic."
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
                        (indent-style (equal indent-style-data "tab")))
                   (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))))))
-
-       (add-hook 'css-mode-hook #'my-css-mode-initialize))
+                      (setq-local indent-tabs-mode indent-style)))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -2969,6 +2999,9 @@ Ordering is lexicographic."
      (use-package elisp-mode
        ;; :disabled
        :defer t
+       :hook ((emacs-lisp-mode . my-emacs-lisp-mode-initialize)
+              (lisp-interaction-mode . my-emacs-lisp-mode-initialize)
+              (lisp-interaction-mode . my-lisp-interaction-mode-initialize))
        :init
        ;; -----------------------------
        ;; 初期化
@@ -2991,9 +3024,6 @@ Ordering is lexicographic."
                   (if (not (equal indent-tabs-mode indent-style))
                       (setq-local indent-tabs-mode indent-style))))))
 
-       (add-hook 'emacs-lisp-mode-hook #'my-emacs-lisp-mode-initialize)
-       (add-hook 'lisp-interaction-mode-hook #'my-emacs-lisp-mode-initialize)
-
        ;;
        ;; `lisp-interaction-mode' ONLY
        ;;
@@ -3006,9 +3036,7 @@ Ordering is lexicographic."
                   (whitespace-mode -1))
               (when (boundp 'whitespace-style)
                 (setq-local whitespace-style (copy-tree whitespace-style))
-                (delete 'empty whitespace-style)))))
-
-       (add-hook 'lisp-interaction-mode-hook #'my-lisp-interaction-mode-initialize))
+                (delete 'empty whitespace-style))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -3018,6 +3046,7 @@ Ordering is lexicographic."
        ;; :disabled
        :ensure t
        :defer t
+       :hook ((haml-mode . my-haml-mode-initialize))
        :init
        ;; -----------------------------
        ;; 初期化
@@ -3032,9 +3061,7 @@ Ordering is lexicographic."
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
                        (indent-style (equal indent-style-data "tab")))
                   (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))))))
-
-       (add-hook 'haml-mode-hook #'my-haml-mode-initialize))
+                      (setq-local indent-tabs-mode indent-style)))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -3043,6 +3070,7 @@ Ordering is lexicographic."
      (use-package ielm
        ;; :disabled
        :defer t
+       :hook ((ielm-mode-hook . my-ielm-mode-initialize))
        :init
        ;; -----------------------------
        ;; 初期化
@@ -3050,9 +3078,7 @@ Ordering is lexicographic."
        (defun my-ielm-mode-initialize ()
          "Initialize `ielm' major mode before file load."
          (setq-local indent-tabs-mode nil)
-         (setq-local tab-width 8))
-
-       (add-hook 'ielm-mode-hook #'my-ielm-mode-initialize))
+         (setq-local tab-width 8)))
 
 
      ;; -----------------------------------------------------------------------
@@ -3064,6 +3090,7 @@ Ordering is lexicographic."
        :defer t
        :mode (("\\.js\\'" . js2-mode)
               ("\\.pac\\'" . js2-mode))
+       :hook ((js2-mode . my-js2-mode-initialize))
        :init
        ;; -----------------------------
        ;; デフォルト値
@@ -3124,9 +3151,7 @@ Ordering is lexicographic."
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
                        (indent-style (equal indent-style-data "tab")))
                   (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))))))
-
-       (add-hook 'js2-mode-hook #'my-js2-mode-initialize))
+                      (setq-local indent-tabs-mode indent-style)))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -3144,6 +3169,7 @@ Ordering is lexicographic."
               ("\\.jshintrc\\'" . json-mode)
               ("\\.json\\'" . json-mode)
               ("\\.stylelintrc\\'" . json-mode))
+       :hook ((json-mode . my-json-mode-initialize))
        :init
        ;; -----------------------------
        ;; 初期化
@@ -3162,9 +3188,7 @@ Ordering is lexicographic."
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
                        (indent-style (equal indent-style-data "tab")))
                   (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))))))
-
-       (add-hook 'json-mode-hook #'my-json-mode-initialize))
+                      (setq-local indent-tabs-mode indent-style)))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -3173,6 +3197,7 @@ Ordering is lexicographic."
      (use-package lisp-mode
        ;; :disabled
        :defer t
+       :hook ((lisp-mode . my-lisp-mode-initialize))
        :init
        ;; -----------------------------
        ;; 初期化
@@ -3190,9 +3215,7 @@ Ordering is lexicographic."
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
                        (indent-style (equal indent-style-data "tab")))
                   (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))))))
-
-       (add-hook 'lisp-mode-hook #'my-lisp-mode-initialize))
+                      (setq-local indent-tabs-mode indent-style)))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -3202,6 +3225,7 @@ Ordering is lexicographic."
        ;; :disabled
        :ensure t
        :defer t
+       :hook ((markdown-mode . my-markdown-mode-initialize))
        :init
        ;; -----------------------------
        ;; デフォルト値
@@ -3232,8 +3256,6 @@ Ordering is lexicographic."
                        (indent-style (equal indent-style-data "tab")))
                   (if (not (equal indent-tabs-mode indent-style))
                       (setq-local indent-tabs-mode indent-style))))))
-
-       (add-hook 'markdown-mode-hook #'my-markdown-mode-initialize)
        :config
        ;; -----------------------------
        ;; 起動
@@ -3252,6 +3274,7 @@ Ordering is lexicographic."
        ;; :disabled
        :ensure t
        :defer t
+       :hook ((php-mode . my-php-mode-initialize))
        :init
        ;; -----------------------------
        ;; 初期化
@@ -3266,9 +3289,7 @@ Ordering is lexicographic."
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
                        (indent-style (equal indent-style-data "tab")))
                   (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))))))
-
-       (add-hook 'php-mode-hook #'my-php-mode-initialize))
+                      (setq-local indent-tabs-mode indent-style)))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -3279,6 +3300,7 @@ Ordering is lexicographic."
        :ensure t
        :defer t
        :mode (("\\.sass\\'" . sass-mode))
+       :hook ((sass-mode . my-sass-mode-initialize))
        :init
        ;; -----------------------------
        ;; 初期化
@@ -3293,9 +3315,7 @@ Ordering is lexicographic."
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
                        (indent-style (equal indent-style-data "tab")))
                   (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))))))
-
-       (add-hook 'sass-mode-hook #'my-sass-mode-initialize))
+                      (setq-local indent-tabs-mode indent-style)))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -3305,6 +3325,7 @@ Ordering is lexicographic."
        ;; :disabled
        :ensure t
        :defer t
+       :hook ((scss-mode . my-scss-mode-initialize))
        :init
        ;; -----------------------------
        ;; デフォルト値
@@ -3329,9 +3350,7 @@ Ordering is lexicographic."
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
                        (indent-style (equal indent-style-data "tab")))
                   (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))))))
-
-       (add-hook 'scss-mode-hook #'my-scss-mode-initialize))
+                      (setq-local indent-tabs-mode indent-style)))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -3341,6 +3360,8 @@ Ordering is lexicographic."
        ;; :disabled
        :defer t
        :mode (("\\.[sx]?html?\\'" . html-mode))
+       :hook ((sgml-mode . my-sgml-mode-initialize)
+              (html-mode . my-html-mode-initialize))
        :init
        ;; -----------------------------
        ;; 初期化
@@ -3364,8 +3385,6 @@ Ordering is lexicographic."
                   (if (not (equal indent-tabs-mode indent-style))
                       (setq-local indent-tabs-mode indent-style))))))
 
-       (add-hook 'sgml-mode-hook #'my-sgml-mode-initialize)
-
        ;;
        ;; (X)HTML
        ;;
@@ -3379,9 +3398,7 @@ Ordering is lexicographic."
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
                        (indent-style (equal indent-style-data "tab")))
                   (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))))))
-
-       (add-hook 'html-mode-hook #'my-html-mode-initialize))
+                      (setq-local indent-tabs-mode indent-style)))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -3390,15 +3407,14 @@ Ordering is lexicographic."
      (use-package tex-mode
        ;; :disabled
        :defer t
+       :hook ((tex-mode . my-tex-mode-initialize))
        :init
        ;; -----------------------------
        ;; 初期化
        ;; -----------------------------
        (defun my-tex-mode-initialize ()
          "Initialize `tex-mode' before file load."
-         (setq-local truncate-lines nil))
-
-       (add-hook 'tex-mode-hook #'my-tex-mode-initialize))
+         (setq-local truncate-lines nil)))
 
 
      ;; -----------------------------------------------------------------------
@@ -3407,15 +3423,14 @@ Ordering is lexicographic."
      (use-package text-mode
        ;; :disabled
        :defer t
+       :hook ((text-mode . my-tex-mode-initialize))
        :init
        ;; -----------------------------
        ;; 初期化
        ;; -----------------------------
        (defun my-text-mode-initialize ()
          "Initialize `text-mode' before file load."
-         (setq-local truncate-lines nil))
-
-       (add-hook 'text-mode-hook #'my-text-mode-initialize))
+         (setq-local truncate-lines nil)))
 
 
      ;; -----------------------------------------------------------------------
@@ -3435,6 +3450,7 @@ Ordering is lexicographic."
        :defer t
        :mode (("\\.xml\\'" . nxml-mode)
               ("\\.plist\\'" . nxml-mode))
+       :hook ((nxml-mode . my-nxml-mode-initialize))
        :init
        ;; -----------------------------
        ;; デフォルト値
@@ -3460,9 +3476,7 @@ Ordering is lexicographic."
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
                        (indent-style (equal indent-style-data "tab")))
                   (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))))))
-
-       (add-hook 'nxml-mode-hook #'my-nxml-mode-initialize))
+                      (setq-local indent-tabs-mode indent-style)))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -3473,7 +3487,9 @@ Ordering is lexicographic."
        :ensure t
        :defer t
        :mode (("\\.eslintrc\\'" . nxml-mode))
+       :hook ((yaml-mode . my-yaml-mode-initialize))
        :init
+
        ;; -----------------------------
        ;; デフォルト値
        ;; -----------------------------
@@ -3493,9 +3509,7 @@ Ordering is lexicographic."
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
                        (indent-style (equal indent-style-data "tab")))
 3                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))))))
-
-       (add-hook 'yaml-mode-hook #'my-yaml-mode-initialize))
+                      (setq-local indent-tabs-mode indent-style)))))))
 
 
      ;; -----------------------------------------------------------------------
