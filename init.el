@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-06T16:32:28+09:00>
+;; Time-stamp: <2019-02-06T20:59:02+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2997,14 +2997,19 @@ Ordering is lexicographic."
          (setq-local tab-width 8)
 
          ;; EditorConfig 対応
-         ;;
-         ;; TODO: `tab-width' 対応
          (eval-after-load 'editorconfig
            '(if (hash-table-p editorconfig-properties-hash)
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab")))
+                       (indent-style (equal indent-style-data "tab"))
+                       (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
+                       (tab-width-number (if (and tab-width-number-data
+                                                  (stringp tab-width-number-data))
+                                             (string-to-number tab-width-number-data)
+                                           tab-width)))
                   (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))))))
+                      (setq-local indent-tabs-mode indent-style))
+                  (if (not (equal tab-width tab-width-number))
+                      (setq-local tab-width tab-width-number))))))
 
        ;;
        ;; `lisp-interaction-mode' ONLY
@@ -3083,7 +3088,7 @@ Ordering is lexicographic."
         '(js2-bounce-indent-p nil)
         '(js2-pretty-multiline-declarations t)
         '(js2-indent-switch-body nil) ; case 文はインデントしない
-        '(js2-idle-timer-delay 0.2)
+        '(js2-idle-timer-delay 0.25)
         '(js2-dynamic-idle-timer-adjust 0)
         '(js2-concat-multiline-strings t)
         ;;
@@ -3159,18 +3164,25 @@ Ordering is lexicographic."
        (defun my-json-mode-initialize ()
          "Initialize `json-mode' before file load."
          (setq-local indent-tabs-mode nil)
-         (setq-local js-indent-level 2)
          (setq-local tab-width 2)
+         (setq-local js-indent-level tab-width)
 
          ;; EditorConfig 対応
-         ;;
-         ;; TODO: `tab-width' と `js-indent-level' 対応
          (eval-after-load 'editorconfig
            '(if (hash-table-p editorconfig-properties-hash)
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab")))
+                       (indent-style (equal indent-style-data "tab"))
+                       (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
+                       (tab-width-number (if (and tab-width-number-data
+                                                  (stringp tab-width-number-data))
+                                             (string-to-number tab-width-number-data)
+                                           tab-width)))
                   (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style)))))))
+                      (setq-local indent-tabs-mode indent-style))
+                  (if (not (equal tab-width tab-width-number))
+                      (setq-local tab-width tab-width-number))
+                  (if (not (equal js-indent-level tab-width))
+                      (setq-local js-indent-level tab-width)))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -3190,14 +3202,19 @@ Ordering is lexicographic."
          (setq-local tab-width 8)
 
          ;; EditorConfig 対応
-         ;;
-         ;; TODO: `tab-width' 対応
          (eval-after-load 'editorconfig
            '(if (hash-table-p editorconfig-properties-hash)
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab")))
+                       (indent-style (equal indent-style-data "tab"))
+                       (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
+                       (tab-width-number (if (and tab-width-number-data
+                                                  (stringp tab-width-number-data))
+                                             (string-to-number tab-width-number-data)
+                                           tab-width)))
                   (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style)))))))
+                      (setq-local indent-tabs-mode indent-style))
+                  (if (not (equal tab-width tab-width-number))
+                      (setq-local tab-width tab-width-number)))))))
 
 
      ;; -----------------------------------------------------------------------
