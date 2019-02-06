@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-06T14:57:04+09:00>
+;; Time-stamp: <2019-02-06T16:32:28+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -830,6 +830,7 @@
        ;; :disabled
        :defer t
        :bind (("C-c C-l" . compile))
+       :hook ((compilation-filter . my-compilation-ansi-color-apply))
        :init
        ;; -----------------------------
        ;; デフォルト値
@@ -843,91 +844,62 @@
         '(compilation-scroll-output t)
         '(compilation-always-kill t)
         '(compilation-context-lines t))
+       :init
+       ;; ---------------------------
+       ;; HACK: コンパイル完了後、モードラインにも状態を簡易表示
+       ;; ---------------------------
+       (defun my-compilation-message (cur-buffer msg)
+         "Show status messages when compile done in `compilation-mode'."
+         (let ((msg-text (string-trim msg)) ; 改行文字が含まれうる問題を回避
+               (msg-title (buffer-name))
+               (msg-face 'compilation-mode-line-fail))
+           (message "%s: %s"
+                    msg-title
+                    (propertize msg-text
+                                'face
+                                (if (string-equal "finished" msg-text)
+                                    'compilation-mode-line-exit
+                                  'compilation-mode-line-fail)))))
+
+       (add-to-list 'compilation-finish-functions 'my-compilation-message)
+
+       ;; ---------------------------
+       ;; HACK: ANSI エスケープシーケンスが正しく解釈されない問題を回避
+       ;; ---------------------------
+       (defun my-compilation-ansi-color-apply ()
+         "Recognize ASCII color escape sequences for `compilation-mode' buffer."
+         (if (and (require 'ansi-color nil :noerror)
+                  (fboundp 'ansi-color-apply-on-region))
+             (let ((start-marker (make-marker))
+                   (end-marker (process-mark (get-buffer-process (current-buffer)))))
+               (set-marker start-marker (point-min))
+               (ansi-color-apply-on-region start-marker end-marker))))
        :config
-       (use-package subr-x
-         ;; :disabled
-         :demand t
-         :config
-         ;; ---------------------------
-         ;; HACK: ウインドウの状態を問わず、常にリサイズをかける
-         ;; ---------------------------
-         ;; オーバーライド
-         (defun compilation-set-window-height (window)
-           "Set the height of WINDOW according to `compilation-window-height'."
-           (let ((height (buffer-local-value 'compilation-window-height
-                                             (window-buffer window))))
-             (and height
-                  ;; `window-full-width-p' は用いない
-                  ;;
-                  ;; If window is alone in its frame, aside from a minibuffer,
-                  ;; don't change its height.
-                  (not (eq window (frame-root-window (window-frame window))))
-                  ;; Stef said that doing the saves in this order is safer:
-                  (save-excursion
-                    (save-selected-window
-                      (select-window window)
-                      (enlarge-window (- height (window-height))))))))
+       ;; ---------------------------
+       ;; HACK: コンパイル完了後、正常に終了していれば自動でウインドウを閉じる
+       ;; ---------------------------
+       (defcustom my-compilation-auto-quit-window-enable-buffer-names '("*compilation*")
+         "Created buffer names by `compile' command."
+         :group 'compilation
+         :type '(list (repeat string)))
 
-         ;; ---------------------------
-         ;; HACK: コンパイル完了後、モードラインにも状態を簡易表示
-         ;; ---------------------------
-         (defun my-compilation-message (cur-buffer msg)
-           "Show status messages when compile done in `compilation-mode'."
-           (let ((msg-text (string-trim msg)) ; 改行文字が含まれうる問題を回避
-                 (msg-title (buffer-name))
-                 (msg-face 'compilation-mode-line-fail))
-             (message "%s: %s"
-                      msg-title
-                      (propertize msg-text
-                                  'face
-                                  (if (string-equal "finished" msg-text)
-                                      'compilation-mode-line-exit
-                                    'compilation-mode-line-fail)))))
+       ;; `process-status' と `exit-status' の値も得たいので、アドバイスを利用
+       ;; `compilation-finish-functions' にフックした関数では `msg' しか
+       ;; 参照できないため
+       (defun my-compilation-auto-quit-window (process-status exit-status msg)
+         "Run `quit-window' when `compile' successed."
+         (if (and (member (buffer-name)
+                          my-compilation-auto-quit-window-enable-buffer-names)
+                  (or (and (equal process-status 'exit)
+                           (zerop exit-status))
+                      ;; 改行文字が含まれうる問題を回避
+                      (string-equal "finished" (string-trim msg))))
+             (quit-window nil (get-buffer-window))))
 
-         (add-hook 'compilation-finish-functions #'my-compilation-message)
-
-
-         ;; ---------------------------
-         ;; HACK: コンパイル完了後、
-         ;;       ステータスに異常がなければ自動でウインドウを閉じる
-         ;; ---------------------------
-         (defcustom my-compilation-auto-quit-window-enable-buffer-names '("*compilation*")
-           "Created buffer names by `compile' command."
-           :group 'compilation
-           :type '(list (repeat string)))
-
-         ;; `process-status' と `exit-status' の値も得たいので、
-         ;; アドバイスを利用
-         ;; `compilation-finish-functions' にフックした関数では `msg' しか
-         ;; 参照できないため
-         (defun my-compilation-auto-quit-window (process-status exit-status msg)
-           "Run `quit-window' when `compile' successed."
-           (if (and (member (buffer-name)
-                            my-compilation-auto-quit-window-enable-buffer-names)
-                    (or (and (equal process-status 'exit)
-                             (zerop exit-status))
-                        ;; 改行文字が含まれうる問題を回避
-                        (string-equal "finished" (string-trim msg))))
-               (quit-window nil (get-buffer-window))))
-
-         (if (fboundp 'compilation-handle-exit)
-             (advice-add 'compilation-handle-exit
-                         :after
-                         #'my-compilation-auto-quit-window))
-
-         ;; ---------------------------
-         ;; HACK: ANSI エスケープシーケンスが正しく解釈されない問題を回避
-         ;; ---------------------------
-         (defun my-ansi-color-apply-on-compilation ()
-           "Recognize ASCII color escape sequences for `compilation-mode' buffer."
-           (if (and (require 'ansi-color nil :noerror)
-                    (fboundp 'ansi-color-apply-on-region))
-               (let ((start-marker (make-marker))
-                     (end-marker (process-mark (get-buffer-process (current-buffer)))))
-                 (set-marker start-marker (point-min))
-                 (ansi-color-apply-on-region start-marker end-marker))))
-
-         (add-hook 'compilation-filter-hook #'my-ansi-color-apply-on-compilation)))
+       (if (fboundp 'compilation-handle-exit)
+           (advice-add 'compilation-handle-exit
+                       :after
+                       #'my-compilation-auto-quit-window)))
 
 
      ;; -----------------------------------------------------------------------
@@ -1526,37 +1498,47 @@ See URL `https://github.com/validator/validator'."
      ;; -----------------------------------------------------------------------
      (use-package grep
        ;; :disabled
-       :demand (member system-type '(ms-dos windows-nt))
+       :defer t
        :bind (("C-M-g" . rgrep))
        :init
        ;; -----------------------------
-       ;; デフォルト値 (Windows ONLY)
-       ;;------------------------------
+       ;; Windows ONLY
+       ;; -----------------------------
        (if (member system-type '(ms-dos windows-nt))
-           (custom-set-variables
-            ;;
-            ;; 例外が出るため NUL デバイスは使わせない
-            ;;
-            '(grep-use-null-device nil)))
+           (use-package grep
+             ;;
+             ;; HACK: `autoload' 未対応変数を変更する必要があるため、
+             ;;       明示的にロードさせる必要がある
+             ;;
+             :demand t
+             :init
+             ;;
+             ;; デフォルト値
+             ;;
+             (custom-set-variables
+              ;;
+              ;; 例外が出るため NUL デバイスは使わせない
+              ;;
+              '(grep-use-null-device nil))
 
-       ;; -----------------------------
-       ;; 初期化 (Windows ONLY)
-       ;; -----------------------------
-       (when (member system-type '(ms-dos windows-nt))
-         ;; PATH は通っていないが、`exec-path' は通っている場合を想定
-         ;;
-         ;; すべて `defvar' 定義なので、 `autoload' 前後での
-         ;; `custom-set-variables' による設定は不可能
-         ;; 明示的ロード後～関数実行前までに設定しなければならない
-         (setq grep-program
-               (purecopy (or (executable-find "grep")
-                             "grep")))
-         (setq find-program
-               (purecopy (or (executable-find "find")
-                             "find")))
-         (setq xargs-program
-               (purecopy (or (executable-find "xargs")
-                             "xargs"))))
+             ;;
+             ;; 初期化
+             ;;
+             ;; PATH は通っていないが、`exec-path' は通っている場合を想定
+             ;;
+             ;; すべて `defvar' 定義なので、 `autoload' 前後での
+             ;; `custom-set-variables' による設定は不可能
+             ;; 明示的ロード後～関数実行前までに設定しなければならない
+             ;;
+             (setq grep-program
+                   (purecopy (or (executable-find "grep")
+                                 "grep")))
+             (setq find-program
+                   (purecopy (or (executable-find "find")
+                                 "find")))
+             (setq xargs-program
+                   (purecopy (or (executable-find "xargs")
+                                 "xargs")))))
        :config
        ;; -----------------------------
        ;; PATCH: grep 2.21 から環境変数 `GREP_OPTIONS' が deprecated に
