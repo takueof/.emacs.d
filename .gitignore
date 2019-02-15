@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------
 # Git ignored resource file
 # Copyright (C) 2014-2019 Taku Watabe
-# Time-stamp: <2019-01-09T15:34:13+09:00>
+# Time-stamp: <2019-02-16T02:41:54+09:00>
 # -----------------------------------------------------------------
 .AppleDouble
 .DS_Store
@@ -11,5 +11,6 @@
 /elpa/
 /site-lisp/
 /snippets/
+/transient/
 /url/
 Thumbs.db

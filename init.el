@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-06T20:59:02+09:00>
+;; Time-stamp: <2019-02-16T02:40:21+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1113,6 +1113,29 @@
 
 
      ;; -----------------------------------------------------------------------
+     ;; Markdown プレビュー
+     ;; -----------------------------------------------------------------------
+     (use-package livedown
+       ;; :disabled
+       :load-path "site-lisp/emacs-livedown"
+       :after (:all nvm
+                    markdown-mode)
+       :defer t
+       :bind (:map markdown-mode-map
+                   ("C-c l p" . livedown-preview)
+                   ("C-c l k" . livedown-kill))
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;;------------------------------
+       (custom-set-variables
+        '(livedown-autostart nil)
+        '(livedown-open t)
+        '(livedown-port 50001)
+        '(livedown-browser nil)))
+
+
+     ;; -----------------------------------------------------------------------
      ;; Emmet
      ;; -----------------------------------------------------------------------
      (use-package emmet-mode
@@ -1166,19 +1189,6 @@
        :defer t
        :bind (("C-4" . evil-numbers/dec-at-pt)
               ("C-3" . evil-numbers/inc-at-pt)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得・設定
-     ;; -----------------------------------------------------------------------
-     (use-package exec-path-from-shell
-       ;; :disabled
-       :if (member window-system '(mac ns x))
-       :ensure t
-       :demand t
-       :init
-       (if (fboundp 'exec-path-from-shell-initialize)
-           (exec-path-from-shell-initialize)))
 
 
      ;; -----------------------------------------------------------------------
@@ -3539,6 +3549,19 @@ Ordering is lexicographic."
 
 
      ;; -----------------------------------------------------------------------
+     ;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得・設定
+     ;; -----------------------------------------------------------------------
+     (use-package exec-path-from-shell
+       ;; :disabled
+       :if (member window-system '(mac ns x))
+       :ensure t
+       :demand t
+       :init
+       (if (fboundp 'exec-path-from-shell-initialize)
+           (exec-path-from-shell-initialize)))
+
+
+     ;; -----------------------------------------------------------------------
      ;; JavaScript 開発環境
      ;; -----------------------------------------------------------------------
      (use-package indium
@@ -3554,6 +3577,18 @@ Ordering is lexicographic."
        (eval-after-load 'my-utils
          '(if (fboundp 'indium-interaction-mode)
               (my-change-lighter indium-interaction-mode nil))))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; nvm 経由での Node.js 利用をサポート
+     ;; -----------------------------------------------------------------------
+     (use-package nvm
+       ;; :disabled
+       :ensure t
+       :defer t
+       :init
+       (if (fboundp 'nvm-use-for)
+           (ignore-errors (nvm-use-for))))
 
 
      ;; -----------------------------------------------------------------------
