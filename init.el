@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-16T12:06:46+09:00>
+;; Time-stamp: <2019-02-16T15:06:19+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -528,6 +528,400 @@
          (package-install 'use-package))
 
      (require 'use-package nil :noerror)))
+
+
+;; ============================================================================
+;; 詳細設定（機能、非メジャー＆マイナーモード）
+;; ============================================================================
+(eval-after-load 'use-package
+  '(progn
+     ;; -----------------------------------------------------------------------
+     ;; EWW (Emacs Web Wowser)
+     ;; -----------------------------------------------------------------------
+     (use-package eww
+       ;; :disabled t
+       :defer t
+       :bind (("C-c C-e" . eww))
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;; -----------------------------
+       (custom-set-variables
+        '(eww-search-prefix "https://www.google.co.jp/search?&q=")
+        '(eww-history-limit 100)))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得・設定
+     ;; -----------------------------------------------------------------------
+     (use-package exec-path-from-shell
+       ;; :disabled t
+       :ensure t
+       :demand t
+       :init
+       (if (and (member window-system '(mac ns x))
+                (fboundp 'exec-path-from-shell-initialize))
+           (exec-path-from-shell-initialize)))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; JavaScript 開発環境
+     ;; -----------------------------------------------------------------------
+     (use-package indium
+       ;; :disabled t
+       :ensure t
+       :demand t
+       :hook ((js-mode . indium-interaction-mode)
+              (js2-mode . indium-interaction-mode))
+       :config
+       ;; -----------------------------
+       ;; lighter
+       ;; -----------------------------
+       (eval-after-load 'my-utils
+         '(if (fboundp 'indium-interaction-mode)
+              (my-change-lighter indium-interaction-mode nil))))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; Git インターフェース
+     ;; -----------------------------------------------------------------------
+     (use-package magit
+       ;; :disabled t
+       :ensure t
+       :defer t
+       :bind (("C-x g" . magit-status))
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;;------------------------------
+       (custom-set-variables
+        ;;
+        ;; カレントバッファを表示しているウインドウに表示させる
+        ;;
+        '(magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; NSM (Network Security Manager)
+     ;; -----------------------------------------------------------------------
+     (use-package nsm
+       ;; :disabled t
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;;------------------------------
+       (custom-set-variables
+        ;;
+        ;; ローカル環境にのみ保存
+        ;;
+        `(nsm-settings-file ,(convert-standard-filename "~/.emacs.network-security.data"))))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; nvm 経由での Node.js 利用をサポート
+     ;; -----------------------------------------------------------------------
+     (use-package nvm
+       ;; :disabled t
+       :ensure t
+       :defer t
+       :init
+       (if (fboundp 'nvm-use-for)
+           ;; `~/.nvmrc' がなければ何もしない
+           (ignore-errors (nvm-use-for))))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; カーソルの移動履歴
+     ;; -----------------------------------------------------------------------
+     (use-package point-undo
+       ;; :disabled t
+       :ensure t
+       :demand t
+       :bind (("M-]" . point-undo)
+              ("M-[" . point-redo)))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; 印刷 (PostScript)
+     ;; -----------------------------------------------------------------------
+     (use-package ps-print
+       ;; :disabled t
+       :defer t
+       :bind (("C-c p b" . ps-print-buffer)
+              ("C-c p f" . ps-print-buffer-with-faces))
+       :hook ((ps-print . my-ps-print-hook-listener))
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;;------------------------------
+       (custom-set-variables
+        ;;
+        ;; 用紙
+        ;;
+        '(ps-paper-type 'a4)
+        '(ps-landscape-mode nil) ; 縦剥き
+        ;;
+        ;; 本文フォント
+        ;;
+        '(ps-font-family 'Courier)
+        '(ps-font-size '(10.0 . 10.0)) ; 縦：10.0pt、横：10.0pt
+        ;;
+        ;; 色
+        ;;
+        '(ps-print-color-p t)
+        '(ps-default-fg t)
+        '(ps-default-bg t)
+        '(ps-use-face-background t)
+        ;;
+        ;; プリンターに対する命令
+        ;;
+        '(ps-multibyte-buffer 'non-latin-printer)
+        ;;
+        ;; 行調整
+        ;;
+        '(ps-line-spacing 2.0)
+        ;;
+        ;; 行番号
+        ;;
+        '(ps-line-number t)
+        '(ps-line-number-font "Times-Italic") ; FIXME: Courier にしたい
+        ;;
+        ;; 水平レイアウト
+        ;;
+        '(ps-left-margin (/ (* 72 1.4) 2.54)) ; 14mm（行番号が切れないようにする）
+        '(ps-inter-column (/ (* 72 1.0) 2.54)) ; 10mm
+        '(ps-right-margin (/ (* 72 0.54) 2.54)) ; 5.4mm（ヘッダ・フッタの box 右端が切れないようにする）
+        ;;
+        ;; 垂直レイアウト
+        ;;
+        '(ps-top-margin (/ (* 72 0.9) 2.54)) ; 9mm（ヘッダ box 上端が切れないようにする）
+        '(ps-header-offset (/ (* 72 0.1) 2.54)) ; 1mm
+        '(ps-footer-offset (/ (* 72 0.37) 2.54)) ; 3.7mm（フッタ box 上端へカブらないようにする）
+        '(ps-bottom-margin (/ (* 72 0.55) 2.54)) ; 5.5mm（フッタ box 下端が切れないようにする）
+        ;;
+        ;; ヘッダ
+        ;;
+        '(ps-print-header t)
+        '(ps-header-lines 2)
+        '(ps-print-header-frame t)
+        '(ps-left-header (list 'ps-get-buffer-name
+                               'ps-header-dirpart))
+        '(ps-right-header (list 'ps-time-stamp-yyyy-mm-dd
+                                'ps-time-stamp-hh:mm:ss))
+        '(ps-header-line-pad 0.15)
+        '(ps-header-font-family 'Courier)
+        '(ps-header-font-size '(10 . 10))
+        '(ps-header-title-font-size '(10 . 10))
+        ;;
+        ;; フッタ
+        ;;
+        '(ps-print-footer t)
+        '(ps-footer-lines 1)
+        '(ps-print-footer-frame t)
+        '(ps-left-footer nil)
+        '(ps-right-footer (list "/pagenumberstring load"))
+        '(ps-footer-line-pad 0.15)
+        '(ps-footer-font-family 'Courier)
+        '(ps-footer-font-size '(10 . 10))
+        '(ps-footer-title-font-size '(10 . 10)))
+
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       (defun my-ps-print-hook-listener ()
+         "Initialize `ps-print' when load hook `ps-print-hook'."
+
+         ;; FIXME: 長い行の右端が切れてしまう問題を解決しなければならない
+         ;;        いちいち改行をカレントバッファへ明示的に入れる方法はナシで
+         ;;        プリント前処理 temp バッファを作ればいいかもしれないが……？
+
+         ;; 極限まで細くする
+         (if (boundp 'ps-header-frame-alist)
+             (setcdr (assoc 'border-width ps-header-frame-alist) 0.1))))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; 印刷ユーティリティ
+     ;; -----------------------------------------------------------------------
+     (use-package printing
+       ;; :disabled t
+       :demand t
+       :bind (("C-c p p" . pr-interface))
+       :init
+       ;; -----------------------------
+       ;; 起動
+       ;; -----------------------------
+       (if (fboundp 'pr-update-menus)
+           ;;
+           ;; メニューに項目追加
+           ;;
+           (pr-update-menus +1)))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; タイムスタンプ記述
+     ;; -----------------------------------------------------------------------
+     (use-package time-stamp
+       ;; :disabled t
+       :defer t
+       :hook ((before-save . time-stamp))
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;;------------------------------
+       (custom-set-variables
+        ;;
+        ;; ISO 8601 (JIS X 0301) 形式にする
+        ;;
+        ;; see also:
+        ;; https://ja.wikipedia.org/wiki/ISO_8601
+        ;;
+        ;; WARNING: `time-stamp-time-zone' を "+09:00" にしても、
+        ;;          コロン以降が無視される
+        ;;
+        `(time-stamp-format
+          ,(concat "%:y-%02m-%02dT%02H:%02M:%02S"
+                   ;; タイムゾーンは別途指定
+                   ;;
+                   ;; 以下理由
+                   ;;
+                   ;; `time-stamp-string' の "%Z" は
+                   ;; (format-time-string "%Z") と同義
+                   ;; この値をそのまま扱うため、
+                   ;; 環境の差異が出やすくマトモに使えない
+                   ;;
+                   ;; `time-stamp-string' の "%z" は
+                   ;; (format-time-string "%#Z") と同義
+                   ;; (format-time-string "%z") ではない点に注意
+                   ;; この値をそのまま扱うため、
+                   ;; 環境の差異が出やすくマトモに使えない
+                   ;; また `format-time-string' 側のバグにより、
+                   ;; 環境次第で文字化けする
+                   ;;
+                   ;; Windows 環境（環境変数 %TZ% 未指定・+09:00 ゾーン）では
+                   ;; 次の値が用いられてしまう
+                   ;; （どちらもエンコーディングは `cp932-2-byte'）：
+                   ;;
+                   ;; "%Z" (≒ "%Z"):  #("東京 (標準時)" 0 8
+                   ;; "%z" (≒ "%#Z"): #("東京 (婦準時)" 0 8
+                   ;;
+                   ;; 「標」→「婦」に文字化けしているのがわかる
+                   ;; また、`propertize' されている
+                   ;;
+                   ;; FIXME: 現状では、OS 側の動的なタイムゾーン変更に追従不能
+                   ;;        都度評価にしたい
+                   (replace-regexp-in-string
+                    ;; コロンがない形式を返されるため、強制的にコロンを付与
+                    ;; 厳密なチェックにより "±1259" 形式のみ対象にする
+                    ;;   → 他は無視
+                    "\\`\\([\\+\\-]\\(?:0[0-9]\\|1[0-2]\\)\\)\\([0-5][0-9]\\)\\'"
+                    "\\1:\\2"
+                    ;; タイムゾーンが UTC でも "Z" でなく "+0000" を返してくる
+                    ;; 今のところ、あえて "Z" への変換はしないでおく
+                    (format-time-string "%z"))))))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; TRAMP (Transparent Remote Access, Multiple Protocols)
+     ;; -----------------------------------------------------------------------
+     (use-package tramp
+       ;; :disabled t
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;; -----------------------------
+       (eval-after-load 'tramp
+         ;;
+         ;; WARNING: 遅延ロード (`autoload') 後に実行しないと適用されない
+         ;;
+         '(custom-set-variables
+           ;;
+           ;; ローカル環境にのみ保存
+           ;;
+           `(tramp-persistency-file-name ,(convert-standard-filename "~/.emacs.tramp")))))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; `undo' 履歴の記憶
+     ;; -----------------------------------------------------------------------
+     (use-package undohist
+       ;; :disabled t
+       :ensure t
+       :demand t
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;;------------------------------
+       (custom-set-variables
+        ;;
+        ;; ローカル環境にのみ保存
+        ;;
+        `(undohist-directory ,(convert-standard-filename "~/.emacs.undohist")))
+
+       ;; -----------------------------
+       ;; 起動
+       ;; -----------------------------
+       (if (fboundp 'undohist-initialize)
+           (undohist-initialize)))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; ファイル名を元に、より唯一性の高いバッファ名を生成
+     ;; -----------------------------------------------------------------------
+     (use-package uniquify
+       ;; :disabled t
+       :demand t
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;;------------------------------
+       (custom-set-variables
+        '(uniquify-buffer-name-style 'forward)
+        '(uniquify-ignore-buffers-re "^*[^*]+*\\-")))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; URL ツール
+     ;; -----------------------------------------------------------------------
+     (use-package url
+       ;; :disabled t
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;;------------------------------
+       (custom-set-variables
+        '(url-using-proxy t)))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; ウインドウ移動キーを直感的にする
+     ;; -----------------------------------------------------------------------
+     (use-package windmove
+       ;; :disabled t
+       :defer t
+       :bind (("C-S-b" . windmove-left)
+              ("C-S-f" . windmove-right)
+              ("C-S-p" . windmove-up)
+              ("C-S-n" . windmove-down))
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;;------------------------------
+       (custom-set-variables
+        ;;
+        ;; フレーム端のウインドウでは無限スクロールするようにふるまう
+        ;; 「マリオブラザーズ」左右画面端におけるループのような動き
+        ;;
+        '(windmove-wrap-around t)))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; END OF CONFIG: 詳細設定（その他）
+     ;; -----------------------------------------------------------------------
+     ))
 
 
 ;; ============================================================================
@@ -2048,25 +2442,6 @@ Ordering is lexicographic."
 
 
      ;; -----------------------------------------------------------------------
-     ;; Git インターフェース
-     ;; -----------------------------------------------------------------------
-     (use-package magit
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :bind (("C-x g" . magit-status))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; カレントバッファを表示しているウインドウに表示させる
-        ;;
-        '(magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)))
-
-
-     ;; -----------------------------------------------------------------------
      ;; OBSOLETE: 環境に依存しないフレーム状態復元
      ;; -----------------------------------------------------------------------
      (use-package maxframe
@@ -2176,151 +2551,6 @@ Ordering is lexicographic."
                 (boundp 'migemo-dictionary)
                 (file-exists-p migemo-dictionary))
            (migemo-init)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; NSM (Network Security Manager)
-     ;; -----------------------------------------------------------------------
-     (use-package nsm
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(nsm-settings-file ,(convert-standard-filename "~/.emacs.network-security.data"))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; カーソルの移動履歴
-     ;; -----------------------------------------------------------------------
-     (use-package point-undo
-       ;; :disabled t
-       :ensure t
-       :demand t
-       :bind (("M-]" . point-undo)
-              ("M-[" . point-redo)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 印刷 (PostScript)
-     ;; -----------------------------------------------------------------------
-     (use-package ps-print
-       ;; :disabled t
-       :defer t
-       :bind (("C-c p b" . ps-print-buffer)
-              ("C-c p f" . ps-print-buffer-with-faces))
-       :hook ((ps-print . my-ps-print-hook-listener))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; 用紙
-        ;;
-        '(ps-paper-type 'a4)
-        '(ps-landscape-mode nil) ; 縦剥き
-        ;;
-        ;; 本文フォント
-        ;;
-        '(ps-font-family 'Courier)
-        '(ps-font-size '(10.0 . 10.0)) ; 縦：10.0pt、横：10.0pt
-        ;;
-        ;; 色
-        ;;
-        '(ps-print-color-p t)
-        '(ps-default-fg t)
-        '(ps-default-bg t)
-        '(ps-use-face-background t)
-        ;;
-        ;; プリンターに対する命令
-        ;;
-        '(ps-multibyte-buffer 'non-latin-printer)
-        ;;
-        ;; 行調整
-        ;;
-        '(ps-line-spacing 2.0)
-        ;;
-        ;; 行番号
-        ;;
-        '(ps-line-number t)
-        '(ps-line-number-font "Times-Italic") ; FIXME: Courier にしたい
-        ;;
-        ;; 水平レイアウト
-        ;;
-        '(ps-left-margin (/ (* 72 1.4) 2.54)) ; 14mm（行番号が切れないようにする）
-        '(ps-inter-column (/ (* 72 1.0) 2.54)) ; 10mm
-        '(ps-right-margin (/ (* 72 0.54) 2.54)) ; 5.4mm（ヘッダ・フッタの box 右端が切れないようにする）
-        ;;
-        ;; 垂直レイアウト
-        ;;
-        '(ps-top-margin (/ (* 72 0.9) 2.54)) ; 9mm（ヘッダ box 上端が切れないようにする）
-        '(ps-header-offset (/ (* 72 0.1) 2.54)) ; 1mm
-        '(ps-footer-offset (/ (* 72 0.37) 2.54)) ; 3.7mm（フッタ box 上端へカブらないようにする）
-        '(ps-bottom-margin (/ (* 72 0.55) 2.54)) ; 5.5mm（フッタ box 下端が切れないようにする）
-        ;;
-        ;; ヘッダ
-        ;;
-        '(ps-print-header t)
-        '(ps-header-lines 2)
-        '(ps-print-header-frame t)
-        '(ps-left-header (list 'ps-get-buffer-name
-                               'ps-header-dirpart))
-        '(ps-right-header (list 'ps-time-stamp-yyyy-mm-dd
-                                'ps-time-stamp-hh:mm:ss))
-        '(ps-header-line-pad 0.15)
-        '(ps-header-font-family 'Courier)
-        '(ps-header-font-size '(10 . 10))
-        '(ps-header-title-font-size '(10 . 10))
-        ;;
-        ;; フッタ
-        ;;
-        '(ps-print-footer t)
-        '(ps-footer-lines 1)
-        '(ps-print-footer-frame t)
-        '(ps-left-footer nil)
-        '(ps-right-footer (list "/pagenumberstring load"))
-        '(ps-footer-line-pad 0.15)
-        '(ps-footer-font-family 'Courier)
-        '(ps-footer-font-size '(10 . 10))
-        '(ps-footer-title-font-size '(10 . 10)))
-
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-ps-print-hook-listener ()
-         "Initialize `ps-print' when load hook `ps-print-hook'."
-
-         ;; FIXME: 長い行の右端が切れてしまう問題を解決しなければならない
-         ;;        いちいち改行をカレントバッファへ明示的に入れる方法はナシで
-         ;;        プリント前処理 temp バッファを作ればいいかもしれないが……？
-
-         ;; 極限まで細くする
-         (if (boundp 'ps-header-frame-alist)
-             (setcdr (assoc 'border-width ps-header-frame-alist) 0.1))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 印刷ユーティリティ
-     ;; -----------------------------------------------------------------------
-     (use-package printing
-       ;; :disabled t
-       :demand t
-       :bind (("C-c p p" . pr-interface))
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'pr-update-menus)
-           ;;
-           ;; メニューに項目追加
-           ;;
-           (pr-update-menus +1)))
 
 
      ;; -----------------------------------------------------------------------
@@ -2469,7 +2699,10 @@ Ordering is lexicographic."
        ;; -----------------------------
        ;; 起動
        ;; -----------------------------
-       (setq-default save-place t))
+       (cond (((fboundp 'save-place-mode) ; v25.1 以降
+               (save-place-mode +1))
+              ((boundp 'save-place) ; v25.1 未満
+               (setq-default save-place t)))))
 
 
      ;; -----------------------------------------------------------------------
@@ -2485,14 +2718,16 @@ Ordering is lexicographic."
        ;; 起動
        ;; -----------------------------
        ;;
-       ;; v24.x 以前
-       ;;
        ;; ウインドウシステム上では、あらゆるスクロールバーを非表示化
        ;;
-       (set-scroll-bar-mode (if window-system nil 'right))
+       ;; v25.1 未満
+       ;;
+       (eval-after-load 'scroll-bar
+         '(if (fboundp 'set-scroll-bar-mode)
+              (set-scroll-bar-mode (if window-system nil 'right))))
 
        ;;
-       ;; v25.x 以降
+       ;; v25.1 以降
        ;;
        (defun my-scroll-bar-initilalize ()
          "Initialize `scroll-bar' settings."
@@ -2573,8 +2808,16 @@ Ordering is lexicographic."
        ;; デフォルト値
        ;;------------------------------
        (custom-set-variables
-        '(sp-undo-pairs-separately t)
-        '(sp-show-pair-from-inside t))
+        '(sp-show-pair-from-inside t)
+        '(sp-undo-pairs-separately t))
+
+       ;; -----------------------------
+       ;; 起動
+       ;; -----------------------------
+       (if (fboundp 'show-smartparens-global-mode)
+           (show-smartparens-global-mode +1))
+       (if (fboundp 'smartparens-global-strict-mode)
+           (smartparens-global-strict-mode +1))
        :config
        ;; -----------------------------
        ;; lighter
@@ -2591,69 +2834,6 @@ Ordering is lexicographic."
        ;; :disabled t
        :after (:all smartparens)
        :demand t)
-
-
-     ;; -----------------------------------------------------------------------
-     ;; タイムスタンプ記述
-     ;; -----------------------------------------------------------------------
-     (use-package time-stamp
-       ;; :disabled t
-       :defer t
-       :hook ((before-save . time-stamp))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; ISO 8601 (JIS X 0301) 形式にする
-        ;;
-        ;; see also:
-        ;; https://ja.wikipedia.org/wiki/ISO_8601
-        ;;
-        ;; WARNING: `time-stamp-time-zone' を "+09:00" にしても、
-        ;;          コロン以降が無視される
-        ;;
-        `(time-stamp-format
-          ,(concat "%:y-%02m-%02dT%02H:%02M:%02S"
-                   ;; タイムゾーンは別途指定
-                   ;;
-                   ;; 以下理由
-                   ;;
-                   ;; `time-stamp-string' の "%Z" は
-                   ;; (format-time-string "%Z") と同義
-                   ;; この値をそのまま扱うため、
-                   ;; 環境の差異が出やすくマトモに使えない
-                   ;;
-                   ;; `time-stamp-string' の "%z" は
-                   ;; (format-time-string "%#Z") と同義
-                   ;; (format-time-string "%z") ではない点に注意
-                   ;; この値をそのまま扱うため、
-                   ;; 環境の差異が出やすくマトモに使えない
-                   ;; また `format-time-string' 側のバグにより、
-                   ;; 環境次第で文字化けする
-                   ;;
-                   ;; Windows 環境（環境変数 %TZ% 未指定・+09:00 ゾーン）では
-                   ;; 次の値が用いられてしまう
-                   ;; （どちらもエンコーディングは `cp932-2-byte'）：
-                   ;;
-                   ;; "%Z" (≒ "%Z"):  #("東京 (標準時)" 0 8
-                   ;; "%z" (≒ "%#Z"): #("東京 (婦準時)" 0 8
-                   ;;
-                   ;; 「標」→「婦」に文字化けしているのがわかる
-                   ;; また、`propertize' されている
-                   ;;
-                   ;; FIXME: 現状では、OS 側の動的なタイムゾーン変更に追従不能
-                   ;;        都度評価にしたい
-                   (replace-regexp-in-string
-                    ;; コロンがない形式を返されるため、強制的にコロンを付与
-                    ;; 厳密なチェックにより "±1259" 形式のみ対象にする
-                    ;;   → 他は無視
-                    "\\`\\([\\+\\-]\\(?:0[0-9]\\|1[0-2]\\)\\)\\([0-5][0-9]\\)\\'"
-                    "\\1:\\2"
-                    ;; タイムゾーンが UTC でも "Z" でなく "+0000" を返してくる
-                    ;; 今のところ、あえて "Z" への変換はしないでおく
-                    (format-time-string "%z"))))))
 
 
      ;; -----------------------------------------------------------------------
@@ -2691,27 +2871,6 @@ Ordering is lexicographic."
 
 
      ;; -----------------------------------------------------------------------
-     ;; TRAMP (Transparent Remote Access, Multiple Protocols)
-     ;; -----------------------------------------------------------------------
-     (use-package tramp
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (eval-after-load 'tramp
-         ;;
-         ;; WARNING: 遅延ロード (`autoload') 後に実行しないと適用されない
-         ;;
-         '(custom-set-variables
-           ;;
-           ;; ローカル環境にのみ保存
-           ;;
-           `(tramp-persistency-file-name ,(convert-standard-filename "~/.emacs.tramp")))))
-
-
-     ;; -----------------------------------------------------------------------
      ;; `undo' 拡張、`redo' 機能追加ならびに分岐履歴実装
      ;; -----------------------------------------------------------------------
      (use-package undo-tree
@@ -2731,45 +2890,6 @@ Ordering is lexicographic."
        ;; -----------------------------
        (if (fboundp 'global-undo-tree-mode)
            (global-undo-tree-mode)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; `undo' 履歴の記憶
-     ;; -----------------------------------------------------------------------
-     (use-package undohist
-       ;; :disabled t
-       :ensure t
-       :demand t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(undohist-directory ,(convert-standard-filename "~/.emacs.undohist")))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'undohist-initialize)
-           (undohist-initialize)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; ファイル名を元に、より唯一性の高いバッファ名を生成
-     ;; -----------------------------------------------------------------------
-     (use-package uniquify
-       ;; :disabled t
-       :demand t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(uniquify-buffer-name-style 'forward)
-        '(uniquify-ignore-buffers-re "^*[^*]+*\\-")))
 
 
      ;; -----------------------------------------------------------------------
@@ -2870,28 +2990,6 @@ Ordering is lexicographic."
             ;;
             `(whitespace-display-mappings ',(delete '(space-mark ?\  [?\u00B7] [?.])
                                                     whitespace-display-mappings)))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; ウインドウ移動キーを直感的にする
-     ;; -----------------------------------------------------------------------
-     (use-package windmove
-       ;; :disabled t
-       :defer t
-       :bind (("C-S-b" . windmove-left)
-              ("C-S-f" . windmove-right)
-              ("C-S-p" . windmove-up)
-              ("C-S-n" . windmove-down))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; フレーム端のウインドウでは無限スクロールするようにふるまう
-        ;; 「マリオブラザーズ」左右画面端におけるループのような動き
-        ;;
-        '(windmove-wrap-around t)))
 
 
      ;; -----------------------------------------------------------------------
@@ -3526,90 +3624,6 @@ Ordering is lexicographic."
 
      ;; -----------------------------------------------------------------------
      ;; END OF CONFIG: 詳細設定（メジャーモード）
-     ;; -----------------------------------------------------------------------
-     ))
-
-
-;; ============================================================================
-;; 詳細設定（その他）
-;; ============================================================================
-(eval-after-load 'use-package
-  '(progn
-     ;; -----------------------------------------------------------------------
-     ;; EWW (Emacs Web Wowser)
-     ;; -----------------------------------------------------------------------
-     (use-package eww
-       ;; :disabled t
-       :defer t
-       :bind (("C-c C-e" . eww))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (custom-set-variables
-        '(eww-search-prefix "https://www.google.co.jp/search?&q=")
-        '(eww-history-limit 100)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得・設定
-     ;; -----------------------------------------------------------------------
-     (use-package exec-path-from-shell
-       ;; :disabled t
-       :ensure t
-       :demand t
-       :init
-       (if (and (member window-system '(mac ns x))
-                (fboundp 'exec-path-from-shell-initialize))
-           (exec-path-from-shell-initialize)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; JavaScript 開発環境
-     ;; -----------------------------------------------------------------------
-     (use-package indium
-       ;; :disabled t
-       :ensure t
-       :demand t
-       :hook ((js-mode . indium-interaction-mode)
-              (js2-mode . indium-interaction-mode))
-       :config
-       ;; -----------------------------
-       ;; lighter
-       ;; -----------------------------
-       (eval-after-load 'my-utils
-         '(if (fboundp 'indium-interaction-mode)
-              (my-change-lighter indium-interaction-mode nil))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; nvm 経由での Node.js 利用をサポート
-     ;; -----------------------------------------------------------------------
-     (use-package nvm
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :init
-       (if (fboundp 'nvm-use-for)
-           (ignore-errors (nvm-use-for))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; URL ツール
-     ;; -----------------------------------------------------------------------
-     (use-package url
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(url-using-proxy t)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; END OF CONFIG: 詳細設定（その他）
      ;; -----------------------------------------------------------------------
      ))
 
