@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-16T02:40:21+09:00>
+;; Time-stamp: <2019-02-16T11:09:21+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -828,6 +828,8 @@
      ;; -----------------------------------------------------------------------
      (use-package compile
        ;; :disabled
+       :after (:all nvm
+                    exec-path-from-shell)
        :defer t
        :bind (("C-c C-l" . compile))
        :hook ((compilation-filter . my-compilation-ansi-color-apply))
@@ -1059,7 +1061,7 @@
      ;; -----------------------------------------------------------------------
      (use-package eldoc-eval
        ;; :disabled
-       :after (:any eldoc)
+       :after (:all eldoc)
        :ensure t
        :defer t
        :hook ((lisp-mode . my-eldoc-eval-initialize)
@@ -1905,8 +1907,8 @@ Ordering is lexicographic."
      ;; -----------------------------------------------------------------------
      (use-package ibuffer-projectile
        ;; :disabled
-       :after (:all ibuffer
-                    projectile)
+       :after (:all projectile
+                    ibuffer)
        :ensure t
        :defer t
        :hook ((ibuffer . my-ibuffer-projectile-initialize))
@@ -2570,17 +2572,8 @@ Ordering is lexicographic."
        ;; デフォルト値
        ;;------------------------------
        (custom-set-variables
-        '(sp-autoinsert-quote-if-followed-by-closing-pair t)
         '(sp-undo-pairs-separately t)
         '(sp-show-pair-from-inside t))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'smartparens-global-mode)
-           (smartparens-global-mode +1))
-       (if (fboundp 'show-smartparens-global-mode)
-           (show-smartparens-global-mode +1))
        :config
        ;; -----------------------------
        ;; lighter
@@ -2588,6 +2581,15 @@ Ordering is lexicographic."
        (eval-after-load 'my-utils
          '(if (fboundp 'smartparens-mode)
               (my-change-lighter smartparens-mode nil))))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; 各種カッコ関連機能拡張・公式デフォルト設定
+     ;; -----------------------------------------------------------------------
+     (use-package smartparens-config
+       ;; :disabled
+       :after (:all smartparens)
+       :demand t)
 
 
      ;; -----------------------------------------------------------------------
@@ -3553,11 +3555,11 @@ Ordering is lexicographic."
      ;; -----------------------------------------------------------------------
      (use-package exec-path-from-shell
        ;; :disabled
-       :if (member window-system '(mac ns x))
        :ensure t
        :demand t
        :init
-       (if (fboundp 'exec-path-from-shell-initialize)
+       (if (and (member window-system '(mac ns x))
+                (fboundp 'exec-path-from-shell-initialize))
            (exec-path-from-shell-initialize)))
 
 
