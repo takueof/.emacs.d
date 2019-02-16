@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-16T18:46:43+09:00>
+;; Time-stamp: <2019-02-17T05:53:50+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -60,21 +60,23 @@
 ;; `mule-conf.el'
 (define-coding-system-alias 'utf-8-bom 'utf-8-with-signature)
 
-;; `cp932' を `shift_jis' として強制認識
+;; `japanese-cp932' を `shift_jis' として強制認識
 ;;
 ;; MIME を用いた自動エンコーディング判定を行うコード（`sgml-mode' など）でも
 ;; 例外が出ないようにする
 (coding-system-put 'japanese-cp932
                    :mime-charset 'shift_jis)
 
-;; `japanese-shift-jis' を Microsoft Code Page 932 相当にする
+;; `japanese-shift-jis' を Microsoft Code Page 932 (`japanese-cp932') に変更
 ;;
 ;; GNU Emacs における Shift_JIS 実装 `japanese-shift-jis' は、
-;; JIS X 0208 の附属書1にある定義を厳格に実装したもの
-;; ゆえに、一部文字（例：「～」(U+FF5E)）が未定義であったりするなど、実用上の問題が発生
+;; JIS X 0208 附属書1にある定義を厳格に実装したもの
+;; ゆえに、一部文字（例：「～」(U+FF5E)）が未定義であるなどし、
+;; 実用上問題が発生しやすい
 ;;
 ;; そこで、タイムスタンプ時点で最も普及している Microsoft の Shift_JIS 実装
-;;  `japanese-cp932' を、デフォルトの Shift_JIS として認識させる
+;; Microsoft Code Page 932 (`japanese-cp932') を、
+;; デフォルトの Shift_JIS 実装として認識させる
 ;;
 ;; see also:
 ;; `japanese.el'
@@ -250,7 +252,7 @@
  ;; スタートアップ表示は一切させない
  ;;
  ;; see also:
- ;; http://www.gnu.org/software/emacs/manual/html_node/elisp/Startup-Summary.html
+ ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Startup-Summary.html
  ;;
  '(inhibit-startup-screen t)
  '(inhibit-startup-message t)
@@ -919,7 +921,7 @@
 
 
      ;; -----------------------------------------------------------------------
-     ;; END OF CONFIG: 詳細設定（その他）
+     ;; END OF CONFIG: 詳細設定（機能、非メジャー＆マイナーモード）
      ;; -----------------------------------------------------------------------
      ))
 
