@@ -1,7 +1,7 @@
 ;;; my-modeline.el --- 設定 - モードライン -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-04T15:25:24+09:00>
+;; Time-stamp: <2019-02-17T06:04:49+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -16,7 +16,7 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 

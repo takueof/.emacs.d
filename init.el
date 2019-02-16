@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-17T05:53:50+09:00>
+;; Time-stamp: <2019-02-17T05:58:35+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -16,7 +16,7 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ;;; Commentary:
 
@@ -1816,7 +1816,7 @@ See URL `https://github.com/validator/validator'."
      ;; `frame-restore-mode' は自動検出して停止してくれるが、warning を吐くため
      ;;
      ;; see also:
-     ;; http://bzr.savannah.gnu.org/lh/emacs/trunk/revision/113242
+     ;; https://bzr.savannah.gnu.org/lh/emacs/trunk/revision/113242
      ;; -----------------------------------------------------------------------
      (use-package frame-restore
        ;; :disabled t
@@ -2266,7 +2266,7 @@ Set up `compilation-exit-message-function' and run `grep-setup-hook'."
          ;; メジャーモード名 + ファイルパスでソート
          ;;
          ;; see also:
-         ;; http://www.emacswiki.org/emacs/IbufferMode#toc10
+         ;; https://www.emacswiki.org/emacs/IbufferMode#toc10
          (define-ibuffer-sorter mode-name-and-path-alphabetic
            "Sort the buffers by their mode and paths.
 Ordering is lexicographic."

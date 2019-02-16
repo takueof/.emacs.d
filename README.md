@@ -9,7 +9,7 @@ I was writed these files for "**macOS**" and "**Microsoft Windows**" environment
 
 # Software License
 
-[GNU GENERAL PUBLIC LICENSE Version 3 (GNU GPLv3) or any later version](https://www.gnu.org/licenses/gpl-3.0).
+[GNU GENERAL PUBLIC LICENSE Version 3 (GNU GPLv3)](https://www.gnu.org/licenses/gpl-3.0) (at your option) or any later version.
 
 See also: [`LICENSE`](/LICENSE) file.
 
