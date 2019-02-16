@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-16T15:06:19+09:00>
+;; Time-stamp: <2019-02-16T15:13:50+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2699,10 +2699,10 @@ Ordering is lexicographic."
        ;; -----------------------------
        ;; 起動
        ;; -----------------------------
-       (cond (((fboundp 'save-place-mode) ; v25.1 以降
-               (save-place-mode +1))
-              ((boundp 'save-place) ; v25.1 未満
-               (setq-default save-place t)))))
+       (cond ((fboundp 'save-place-mode) ; v25.1 以降
+              (save-place-mode +1))
+             ((boundp 'save-place) ; v25.1 未満
+              (setq-default save-place t))))
 
 
      ;; -----------------------------------------------------------------------
@@ -2808,7 +2808,7 @@ Ordering is lexicographic."
        ;; デフォルト値
        ;;------------------------------
        (custom-set-variables
-        '(sp-show-pair-from-inside t)
+        '(sp-show-pair-from-inside nil)
         '(sp-undo-pairs-separately t))
 
        ;; -----------------------------
