@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-16T11:51:16+09:00>
+;; Time-stamp: <2019-02-16T12:06:46+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -539,7 +539,7 @@
      ;; 各種検索・置換強化
      ;; -----------------------------------------------------------------------
      (use-package anzu
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :bind (("M-%" . anzu-query-replace)
@@ -572,7 +572,7 @@
      ;; アーカイブファイルを直接編集
      ;; -----------------------------------------------------------------------
      (use-package jka-cmpr-hook
-       ;; :disabled
+       ;; :disabled t
        :demand t
        :config
        ;; -----------------------------
@@ -589,7 +589,7 @@
      ;; `my-default-theme.el'
      ;; -----------------------------------------------------------------------
      (use-package auto-dim-other-buffers
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :hook ((after-init . my-auto-dim-other-buffers-mode-initialize))
@@ -614,7 +614,7 @@
      ;; 自動バッファ再読込
      ;; -----------------------------------------------------------------------
      (use-package autorevert
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -628,7 +628,7 @@
      ;; ブックマーク
      ;; -----------------------------------------------------------------------
      (use-package bookmark
-       ;; :disabled
+       ;; :disabled t
        :demand t
        :init
        ;; -----------------------------
@@ -646,7 +646,7 @@
      ;; ブックマーク (`bookmark') 拡張
      ;; -----------------------------------------------------------------------
      (use-package bookmark+
-       ;; :disabled
+       ;; :disabled t
        :after (:all bookmark)
        :ensure t
        :demand t)
@@ -656,7 +656,7 @@
      ;; プログラマ向けネーミング辞書
      ;; -----------------------------------------------------------------------
      (use-package codic
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :bind (("C-c C-q" . codic))
@@ -691,7 +691,7 @@
      ;; 共通コマンドインタプリタ
      ;; -----------------------------------------------------------------------
      (use-package comint
-       ;; :disabled
+       ;; :disabled t
        :if (member system-type '(ms-dos windows-nt))
        :defer t
        :hook ((comint-mode . my-comint-mode-initialize))
@@ -725,7 +725,7 @@
      ;; 補完フレームワーク
      ;; -----------------------------------------------------------------------
      (use-package company
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :hook ((after-init . global-company-mode))
@@ -779,7 +779,7 @@
      ;; 補完フレームワーク (`company') 拡張（補完候補のソート）
      ;; -----------------------------------------------------------------------
      (use-package company-statistics
-       ;; :disabled
+       ;; :disabled t
        :after (:all company)
        :ensure t
        :defer t
@@ -805,7 +805,7 @@
      ;; 補完フレームワーク (`company') 拡張（補完候補のポップアップドキュメント）
      ;; -----------------------------------------------------------------------
      (use-package company-quickhelp
-       ;; :disabled
+       ;; :disabled t
        :after (:all company)
        :ensure t
        :defer t
@@ -827,7 +827,7 @@
      ;; コンパイル
      ;; -----------------------------------------------------------------------
      (use-package compile
-       ;; :disabled
+       ;; :disabled t
        :after (:all nvm
                     exec-path-from-shell)
        :defer t
@@ -908,7 +908,7 @@
      ;; 矩形選択
      ;; -----------------------------------------------------------------------
      (use-package cua-base
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        (if (fboundp 'cua-selection-mode)
@@ -922,7 +922,7 @@
      ;; バッファ内マッチ補完
      ;; -----------------------------------------------------------------------
      (use-package dabbrev
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -939,7 +939,7 @@
      ;; デスクトップ環境保存・復旧
      ;; -----------------------------------------------------------------------
      (use-package desktop
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :bind (("C-c d c" . desktop-clear)
               ("C-c d C-s" . desktop-save)
@@ -983,7 +983,7 @@
      ;; ディレクトリブラウジング
      ;; -----------------------------------------------------------------------
      (use-package dired
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -1002,7 +1002,7 @@
      ;; ディレクトリブラウジング (`dired') 拡張
      ;; -----------------------------------------------------------------------
      (use-package dired+
-       ;; :disabled
+       ;; :disabled t
        :after (:all dired)
        :ensure t
        :demand t
@@ -1019,7 +1019,7 @@
      ;; EditorConfig
      ;; -----------------------------------------------------------------------
      (use-package editorconfig
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :init
@@ -1040,7 +1040,7 @@
      ;; GNU Emacs Lisp ドキュメント表示
      ;; -----------------------------------------------------------------------
      (use-package eldoc
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :hook ((lisp-mode . eldoc-mode)
               (emacs-lisp-mode . eldoc-mode)
@@ -1060,7 +1060,7 @@
      ;; GNU Emacs Lisp ドキュメント表示 (`eldoc') 拡張（<M-:> による `eval'）
      ;; -----------------------------------------------------------------------
      (use-package eldoc-eval
-       ;; :disabled
+       ;; :disabled t
        :after (:all eldoc)
        :ensure t
        :defer t
@@ -1092,7 +1092,7 @@
      ;; GNU Emacs Lisp 定義ジャンプ・バック・ドキュメント閲覧
      ;; -----------------------------------------------------------------------
      (use-package elisp-slime-nav
-       ;; :disabled
+       ;; :disabled t
        :after (:any emacs-lisp-mode
                     lisp-interaction-mode
                     lisp-mode
@@ -1118,7 +1118,7 @@
      ;; Markdown プレビュー
      ;; -----------------------------------------------------------------------
      (use-package livedown
-       ;; :disabled
+       ;; :disabled t
        :load-path "site-lisp/emacs-livedown"
        :after (:all nvm
                     markdown-mode)
@@ -1141,7 +1141,7 @@
      ;; Emmet
      ;; -----------------------------------------------------------------------
      (use-package emmet-mode
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :hook ((html-mode . emmet-mode)
@@ -1166,7 +1166,7 @@
      ;; `text/enriched' フォーマットファイル
      ;; -----------------------------------------------------------------------
      (use-package enriched
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :config
        ;; -----------------------------
@@ -1186,7 +1186,7 @@
      ;; カーソル下の数値を増減
      ;; -----------------------------------------------------------------------
      (use-package evil-numbers
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :bind (("C-4" . evil-numbers/dec-at-pt)
@@ -1200,7 +1200,7 @@
      ;; `fill-column'
      ;; -----------------------------------------------------------------------
      (use-package fill-column-indicator
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :bind (("C-c q" . fci-mode))
@@ -1230,7 +1230,7 @@
      ;; `dired'
      ;; -----------------------------------------------------------------------
      (use-package find-dired
-       ;; :disabled
+       ;; :disabled t
        :if (member system-type '(ms-dos windows-nt))
        :defer t
        :init
@@ -1251,7 +1251,7 @@
      ;; 自動静的解析
      ;; -----------------------------------------------------------------------
      (use-package flycheck
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :bind (("C-c f" . flycheck-mode))
@@ -1356,7 +1356,7 @@ See URL `https://github.com/validator/validator'."
      ;; 自動静的解析拡張（モードライン変更）
      ;; -----------------------------------------------------------------------
      (use-package flycheck-color-mode-line
-       ;; :disabled
+       ;; :disabled t
        :after (:all flycheck)
        :ensure t
        :defer t
@@ -1367,7 +1367,7 @@ See URL `https://github.com/validator/validator'."
      ;; 自動静的解析 (OLD)
      ;; -----------------------------------------------------------------------
      (use-package flymake
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -1388,7 +1388,7 @@ See URL `https://github.com/validator/validator'."
      ;; フレーム
      ;; -----------------------------------------------------------------------
      (use-package frame
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -1423,7 +1423,7 @@ See URL `https://github.com/validator/validator'."
      ;; http://bzr.savannah.gnu.org/lh/emacs/trunk/revision/113242
      ;; -----------------------------------------------------------------------
      (use-package frame-restore
-       ;; :disabled
+       ;; :disabled t
        :if (and (= emacs-major-version 24)
                 (< emacs-minor-version 4))
        :ensure t
@@ -1456,7 +1456,7 @@ See URL `https://github.com/validator/validator'."
      ;; フレームセット
      ;; -----------------------------------------------------------------------
      (use-package frameset
-       ;; :disabled
+       ;; :disabled t
        :defer t
        ;; 全設定が完了してから実行しなければならない
        ;; 途中で追加される項目がありうるため
@@ -1483,7 +1483,7 @@ See URL `https://github.com/validator/validator'."
      ;; Google 翻訳インターフェース
      ;; -----------------------------------------------------------------------
      (use-package google-translate
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :bind (("C-c C-t p" . google-translate-at-point)
@@ -1510,7 +1510,7 @@ See URL `https://github.com/validator/validator'."
      ;; `grep'
      ;; -----------------------------------------------------------------------
      (use-package grep
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :bind (("C-M-g" . rgrep))
        :init
@@ -1787,7 +1787,7 @@ Set up `compilation-exit-message-function' and run `grep-setup-hook'."
      ;; 拡張補完・展開
      ;; -----------------------------------------------------------------------
      (use-package hippie-exp
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :bind (("M-/" . hippie-expand)))
 
@@ -1796,7 +1796,7 @@ Set up `compilation-exit-message-function' and run `grep-setup-hook'."
      ;; カレントカーソル行強調
      ;; -----------------------------------------------------------------------
      (use-package hl-line
-       ;; :disabled
+       ;; :disabled t
        :defer t
        ;; FIXME: `after-init-hook' 後に実行した `load-theme' に対応したい
        ;;        `advice-add' の after で `enable-theme' を実行してもダメ
@@ -1836,7 +1836,7 @@ Set up `compilation-exit-message-function' and run `grep-setup-hook'."
      ;; 強化バッファ一覧
      ;; -----------------------------------------------------------------------
      (use-package ibuffer
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :bind (("C-x C-b" . ibuffer))
        :init
@@ -1907,7 +1907,7 @@ Ordering is lexicographic."
      ;; 強化バッファ一覧 (`ibuffer') 拡張（`projectile' サポート）
      ;; -----------------------------------------------------------------------
      (use-package ibuffer-projectile
-       ;; :disabled
+       ;; :disabled t
        :after (:all projectile
                     ibuffer)
        :ensure t
@@ -1927,7 +1927,7 @@ Ordering is lexicographic."
      ;; ファイル操作の簡略化
      ;; -----------------------------------------------------------------------
      (use-package ido
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -1960,7 +1960,7 @@ Ordering is lexicographic."
      ;; 画像の直接表示
      ;; -----------------------------------------------------------------------
      (use-package image-file
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -1974,7 +1974,7 @@ Ordering is lexicographic."
      ;; インクリメンタル検索
      ;; -----------------------------------------------------------------------
      (use-package isearch
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -1995,7 +1995,7 @@ Ordering is lexicographic."
      ;; JavaScript リファクタリング補助
      ;; -----------------------------------------------------------------------
      (use-package js2-refactor
-       ;; :disabled
+       ;; :disabled t
        :after (:all js2-mode)
        :ensure t
        :demand t)
@@ -2009,7 +2009,7 @@ Ordering is lexicographic."
      ;; https://langserver.org/
      ;; -----------------------------------------------------------------------
      (use-package lsp-mode
-       :disabled ; 現状 `flycheck' が無効化されてしまうため、一旦無効化
+       :disabled t ; 現状 `flycheck' が無効化されてしまうため、一旦無効化
        :ensure t
        :defer t
        :hook ((css-mode . lsp)
@@ -2040,7 +2040,7 @@ Ordering is lexicographic."
      ;; LSP (Language Server Protocol) クライアント拡張 (UI)
      ;; -----------------------------------------------------------------------
      (use-package lsp-ui
-       ;; :disabled
+       :disabled t ; 現状 `flycheck' が無効化されてしまうため、一旦無効化
        :after (:all lsp-mode)
        :ensure t
        :demand t
@@ -2051,7 +2051,7 @@ Ordering is lexicographic."
      ;; Git インターフェース
      ;; -----------------------------------------------------------------------
      (use-package magit
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :bind (("C-x g" . magit-status))
@@ -2070,7 +2070,7 @@ Ordering is lexicographic."
      ;; OBSOLETE: 環境に依存しないフレーム状態復元
      ;; -----------------------------------------------------------------------
      (use-package maxframe
-       ;; :disabled
+       ;; :disabled t
        :if (and (= emacs-major-version 24)
                 (< emacs-minor-version 4))
        :ensure t
@@ -2098,7 +2098,7 @@ Ordering is lexicographic."
      ;; メニューバー
      ;; -----------------------------------------------------------------------
      (use-package menu-bar
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -2115,7 +2115,7 @@ Ordering is lexicographic."
      ;; ローマ字入力から日本語をインクリメンタル検索
      ;; -----------------------------------------------------------------------
      (use-package migemo
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :demand t
        :bind (:map isearch-mode-map
@@ -2182,7 +2182,7 @@ Ordering is lexicographic."
      ;; NSM (Network Security Manager)
      ;; -----------------------------------------------------------------------
      (use-package nsm
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -2199,7 +2199,7 @@ Ordering is lexicographic."
      ;; カーソルの移動履歴
      ;; -----------------------------------------------------------------------
      (use-package point-undo
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :demand t
        :bind (("M-]" . point-undo)
@@ -2210,7 +2210,7 @@ Ordering is lexicographic."
      ;; 印刷 (PostScript)
      ;; -----------------------------------------------------------------------
      (use-package ps-print
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :bind (("C-c p b" . ps-print-buffer)
               ("C-c p f" . ps-print-buffer-with-faces))
@@ -2309,7 +2309,7 @@ Ordering is lexicographic."
      ;; 印刷ユーティリティ
      ;; -----------------------------------------------------------------------
      (use-package printing
-       ;; :disabled
+       ;; :disabled t
        :demand t
        :bind (("C-c p p" . pr-interface))
        :init
@@ -2327,7 +2327,7 @@ Ordering is lexicographic."
      ;; 汎用プロジェクト管理
      ;; -----------------------------------------------------------------------
      (use-package projectile
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :demand t
        :init
@@ -2359,7 +2359,7 @@ Ordering is lexicographic."
      ;; 自動カラー表示
      ;; -----------------------------------------------------------------------
      (use-package rainbow-mode
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -2383,7 +2383,7 @@ Ordering is lexicographic."
      ;; ファイル履歴保存
      ;; -----------------------------------------------------------------------
      (use-package recentf
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -2404,7 +2404,7 @@ Ordering is lexicographic."
      ;; モードラインからマイナーモードの表示をを隠す
      ;; -----------------------------------------------------------------------
      (use-package rich-minority
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :init
@@ -2427,7 +2427,7 @@ Ordering is lexicographic."
      ;; ミニバッファの履歴を残す
      ;; -----------------------------------------------------------------------
      (use-package savehist
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -2454,7 +2454,7 @@ Ordering is lexicographic."
      ;; ファイルごとにカーソル位置を保存
      ;; -----------------------------------------------------------------------
      (use-package saveplace
-       ;; :disabled
+       ;; :disabled t
        :demand t
        :init
        ;; -----------------------------
@@ -2476,7 +2476,7 @@ Ordering is lexicographic."
      ;; スクロールバー
      ;; -----------------------------------------------------------------------
      (use-package scroll-bar
-       ;; :disabled
+       ;; :disabled t
        :defer t
        ;; `after-init-hook' で実行しないと適用されない問題がある
        :hook ((after-init . my-scroll-bar-initilalize))
@@ -2523,7 +2523,7 @@ Ordering is lexicographic."
      ;; この欠点をある程度回避した wemacs.cmd を用いること
      ;; -----------------------------------------------------------------------
      (use-package server
-       ;; :disabled
+       ;; :disabled t
        :demand t
        :init
        ;; -----------------------------
@@ -2548,7 +2548,7 @@ Ordering is lexicographic."
      ;; 基礎編集コマンド集
      ;; -----------------------------------------------------------------------
      (use-package simple
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -2565,7 +2565,7 @@ Ordering is lexicographic."
      ;; 各種カッコ関連機能拡張
      ;; -----------------------------------------------------------------------
      (use-package smartparens
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :demand t
        :init
@@ -2588,7 +2588,7 @@ Ordering is lexicographic."
      ;; 各種カッコ関連機能拡張・公式デフォルト設定
      ;; -----------------------------------------------------------------------
      (use-package smartparens-config
-       ;; :disabled
+       ;; :disabled t
        :after (:all smartparens)
        :demand t)
 
@@ -2597,7 +2597,7 @@ Ordering is lexicographic."
      ;; タイムスタンプ記述
      ;; -----------------------------------------------------------------------
      (use-package time-stamp
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :hook ((before-save . time-stamp))
        :init
@@ -2660,7 +2660,7 @@ Ordering is lexicographic."
      ;; ツールバー
      ;; -----------------------------------------------------------------------
      (use-package tool-bar
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -2677,7 +2677,7 @@ Ordering is lexicographic."
      ;; ツールチップ
      ;; -----------------------------------------------------------------------
      (use-package tooltip
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -2694,7 +2694,7 @@ Ordering is lexicographic."
      ;; TRAMP (Transparent Remote Access, Multiple Protocols)
      ;; -----------------------------------------------------------------------
      (use-package tramp
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -2715,7 +2715,7 @@ Ordering is lexicographic."
      ;; `undo' 拡張、`redo' 機能追加ならびに分岐履歴実装
      ;; -----------------------------------------------------------------------
      (use-package undo-tree
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :demand t
        :bind (("C-." . undo-tree-redo))
@@ -2737,7 +2737,7 @@ Ordering is lexicographic."
      ;; `undo' 履歴の記憶
      ;; -----------------------------------------------------------------------
      (use-package undohist
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :demand t
        :init
@@ -2761,7 +2761,7 @@ Ordering is lexicographic."
      ;; ファイル名を元に、より唯一性の高いバッファ名を生成
      ;; -----------------------------------------------------------------------
      (use-package uniquify
-       ;; :disabled
+       ;; :disabled t
        :demand t
        :init
        ;; -----------------------------
@@ -2776,7 +2776,7 @@ Ordering is lexicographic."
      ;; 空白文字強調
      ;; -----------------------------------------------------------------------
      (use-package whitespace
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -2876,7 +2876,7 @@ Ordering is lexicographic."
      ;; ウインドウ移動キーを直感的にする
      ;; -----------------------------------------------------------------------
      (use-package windmove
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :bind (("C-S-b" . windmove-left)
               ("C-S-f" . windmove-right)
@@ -2898,7 +2898,7 @@ Ordering is lexicographic."
      ;; ウインドウの状態履歴を undo/redo
      ;; -----------------------------------------------------------------------
      (use-package winner
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
@@ -2912,7 +2912,7 @@ Ordering is lexicographic."
      ;; スニペット挿入
      ;; -----------------------------------------------------------------------
      (use-package yasnippet
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :init
@@ -2945,7 +2945,7 @@ Ordering is lexicographic."
      ;; Apache
      ;; -----------------------------------------------------------------------
      (use-package apache-mode
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :mode (("\\.conf\\'" . apache-mode))
@@ -2962,7 +2962,7 @@ Ordering is lexicographic."
      ;; CSS
      ;; -----------------------------------------------------------------------
      (use-package css-mode
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :hook ((css-mode . my-css-mode-initialize))
        :init
@@ -2992,7 +2992,7 @@ Ordering is lexicographic."
      ;; GNU Emacs Lisp
      ;; -----------------------------------------------------------------------
      (use-package elisp-mode
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :hook ((emacs-lisp-mode . my-emacs-lisp-mode-initialize)
               (lisp-interaction-mode . my-emacs-lisp-mode-initialize)
@@ -3043,7 +3043,7 @@ Ordering is lexicographic."
      ;; Haml
      ;; -----------------------------------------------------------------------
      (use-package haml-mode
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :hook ((haml-mode . my-haml-mode-initialize))
@@ -3068,7 +3068,7 @@ Ordering is lexicographic."
      ;; Emacs Lisp インタラクション
      ;; -----------------------------------------------------------------------
      (use-package ielm
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :hook ((ielm-mode-hook . my-ielm-mode-initialize))
        :init
@@ -3085,7 +3085,7 @@ Ordering is lexicographic."
      ;; JavaScript
      ;; -----------------------------------------------------------------------
      (use-package js2-mode
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :mode (("\\.js\\'" . js2-mode)
@@ -3158,7 +3158,7 @@ Ordering is lexicographic."
      ;; JSON
      ;; -----------------------------------------------------------------------
      (use-package json-mode
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :mode (("\\.bowerrc\\'" . json-mode)
@@ -3202,7 +3202,7 @@ Ordering is lexicographic."
      ;; Lisp
      ;; -----------------------------------------------------------------------
      (use-package lisp-mode
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :hook ((lisp-mode . my-lisp-mode-initialize))
        :init
@@ -3234,7 +3234,7 @@ Ordering is lexicographic."
      ;; Markdown
      ;; -----------------------------------------------------------------------
      (use-package markdown-mode
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :hook ((markdown-mode . my-markdown-mode-initialize))
@@ -3283,7 +3283,7 @@ Ordering is lexicographic."
      ;; PHP
      ;; -----------------------------------------------------------------------
      (use-package php-mode
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :hook ((php-mode . my-php-mode-initialize))
@@ -3308,7 +3308,7 @@ Ordering is lexicographic."
      ;; Sass (extension: ".sass")
      ;; -----------------------------------------------------------------------
      (use-package sass-mode
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :mode (("\\.sass\\'" . sass-mode))
@@ -3334,7 +3334,7 @@ Ordering is lexicographic."
      ;; Sass (extension: ".scss")
      ;; -----------------------------------------------------------------------
      (use-package scss-mode
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :hook ((scss-mode . my-scss-mode-initialize))
@@ -3369,7 +3369,7 @@ Ordering is lexicographic."
      ;; SGML, (X)HTML
      ;; -----------------------------------------------------------------------
      (use-package sgml-mode
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :mode (("\\.[sx]?html?\\'" . html-mode))
        :hook ((sgml-mode . my-sgml-mode-initialize)
@@ -3417,7 +3417,7 @@ Ordering is lexicographic."
      ;; TeX
      ;; -----------------------------------------------------------------------
      (use-package tex-mode
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :hook ((tex-mode . my-tex-mode-initialize))
        :init
@@ -3433,7 +3433,7 @@ Ordering is lexicographic."
      ;; Text
      ;; -----------------------------------------------------------------------
      (use-package text-mode
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :hook ((text-mode . my-tex-mode-initialize))
        :init
@@ -3449,7 +3449,7 @@ Ordering is lexicographic."
      ;; Vue.js
      ;; -----------------------------------------------------------------------
      (use-package vue-mode
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t)
 
@@ -3458,7 +3458,7 @@ Ordering is lexicographic."
      ;; XML
      ;; -----------------------------------------------------------------------
      (use-package nxml-mode
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :mode (("\\.xml\\'" . nxml-mode)
               ("\\.plist\\'" . nxml-mode))
@@ -3495,7 +3495,7 @@ Ordering is lexicographic."
      ;; YAML
      ;; -----------------------------------------------------------------------
      (use-package yaml-mode
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :mode (("\\.eslintrc\\'" . nxml-mode))
@@ -3539,7 +3539,7 @@ Ordering is lexicographic."
      ;; EWW (Emacs Web Wowser)
      ;; -----------------------------------------------------------------------
      (use-package eww
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :bind (("C-c C-e" . eww))
        :init
@@ -3555,7 +3555,7 @@ Ordering is lexicographic."
      ;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得・設定
      ;; -----------------------------------------------------------------------
      (use-package exec-path-from-shell
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :demand t
        :init
@@ -3568,7 +3568,7 @@ Ordering is lexicographic."
      ;; JavaScript 開発環境
      ;; -----------------------------------------------------------------------
      (use-package indium
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :demand t
        :hook ((js-mode . indium-interaction-mode)
@@ -3586,7 +3586,7 @@ Ordering is lexicographic."
      ;; nvm 経由での Node.js 利用をサポート
      ;; -----------------------------------------------------------------------
      (use-package nvm
-       ;; :disabled
+       ;; :disabled t
        :ensure t
        :defer t
        :init
@@ -3598,7 +3598,7 @@ Ordering is lexicographic."
      ;; URL ツール
      ;; -----------------------------------------------------------------------
      (use-package url
-       ;; :disabled
+       ;; :disabled t
        :defer t
        :init
        ;; -----------------------------
