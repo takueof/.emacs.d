@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-16T11:09:21+09:00>
+;; Time-stamp: <2019-02-16T11:51:16+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1341,6 +1341,7 @@ See URL `https://github.com/validator/validator'."
        ;; PATCH: temp ファイルのデフォルトコーディングシステムを、
        ;;        強制的に UTF-8 (LF) とする
        ;; -----------------------------
+       ;; オーバーライド
        (defun flycheck-save-buffer-to-file (file-name)
          "Save the contents of the current buffer to FILE-NAME."
          ;; 他の部分は元定義と一致させる
@@ -2008,7 +2009,7 @@ Ordering is lexicographic."
      ;; https://langserver.org/
      ;; -----------------------------------------------------------------------
      (use-package lsp-mode
-       ;; :disabled
+       :disabled ; 現状 `flycheck' が無効化されてしまうため、一旦無効化
        :ensure t
        :defer t
        :hook ((css-mode . lsp)
