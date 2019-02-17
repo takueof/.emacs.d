@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-17T06:12:11+09:00>
+;; Time-stamp: <2019-02-17T19:29:58+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1084,7 +1084,7 @@
 
 
      ;; -----------------------------------------------------------------------
-     ;; 共通コマンドインタプリタ
+     ;; 共通コマンドインタプリタ (Windows ONLY)
      ;; -----------------------------------------------------------------------
      (use-package comint
        ;; :disabled t
@@ -1169,6 +1169,17 @@
         '(company-dabbrev-code-other-buffers t)
         '(company-dabbrev-code-everywhere t)
         '(company-dabbrev-code-ignore-case t)))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; 補完フレームワーク (`company') 拡張（`lsp-mode' サポート）
+     ;; -----------------------------------------------------------------------
+     (use-package company-lsp
+       :disabled t ; 現状 `flycheck' が無効化されてしまうため、一旦無効化
+       :after (:all lsp-mode
+                    company)
+       :ensure t
+       :demand t)
 
 
      ;; -----------------------------------------------------------------------
@@ -1692,7 +1703,7 @@
          (flycheck-define-checker vnu
            "A (X)HTML syntax and style checker using v.NU.
 
-See URL `https://github.com/validator/validator'."
+See also: `https://github.com/validator/validator'."
            :command ("vnu" "--format" "gnu" "--verbose" source)
            :error-patterns
            ;; ファイル名はフルパスで入ってくるため、チェックしない
@@ -2195,7 +2206,7 @@ Set up `compilation-exit-message-function' and run `grep-setup-hook'."
        ;; :disabled t
        :defer t
        ;; FIXME: `after-init-hook' 後に実行した `load-theme' に対応したい
-       ;;        `advice-add' の after で `enable-theme' を実行してもダメ
+       ;;        `advice-add' の :after で `enable-theme' を実行してもダメ
        :hook ((after-init . my-hl-line-initialize))
        :init
        ;; -----------------------------
@@ -2493,6 +2504,7 @@ Ordering is lexicographic."
      ;; -----------------------------------------------------------------------
      (use-package migemo
        ;; :disabled t
+       :after (:all exec-path-from-shell)
        :ensure t
        :demand t
        :bind (:map isearch-mode-map
@@ -2633,7 +2645,7 @@ Ordering is lexicographic."
 
 
      ;; -----------------------------------------------------------------------
-     ;; モードラインからマイナーモードの表示をを隠す
+     ;; モードラインからマイナーモードの表示を隠す
      ;; -----------------------------------------------------------------------
      (use-package rich-minority
        ;; :disabled t
