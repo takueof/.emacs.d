@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-17T22:16:46+09:00>
+;; Time-stamp: <2019-02-18T00:23:39+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -3685,7 +3685,7 @@ Ordering is lexicographic."
            '(if (hash-table-p editorconfig-properties-hash)
                 (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
                        (indent-style (equal indent-style-data "tab")))
-3                  (if (not (equal indent-tabs-mode indent-style))
+                  (if (not (equal indent-tabs-mode indent-style))
                       (setq-local indent-tabs-mode indent-style)))))))
 
 
