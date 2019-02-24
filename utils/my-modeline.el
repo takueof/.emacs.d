@@ -1,7 +1,7 @@
 ;;; my-modeline.el --- 設定 - モードライン -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-17T06:04:49+09:00>
+;; Time-stamp: <2019-02-24T12:25:09+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -31,6 +31,10 @@
 ;; ============================================================================
 ;; 依存解決
 ;; ============================================================================
+;;
+;; FIXME: `cl-substitute' を使わないようにしたい
+;;        どう実装するか模索中
+;;
 (require 'cl-lib nil :noerror)
 
 
@@ -99,7 +103,9 @@
      ;; `mode-line-mule-info' 差替
      (setq-default mode-line-mule-info
                    (cl-substitute '(:eval (my-buffer-coding-system-mnemonic))
-                                  "%z" mode-line-mule-info :test 'equal))))
+                                  "%z"
+                                  mode-line-mule-info
+                                  :test 'equal))))
 
 
 ;; ============================================================================
