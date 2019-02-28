@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-27T08:24:54+09:00>
+;; Time-stamp: <2019-02-28T20:07:07+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -694,7 +694,7 @@
      (use-package printing
        ;; :disabled t
        :demand t
-       :bind (("C-c p p" . pr-interface))
+       :bind (("C-c p i" . pr-interface))
        :init
        ;; -----------------------------
        ;; 起動
@@ -712,8 +712,7 @@
      (use-package ps-print
        ;; :disabled t
        :defer t
-       :bind (("C-c p b" . ps-print-buffer)
-              ("C-c p f" . ps-print-buffer-with-faces))
+       :bind (("C-c p p" . ps-print-buffer-with-faces))
        :hook ((ps-print . my-ps-print-hook-listener))
        :init
        ;; -----------------------------
@@ -721,50 +720,46 @@
        ;;------------------------------
        (custom-set-variables
         ;;
-        ;; 用紙
+        ;; 用紙は A4 サイズ・縦
         ;;
         '(ps-paper-type 'a4)
-        '(ps-landscape-mode nil) ; 縦剥き
+        '(ps-landscape-mode nil)
         ;;
-        ;; 本文フォント
+        ;; monospace な本文フォントを用いさせる
         ;;
         '(ps-font-family 'Courier)
-        '(ps-font-size '(10.0 . 10.0)) ; 縦：10.0pt、横：10.0pt
+        '(ps-font-size '(8.0 . 8.0)) ; pt
         ;;
-        ;; 色
+        ;; カラー印刷を有効にする
         ;;
         '(ps-print-color-p t)
         '(ps-default-fg t)
         '(ps-default-bg t)
         '(ps-use-face-background t)
         ;;
-        ;; プリンターに対する命令
-        ;;
-        '(ps-multibyte-buffer 'non-latin-printer)
-        ;;
-        ;; 行調整
+        ;; 行間を少し空けさせる
         ;;
         '(ps-line-spacing 2.0)
         ;;
-        ;; 行番号
+        ;; 行番号を印刷させる
         ;;
         '(ps-line-number t)
         '(ps-line-number-font "Times-Italic") ; FIXME: Courier にしたい
         ;;
         ;; 水平レイアウト
         ;;
-        '(ps-left-margin (/ (* 72 1.4) 2.54)) ; 14mm（行番号が切れないようにする）
-        '(ps-inter-column (/ (* 72 1.0) 2.54)) ; 10mm
-        '(ps-right-margin (/ (* 72 0.54) 2.54)) ; 5.4mm（ヘッダ・フッタの box 右端が切れないようにする）
+        `(ps-left-margin ,(/ (* 72 1.40) 2.54)) ; 14.0mm（行番号が切れないようにする）
+        `(ps-inter-column ,(/ (* 72 1.00) 2.54)) ; 10.0mm
+        `(ps-right-margin ,(/ (* 72 0.54) 2.54)) ; 5.4mm（ヘッダ・フッタの box 右端が切れないようにする）
         ;;
         ;; 垂直レイアウト
         ;;
-        '(ps-top-margin (/ (* 72 0.9) 2.54)) ; 9mm（ヘッダ box 上端が切れないようにする）
-        '(ps-header-offset (/ (* 72 0.1) 2.54)) ; 1mm
-        '(ps-footer-offset (/ (* 72 0.37) 2.54)) ; 3.7mm（フッタ box 上端へカブらないようにする）
-        '(ps-bottom-margin (/ (* 72 0.55) 2.54)) ; 5.5mm（フッタ box 下端が切れないようにする）
+        `(ps-top-margin ,(/ (* 72 2.95) 2.54)) ; 29.5mm (24.0mm + 5.5mm)（ヘッダ box 上端が切れないようにする・用紙上端～ヘッダ box 上端までの余白を、フッタ box 下端～用紙下端までの長さと同一にする）
+        `(ps-header-offset 0) ; なし
+        `(ps-footer-offset ,(/ (* 72 0.42) 2.54)) ; 4.2mm (0.5mm + 3.7mm)（フッタ box 上端へカブらないようにする・テキスト box 下端～フッタ box 上端までの余白を、ヘッダ box 下端～テキスト box 上端までの長さと同一にする）
+        `(ps-bottom-margin ,(/ (* 72 0.55) 2.54)) ; 5.5mm（フッタ box 下端が切れないようにする）
         ;;
-        ;; ヘッダ
+        ;; ヘッダに情報を追加させる
         ;;
         '(ps-print-header t)
         '(ps-header-lines 2)
@@ -775,10 +770,10 @@
                                 'ps-time-stamp-hh:mm:ss))
         '(ps-header-line-pad 0.15)
         '(ps-header-font-family 'Courier)
-        '(ps-header-font-size '(10 . 10))
-        '(ps-header-title-font-size '(10 . 10))
+        '(ps-header-font-size '(8.0 . 8.0)) ; pt
+        '(ps-header-title-font-size '(8.0 . 8.0)) ; pt
         ;;
-        ;; フッタ
+        ;; フッタに情報を追加させる
         ;;
         '(ps-print-footer t)
         '(ps-footer-lines 1)
@@ -787,8 +782,20 @@
         '(ps-right-footer (list "/pagenumberstring load"))
         '(ps-footer-line-pad 0.15)
         '(ps-footer-font-family 'Courier)
-        '(ps-footer-font-size '(10 . 10))
-        '(ps-footer-title-font-size '(10 . 10)))
+        '(ps-footer-font-size '(8.0 . 8.0)) ; pt
+        '(ps-footer-title-font-size '(8.0 . 8.0)) ; pt
+        ;;
+        ;; Latin-1 外の文字（日本語など）を印刷できるようにする
+        ;;
+        '(ps-multibyte-buffer 'non-latin-printer))
+
+       ;;
+       ;; HACK: `Preview.app' を経由させる (macOS ONLY)
+       ;;
+       (if (member system-type '(darwin))
+           (custom-set-variables
+            '(ps-lpr-command "open")
+            '(ps-lpr-switches '("-f" "-a" "Preview.app"))))
 
        ;; -----------------------------
        ;; 初期化
