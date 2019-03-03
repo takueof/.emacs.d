@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-03-03T11:32:08+09:00>
+;; Time-stamp: <2019-03-04T00:07:30+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -702,30 +702,6 @@
        ;;------------------------------
        (custom-set-variables
         ;;
-        ;; TODO: `ps-lpr-command' と `ps-lpr-switches' だけは、
-        ;;       `:config' の方に移したほうがよい可能性あり？
-        ;;         → 要検証
-        ;;
-        ;;
-        ;; ウインドウシステムごとに、印刷コマンドとオプションを最適化
-        ;;
-        `(ps-lpr-command ,(cond (;; FIXME: プレビューに最適なコマンドを見つけること
-                                 (equal window-system 'w32)
-                                 ps-lpr-command)
-                                (;; HACK: `Preview.app' を経由 (macOS ONLY)
-                                 (equal window-system 'mac)
-                                 "open")
-                                (t
-                                 ps-lpr-command)))
-        `(ps-lpr-switches ',(cond (;; FIXME: プレビューに最適なオプションを見つけること
-                                   (equal window-system 'w32)
-                                   ps-lpr-switches)
-                                  (;; HACK: `Preview.app' を経由 (macOS ONLY)
-                                   (equal window-system 'mac)
-                                   '("-f" "-a" "Preview.app"))
-                                  (t
-                                   ps-lpr-switches)))
-        ;;
         ;; 用紙は A4 サイズ・縦
         ;;
         '(ps-paper-type 'a4)
@@ -805,6 +781,33 @@
          (if (boundp 'ps-header-frame-alist)
              (setcdr (assoc 'border-width ps-header-frame-alist) 0.1)))
        :config
+       ;; -----------------------------
+       ;; デフォルト値
+       ;;------------------------------
+       ;; HACK: `ps-lpr-command' と `ps-lpr-switches' だけは、
+       ;;       デフォルト値を利用する可能性がある関係上、
+       ;;       `:config' で設定する必要がある
+       ;;------------------------------
+       (custom-set-variables
+        ;;
+        ;; ウインドウシステムごとに、印刷コマンドとオプションを最適化
+        ;;
+        `(ps-lpr-command ,(cond (;; FIXME: プレビューに最適なコマンドを見つけること
+                                 (equal window-system 'w32)
+                                 ps-lpr-command)
+                                (;; HACK: `Preview.app' を経由 (macOS ONLY)
+                                 (equal window-system 'mac)
+                                 "open")
+                                (t
+                                 ps-lpr-command)))
+        `(ps-lpr-switches ',(cond (;; FIXME: プレビューに最適なオプションを見つけること
+                                   (equal window-system 'w32)
+                                   ps-lpr-switches)
+                                  (;; HACK: `Preview.app' を経由 (macOS ONLY)
+                                   (equal window-system 'mac)
+                                   '("-f" "-a" "Preview.app"))
+                                  (t
+                                   ps-lpr-switches))))
        ;; -----------------------------
        ;; 初期化
        ;; -----------------------------

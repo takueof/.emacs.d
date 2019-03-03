@@ -1,7 +1,7 @@
 ;;; my-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-17T05:58:50+09:00>
+;; Time-stamp: <2019-03-04T00:23:53+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -145,7 +145,7 @@
 ;;   𠂉𪚲
 
 ;; see also:
-;; `00-utils.el': 独自サポート関数・マクロ定義
+;; `my-utils.el': 独自サポート関数・マクロ定義
 ;; `mule-conf.el': 文字セット定義（`set-fontset-font' 第2引数の定義一覧）
 ;; `mule-diag.el': 文字セット・コーディングシステム用ツール定義
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-Lookup.html
