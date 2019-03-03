@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-28T20:07:07+09:00>
+;; Time-stamp: <2019-03-03T11:32:08+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -689,24 +689,6 @@
 
 
      ;; -----------------------------------------------------------------------
-     ;; 印刷ユーティリティ
-     ;; -----------------------------------------------------------------------
-     (use-package printing
-       ;; :disabled t
-       :demand t
-       :bind (("C-c p i" . pr-interface))
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'pr-update-menus)
-           ;;
-           ;; メニューに項目追加
-           ;;
-           (pr-update-menus +1)))
-
-
-     ;; -----------------------------------------------------------------------
      ;; 印刷 (PostScript)
      ;; -----------------------------------------------------------------------
      (use-package ps-print
@@ -719,6 +701,30 @@
        ;; デフォルト値
        ;;------------------------------
        (custom-set-variables
+        ;;
+        ;; TODO: `ps-lpr-command' と `ps-lpr-switches' だけは、
+        ;;       `:config' の方に移したほうがよい可能性あり？
+        ;;         → 要検証
+        ;;
+        ;;
+        ;; ウインドウシステムごとに、印刷コマンドとオプションを最適化
+        ;;
+        `(ps-lpr-command ,(cond (;; FIXME: プレビューに最適なコマンドを見つけること
+                                 (equal window-system 'w32)
+                                 ps-lpr-command)
+                                (;; HACK: `Preview.app' を経由 (macOS ONLY)
+                                 (equal window-system 'mac)
+                                 "open")
+                                (t
+                                 ps-lpr-command)))
+        `(ps-lpr-switches ',(cond (;; FIXME: プレビューに最適なオプションを見つけること
+                                   (equal window-system 'w32)
+                                   ps-lpr-switches)
+                                  (;; HACK: `Preview.app' を経由 (macOS ONLY)
+                                   (equal window-system 'mac)
+                                   '("-f" "-a" "Preview.app"))
+                                  (t
+                                   ps-lpr-switches)))
         ;;
         ;; 用紙は A4 サイズ・縦
         ;;
@@ -787,29 +793,38 @@
         ;;
         ;; Latin-1 外の文字（日本語など）を印刷できるようにする
         ;;
+        ;; '(ps-multibyte-buffer 'bdf-font) ;; FIXME: ASCII が設定されていないと怒られる問題を解決する必要あり
         '(ps-multibyte-buffer 'non-latin-printer))
-
-       ;;
-       ;; HACK: `Preview.app' を経由させる (macOS ONLY)
-       ;;
-       (if (member system-type '(darwin))
-           (custom-set-variables
-            '(ps-lpr-command "open")
-            '(ps-lpr-switches '("-f" "-a" "Preview.app"))))
 
        ;; -----------------------------
        ;; 初期化
        ;; -----------------------------
        (defun my-ps-print-hook-listener ()
-         "Initialize `ps-print' when load hook `ps-print-hook'."
-
-         ;; FIXME: 長い行の右端が切れてしまう問題を解決しなければならない
-         ;;        いちいち改行をカレントバッファへ明示的に入れる方法はナシで
-         ;;        プリント前処理 temp バッファを作ればいいかもしれないが……？
-
+         "Initialize `ps-print' when load `ps-print-hook'."
          ;; 極限まで細くする
          (if (boundp 'ps-header-frame-alist)
-             (setcdr (assoc 'border-width ps-header-frame-alist) 0.1))))
+             (setcdr (assoc 'border-width ps-header-frame-alist) 0.1)))
+       :config
+       ;; -----------------------------
+       ;; 初期化
+       ;; -----------------------------
+       ;;
+       ;; FIXME: ASCII が設定されていないと怒られる問題を解決する必要あり
+       ;;
+       ;; (eval-after-load 'ps-bdf
+       ;;   '(eval-after-load 'ps-mule
+       ;;      '(eval-after-load 'my-utils
+       ;;         '(progn
+       ;;            (if (boundp 'bdf-directory-list)
+       ;;                (add-to-list 'bdf-directory-list (convert-standard-filename (expand-file-name "~/bdf"))))
+       ;;            (if (boundp 'ps-mule-font-info-database)
+       ;;                (setq ps-mule-font-info-database
+       ;;                      '((unicode
+       ;;                         (normal bdf "migu-1m.bdf")
+       ;;                         (bold bdf "migu-1m-bold.bdf")
+       ;;                         (italic bdf "migu-1m-italic.bdf")
+       ;;                         (bold-italic bdf "migu-1m-bold-italic.bdf")))))))))
+       )
 
 
      ;; -----------------------------------------------------------------------
