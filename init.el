@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-03-04T00:07:30+09:00>
+;; Time-stamp: <2019-03-04T23:53:15+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -536,6 +536,7 @@
                                       "C:/programs"))
            (paths `(,(concat program-files-dir-x86 "/Aspell/bin")
                     "C:/programs/cmigemo/bin"
+                    "C:/programs/Ghostgum/gsview"
                     "C:/programs/cygwin/bin")))
       (dolist (path paths)
         (setq path (convert-standard-filename path))
@@ -792,17 +793,19 @@
         ;;
         ;; ウインドウシステムごとに、印刷コマンドとオプションを最適化
         ;;
-        `(ps-lpr-command ,(cond (;; FIXME: プレビューに最適なコマンドを見つけること
+        `(ps-lpr-command ,(cond (;; HACK: `GSview' を経由 (Windows ONLY)
                                  (equal window-system 'w32)
-                                 ps-lpr-command)
+                                 (or (executable-find "gsview64")
+                                     (executable-find "gsview")
+                                     "gsview"))
                                 (;; HACK: `Preview.app' を経由 (macOS ONLY)
                                  (equal window-system 'mac)
                                  "open")
                                 (t
                                  ps-lpr-command)))
-        `(ps-lpr-switches ',(cond (;; FIXME: プレビューに最適なオプションを見つけること
+        `(ps-lpr-switches ',(cond (;; HACK: `GSview' を経由 (Windows ONLY)
                                    (equal window-system 'w32)
-                                   ps-lpr-switches)
+                                   nil)
                                   (;; HACK: `Preview.app' を経由 (macOS ONLY)
                                    (equal window-system 'mac)
                                    '("-f" "-a" "Preview.app"))
