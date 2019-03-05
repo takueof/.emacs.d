@@ -1,7 +1,7 @@
 ;;; my-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-03-04T00:23:53+09:00>
+;; Time-stamp: <2019-03-05T10:25:53+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -123,7 +123,7 @@
 ;; https://internet.watch.impress.co.jp/www/column/ogata/news4.htm
 ;; http://charset.7jp.net/sjis.html
 
-;; JIS X 0213:2004
+;; JIS X 0213:2004 (`japanese-jisx0213.2004-1' and `japanese-jisx0213-2')
 ;;
 ;; 字形変更：
 ;;   逢芦飴溢茨鰯淫迂厩噂餌襖迦牙廻恢晦蟹葛鞄釜翰翫徽
@@ -143,6 +143,11 @@
 ;;
 ;; 第4水準（一部・2面）：
 ;;   𠂉𪚲
+
+;; アラビア文字
+;;
+;; 表示例（一部）：
+;; ء آ أ ؤ إ ئ ا ب ة ت ث ج ح خ د
 
 ;; see also:
 ;; `my-utils.el': 独自サポート関数・マクロ定義
@@ -295,6 +300,25 @@
                                                                         "Droid Sans Mono"
                                                                         "Tahoma"
                                                                         "Monospace")))
+  ;; アラビア文字：Unicode 直接指定
+  ;;               `cp858' との重複を避けるため、`cp1256' による指定はしない
+  (dolist (range '((cons #x00600 #x006FF) ; U+0600-U+06FF (Arabic)
+                   (cons #x00750 #x0077F) ; U+0750–U+077F (Arabic Supplement)
+                   (cons #x008A0 #x008FF) ; U+08A0–U+08FF (Arabic Extended-A)
+                   (cons #x0FB50 #x0FDFF) ; U+FB50–U+FDFF (Arabic Presentation Forms-A)
+                   (cons #x0FE70 #X0FEFF) ; U+FE70–U+FEFF (Arabic Presentation Forms-B)
+                   (cons #x10E60 #x10E7F) ; U+10E60–U+10E7F (Rumi Numeral Symbols)
+                   (cons #x1EC70 #x1ECBF) ; U+1EC70–U+1ECBF (Indic Siyaq Numbers)
+                   (cons #x1EE00 #x1EEFF))) ; U+1EE00-U+1EEFF (Arabic Mathematical Alphabetic Symbols)
+    (my-set-fontset-font-safe "fontset-programming"
+                              range
+                              (font-spec :family (my-fallback-font-family "Baghdad"
+                                                                          "Geeza Pro"
+                                                                          "Al Bayan"
+                                                                          "DecoType Naskh"
+                                                                          "Microsoft Sans Serif"
+                                                                          "Tahoma"
+                                                                          "Arial"))))
   ;; 日本語：JIS X 0213:2004
   (my-set-fontset-font-safe "fontset-programming"
                             'japanese-jisx0213.2004-1
@@ -469,6 +493,25 @@
                             (font-spec :family (my-fallback-font-family "Ayuthaya"
                                                                         "Droid Sans Mono"
                                                                         "Tahoma")))
+  ;; アラビア文字：Unicode 直接指定
+  ;;               `cp858' との重複を避けるため、`cp1256' による指定はしない
+  (dolist (range '((cons #x00600 #x006FF) ; U+0600-U+06FF (Arabic)
+                   (cons #x00750 #x0077F) ; U+0750–U+077F (Arabic Supplement)
+                   (cons #x008A0 #x008FF) ; U+08A0–U+08FF (Arabic Extended-A)
+                   (cons #x0FB50 #x0FDFF) ; U+FB50–U+FDFF (Arabic Presentation Forms-A)
+                   (cons #x0FE70 #X0FEFF) ; U+FE70–U+FEFF (Arabic Presentation Forms-B)
+                   (cons #x10E60 #x10E7F) ; U+10E60–U+10E7F (Rumi Numeral Symbols)
+                   (cons #x1EC70 #x1ECBF) ; U+1EC70–U+1ECBF (Indic Siyaq Numbers)
+                   (cons #x1EE00 #x1EEFF))) ; U+1EE00-U+1EEFF (Arabic Mathematical Alphabetic Symbols)
+    (my-set-fontset-font-safe "fontset-programmingBMP"
+                              range
+                              (font-spec :family (my-fallback-font-family "Baghdad"
+                                                                          "Geeza Pro"
+                                                                          "Al Bayan"
+                                                                          "DecoType Naskh"
+                                                                          "Microsoft Sans Serif"
+                                                                          "Tahoma"
+                                                                          "Arial"))))
   ;; 日本語：JIS X 0213:2004
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'japanese-jisx0213.2004-1
