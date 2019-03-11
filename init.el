@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-03-11T15:04:43+09:00>
+;; Time-stamp: <2019-03-11T15:17:33+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -810,7 +810,6 @@
          ;; 極限まで細くする
          (if (boundp 'ps-header-frame-alist)
              (setcdr (assoc 'border-width ps-header-frame-alist) 0.1)))
-
        :config
        ;; -----------------------------
        ;; デフォルト値
