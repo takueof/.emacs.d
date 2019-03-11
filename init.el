@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-03-04T23:53:15+09:00>
+;; Time-stamp: <2019-03-11T15:04:43+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -690,7 +690,7 @@
 
 
      ;; -----------------------------------------------------------------------
-     ;; 印刷 (PostScript)
+     ;; PostScript（印刷）
      ;; -----------------------------------------------------------------------
      (use-package ps-print
        ;; :disabled t
@@ -703,15 +703,83 @@
        ;;------------------------------
        (custom-set-variables
         ;;
-        ;; 用紙は A4 サイズ・縦
+        ;; エラーは紙媒体・システム両方に送信
+        ;;
+        '(ps-error-handler-message 'paper-and-system)
+        ;;
+        ;; 用紙は A4 サイズ・縦・回転なし
         ;;
         '(ps-paper-type 'a4)
         '(ps-landscape-mode nil)
+        '(ps-print-upside-down nil)
         ;;
-        ;; monospace な本文フォントを用いさせる
+        ;; 全ページを印刷
+        ;;
+        '(ps-selected-pages nil)
+        '(ps-even-or-odd-pages nil)
+        ;;
+        ;; コントロール文字を認識させない（非 ASCII 文字対策）
+        ;;
+        '(ps-print-control-characters nil)
+        ;;
+        ;; 用紙1枚につき1ページを印刷
+        ;;
+        '(ps-n-up-printing 1)
+        ;;
+        ;; シートの罫線とページの間に余白を設ける
+        ;;
+        `(ps-n-up-margin ,(/ (* 72 1.00) 2.54)) ; 10.0mm
+        ;;
+        ;; 行番号を印刷させる
+        ;;
+        '(ps-line-number t)
+        '(ps-line-number-step 1)
+        '(ps-line-number-start 1)
+        ;;
+        ;; 水平レイアウト
+        ;;
+        `(ps-left-margin ,(/ (* 72 1.40) 2.54)) ; 14.0mm（行番号が切れないようにする）
+        `(ps-inter-column ,(/ (* 72 1.00) 2.54)) ; 10.0mm
+        `(ps-right-margin ,(/ (* 72 0.54) 2.54)) ; 5.4mm（ヘッダ・フッタの box 右端が切れないようにする）
+        ;;
+        ;; 垂直レイアウト
+        ;;
+        `(ps-bottom-margin ,(/ (* 72 0.55) 2.54)) ; 5.5mm（フッタ box 下端が切れないようにする）
+        `(ps-top-margin ,(/ (* 72 2.95) 2.54)) ; 29.5mm (24.0mm + 5.5mm)（ヘッダ box 上端が切れないようにする・用紙上端～ヘッダ box 上端までの余白を、フッタ box 下端～用紙下端までの長さと同一にする）
+        `(ps-header-offset 0) ; なし
+        '(ps-header-line-pad 0.15)
+        `(ps-footer-offset ,(/ (* 72 0.42) 2.54)) ; 4.2mm (0.5mm + 3.7mm)（フッタ box 上端へカブらないようにする・テキスト box 下端～フッタ box 上端までの余白を、ヘッダ box 下端～テキスト box 上端までの長さと同一にする）
+        '(ps-footer-line-pad 0.15)
+        ;;
+        ;; ヘッダに情報を追加させる
+        ;;
+        '(ps-print-header t)
+        '(ps-print-header-frame t)
+        '(ps-header-lines 2)
+        '(ps-left-header (list 'ps-get-buffer-name
+                               'ps-header-dirpart))
+        '(ps-right-header (list 'ps-time-stamp-yyyy-mm-dd
+                                'ps-time-stamp-hh:mm:ss))
+        ;;
+        ;; フッタに情報を追加させる
+        ;;
+        '(ps-print-footer t)
+        '(ps-footer-lines 1)
+        '(ps-print-footer-frame t)
+        '(ps-left-footer nil)
+        '(ps-right-footer (list "/pagenumberstring load"))
+        ;;
+        ;; monospace なフォントを用いさせる
         ;;
         '(ps-font-family 'Courier)
         '(ps-font-size '(8.0 . 8.0)) ; pt
+        '(ps-header-font-family 'Courier)
+        '(ps-header-font-size '(8.0 . 8.0)) ; pt
+        '(ps-header-title-font-size '(8.0 . 8.0)) ; pt
+        '(ps-footer-font-family 'Courier)
+        '(ps-footer-font-size '(8.0 . 8.0)) ; pt
+        '(ps-line-number-font "Courier") ; "Times-Italic"
+        '(ps-line-number-font-size 6.0) ; pt
         ;;
         ;; カラー印刷を有効にする
         ;;
@@ -724,54 +792,15 @@
         ;;
         '(ps-line-spacing 2.0)
         ;;
-        ;; 行番号を印刷させる
+        ;; 段落間は空けさせない
         ;;
-        '(ps-line-number t)
-        '(ps-line-number-font "Times-Italic") ; FIXME: Courier にしたい
-        ;;
-        ;; 水平レイアウト
-        ;;
-        `(ps-left-margin ,(/ (* 72 1.40) 2.54)) ; 14.0mm（行番号が切れないようにする）
-        `(ps-inter-column ,(/ (* 72 1.00) 2.54)) ; 10.0mm
-        `(ps-right-margin ,(/ (* 72 0.54) 2.54)) ; 5.4mm（ヘッダ・フッタの box 右端が切れないようにする）
-        ;;
-        ;; 垂直レイアウト
-        ;;
-        `(ps-top-margin ,(/ (* 72 2.95) 2.54)) ; 29.5mm (24.0mm + 5.5mm)（ヘッダ box 上端が切れないようにする・用紙上端～ヘッダ box 上端までの余白を、フッタ box 下端～用紙下端までの長さと同一にする）
-        `(ps-header-offset 0) ; なし
-        `(ps-footer-offset ,(/ (* 72 0.42) 2.54)) ; 4.2mm (0.5mm + 3.7mm)（フッタ box 上端へカブらないようにする・テキスト box 下端～フッタ box 上端までの余白を、ヘッダ box 下端～テキスト box 上端までの長さと同一にする）
-        `(ps-bottom-margin ,(/ (* 72 0.55) 2.54)) ; 5.5mm（フッタ box 下端が切れないようにする）
-        ;;
-        ;; ヘッダに情報を追加させる
-        ;;
-        '(ps-print-header t)
-        '(ps-header-lines 2)
-        '(ps-print-header-frame t)
-        '(ps-left-header (list 'ps-get-buffer-name
-                               'ps-header-dirpart))
-        '(ps-right-header (list 'ps-time-stamp-yyyy-mm-dd
-                                'ps-time-stamp-hh:mm:ss))
-        '(ps-header-line-pad 0.15)
-        '(ps-header-font-family 'Courier)
-        '(ps-header-font-size '(8.0 . 8.0)) ; pt
-        '(ps-header-title-font-size '(8.0 . 8.0)) ; pt
-        ;;
-        ;; フッタに情報を追加させる
-        ;;
-        '(ps-print-footer t)
-        '(ps-footer-lines 1)
-        '(ps-print-footer-frame t)
-        '(ps-left-footer nil)
-        '(ps-right-footer (list "/pagenumberstring load"))
-        '(ps-footer-line-pad 0.15)
-        '(ps-footer-font-family 'Courier)
-        '(ps-footer-font-size '(8.0 . 8.0)) ; pt
-        '(ps-footer-title-font-size '(8.0 . 8.0)) ; pt
+        '(ps-paragraph-spacing 0)
         ;;
         ;; Latin-1 外の文字（日本語など）を印刷できるようにする
+        ;; フォント一覧に `ps-mule-font-info-database-default' を使うよう強制
         ;;
-        ;; '(ps-multibyte-buffer 'bdf-font) ;; FIXME: ASCII が設定されていないと怒られる問題を解決する必要あり
-        '(ps-multibyte-buffer 'non-latin-printer))
+        '(ps-multibyte-buffer nil))
+
 
        ;; -----------------------------
        ;; 初期化
@@ -781,6 +810,7 @@
          ;; 極限まで細くする
          (if (boundp 'ps-header-frame-alist)
              (setcdr (assoc 'border-width ps-header-frame-alist) 0.1)))
+
        :config
        ;; -----------------------------
        ;; デフォルト値
@@ -811,26 +841,64 @@
                                    '("-f" "-a" "Preview.app"))
                                   (t
                                    ps-lpr-switches))))
+
        ;; -----------------------------
-       ;; 初期化
+       ;; PostScript (mule)
        ;; -----------------------------
-       ;;
-       ;; FIXME: ASCII が設定されていないと怒られる問題を解決する必要あり
-       ;;
-       ;; (eval-after-load 'ps-bdf
-       ;;   '(eval-after-load 'ps-mule
-       ;;      '(eval-after-load 'my-utils
-       ;;         '(progn
-       ;;            (if (boundp 'bdf-directory-list)
-       ;;                (add-to-list 'bdf-directory-list (convert-standard-filename (expand-file-name "~/bdf"))))
-       ;;            (if (boundp 'ps-mule-font-info-database)
-       ;;                (setq ps-mule-font-info-database
-       ;;                      '((unicode
-       ;;                         (normal bdf "migu-1m.bdf")
-       ;;                         (bold bdf "migu-1m-bold.bdf")
-       ;;                         (italic bdf "migu-1m-italic.bdf")
-       ;;                         (bold-italic bdf "migu-1m-bold-italic.bdf")))))))))
-       )
+       ;; `ps-mule-font-info-database-default' が非 `autoload'
+       ;; ゆえに、明示的なロードが必要
+       (use-package ps-mule
+         ;; :disabled t
+         :demand t
+         :config
+         ;; ---------------------------
+         ;; PostScript (BDF: Glyph Bitmap Distribution Format)
+         ;; ---------------------------
+         ;; `ps-mule-font-info-database-bdf' が非 `autoload'
+         ;; ゆえに、明示的なロードが必須
+         (use-package ps-bdf
+           ;; :disabled t
+           :demand t
+           :config
+           ;;
+           ;; Latin-1 外の文字（日本語など）を印刷できるようにする
+           ;;
+           (if (boundp 'bdf-directory-list)
+               ;; 自分用 BDF フォントディレクトリを追加
+               (add-to-list 'bdf-directory-list (convert-standard-filename (expand-file-name "~/bdf"))))
+           (if (and (boundp 'ps-mule-font-info-database-default)
+                    (boundp 'ps-mule-font-info-database-bdf))
+               ;; 自分用 BDF フォントを追加
+               ;;
+               ;; `ps-mule-font-info-database-bdf' が `ps-mule.el' で
+               ;; `defconst' 定義されていることを考慮し、
+               ;; 確実に定義された後で設定
+               (let ((database-bdf (copy-tree ps-mule-font-info-database-bdf)))
+                 ;; 不要なアイテムをすべて除去
+                 (setq database-bdf (assq-delete-all 'jisx0201 database-bdf))
+                 (setq database-bdf (assq-delete-all 'japanese-jisx0208 database-bdf))
+                 (setq database-bdf (assq-delete-all 'japanese-jisx0212 database-bdf))
+                 ;; 自分用 BDF フォントを追加
+                 ;;
+                 ;; FIXME: 現状の設定だと日本語文字が文字化けする
+                 ;;        対策法を見つけること
+                 ;;
+                 (setq database-bdf (append '((japanese-jisx0213-2
+                                               (normal bdf "migu-1m.bdf")
+                                               (bold bdf "migu-1m-bold.bdf")))
+                                            '((japanese-jisx0213.2004-1
+                                               (normal bdf "migu-1m.bdf")
+                                               (bold bdf "migu-1m-bold.bdf")))
+                                            '((unicode-bmp
+                                               (normal bdf "migu-1m.bdf")
+                                               (bold bdf "migu-1m-bold.bdf")))
+                                            '((iso-8859-1
+                                               (normal bdf "migu-1m.bdf")
+                                               (bold bdf "migu-1m-bold.bdf")))
+                                            database-bdf))
+                 ;; 設定
+                 (custom-set-variables
+                  `(ps-mule-font-info-database-default ',database-bdf)))))))
 
 
      ;; -----------------------------------------------------------------------
