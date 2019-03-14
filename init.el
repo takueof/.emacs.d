@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-03-11T15:17:33+09:00>
+;; Time-stamp: <2019-03-14T09:32:45+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -627,6 +627,24 @@
        (eval-after-load 'my-utils
          '(if (fboundp 'indium-interaction-mode)
               (my-change-lighter indium-interaction-mode nil))))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; スペルチェッカ
+     ;; -----------------------------------------------------------------------
+     (use-package ispell
+       ;; :disabled t
+       :defer t
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;; -----------------------------
+       (custom-set-variables
+        '(ispell-dictionary "english")
+        '(ispell-extra-args '("--sug-mode=fast"
+                              "--run-together"
+                              "--run-together-limit=5"
+                              "--run-together-min=2"))))
 
 
      ;; -----------------------------------------------------------------------
@@ -1588,10 +1606,10 @@
      (use-package eldoc
        ;; :disabled t
        :defer t
-       :hook ((lisp-mode . eldoc-mode)
-              (emacs-lisp-mode . eldoc-mode)
+       :hook ((emacs-lisp-mode . eldoc-mode)
+              (ielm-mode . eldoc-mode)
               (lisp-interaction-mode . eldoc-mode)
-              (ielm-mode . eldoc-mode))
+              (lisp-mode . eldoc-mode))
        :init
        ;; -----------------------------
        ;; デフォルト値
@@ -1610,10 +1628,10 @@
        :after (:all eldoc)
        :ensure t
        :defer t
-       :hook ((lisp-mode . my-eldoc-eval-initialize)
-              (emacs-lisp-mode . my-eldoc-eval-initialize)
+       :hook ((emacs-lisp-mode . my-eldoc-eval-initialize)
+              (ielm-mode . my-eldoc-eval-initialize)
               (lisp-interaction-mode . my-eldoc-eval-initialize)
-              (ielm-mode . my-eldoc-eval-initialize))
+              (lisp-mode . my-eldoc-eval-initialize))
        :init
        ;; -----------------------------
        ;; デフォルト値
@@ -1928,6 +1946,35 @@ See also: `https://github.com/validator/validator'."
        (eval-after-load 'my-utils
          '(if (fboundp 'flymake-mode)
               (my-change-lighter flymake-mode nil))))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; 自動スペルチェッカ
+     ;; -----------------------------------------------------------------------
+     (use-package flyspell
+       ;; :disabled t
+       :defer t
+       :hook (;; Full
+              (markdown-mode . flyspell-mode)
+              (org-mode . flyspell-mode)
+              (text-mode . flyspell-mode)
+              ;; Comments ONLY
+              (css-mode . flyspell-prog-mode)
+              (emacs-lisp-mode . flyspell-prog-mode)
+              (html-mode . flyspell-prog-mode)
+              (ielm-mode . flyspell-prog-mode)
+              (js2-mode . flyspell-prog-mode)
+              (lisp-interaction-mode . flyspell-prog-mode)
+              (lisp-mode . flyspell-prog-mode)
+              (php-mode . flyspell-prog-mode)
+              (sass-mode . flyspell-prog-mode)
+              (scss-mode . flyspell-prog-mode))
+       :init
+       ;; -----------------------------
+       ;; デフォルト値
+       ;; -----------------------------
+       (custom-set-variables
+        '(flyspell-delay 1.0)))
 
 
      ;; -----------------------------------------------------------------------
@@ -3629,8 +3676,8 @@ Ordering is lexicographic."
        ;; :disabled t
        :defer t
        :mode (("\\.[sx]?html?\\'" . html-mode))
-       :hook ((sgml-mode . my-sgml-mode-initialize)
-              (html-mode . my-html-mode-initialize))
+       :hook ((html-mode . my-html-mode-initialize)
+              (sgml-mode . my-sgml-mode-initialize))
        :init
        ;; -----------------------------
        ;; 初期化
