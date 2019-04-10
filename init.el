@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-03-14T09:32:45+09:00>
+;; Time-stamp: <2019-04-10T12:53:57+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -3747,6 +3747,18 @@ Ordering is lexicographic."
        (defun my-text-mode-initialize ()
          "Initialize `text-mode' before file load."
          (setq-local truncate-lines nil)))
+
+
+     ;; -----------------------------------------------------------------------
+     ;; Template Toolkit (tt, written by Perl)
+     ;;
+     ;; see also:
+     ;; http://tt2.org/
+     ;; -----------------------------------------------------------------------
+     (use-package tt-mode
+       ;; :disabled t
+       :ensure t
+       :defer t)
 
 
      ;; -----------------------------------------------------------------------
