@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-04-10T12:53:57+09:00>
+;; Time-stamp: <2019-04-30T22:07:46+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2609,19 +2609,22 @@ Ordering is lexicographic."
      ;; https://langserver.org/
      ;; -----------------------------------------------------------------------
      (use-package lsp-mode
-       :disabled t ; 現状 `flycheck' が無効化されてしまうため、一旦無効化
+       ;; :disabled t
        :ensure t
        :defer t
-       :hook ((css-mode . lsp)
-              (html-mode . lsp)
-              (js-mode . lsp)
-              (js2-mode . lsp)
-              (json-mode . lsp)
-              (php-mode . lsp)
-              (sass-mode . lsp)
-              (scss-mode . lsp)
-              (sh-mode . lsp)
-              (vue-mode . lsp))
+       :hook (;; 現状 `flycheck' が無効化されてしまうため、一部を除き無効化
+              ;; (css-mode . lsp)
+              ;; (html-mode . lsp)
+              ;; (js-mode . lsp)
+              ;; (js2-mode . lsp)
+              ;; (json-mode . lsp)
+              ;; (php-mode . lsp)
+              ;; (sass-mode . lsp)
+              ;; (scss-mode . lsp)
+              ;; (sh-mode . lsp)
+              (typescript-mode . lsp)
+              ;; (vue-mode . lsp)
+              )
        :init
        ;; -----------------------------
        ;; デフォルト値
@@ -2640,7 +2643,7 @@ Ordering is lexicographic."
      ;; LSP (Language Server Protocol) クライアント拡張 (UI)
      ;; -----------------------------------------------------------------------
      (use-package lsp-ui
-       :disabled t ; 現状 `flycheck' が無効化されてしまうため、一旦無効化
+       ;; :disabled t
        :after (:all lsp-mode)
        :ensure t
        :demand t
