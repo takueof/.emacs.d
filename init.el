@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-06-28T12:36:12+09:00>
+;; Time-stamp: <2019-06-28T13:08:05+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1411,9 +1411,9 @@
          :when (member system-type '(ms-dos windows-nt))
          :after find-dired
          :config
-         ;; `:custom' で設定すると `find-exec-terminator' の展開が先になり
-         ;; エラーとなる
-         ;; 仕方なく `:config' で泥臭く設定しなければならない
+         ;; HACK: `:custom' で設定すると `find-exec-terminator' の展開が
+         ;;       `find-dired' の `eval-after-load' より先になりエラーとなる
+         ;;       仕方なく `:config' で泥臭く設定しなければならない
          (custom-set-variables
           `(find-ls-option ,(cons (format "-exec %s -ld {} %s"
                                           (executable-find "ls")
