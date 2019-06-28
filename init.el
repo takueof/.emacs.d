@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-04-30T22:07:46+09:00>
+;; Time-stamp: <2019-06-28T12:36:12+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -25,6 +25,9 @@
 ;;
 ;; This file is VERY LONG.
 ;; So, I DARE USE file local variables in the FIRST LINE.
+;;
+;; Show initialization time:
+;; (emacs-init-time)
 
 ;;; Code:
 
@@ -123,11 +126,6 @@
 ;; `ido-undo-merge-work-directory' 実行のため <C-z> を押しすぎた場合、
 ;; `suspend-frame' が起動しないよう配慮
 (global-unset-key (kbd "C-z"))
-
-;; `suspend-frame' を滅多に押さないキーバインドに変更することで、
-;; 最小化の誤爆を防ぐ
-(if (fboundp 'suspend-frame)
-    (global-set-key (kbd "C-c C-z C-z") #'suspend-frame))
 
 ;; ヘルプ表示を割り当てなおす
 (if (fboundp 'help-command)
@@ -566,384 +564,287 @@
 
 
 ;; ============================================================================
-;; 詳細設定補助 (by `use-package')
+;; 詳細設定補助 (by `leaf')
 ;; ============================================================================
 (eval-after-load 'package
   '(progn
      ;; `package' が必ず使える状況を前提とする
-     (if (not (package-installed-p 'use-package))
-         (package-install 'use-package))
+     (if (not (package-installed-p 'leaf))
+         (package-install 'leaf))
 
-     (require 'use-package nil :noerror)))
+     (require 'leaf nil :noerror)))
 
 
 ;; ============================================================================
-;; 詳細設定（機能、非メジャー＆マイナーモード）
+;; 詳細設定
+;;
+;; see also:
+;; https://github.com/conao3/leaf.el
+;; https://qiita.com/conao3/items/dc88bdadb0523ef95878
 ;; ============================================================================
-(eval-after-load 'use-package
+(eval-after-load 'leaf
   '(progn
-     ;; -----------------------------------------------------------------------
-     ;; EWW (Emacs Web Wowser)
-     ;; -----------------------------------------------------------------------
-     (use-package eww
-       ;; :disabled t
-       :defer t
-       :bind (("C-c C-e" . eww))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (custom-set-variables
-        '(eww-search-prefix "https://www.google.co.jp/search?&q=")
-        '(eww-history-limit 100)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得・設定
-     ;; -----------------------------------------------------------------------
-     (use-package exec-path-from-shell
-       ;; :disabled t
-       :ensure t
-       :demand t
-       :init
-       (if (and (member window-system '(mac ns x))
-                (fboundp 'exec-path-from-shell-initialize))
-           (exec-path-from-shell-initialize)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; JavaScript 開発環境
-     ;; -----------------------------------------------------------------------
-     (use-package indium
-       ;; :disabled t
-       :ensure t
-       :demand t
-       :hook ((js-mode . indium-interaction-mode)
-              (js2-mode . indium-interaction-mode))
+     ;; =======================================================================
+     ;; 未分類パッケージ（非メジャー／マイナーモード）
+     ;; =======================================================================
+     (leaf *packages
        :config
-       ;; -----------------------------
-       ;; lighter
-       ;; -----------------------------
-       (eval-after-load 'my-utils
-         '(if (fboundp 'indium-interaction-mode)
-              (my-change-lighter indium-interaction-mode nil))))
+       ;; ---------------------------------------------------------------------
+       ;; `leaf' キーワード群
+       ;; ---------------------------------------------------------------------
+       (leaf leaf-keywords
+         :package t
+         :config
+         (leaf-keywords-init))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; スペルチェッカ
-     ;; -----------------------------------------------------------------------
-     (use-package ispell
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (custom-set-variables
-        '(ispell-dictionary "english")
-        '(ispell-extra-args '("--sug-mode=fast"
-                              "--run-together"
-                              "--run-together-limit=5"
-                              "--run-together-min=2"))))
+       ;; ---------------------------------------------------------------------
+       ;; EWW (Emacs Web Wowser, Web Browser)
+       ;; ---------------------------------------------------------------------
+       (leaf eww
+         :bind (("C-c C-e" . eww))
+         :custom `((eww-search-prefix . "https://www.google.co.jp/search?&q=")
+                   (eww-history-limit . 100)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; Git インターフェース
-     ;; -----------------------------------------------------------------------
-     (use-package magit
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :bind (("C-x g" . magit-status))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; カレントバッファを表示しているウインドウに表示させる
-        ;;
-        '(magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)))
+       ;; ---------------------------------------------------------------------
+       ;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得・設定
+       ;; ---------------------------------------------------------------------
+       (leaf exec-path-from-shell
+         :when (member window-system '(mac ns x))
+         :package t
+         :require t
+         :config
+         (if (fboundp 'exec-path-from-shell-initialize)
+             (exec-path-from-shell-initialize)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; NSM (Network Security Manager)
-     ;; -----------------------------------------------------------------------
-     (use-package nsm
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(nsm-settings-file ,(convert-standard-filename "~/.emacs.network-security.data"))))
+       ;; ---------------------------------------------------------------------
+       ;; スペルチェッカ
+       ;; ---------------------------------------------------------------------
+       (leaf ispell
+         :custom `((ispell-dictionary . "english")
+                   (ispell-extra-args . '("--sug-mode=fast"
+                                          "--run-together"
+                                          "--run-together-limit=5"
+                                          "--run-together-min=2"))))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; nvm 経由での Node.js 利用をサポート
-     ;; -----------------------------------------------------------------------
-     (use-package nvm
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :init
-       (if (fboundp 'nvm-use-for)
-           ;; `~/.nvmrc' がなければ何もしない
-           (ignore-errors (nvm-use-for))))
+       ;; ---------------------------------------------------------------------
+       ;; Git インターフェース
+       ;; ---------------------------------------------------------------------
+       (leaf magit
+         :package t
+         :bind (("C-x g" . magit-status))
+         :custom `(;; カレントバッファを表示しているウインドウに表示させる
+                   (magit-display-buffer-function . 'magit-display-buffer-same-window-except-diff-v1)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; カーソルの移動履歴
-     ;; -----------------------------------------------------------------------
-     (use-package point-undo
-       ;; :disabled t
-       :ensure t
-       :demand t
-       :bind (("M-]" . point-undo)
-              ("M-[" . point-redo)))
+       ;; ---------------------------------------------------------------------
+       ;; NSM (Network Security Manager)
+       ;; ---------------------------------------------------------------------
+       (leaf nsm
+         :custom `(;; ローカル環境にのみ保存
+                   (nsm-settings-file . "~/.emacs.network-security.data")))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; PostScript（印刷）
-     ;; -----------------------------------------------------------------------
-     (use-package ps-print
-       ;; :disabled t
-       :defer t
-       :bind (("C-c p p" . ps-print-buffer-with-faces))
-       :hook ((ps-print . my-ps-print-hook-listener))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; エラーは紙媒体・システム両方に送信
-        ;;
-        '(ps-error-handler-message 'paper-and-system)
-        ;;
-        ;; 用紙は A4 サイズ・縦・回転なし
-        ;;
-        '(ps-paper-type 'a4)
-        '(ps-landscape-mode nil)
-        '(ps-print-upside-down nil)
-        ;;
-        ;; 全ページを印刷
-        ;;
-        '(ps-selected-pages nil)
-        '(ps-even-or-odd-pages nil)
-        ;;
-        ;; コントロール文字を認識させない（非 ASCII 文字対策）
-        ;;
-        '(ps-print-control-characters nil)
-        ;;
-        ;; 用紙1枚につき1ページを印刷
-        ;;
-        '(ps-n-up-printing 1)
-        ;;
-        ;; シートの罫線とページの間に余白を設ける
-        ;;
-        `(ps-n-up-margin ,(/ (* 72 1.00) 2.54)) ; 10.0mm
-        ;;
-        ;; 行番号を印刷させる
-        ;;
-        '(ps-line-number t)
-        '(ps-line-number-step 1)
-        '(ps-line-number-start 1)
-        ;;
-        ;; 水平レイアウト
-        ;;
-        `(ps-left-margin ,(/ (* 72 1.40) 2.54)) ; 14.0mm（行番号が切れないようにする）
-        `(ps-inter-column ,(/ (* 72 1.00) 2.54)) ; 10.0mm
-        `(ps-right-margin ,(/ (* 72 0.54) 2.54)) ; 5.4mm（ヘッダ・フッタの box 右端が切れないようにする）
-        ;;
-        ;; 垂直レイアウト
-        ;;
-        `(ps-bottom-margin ,(/ (* 72 0.55) 2.54)) ; 5.5mm（フッタ box 下端が切れないようにする）
-        `(ps-top-margin ,(/ (* 72 2.95) 2.54)) ; 29.5mm (24.0mm + 5.5mm)（ヘッダ box 上端が切れないようにする・用紙上端～ヘッダ box 上端までの余白を、フッタ box 下端～用紙下端までの長さと同一にする）
-        `(ps-header-offset 0) ; なし
-        '(ps-header-line-pad 0.15)
-        `(ps-footer-offset ,(/ (* 72 0.42) 2.54)) ; 4.2mm (0.5mm + 3.7mm)（フッタ box 上端へカブらないようにする・テキスト box 下端～フッタ box 上端までの余白を、ヘッダ box 下端～テキスト box 上端までの長さと同一にする）
-        '(ps-footer-line-pad 0.15)
-        ;;
-        ;; ヘッダに情報を追加させる
-        ;;
-        '(ps-print-header t)
-        '(ps-print-header-frame t)
-        '(ps-header-lines 2)
-        '(ps-left-header (list 'ps-get-buffer-name
-                               'ps-header-dirpart))
-        '(ps-right-header (list 'ps-time-stamp-yyyy-mm-dd
-                                'ps-time-stamp-hh:mm:ss))
-        ;;
-        ;; フッタに情報を追加させる
-        ;;
-        '(ps-print-footer t)
-        '(ps-footer-lines 1)
-        '(ps-print-footer-frame t)
-        '(ps-left-footer nil)
-        '(ps-right-footer (list "/pagenumberstring load"))
-        ;;
-        ;; monospace なフォントを用いさせる
-        ;;
-        '(ps-font-family 'Courier)
-        '(ps-font-size '(8.0 . 8.0)) ; pt
-        '(ps-header-font-family 'Courier)
-        '(ps-header-font-size '(8.0 . 8.0)) ; pt
-        '(ps-header-title-font-size '(8.0 . 8.0)) ; pt
-        '(ps-footer-font-family 'Courier)
-        '(ps-footer-font-size '(8.0 . 8.0)) ; pt
-        '(ps-line-number-font "Courier") ; "Times-Italic"
-        '(ps-line-number-font-size 6.0) ; pt
-        ;;
-        ;; カラー印刷を有効にする
-        ;;
-        '(ps-print-color-p t)
-        '(ps-default-fg t)
-        '(ps-default-bg t)
-        '(ps-use-face-background t)
-        ;;
-        ;; 行間を少し空けさせる
-        ;;
-        '(ps-line-spacing 2.0)
-        ;;
-        ;; 段落間は空けさせない
-        ;;
-        '(ps-paragraph-spacing 0)
-        ;;
-        ;; Latin-1 外の文字（日本語など）を印刷できるようにする
-        ;; フォント一覧に `ps-mule-font-info-database-default' を使うよう強制
-        ;;
-        '(ps-multibyte-buffer nil))
+       ;; ---------------------------------------------------------------------
+       ;; nvm 経由での Node.js 利用をサポート
+       ;; ---------------------------------------------------------------------
+       (leaf nvm
+         :package t
+         :config
+         (if (fboundp 'nvm-use-for)
+             ;; `~/.nvmrc' がなければ何もしない
+             (ignore-errors (nvm-use-for))))
 
 
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-ps-print-hook-listener ()
-         "Initialize `ps-print' when load `ps-print-hook'."
-         ;; 極限まで細くする
-         (if (boundp 'ps-header-frame-alist)
-             (setcdr (assoc 'border-width ps-header-frame-alist) 0.1)))
-       :config
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       ;; HACK: `ps-lpr-command' と `ps-lpr-switches' だけは、
-       ;;       デフォルト値を利用する可能性がある関係上、
-       ;;       `:config' で設定する必要がある
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; ウインドウシステムごとに、印刷コマンドとオプションを最適化
-        ;;
-        `(ps-lpr-command ,(cond (;; HACK: `GSview' を経由 (Windows ONLY)
-                                 (equal window-system 'w32)
-                                 (or (executable-find "gsview64")
-                                     (executable-find "gsview")
-                                     "gsview"))
-                                (;; HACK: `Preview.app' を経由 (macOS ONLY)
-                                 (equal window-system 'mac)
-                                 "open")
-                                (t
-                                 ps-lpr-command)))
-        `(ps-lpr-switches ',(cond (;; HACK: `GSview' を経由 (Windows ONLY)
+       ;; ---------------------------------------------------------------------
+       ;; カーソルの移動履歴
+       ;; ---------------------------------------------------------------------
+       (leaf point-undo
+         :package t
+         :require t
+         :bind (("M-]" . point-undo)
+                ("M-[" . point-redo)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; PostScript（印刷）
+       ;; ---------------------------------------------------------------------
+       (leaf ps-print
+         :bind (("C-c p p" . ps-print-buffer-with-faces))
+         :hook ((ps-print-hook . my-ps-print-hook-listener))
+         :custom `(;; エラーは紙媒体・システム両方に送信
+                   (ps-error-handler-message . 'paper-and-system)
+                   ;; 用紙は A4 サイズ・縦・回転なし
+                   (ps-paper-type . 'a4)
+                   (ps-landscape-mode . nil)
+                   (ps-print-upside-down . nil)
+                   ;; 全ページを印刷
+                   (ps-selected-pages . nil)
+                   (ps-even-or-odd-pages . nil)
+                   ;; コントロール文字を認識させない（非 ASCII 文字対策）
+                   (ps-print-control-characters . nil)
+                   ;; 用紙1枚につき1ページを印刷
+                   (ps-n-up-printing . 1)
+                   ;; シートの罫線とページの間に余白を設ける
+                   (ps-n-up-margin . (/ (* 72 1.00) 2.54)) ; 10.0mm
+                   ;; 行番号を印刷させる
+                   (ps-line-number . t)
+                   (ps-line-number-step . 1)
+                   (ps-line-number-start . 1)
+                   ;; 水平レイアウト
+                   (ps-left-margin . (/ (* 72 1.40) 2.54)) ; 14.0mm（行番号が切れないようにする）
+                   (ps-inter-column . (/ (* 72 1.00) 2.54)) ; 10.0mm
+                   (ps-right-margin . (/ (* 72 0.54) 2.54)) ; 5.4mm（ヘッダ・フッタの box 右端が切れないようにする）
+                   ;; 垂直レイアウト
+                   (ps-bottom-margin . (/ (* 72 0.55) 2.54)) ; 5.5mm（フッタ box 下端が切れないようにする）
+                   (ps-top-margin . (/ (* 72 2.95) 2.54)) ; 29.5mm (24.0mm + 5.5mm)（ヘッダ box 上端が切れないようにする・用紙上端～ヘッダ box 上端までの余白を、フッタ box 下端～用紙下端までの長さと同一にする）
+                   (ps-header-offset . 0) ; なし
+                   (ps-header-line-pad . 0.15)
+                   (ps-footer-offset . (/ (* 72 0.42) 2.54)) ; 4.2mm (0.5mm + 3.7mm)（フッタ box 上端へカブらないようにする・テキスト box 下端～フッタ box 上端までの余白を、ヘッダ box 下端～テキスト box 上端までの長さと同一にする）
+                   (ps-footer-line-pad . 0.15)
+                   ;; ヘッダに情報を追加させる
+                   (ps-print-header . t)
+                   (ps-print-header-frame . t)
+                   (ps-header-lines . 2)
+                   (ps-left-header . (list 'ps-get-buffer-name
+                                           'ps-header-dirpart))
+                   (ps-right-header . (list 'ps-time-stamp-yyyy-mm-dd
+                                            'ps-time-stamp-hh:mm:ss))
+                   ;; フッタに情報を追加させる
+                   (ps-print-footer . t)
+                   (ps-footer-lines . 1)
+                   (ps-print-footer-frame . t)
+                   (ps-left-footer . nil)
+                   (ps-right-footer . (list "/pagenumberstring load"))
+                   ;; monospace なフォントを用いさせる
+                   (ps-font-family . 'Courier)
+                   (ps-font-size . '(8.0 . 8.0)) ; pt
+                   (ps-header-font-family . 'Courier)
+                   (ps-header-font-size . '(8.0 . 8.0)) ; pt
+                   (ps-header-title-font-size . '(8.0 . 8.0)) ; pt
+                   (ps-footer-font-family . 'Courier)
+                   (ps-footer-font-size . '(8.0 . 8.0)) ; pt
+                   (ps-line-number-font . "Courier") ; "Times-Italic"
+                   (ps-line-number-font-size . 6.0) ; pt
+                   ;; カラー印刷を有効にする
+                   (ps-print-color-p . t)
+                   (ps-default-fg . t)
+                   (ps-default-bg . t)
+                   (ps-use-face-background . t)
+                   ;; 行間を少し空けさせる
+                   (ps-line-spacing . 2.0)
+                   ;; 段落間は空けさせない
+                   (ps-paragraph-spacing . 0)
+                   ;; Latin-1 外の文字（日本語など）を印刷できるようにする
+                   ;; フォント一覧に `ps-mule-font-info-database-default' を
+                   ;; 使うよう強制
+                   (ps-multibyte-buffer . nil))
+         :init
+         (defun my-ps-print-hook-listener ()
+           "Initialize `ps-print' when load `ps-print-hook'."
+           ;; 極限まで細くする
+           (if (boundp 'ps-header-frame-alist)
+               (setcdr (assoc 'border-width ps-header-frame-alist) 0.1)))
+         :config
+         ;;----------------------------
+         ;; HACK: `ps-lpr-command' と `ps-lpr-switches' だけは、
+         ;;       デフォルト値を利用する可能性がある関係上、
+         ;;       `:config' で設定する必要がある
+         ;;----------------------------
+         (custom-set-variables
+          ;; ウインドウシステムごとに、印刷コマンドとオプションを最適化
+          `(ps-lpr-command ,(cond (;; HACK: `GSview' を経由 (Windows ONLY)
                                    (equal window-system 'w32)
-                                   nil)
+                                   (or (executable-find "gsview64")
+                                       (executable-find "gsview")
+                                       "gsview"))
                                   (;; HACK: `Preview.app' を経由 (macOS ONLY)
                                    (equal window-system 'mac)
-                                   '("-f" "-a" "Preview.app"))
+                                   "open")
                                   (t
-                                   ps-lpr-switches))))
-
-       ;; -----------------------------
-       ;; PostScript (mule)
-       ;; -----------------------------
-       ;; `ps-mule-font-info-database-default' が非 `autoload'
-       ;; ゆえに、明示的なロードが必要
-       (use-package ps-mule
-         ;; :disabled t
-         :demand t
-         :config
+                                   ps-lpr-command)))
+          `(ps-lpr-switches ',(cond (;; HACK: `GSview' を経由 (Windows ONLY)
+                                     (equal window-system 'w32)
+                                     nil)
+                                    (;; HACK: `Preview.app' を経由 (macOS ONLY)
+                                     (equal window-system 'mac)
+                                     '("-f" "-a" "Preview.app"))
+                                    (t
+                                     ps-lpr-switches))))
          ;; ---------------------------
-         ;; PostScript (BDF: Glyph Bitmap Distribution Format)
+         ;; `ps-print' がロードされるまで何もしない
          ;; ---------------------------
-         ;; `ps-mule-font-info-database-bdf' が非 `autoload'
-         ;; ゆえに、明示的なロードが必須
-         (use-package ps-bdf
-           ;; :disabled t
-           :demand t
+         ;; PostScript (mule)
+         ;; ---------------------------
+         ;; `ps-mule-font-info-database-default' が非 `autoload'
+         ;; ゆえに、明示的なロードが必要
+         (leaf ps-mule
+           :require t
            :config
-           ;;
-           ;; Latin-1 外の文字（日本語など）を印刷できるようにする
-           ;;
-           (if (boundp 'bdf-directory-list)
-               ;; 自分用 BDF フォントディレクトリを追加
-               (add-to-list 'bdf-directory-list (convert-standard-filename (expand-file-name "~/bdf"))))
-           (if (and (boundp 'ps-mule-font-info-database-default)
-                    (boundp 'ps-mule-font-info-database-bdf))
-               ;; 自分用 BDF フォントを追加
-               ;;
-               ;; `ps-mule-font-info-database-bdf' が `ps-mule.el' で
-               ;; `defconst' 定義されていることを考慮し、
-               ;; 確実に定義された後で設定
-               (let ((database-bdf (copy-tree ps-mule-font-info-database-bdf)))
-                 ;; 不要なアイテムをすべて除去
-                 (setq database-bdf (assq-delete-all 'jisx0201 database-bdf))
-                 (setq database-bdf (assq-delete-all 'japanese-jisx0208 database-bdf))
-                 (setq database-bdf (assq-delete-all 'japanese-jisx0212 database-bdf))
+           ;; -------------------------
+           ;; PostScript (BDF: Glyph Bitmap Distribution Format)
+           ;; -------------------------
+           ;; `ps-mule-font-info-database-bdf' が非 `autoload'
+           ;; ゆえに、明示的なロードが必須
+           (leaf ps-bdf
+             :require t
+             :config
+             ;; Latin-1 外の文字（日本語など）を印刷できるようにする
+             (if (boundp 'bdf-directory-list)
+                 ;; 自分用 BDF フォントディレクトリを追加
+                 (add-to-list 'bdf-directory-list (convert-standard-filename (expand-file-name "~/bdf"))))
+             (if (and (boundp 'ps-mule-font-info-database-default)
+                      (boundp 'ps-mule-font-info-database-bdf))
                  ;; 自分用 BDF フォントを追加
                  ;;
-                 ;; FIXME: 現状の設定だと日本語文字が文字化けする
-                 ;;        対策法を見つけること
-                 ;;
-                 (setq database-bdf (append '((japanese-jisx0213-2
-                                               (normal bdf "migu-1m.bdf")
-                                               (bold bdf "migu-1m-bold.bdf")))
-                                            '((japanese-jisx0213.2004-1
-                                               (normal bdf "migu-1m.bdf")
-                                               (bold bdf "migu-1m-bold.bdf")))
-                                            '((unicode-bmp
-                                               (normal bdf "migu-1m.bdf")
-                                               (bold bdf "migu-1m-bold.bdf")))
-                                            '((iso-8859-1
-                                               (normal bdf "migu-1m.bdf")
-                                               (bold bdf "migu-1m-bold.bdf")))
-                                            database-bdf))
-                 ;; 設定
-                 (custom-set-variables
-                  `(ps-mule-font-info-database-default ',database-bdf)))))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; タイムスタンプ記述
-     ;; -----------------------------------------------------------------------
-     (use-package time-stamp
-       ;; :disabled t
-       :defer t
-       :hook ((before-save . time-stamp))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; ISO 8601 (JIS X 0301) 形式にする
-        ;;
-        ;; see also:
-        ;; https://ja.wikipedia.org/wiki/ISO_8601
-        ;;
-        ;; WARNING: `time-stamp-time-zone' を "+09:00" にしても、
-        ;;          コロン以降が無視される
-        ;;
-        `(time-stamp-format
-          ,(concat "%:y-%02m-%02dT%02H:%02M:%02S"
-                   ;; タイムゾーンは別途指定
+                 ;; `ps-mule-font-info-database-bdf' が `ps-mule.el' で
+                 ;; `defconst' 定義されていることを考慮し、
+                 ;; 確実に定義された後で設定
+                 (let ((database-bdf (copy-tree ps-mule-font-info-database-bdf)))
+                   ;; 不要なアイテムをすべて除去
+                   (setq database-bdf (assq-delete-all 'jisx0201 database-bdf))
+                   (setq database-bdf (assq-delete-all 'japanese-jisx0208 database-bdf))
+                   (setq database-bdf (assq-delete-all 'japanese-jisx0212 database-bdf))
+                   ;; 自分用 BDF フォントを追加
                    ;;
-                   ;; 以下理由
+                   ;; FIXME: 現状の設定だと日本語文字が文字化けする
+                   ;;        対策法を見つけること
+                   ;;
+                   (setq database-bdf (append '((japanese-jisx0213-2
+                                                 (normal bdf "migu-1m.bdf")
+                                                 (bold bdf "migu-1m-bold.bdf")))
+                                              '((japanese-jisx0213.2004-1
+                                                 (normal bdf "migu-1m.bdf")
+                                                 (bold bdf "migu-1m-bold.bdf")))
+                                              '((unicode-bmp
+                                                 (normal bdf "migu-1m.bdf")
+                                                 (bold bdf "migu-1m-bold.bdf")))
+                                              '((iso-8859-1
+                                                 (normal bdf "migu-1m.bdf")
+                                                 (bold bdf "migu-1m-bold.bdf")))
+                                              database-bdf))
+                   ;; 設定
+                   (custom-set-variables
+                    `(ps-mule-font-info-database-default ',database-bdf)))))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; タイムスタンプ記述
+       ;; ---------------------------------------------------------------------
+       (leaf time-stamp
+         :hook ((before-save-hook . time-stamp))
+         :custom `(;; ISO 8601 (JIS X 0301) 形式にする
+                   ;;
+                   ;; see also:
+                   ;; https://ja.wikipedia.org/wiki/ISO_8601
+                   ;;
+                   ;; WARNING: `time-stamp-time-zone' を "+09:00" にしても、
+                   ;;          コロン以降が無視される
+                   ;;
+                   ;; タイムゾーンは別途指定、以下理由：
                    ;;
                    ;; `time-stamp-string' の "%Z" は
                    ;; (format-time-string "%Z") と同義
@@ -968,2884 +869,1809 @@
                    ;; 「標」→「婦」に文字化けしているのがわかる
                    ;; また、`propertize' されている
                    ;;
-                   ;; FIXME: 現状では、OS 側の動的なタイムゾーン変更に追従不能
+                   ;; FIXME: 現状、OS 側の動的なタイムゾーン変更に追従不能
                    ;;        都度評価にしたい
-                   (replace-regexp-in-string
-                    ;; コロンがない形式を返されるため、強制的にコロンを付与
-                    ;; 厳密なチェックにより "±1259" 形式のみ対象にする
-                    ;;   → 他は無視
-                    "\\`\\([\\+\\-]\\(?:0[0-9]\\|1[0-2]\\)\\)\\([0-5][0-9]\\)\\'"
-                    "\\1:\\2"
-                    ;; タイムゾーンが UTC でも "Z" でなく "+0000" を返してくる
-                    ;; 今のところ、あえて "Z" への変換はしないでおく
-                    (format-time-string "%z"))))))
+                   (time-stamp-format . ,(concat "%:y-%02m-%02dT%02H:%02M:%02S"
+                                                 (replace-regexp-in-string
+                                                  ;; コロンがない形式を返されるため、強制的にコロンを付与
+                                                  ;; 厳密なチェックにより "±1259" 形式のみ対象にする
+                                                  ;;   → 他は無視
+                                                  "\\`\\([\\+\\-]\\(?:0[0-9]\\|1[0-2]\\)\\)\\([0-5][0-9]\\)\\'"
+                                                  "\\1:\\2"
+                                                  ;; タイムゾーンが UTC でも "Z" でなく "+0000" を返す
+                                                  ;; 今のところ、あえて "Z" への変換はしないでおく
+                                                  (format-time-string "%z"))))))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; TRAMP (Transparent Remote Access, Multiple Protocols)
-     ;; -----------------------------------------------------------------------
-     (use-package tramp
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (eval-after-load 'tramp
-         ;;
-         ;; WARNING: 遅延ロード (`autoload') 後に実行しないと適用されない
-         ;;
-         '(custom-set-variables
-           ;;
-           ;; ローカル環境にのみ保存
-           ;;
-           `(tramp-persistency-file-name ,(convert-standard-filename "~/.emacs.tramp")))))
+       ;; ---------------------------------------------------------------------
+       ;; TRAMP (Transparent Remote Access, Multiple Protocols)
+       ;; ---------------------------------------------------------------------
+       (leaf tramp
+         :require t
+         :custom `(;; WARNING: `load' か `autoload' 後に実行しないと適用されない
+                   ;; ローカル環境にのみ保存
+                   (tramp-persistency-file-name . "~/.emacs.tramp")))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; `undo' 履歴の記憶
-     ;; -----------------------------------------------------------------------
-     (use-package undohist
-       ;; :disabled t
-       :ensure t
-       :demand t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(undohist-directory ,(convert-standard-filename "~/.emacs.undohist")))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'undohist-initialize)
-           (undohist-initialize)))
+       ;; ---------------------------------------------------------------------
+       ;; `undo' 履歴の記憶
+       ;; ---------------------------------------------------------------------
+       (leaf undohist
+         :package t
+         :require t
+         :custom `(;; ローカル環境にのみ保存
+                   (undohist-directory . "~/.emacs.undohist"))
+         :config
+         (if (fboundp 'undohist-initialize)
+             (undohist-initialize)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; ファイル名を元に、より唯一性の高いバッファ名を生成
-     ;; -----------------------------------------------------------------------
-     (use-package uniquify
-       ;; :disabled t
-       :demand t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(uniquify-buffer-name-style 'forward)
-        '(uniquify-ignore-buffers-re "^*[^*]+*\\-")))
+       ;; ---------------------------------------------------------------------
+       ;; ファイル名を元に、より唯一性の高いバッファ名を生成
+       ;; ---------------------------------------------------------------------
+       (leaf uniquify
+         :require t
+         :custom `((uniquify-buffer-name-style . 'forward)
+                   (uniquify-ignore-buffers-re . "^*[^*]+*\\-")))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; URL ツール
-     ;; -----------------------------------------------------------------------
-     (use-package url
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(url-using-proxy t)))
+       ;; ---------------------------------------------------------------------
+       ;; URL ツール
+       ;; ---------------------------------------------------------------------
+       (leaf url
+         :custom `((url-using-proxy . t)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; ウインドウ移動キーを直感的にする
-     ;; -----------------------------------------------------------------------
-     (use-package windmove
-       ;; :disabled t
-       :defer t
-       :bind (("C-S-b" . windmove-left)
-              ("C-S-f" . windmove-right)
-              ("C-S-p" . windmove-up)
-              ("C-S-n" . windmove-down))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; フレーム端のウインドウでは無限スクロールするようにふるまう
-        ;; 「マリオブラザーズ」左右画面端におけるループのような動き
-        ;;
-        '(windmove-wrap-around t)))
+       ;; ---------------------------------------------------------------------
+       ;; ウインドウ移動キーを直感的にする
+       ;; ---------------------------------------------------------------------
+       (leaf windmove
+         :bind (("C-S-b" . windmove-left)
+                ("C-S-f" . windmove-right)
+                ("C-S-p" . windmove-up)
+                ("C-S-n" . windmove-down))
+         :custom `(;; フレーム端のウインドウでは無限スクロールするようにふるまう
+                   ;; 「マリオブラザーズ」左右画面端におけるループのような動き
+                   (windmove-wrap-around . t)))
+       ) ; END
 
 
-     ;; -----------------------------------------------------------------------
-     ;; END OF CONFIG: 詳細設定（機能、非メジャー＆マイナーモード）
-     ;; -----------------------------------------------------------------------
-     ))
-
-
-;; ============================================================================
-;; 詳細設定（マイナーモード）
-;; ============================================================================
-(eval-after-load 'use-package
-  '(progn
-     ;; -----------------------------------------------------------------------
-     ;; 各種検索・置換強化
-     ;; -----------------------------------------------------------------------
-     (use-package anzu
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :bind (("M-%" . anzu-query-replace)
-              ("C-M-%" . anzu-query-replace-regexp))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (custom-set-variables
-        '(anzu-mode-lighter nil)
-        '(anzu-minimum-input-length 3)
-        '(anzu-search-threshold 1000)
-        '(anzu-replace-to-string-separator " -> "))
-
-       ;; -----------------------------
-       ;; デフォルト値（`migemo' 利用可能時）
-       ;; -----------------------------
-       (eval-after-load 'migemo
-         '(custom-set-variables
-           '(anzu-use-migemo t)))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'global-anzu-mode)
-           (global-anzu-mode +1)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; アーカイブファイルを直接編集
-     ;; -----------------------------------------------------------------------
-     (use-package jka-cmpr-hook
-       ;; :disabled t
-       :demand t
+     ;; =======================================================================
+     ;; マイナーモード
+     ;; =======================================================================
+     (leaf *minor-mode
        :config
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'auto-compression-mode)
-           (auto-compression-mode +1)))
+       ;; ---------------------------------------------------------------------
+       ;; 各種検索・置換強化
+       ;; ---------------------------------------------------------------------
+       (leaf anzu
+         ;; :disabled t
+         :package t
+         :bind (("M-%" . anzu-query-replace)
+                ("C-M-%" . anzu-query-replace-regexp))
+         :custom `((anzu-mode-lighter . nil)
+                   (anzu-minimum-input-length . 3)
+                   (anzu-search-threshold . 1000)
+                   (anzu-replace-to-string-separator . " -> "))
+         :init
+         ;; `migemo' 利用可能時
+         (leaf anzu
+           :after migemo
+           :custom `((anzu-use-migemo . t)))
+         :config
+         (if (fboundp 'global-anzu-mode)
+             (global-anzu-mode +1)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; 他ウインドウ弱調化
-     ;;
-     ;; see also:
-     ;; `my-default-theme.el'
-     ;; -----------------------------------------------------------------------
-     (use-package auto-dim-other-buffers
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :hook ((after-init . my-auto-dim-other-buffers-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (defun my-auto-dim-other-buffers-mode-initialize ()
-         "Initialize `auto-dim-other-buffers-mode'."
-         (if (fboundp 'auto-dim-other-buffers-mode)
-             (auto-dim-other-buffers-mode +1)))
-       :config
-       ;; -----------------------------
-       ;; lighter
-       ;; -----------------------------
-       (eval-after-load 'my-utils
-         '(if (fboundp 'auto-dim-other-buffers-mode)
-              (my-change-lighter auto-dim-other-buffers-mode nil))))
+       ;; ---------------------------------------------------------------------
+       ;; アーカイブファイルを直接編集
+       ;; ---------------------------------------------------------------------
+       (leaf jka-cmpr-hook
+         :require t
+         :config
+         (if (fboundp 'auto-compression-mode)
+             (auto-compression-mode +1)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; 自動バッファ再読込
-     ;; -----------------------------------------------------------------------
-     (use-package autorevert
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'global-auto-revert-mode)
-           (global-auto-revert-mode +1)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; ブックマーク
-     ;; -----------------------------------------------------------------------
-     (use-package bookmark
-       ;; :disabled t
-       :demand t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(bookmark-version-control t)
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(bookmark-default-file ,(convert-standard-filename "~/.emacs.bookmark.el"))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; ブックマーク (`bookmark') 拡張
-     ;; -----------------------------------------------------------------------
-     (use-package bookmark+
-       ;; :disabled t
-       :after (:all bookmark)
-       :ensure t
-       :demand t)
-
-
-     ;; -----------------------------------------------------------------------
-     ;; プログラマ向けネーミング辞書
-     ;; -----------------------------------------------------------------------
-     (use-package codic
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :bind (("C-c C-q" . codic))
-       :config
-       ;; -----------------------------
-       ;; HACK: 専用バッファをコマンドで `quit-window' させる
-       ;; -----------------------------
-       (unless (fboundp 'codic-view-kill)
-         ;; 専用ウインドウを `quit-window' する関数が
-         ;; 定義されていないなら追加
-         (defun my-codic-view-kill ()
-           "Quit `codic' window and bury its buffer."
-           (interactive)
-           (with-current-buffer (current-buffer)
-             (quit-window t)))
-
-         ;; 専用バッファでキーバインドを有効にするため、アドバイスを利用
-         ;; 専用 hook がないため
-         (defun my-codic-local-set-key (items)
-           "Set `local-set-key' for `codic' result buffer."
-           (with-current-buffer "*Codic Result*"
-             (if (fboundp 'my-codic-view-kill)
-                 (local-set-key (kbd "q") #'my-codic-view-kill))))
-
-         (if (fboundp 'codic--view)
-             (advice-add 'codic--view
-                         :after
-                         #'my-codic-local-set-key))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 共通コマンドインタプリタ (Windows ONLY)
-     ;; -----------------------------------------------------------------------
-     (use-package comint
-       ;; :disabled t
-       :if (member system-type '(ms-dos windows-nt))
-       :defer t
-       :hook ((comint-mode . my-comint-mode-initialize))
-       :init
-       (custom-set-variables
-        '(comint-scroll-to-bottom-on-input 'all)
-        '(comint-move-point-for-output 'all)
-        '(comint-buffer-maximum-size 5000)
-        '(comint-process-echoes t)
-        '(comint-eol-on-send t))
-
-       ;; -----------------------------
-       ;; プロセスごとのコーディングシステム変換表
+       ;; ---------------------------------------------------------------------
+       ;; 他ウインドウ弱調化
        ;;
        ;; see also:
-       ;; https://www.emacswiki.org/emacs/ShellMode#toc1
-       ;; -----------------------------
-       (add-to-list 'process-coding-system-alist
-                    '("[bB][aA][sS][hH]" . (undecided-dos . undecided-unix)))
-
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-comint-mode-initialize ()
-         "Initialize `comint-mode' before file load."
-         (if (boundp 'comint-input-sender-no-newline)
-             (setq-local comint-input-sender-no-newline t))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 補完フレームワーク
-     ;; -----------------------------------------------------------------------
-     (use-package company
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :hook ((after-init . global-company-mode))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; `company'
-        ;;
-        '(company-tooltip-limit 20)
-        '(company-tooltip-minimum 10)
-        '(company-tooltip-offset-display 'lines)
-        '(company-tooltip-align-annotations t)
-        '(company-tooltip-flip-when-above t)
-        '(company-transformers '(company-sort-by-occurrence))
-        '(company-minimum-prefix-length 1)
-        '(company-abort-manual-when-too-short t)
-        '(company-idle-delay 0.25)
-        '(company-selection-wrap-around t)
-        '(company-lighter-base nil)
-        ;;
-        ;; `company-dabbrev'
-        ;;
-        '(company-dabbrev-other-buffers t)
-        '(company-dabbrev-downcase nil)
-        ;;
-        ;; `company-dabbrev-code'
-        ;;
-        '(company-dabbrev-code-modes '(batch-file-mode
-                                       csharp-mode
-                                       css-mode
-                                       erlang-mode
-                                       haskell-mode
-                                       jde-mode
-                                       js-mode
-                                       js2-mode
-                                       js3-mode
-                                       lua-mode
-                                       prog-mode
-                                       python-mode
-                                       sass-mode
-                                       scss-mode))
-        '(company-dabbrev-code-other-buffers t)
-        '(company-dabbrev-code-everywhere t)
-        '(company-dabbrev-code-ignore-case t)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 補完フレームワーク (`company') 拡張（`lsp-mode' サポート）
-     ;; -----------------------------------------------------------------------
-     (use-package company-lsp
-       :disabled t ; 現状 `flycheck' が無効化されてしまうため、一旦無効化
-       :after (:all lsp-mode
-                    company)
-       :ensure t
-       :demand t)
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 補完フレームワーク (`company') 拡張（補完候補のソート）
-     ;; -----------------------------------------------------------------------
-     (use-package company-statistics
-       ;; :disabled t
-       :after (:all company)
-       :ensure t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(company-statistics-size 500)
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(company-statistics-file ,(convert-standard-filename "~/.emacs.company-statistics-cache.el")))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'company-statistics-mode)
-           (company-statistics-mode +1)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 補完フレームワーク (`company') 拡張（補完候補のポップアップドキュメント）
-     ;; -----------------------------------------------------------------------
-     (use-package company-quickhelp
-       ;; :disabled t
-       :after (:all company)
-       :ensure t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(company-quickhelp-delay 0.25))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'company-quickhelp-mode)
-           (company-quickhelp-mode +1)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; コンパイル
-     ;; -----------------------------------------------------------------------
-     (use-package compile
-       ;; :disabled t
-       :after (:all nvm
-                    exec-path-from-shell)
-       :defer t
-       :bind (("C-c C-l" . compile))
-       :hook ((compilation-filter . my-compilation-ansi-color-apply))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(compilation-window-height 15)
-        ;;
-        ;; ビルドツール・タスクランナーに依存させない
-        ;;
-        '(compile-command (purecopy ""))
-        '(compilation-scroll-output t)
-        '(compilation-always-kill t)
-        '(compilation-context-lines t))
-       :init
-       ;; ---------------------------
-       ;; HACK: コンパイル完了後、モードラインにも状態を簡易表示
-       ;; ---------------------------
-       (defun my-compilation-message (cur-buffer msg)
-         "Show status messages when compile done in `compilation-mode'."
-         (let ((msg-text (string-trim msg)) ; 改行文字が含まれうる問題を回避
-               (msg-title (buffer-name))
-               (msg-face 'compilation-mode-line-fail))
-           (message "%s: %s"
-                    msg-title
-                    (propertize msg-text
-                                'face
-                                (if (string-equal "finished" msg-text)
-                                    'compilation-mode-line-exit
-                                  'compilation-mode-line-fail)))))
-
-       (add-to-list 'compilation-finish-functions 'my-compilation-message)
-
-       ;; ---------------------------
-       ;; HACK: ANSI エスケープシーケンスが正しく解釈されない問題を回避
-       ;; ---------------------------
-       (defun my-compilation-ansi-color-apply ()
-         "Recognize ASCII color escape sequences for `compilation-mode' buffer."
-         (if (and (require 'ansi-color nil :noerror)
-                  (fboundp 'ansi-color-apply-on-region))
-             (let ((start-marker (make-marker))
-                   (end-marker (process-mark (get-buffer-process (current-buffer)))))
-               (set-marker start-marker (point-min))
-               (ansi-color-apply-on-region start-marker end-marker))))
-       :config
-       ;; ---------------------------
-       ;; HACK: コンパイル完了後、正常に終了していれば自動でウインドウを閉じる
-       ;; ---------------------------
-       (defcustom my-compilation-auto-quit-window-enable-buffer-names '("*compilation*")
-         "Created buffer names by `compile' command."
-         :group 'compilation
-         :type '(list (repeat string)))
-
-       ;; `process-status' と `exit-status' の値も得たいので、アドバイスを利用
-       ;; `compilation-finish-functions' にフックした関数では `msg' しか
-       ;; 参照できないため
-       (defun my-compilation-auto-quit-window (process-status exit-status msg)
-         "Run `quit-window' when `compile' successed."
-         (if (and (member (buffer-name)
-                          my-compilation-auto-quit-window-enable-buffer-names)
-                  (or (and (equal process-status 'exit)
-                           (zerop exit-status))
-                      ;; 改行文字が含まれうる問題を回避
-                      (string-equal "finished" (string-trim msg))))
-             (quit-window nil (get-buffer-window))))
-
-       (if (fboundp 'compilation-handle-exit)
-           (advice-add 'compilation-handle-exit
-                       :after
-                       #'my-compilation-auto-quit-window)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 矩形選択
-     ;; -----------------------------------------------------------------------
-     (use-package cua-base
-       ;; :disabled t
-       :defer t
-       :init
-       (if (fboundp 'cua-selection-mode)
-           ;;
-           ;; 特殊キーバインド無効
-           ;;
-           (cua-selection-mode +1)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; バッファ内マッチ補完
-     ;; -----------------------------------------------------------------------
-     (use-package dabbrev
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; 補完時に大小文字を区別しない
-        ;;
-        '(dabbrev-case-fold-search t)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; デスクトップ環境保存・復旧
-     ;; -----------------------------------------------------------------------
-     (use-package desktop
-       ;; :disabled t
-       :defer t
-       :bind (("C-c d c" . desktop-clear)
-              ("C-c d C-s" . desktop-save)
-              ("C-c d s" . desktop-save-in-desktop-dir)
-              ("C-c d d" . desktop-remove)
-              ("C-c d f" . desktop-change-dir)
-              ("C-c d r" . desktop-revert))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(desktop-save 'ask-if-new)
-        '(desktop-load-locked-desktop t)
-        '(desktop-missing-file-warning nil)
-        ;;
-        ;; 必要最小限の情報のみ保存させる
-        ;;
-        '(desktop-locals-to-save '(case-fold-search
-                                   case-replace
-                                   desktop-locals-to-save
-                                   fill-column
-                                   truncate-lines))
-        '(desktop-restore-frames t)
-        '(desktop-restore-in-current-display t)
-        '(desktop-restore-forces-onscreen t)
-        '(desktop-restore-reuses-frames t)
-        '(desktop-file-name-format 'absolute)
-        '(desktop-restore-eager t)
-        '(desktop-lazy-verbose t)
-        '(desktop-lazy-idle-delay 5))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'desktop-save-mode)
-           (desktop-save-mode +1)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; ディレクトリブラウジング
-     ;; -----------------------------------------------------------------------
-     (use-package dired
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-dired-mode-initialize ()
-         "Initialize `dired-mode'."
-         (if (fboundp 'dired-hide-details-mode)
-             ;; 常にすべての情報を表示（簡易モードにしない）
-             (dired-hide-details-mode -1)))
-
-       (add-hook 'dired-mode-hook #'my-dired-mode-initialize))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; ディレクトリブラウジング (`dired') 拡張
-     ;; -----------------------------------------------------------------------
-     (use-package dired+
-       ;; :disabled t
-       :after (:all dired)
-       :ensure t
-       :demand t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(diredp-hide-details-initially-flag nil)
-        '(diredp-hide-details-propagate-flag nil)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; EditorConfig
-     ;; -----------------------------------------------------------------------
-     (use-package editorconfig
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(editorconfig-mode-lighter ""))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'editorconfig-mode)
-           (editorconfig-mode +1)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; GNU Emacs Lisp ドキュメント表示
-     ;; -----------------------------------------------------------------------
-     (use-package eldoc
-       ;; :disabled t
-       :defer t
-       :hook ((emacs-lisp-mode . eldoc-mode)
-              (ielm-mode . eldoc-mode)
-              (lisp-interaction-mode . eldoc-mode)
-              (lisp-mode . eldoc-mode))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(eldoc-minor-mode-string nil)
-        '(eldoc-idle-delay 0.2)
-        '(eldoc-echo-area-use-multiline-p 'truncate-sym-name-if-fit)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; GNU Emacs Lisp ドキュメント表示 (`eldoc') 拡張（<M-:> による `eval'）
-     ;; -----------------------------------------------------------------------
-     (use-package eldoc-eval
-       ;; :disabled t
-       :after (:all eldoc)
-       :ensure t
-       :defer t
-       :hook ((emacs-lisp-mode . my-eldoc-eval-initialize)
-              (ielm-mode . my-eldoc-eval-initialize)
-              (lisp-interaction-mode . my-eldoc-eval-initialize)
-              (lisp-mode . my-eldoc-eval-initialize))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(eldoc-in-minibuffer-show-fn 'eldoc-show-in-mode-line)
-        '(eldoc-show-in-mode-line-delay 0.25)
-        '(eldoc-eval-preferred-function 'pp-eval-expression)
-        '(eldoc-in-minibuffer-own-frame-p nil)
-        '(eldoc-in-minibuffer-mode-lighter nil)
-        '(eldoc-mode-line-stop-rolling-on-input t))
-
-       ;; -----------------------------
-       ;; 起動
-       ;;------------------------------
-       (defun my-eldoc-eval-initialize ()
-         "Initialize `eldoc-eval' when Lisp languages major mode hooks."
-         (eldoc-in-minibuffer-mode +1)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; GNU Emacs Lisp 定義ジャンプ・バック・ドキュメント閲覧
-     ;; -----------------------------------------------------------------------
-     (use-package elisp-slime-nav
-       ;; :disabled t
-       :after (:any emacs-lisp-mode
-                    lisp-interaction-mode
-                    lisp-mode
-                    ielm)
-       :ensure t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;;------------------------------
-       (if (fboundp 'elisp-slime-nav-mode)
-           (elisp-slime-nav-mode +1))
-       :config
-       ;; -----------------------------
-       ;; lighter
-       ;;------------------------------
-       (eval-after-load 'my-utils
-         '(if (fboundp 'elisp-slime-nav-mode)
-              (my-change-lighter elisp-slime-nav-mode nil))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; Markdown プレビュー
-     ;; -----------------------------------------------------------------------
-     (use-package livedown
-       ;; :disabled t
-       :load-path "site-lisp/emacs-livedown"
-       :after (:all nvm
-                    markdown-mode)
-       :defer t
-       :bind (:map markdown-mode-map
-                   ("C-c l p" . livedown-preview)
-                   ("C-c l k" . livedown-kill))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(livedown-autostart nil)
-        '(livedown-open t)
-        '(livedown-port 50001)
-        '(livedown-browser nil)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; Emmet
-     ;; -----------------------------------------------------------------------
-     (use-package emmet-mode
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :hook ((html-mode . emmet-mode)
-              (php-mode . emmet-mode))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(emmet-indentation 0)
-        '(emmet-indent-after-insert t)
-        '(emmet-use-style-tag-and-attr-detection t)
-        '(emmet-self-closing-tag-style "/")
-        '(emmet-preview-default t)
-        '(emmet-insert-flash-time 0.25)
-        '(emmet-move-cursor-after-expanding t)
-        '(emmet-move-cursor-between-quotes t)
-        '(emmet-postwrap-goto-edit-point t)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; `text/enriched' フォーマットファイル
-     ;; -----------------------------------------------------------------------
-     (use-package enriched
-       ;; :disabled t
-       :defer t
-       :config
-       ;; -----------------------------
-       ;; PATCH: v25.3 未満に存在するセキュリティホールの Fix
-       ;;
-       ;; see also:
-       ;; https://lists.gnu.org/archive/html/emacs-devel/2017-09/msg00211.html
-       ;; -----------------------------
-       (if (or (< emacs-major-version 25)
-               (and (= emacs-major-version 25)
-                    (< emacs-minor-version 3)))
-           (defun enriched-decode-display-prop (start end &optional param)
-             (list start end))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; カーソル下の数値を増減
-     ;; -----------------------------------------------------------------------
-     (use-package evil-numbers
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :bind (("C-4" . evil-numbers/dec-at-pt)
-              ("C-3" . evil-numbers/inc-at-pt)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; デフォルト行文字数の位置にインジケータを表示
-     ;;
-     ;; see also:
-     ;; `fill-column'
-     ;; -----------------------------------------------------------------------
-     (use-package fill-column-indicator
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :bind (("C-c q" . fci-mode))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;; FIXME: `font-lock-comment-face' を用いたい
-        ;;        しかし、指定すると、なぜか "red" が用いられてしまう
-        ;;        現状は `default' フェイスで回避中
-        `(fci-rule-color ,(face-attribute 'default :foreground))
-        '(fci-rule-use-dashes t)
-        '(fci-dash-pattern 0.5)
-        ;;
-        ;; HACK: `fci-mode' を有効にした後、
-        ;;       `toggle-truncate-lines' で折り返し表示を有効にすると
-        ;;       `line-move-visual' が強制的に nil となる問題を回避
-        ;;
-        '(fci-handle-line-move-visual nil)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; `dired' における `find' コマンド実行 (Windows ONLY)
-     ;;
-     ;; see also:
-     ;; `dired'
-     ;; -----------------------------------------------------------------------
-     (use-package find-dired
-       ;; :disabled t
-       :if (member system-type '(ms-dos windows-nt))
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; PATH は通っていないが、`exec-path' は通っている場合を想定
-        ;;
-        `(find-ls-option (cons (format "-exec %s -ld {} %s"
-                                       (executable-find "ls")
-                                       find-exec-terminator)
-                               "-ld"))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 自動静的解析
-     ;; -----------------------------------------------------------------------
-     (use-package flycheck
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :bind (("C-c f" . flycheck-mode))
-       :hook ((after-init . global-flycheck-mode))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(flycheck-checker-error-threshold nil)
-        '(flycheck-display-errors-delay 0.5)
-        '(flycheck-idle-change-delay 0.25)
-        '(flycheck-mode-line "")
-        '(flycheck-disabled-checkers '(javascript-jscs)))
-       :config
-       ;; -----------------------------
-       ;; HACK: `flycheck-checker-error-threshold' 以上の項目が出現すると
-       ;;       生成されうる警告バッファの出現を抑制
-       ;; -----------------------------
-       (eval-after-load 'warnings
-         '(if (boundp 'warning-suppress-log-types)
-              (add-to-list 'warning-suppress-log-types
-                           '(flycheck syntax-checker))))
-
-       ;; -----------------------------
-       ;; PATCH: ESLint 優先利用
-       ;;        JSHint -> ESLint を ESLint -> JSHint 順に変更
-       ;; -----------------------------
-       (if (boundp 'flycheck-checkers)
-           (let* ((target-and-other-checkers (member 'javascript-eslint
-                                                     flycheck-checkers)))
-             (delete 'javascript-jshint flycheck-checkers)
-             (setcdr target-and-other-checkers
-                     (cons 'javascript-jshint
-                           (cdr-safe target-and-other-checkers)))))
-
-       ;; -----------------------------
-       ;; PATCH: v.Nu サポート
-       ;; -----------------------------
-       (unless (flycheck-registered-checker-p 'vnu)
-         ;; FIXME: v.Nu の標準出力が UTF-8 なので、環境によっては文字化けする
-         (flycheck-define-checker vnu
-           "A (X)HTML syntax and style checker using v.NU.
-
-See also: `https://github.com/validator/validator'."
-           :command ("vnu" "--format" "gnu" "--verbose" source)
-           :error-patterns
-           ;; ファイル名はフルパスで入ってくるため、チェックしない
-           ((error line-start (minimal-match (one-or-more not-newline)) ":"
-                   line "." column "-"
-                   ;; `flycheck' は範囲指定（複数の line, column 指定）を
-                   ;; サポートしていない
-                   ;; ゆえに範囲の終了地点は無視
-                   (one-or-more digit) "." (one-or-more digit) ": "
-                   "error: " (message)
-                   line-end)
-            (warning line-start (minimal-match (one-or-more not-newline)) ":"
-                     line "." column "-"
-                     (one-or-more digit) "." (one-or-more digit) ": "
-                     "info warning: " (message)
-                     line-end)
-            (info line-start (minimal-match (one-or-more not-newline)) ":"
-                  line "." column "-"
-                  (one-or-more digit) "." (one-or-more digit) ": "
-                  "info: " (message)
-                  line-end))
-           :modes (html-mode nxhtml-mode web-mode))
-
-         ;; 有効化
-         (let ((target-and-other-checkers (member 'html-tidy flycheck-checkers)))
-           (if target-and-other-checkers
-               ;; デフォルトの (X)HTML チェッカ `html-tidy' と入れ替える
-               (setcar target-and-other-checkers 'vnu)
-             ;; 未追加ならリスト先頭に追加
-             (add-to-list 'flycheck-checkers 'vnu))))
-
-       ;; -----------------------------
-       ;; PATCH: Sass（.scss/.sass 両形式）チェック時にキャッシュを使わせない
-       ;; -----------------------------
-       (dolist (checker '(scss sass))
-         (if (and (flycheck-registered-checker-p checker)
-                  (not (member "-C" (flycheck-checker-arguments checker))))
-             ;; あえて破壊的に変更（元のリストに追加したい）
-             (nconc (get checker 'flycheck-command) '("-C"))))
-
-       ;; -----------------------------
-       ;; PATCH: temp ファイルのデフォルトコーディングシステムを、
-       ;;        強制的に UTF-8 (LF) とする
-       ;; -----------------------------
-       ;; オーバーライド
-       (defun flycheck-save-buffer-to-file (file-name)
-         "Save the contents of the current buffer to FILE-NAME."
-         ;; 他の部分は元定義と一致させる
-         (make-directory (file-name-directory file-name) t)
-         ;; FIXME: もっと柔軟に設定できるようにならないか？
-         (let ((coding-system-for-write 'utf-8-unix) ; ここだけ変更・決め打ち
-               (jka-compr-inhibit t))
-           (write-region nil nil file-name nil 0))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 自動静的解析拡張（モードライン変更）
-     ;; -----------------------------------------------------------------------
-     (use-package flycheck-color-mode-line
-       ;; :disabled t
-       :after (:all flycheck)
-       :ensure t
-       :defer t
-       :hook ((flycheck-mode . flycheck-color-mode-line-mode)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 自動静的解析 (OLD)
-     ;; -----------------------------------------------------------------------
-     (use-package flymake
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(flymake-run-in-place nil))
-       :config
-       ;; -----------------------------
-       ;; lighter
-       ;; -----------------------------
-       (eval-after-load 'my-utils
-         '(if (fboundp 'flymake-mode)
-              (my-change-lighter flymake-mode nil))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 自動スペルチェッカ
-     ;; -----------------------------------------------------------------------
-     (use-package flyspell
-       ;; :disabled t
-       :defer t
-       :hook (;; Full
-              (markdown-mode . flyspell-mode)
-              (org-mode . flyspell-mode)
-              (text-mode . flyspell-mode)
-              ;; Comments ONLY
-              (css-mode . flyspell-prog-mode)
-              (emacs-lisp-mode . flyspell-prog-mode)
-              (html-mode . flyspell-prog-mode)
-              (ielm-mode . flyspell-prog-mode)
-              (js2-mode . flyspell-prog-mode)
-              (lisp-interaction-mode . flyspell-prog-mode)
-              (lisp-mode . flyspell-prog-mode)
-              (php-mode . flyspell-prog-mode)
-              (sass-mode . flyspell-prog-mode)
-              (scss-mode . flyspell-prog-mode))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (custom-set-variables
-        '(flyspell-delay 1.0)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; フレーム
-     ;; -----------------------------------------------------------------------
-     (use-package frame
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; フレームサイズ変更を px 単位で実行できるようにする
-        ;;
-        '(frame-resize-pixelwise t))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'blink-cursor-mode)
-           ;;
-           ;; カーソルは点滅させない
-           ;;
-           (blink-cursor-mode -1))
-       :config
-       ;; -----------------------------
-       ;; その他
-       ;; -----------------------------
-       (if (and window-system
-                (fboundp 'set-frame-parameter))
-           (set-frame-parameter nil 'alpha '(90 . 80))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; OBSOLETE: フレーム位置・サイズ復元
-     ;; -----------------------------------------------------------------------
-     ;; v24.4 (r113242) 以降では `desktop' に同一機能 `desktop-restore-frames'
-     ;; が実装されている
-     ;;
-     ;; 条件分岐による起動制御を実施する
-     ;; `frame-restore-mode' は自動検出して停止してくれるが、warning を吐くため
-     ;;
-     ;; see also:
-     ;; https://bzr.savannah.gnu.org/lh/emacs/trunk/revision/113242
-     ;; -----------------------------------------------------------------------
-     (use-package frame-restore
-       ;; :disabled t
-       :if (and (= emacs-major-version 24)
-                (< emacs-minor-version 4))
-       :ensure t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(frame-restore-parameters-file ,(convert-standard-filename "~/.emacs.frame-restore-parameters.el")))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'frame-restore-mode)
-           (frame-restore-mode +1))
-       :config
-       (if (not noninteractive)
-           ;; なるべく「最後」に実行されるよう調整
-           ;; 他のフレーム状態変更機能と衝突させないため
-           (when (fboundp 'frame-restore-save-parameters)
-             (remove-hook 'kill-emacs-hook #'frame-restore-save-parameters)
-             (add-hook 'kill-emacs-hook #'frame-restore-save-parameters t))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; フレームセット
-     ;; -----------------------------------------------------------------------
-     (use-package frameset
-       ;; :disabled t
-       :defer t
-       ;; 全設定が完了してから実行しなければならない
-       ;; 途中で追加される項目がありうるため
-       :hook ((after-init . my-frameset-initialize))
-       :init
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-frameset-initialize ()
-         "Initialize `frameset' when `after-init-hook' running."
-         (eval-after-load 'frameset
-           '(when (listp frameset-filter-alist)
-              ;; `desktop' で保存不要な項目はすべて `:never' にする
-              (dolist (key '(background-color
-                             foreground-color
-                             font
-                             frameset--text-pixel-height
-                             frameset--text-pixel-width
-                             GUI:font))
-                (setcdr (assoc key frameset-filter-alist) :never))))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; Google 翻訳インターフェース
-     ;; -----------------------------------------------------------------------
-     (use-package google-translate
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :bind (("C-c C-t p" . google-translate-at-point)
-              ("C-c C-t o" . google-translate-at-point-reverse)
-              ("C-c C-t q" . google-translate-query-translate)
-              ("C-c C-t w" . google-translate-query-translate-reverse)
-              ("C-c C-t s" . google-translate-smooth-translate))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (custom-set-variables
-        '(google-translate-default-source-language "auto")
-        '(google-translate-default-target-language "ja")
-        '(google-translate-enable-ido-completion t)
-        '(google-translate-show-phonetic nil)
-        '(google-translate-listen-program nil)
-        '(google-translate-output-destination 'popup)
-        '(google-translate-pop-up-buffer-set-focus t)
-        '(google-translate-listen-button-label "[Listen]")))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; `grep'
-     ;; -----------------------------------------------------------------------
-     (use-package grep
-       ;; :disabled t
-       :defer t
-       :bind (("C-M-g" . rgrep))
-       :init
-       ;; -----------------------------
-       ;; Windows ONLY
-       ;; -----------------------------
-       (if (member system-type '(ms-dos windows-nt))
-           (use-package grep
-             ;;
-             ;; HACK: `autoload' 未対応変数を変更する必要があるため、
-             ;;       明示的にロードさせる必要がある
-             ;;
-             :demand t
-             :init
-             ;;
-             ;; デフォルト値
-             ;;
-             (custom-set-variables
-              ;;
-              ;; 例外が出るため NUL デバイスは使わせない
-              ;;
-              '(grep-use-null-device nil))
-
-             ;;
-             ;; 初期化
-             ;;
-             ;; PATH は通っていないが、`exec-path' は通っている場合を想定
-             ;;
-             ;; すべて `defvar' 定義なので、 `autoload' 前後での
-             ;; `custom-set-variables' による設定は不可能
-             ;; 明示的ロード後～関数実行前までに設定しなければならない
-             ;;
-             (setq grep-program
-                   (purecopy (or (executable-find "grep")
-                                 "grep")))
-             (setq find-program
-                   (purecopy (or (executable-find "find")
-                                 "find")))
-             (setq xargs-program
-                   (purecopy (or (executable-find "xargs")
-                                 "xargs")))))
-       :config
-       ;; -----------------------------
-       ;; PATCH: grep 2.21 から環境変数 `GREP_OPTIONS' が deprecated に
-       ;;        なったため、v24.x までの `grep' では結果に warning が出る
-       ;;        問題を回避
-       ;;        v25.0 以降はパッチが適用されたため、何もしない
-       ;; -----------------------------
-       ;; HACK: `add-to-list' を用いている部分は、元コードのままとする
-       ;; -----------------------------
-       ;; see also:
-       ;; https://lists.gnu.org/archive/html/info-gnu/2014-11/msg00009.html
-       ;; https://lists.gnu.org/archive/html/emacs-diffs/2014-09/msg00134.html
-       ;; -----------------------------
-       (if (< emacs-major-version 25)
-           (defcustom grep-highlight-matches 'auto-detect
-             "Use special markers to highlight grep matches.
-
-Some grep programs are able to surround matches with special
-markers in grep output.  Such markers can be used to highlight
-matches in grep mode.  This requires `font-lock-mode' to be active
-in grep buffers, so if you have globally disabled font-lock-mode,
-you will not get highlighting.
-
-This option sets the environment variable GREP_COLORS to specify
-markers for highlighting and GREP_OPTIONS to add the --color
-option in front of any explicit grep options before starting
-the grep.
-
-When this option is `auto', grep uses `--color=auto' to highlight
-matches only when it outputs to a terminal (when `grep' is the last
-command in the pipe), thus avoiding the use of any potentially-harmful
-escape sequences when standard output goes to a file or pipe.
-
-To make grep highlight matches even into a pipe, you need the option
-`always' that forces grep to use `--color=always' to unconditionally
-output escape sequences.
-
-In interactive usage, the actual value of this variable is set up
-by `grep-compute-defaults' when the default value is `auto-detect'.
-To change the default value, use Customize or call the function
-`grep-apply-setting'."
-             :type '(choice (const :tag "Do not highlight matches with grep markers" nil)
-                            (const :tag "Highlight matches with grep markers" t)
-                            (const :tag "Use --color=always" always)
-                            (const :tag "Use --color" auto)
-                            (other :tag "Not Set" auto-detect))
-             :set 'grep-apply-setting
-             :version "22.1"
-             :group 'grep)
-
-         (defun grep-process-setup ()
-           "Setup compilation variables and buffer for `grep'.
-Set up `compilation-exit-message-function' and run `grep-setup-hook'."
-           (when (eq grep-highlight-matches 'auto-detect)
-             (grep-compute-defaults))
-           (unless (or (eq grep-highlight-matches 'auto-detect)
-                       (null grep-highlight-matches)
-                       ;; Don't output color escapes if they can't be
-                       ;; highlighted with `font-lock-face' by `grep-filter'.
-                       (null font-lock-mode))
-             ;; `setenv' modifies `process-environment' let-bound in `compilation-start'
-             ;; Any TERM except "dumb" allows GNU grep to use `--color=auto'
-             (setenv "TERM" "emacs-grep")
-             ;; GREP_COLOR is used in GNU grep 2.5.1, but deprecated in later versions
-             (setenv "GREP_COLOR" "01;31")
-             ;; GREP_COLORS is used in GNU grep 2.5.2 and later versions
-             (setenv "GREP_COLORS" "mt=01;31:fn=:ln=:bn=:se=:sl=:cx=:ne"))
-           (set (make-local-variable 'compilation-exit-message-function)
-                (lambda (status code msg)
-                  (if (eq status 'exit)
-                      ;; This relies on the fact that `compilation-start'
-                      ;; sets buffer-modified to nil before running the command,
-                      ;; so the buffer is still unmodified if there is no output.
-                      (cond ((and (zerop code) (buffer-modified-p))
-                             '("finished (matches found)\n" . "matched"))
-                            ((not (buffer-modified-p))
-                             '("finished with no matches found\n" . "no match"))
-                            (t
-                             (cons msg code)))
-                    (cons msg code))))
-           (run-hooks 'grep-setup-hook))
-
-         (defun grep-compute-defaults ()
-           ;; Keep default values.
-           (unless grep-host-defaults-alist
-             (add-to-list
-              'grep-host-defaults-alist
-              (cons nil
-                    `((grep-command ,grep-command)
-                      (grep-template ,grep-template)
-                      (grep-use-null-device ,grep-use-null-device)
-                      (grep-find-command ,grep-find-command)
-                      (grep-find-template ,grep-find-template)
-                      (grep-find-use-xargs ,grep-find-use-xargs)
-                      (grep-highlight-matches ,grep-highlight-matches)))))
-           (let* ((host-id
-                   (intern (or (file-remote-p default-directory) "localhost")))
-                  (host-defaults (assq host-id grep-host-defaults-alist))
-                  (defaults (assq nil grep-host-defaults-alist)))
-             ;; There are different defaults on different hosts.  They must be
-             ;; computed for every host once.
-             (dolist (setting '(grep-command grep-template
-                                             grep-use-null-device grep-find-command
-                                             grep-find-template grep-find-use-xargs
-                                             grep-highlight-matches))
-               (set setting
-                    (cadr (or (assq setting host-defaults)
-                              (assq setting defaults)))))
-
-             (unless (or (not grep-use-null-device) (eq grep-use-null-device t))
-               (setq grep-use-null-device
-                     (with-temp-buffer
-                       (let ((hello-file (expand-file-name "HELLO" data-directory)))
-                         (not
-                          (and (if grep-command
-                                   ;; `grep-command' is already set, so
-                                   ;; use that for testing.
-                                   (grep-probe grep-command
-                                               `(nil t nil "^English" ,hello-file)
-                                               #'call-process-shell-command)
-                                 ;; otherwise use `grep-program'
-                                 (grep-probe grep-program
-                                             `(nil t nil "-nH" "^English" ,hello-file)))
-                               (progn
-                                 (goto-char (point-min))
-                                 (looking-at
-                                  (concat (regexp-quote hello-file)
-                                          ":[0-9]+:English")))))))))
-             (unless (and grep-command grep-find-command
-                          grep-template grep-find-template)
-               (let ((grep-options
-                      (concat (and grep-highlight-matches
-                                   (grep-probe grep-program
-                                               `(nil nil nil "--color" "x" ,null-device)
-                                               nil 1)
-                                   (if (eq grep-highlight-matches 'always)
-                                       "--color=always " "--color "))
-                              (if grep-use-null-device "-n" "-nH")
-                              (if (grep-probe grep-program
-                                              `(nil nil nil "-e" "foo" ,null-device)
-                                              nil 1)
-                                  " -e"))))
-                 (unless grep-command
-                   (setq grep-command
-                         (format "%s %s " grep-program grep-options)))
-                 (unless grep-template
-                   (setq grep-template
-                         (format "%s <X> <C> %s <R> <F>" grep-program grep-options)))
-                 (unless grep-find-use-xargs
-                   (setq grep-find-use-xargs
-                         (cond
-                          ((grep-probe find-program
-                                       `(nil nil nil ,null-device "-exec" "echo"
-                                             "{}" "+"))
-                           'exec-plus)
-                          ((and
-                            (grep-probe find-program `(nil nil nil ,null-device "-print0"))
-                            (grep-probe xargs-program `(nil nil nil "-0" "echo")))
-                           'gnu)
-                          (t
-                           'exec))))
-                 (unless grep-find-command
-                   (setq grep-find-command
-                         (cond ((eq grep-find-use-xargs 'gnu)
-                                ;; Windows shells need the program file name
-                                ;; after the pipe symbol be quoted if they use
-                                ;; forward slashes as directory separators.
-                                (format "%s . -type f -print0 | \"%s\" -0 %s"
-                                        find-program xargs-program grep-command))
-                               ((memq grep-find-use-xargs '(exec exec-plus))
-                                (let ((cmd0 (format "%s . -type f -exec %s"
-                                                    find-program grep-command))
-                                      (null (if grep-use-null-device
-                                                (format "%s " null-device)
-                                              "")))
-                                  (cons
-                                   (if (eq grep-find-use-xargs 'exec-plus)
-                                       (format "%s %s{} +" cmd0 null)
-                                     (format "%s {} %s%s" cmd0 null
-                                             (shell-quote-argument ";")))
-                                   (1+ (length cmd0)))))
-                               (t
-                                (format "%s . -type f -print | \"%s\" %s"
-                                        find-program xargs-program grep-command)))))
-                 (unless grep-find-template
-                   (setq grep-find-template
-                         (let ((gcmd (format "%s <C> %s <R>"
-                                             grep-program grep-options))
-                               (null (if grep-use-null-device
-                                         (format "%s " null-device)
-                                       "")))
-                           (cond ((eq grep-find-use-xargs 'gnu)
-                                  (format "%s . <X> -type f <F> -print0 | \"%s\" -0 %s"
-                                          find-program xargs-program gcmd))
-                                 ((eq grep-find-use-xargs 'exec)
-                                  (format "%s . <X> -type f <F> -exec %s {} %s%s"
-                                          find-program gcmd null
-                                          (shell-quote-argument ";")))
-                                 ((eq grep-find-use-xargs 'exec-plus)
-                                  (format "%s . <X> -type f <F> -exec %s %s{} +"
-                                          find-program gcmd null))
-                                 (t
-                                  (format "%s . <X> -type f <F> -print | \"%s\" %s"
-                                          find-program xargs-program gcmd))))))))
-             (when (eq grep-highlight-matches 'auto-detect)
-               (setq grep-highlight-matches
-                     (with-temp-buffer
-                       (and (grep-probe grep-program '(nil t nil "--help"))
-                            (progn
-                              (goto-char (point-min))
-                              (search-forward "--color" nil t))
-                            ;; Windows and DOS pipes fail `isatty' detection in Grep.
-                            (if (memq system-type '(windows-nt ms-dos))
-                                'always 'auto)))))
-
-             ;; Save defaults for this host.
-             (setq grep-host-defaults-alist
-                   (delete (assq host-id grep-host-defaults-alist)
-                           grep-host-defaults-alist))
-             (add-to-list
-              'grep-host-defaults-alist
-              (cons host-id
-                    `((grep-command ,grep-command)
-                      (grep-template ,grep-template)
-                      (grep-use-null-device ,grep-use-null-device)
-                      (grep-find-command ,grep-find-command)
-                      (grep-find-template ,grep-find-template)
-                      (grep-find-use-xargs ,grep-find-use-xargs)
-                      (grep-highlight-matches ,grep-highlight-matches))))))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 拡張補完・展開
-     ;; -----------------------------------------------------------------------
-     (use-package hippie-exp
-       ;; :disabled t
-       :defer t
-       :bind (("M-/" . hippie-expand)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; カレントカーソル行強調
-     ;; -----------------------------------------------------------------------
-     (use-package hl-line
-       ;; :disabled t
-       :defer t
-       ;; FIXME: `after-init-hook' 後に実行した `load-theme' に対応したい
-       ;;        `advice-add' の :after で `enable-theme' を実行してもダメ
-       :hook ((after-init . my-hl-line-initialize))
-       :init
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-hl-line-initialize ()
-         "Initialize `hl-line' settings."
-         (when (and (require 'color nil :noerror) ; 未ロードがありうるため必須
-                    (fboundp 'color-rgb-to-hsl)
-                    (fboundp 'color-name-to-rgb)
-                    (fboundp 'color-darken-name)
-                    (fboundp 'color-lighten-name))
-           (let* ((L-diff 20)
-                  (background-color (face-attribute 'default :background))
-                  (L (nth 2 (apply 'color-rgb-to-hsl
-                                   (color-name-to-rgb background-color))))
-                  (line-background-color (funcall (if (< L 0.5)
-                                                      'color-lighten-name
-                                                    'color-darken-name)
-                                                  background-color
-                                                  L-diff)))
-             (custom-set-faces
-              `(hl-line ((((class color))
-                          (:background ,line-background-color :inherit nil))))))))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'global-hl-line-mode)
-           (global-hl-line-mode +1)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 強化バッファ一覧
-     ;; -----------------------------------------------------------------------
-     (use-package ibuffer
-       ;; :disabled t
-       :defer t
-       :bind (("C-x C-b" . ibuffer))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(ibuffer-expert t))
-       :config
-       ;; -----------------------------
-       ;; 機能拡張
-       ;; -----------------------------
-       (when (and (boundp 'ibuffer-formats)
-                  (boundp 'ibuffer-sorting-mode)
-                  (boundp 'ibuffer-last-sorting-mode)
-                  (boundp 'ibuffer-sorting-reversep)
-                  (boundp 'ibuffer-sorting-functions-alist))
-         ;; バッファ名の表示を30文字に拡張
-         ;; カラム幅が揃わなくなるため、-1 にはできない
-         (let* (;; `customize-mark-to-save' の評価を t にするため、
-                ;; 明示的にコピー
-                (formats (copy-tree ibuffer-formats))
-                (settings (assoc 'name (assoc 'mark formats))))
-           ;; 該当する設定項目がなければ何もしない
-           ;; 将来的に項目が変更された場合でも、例外を出さないための対策
-           (when settings
-             (setcdr settings '(30 30 :left :elide))
-             (custom-set-variables
-              `(ibuffer-formats ',formats))))
-
-         ;; メジャーモード名 + ファイルパスでソート
+       ;; `my-default-theme.el'
+       ;; ---------------------------------------------------------------------
+       (leaf auto-dim-other-buffers
+         :package t
+         :hook ((after-init-hook . my-auto-dim-other-buffers-mode-initialize))
+         :init
+         (defun my-auto-dim-other-buffers-mode-initialize ()
+           "Initialize `auto-dim-other-buffers-mode'."
+           (if (fboundp 'auto-dim-other-buffers-mode)
+               (auto-dim-other-buffers-mode +1))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 自動バッファ再読込
+       ;; ---------------------------------------------------------------------
+       (leaf autorevert
+         :config
+         (if (fboundp 'global-auto-revert-mode)
+             (global-auto-revert-mode +1)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; ブックマーク
+       ;; ---------------------------------------------------------------------
+       (leaf bookmark
+         :require t
+         :custom `((bookmark-version-control . t)
+                   ;; ローカル環境にのみ保存
+                   (bookmark-default-file . "~/.emacs.bookmark.el")))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; ブックマーク (`bookmark') 拡張
+       ;; ---------------------------------------------------------------------
+       (leaf bookmark+
+         :after bookmark
+         :package t
+         :require t)
+
+
+       ;; ---------------------------------------------------------------------
+       ;; プログラマ向けネーミング辞書
+       ;; ---------------------------------------------------------------------
+       (leaf codic
+         :package t
+         :bind (("C-c C-q" . codic))
+         :config
+         ;; ---------------------------
+         ;; HACK: 専用バッファをコマンドで `quit-window' させる
+         ;; ---------------------------
+         (unless (fboundp 'codic-view-kill)
+           ;; 専用ウインドウを `quit-window' する関数が
+           ;; 定義されていないなら追加
+           (defun my-codic-view-kill ()
+             "Quit `codic' window and bury its buffer."
+             (interactive)
+             (with-current-buffer (current-buffer)
+               (quit-window t)))
+
+           ;; 専用バッファでキーバインドを有効にするため、アドバイスを利用
+           ;; 専用 hook がないため
+           (defun my-codic-local-set-key (items)
+             "Set `local-set-key' for `codic' result buffer."
+             (with-current-buffer "*Codic Result*"
+               (if (fboundp 'my-codic-view-kill)
+                   (local-set-key (kbd "q") #'my-codic-view-kill))))
+
+           (if (fboundp 'codic--view)
+               (advice-add 'codic--view
+                           :after
+                           #'my-codic-local-set-key))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 共通コマンドインタプリタ (Windows ONLY)
+       ;; ---------------------------------------------------------------------
+       (leaf comint
+         :when (member system-type '(ms-dos windows-nt))
+         :hook ((comint-mode-hook . my-comint-mode-initialize))
+         :custom `((comint-scroll-to-bottom-on-input . 'all)
+                   (comint-move-point-for-output . 'all)
+                   (comint-buffer-maximum-size . 5000)
+                   (comint-process-echoes . t)
+                   (comint-eol-on-send . t))
+         :init
+         (defun my-comint-mode-initialize ()
+           "Initialize `comint-mode' before file load."
+           (if (boundp 'comint-input-sender-no-newline)
+               (setq-local comint-input-sender-no-newline t)))
+
+         ;; -----------------------------
+         ;; プロセスごとのコーディングシステム変換表
          ;;
          ;; see also:
-         ;; https://www.emacswiki.org/emacs/IbufferMode#toc10
-         (define-ibuffer-sorter mode-name-and-path-alphabetic
-           "Sort the buffers by their mode and paths.
+         ;; https://www.emacswiki.org/emacs/ShellMode#toc1
+         ;; -----------------------------
+         (add-to-list 'process-coding-system-alist
+                      '("[bB][aA][sS][hH]" . (undecided-dos . undecided-unix))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 補完フレームワーク
+       ;; ---------------------------------------------------------------------
+       (leaf company
+         :package t
+         :hook ((after-init-hook . global-company-mode))
+         :custom `(;; `company'
+                   (company-tooltip-limit . 20)
+                   (company-tooltip-minimum . 10)
+                   (company-tooltip-offset-display . 'lines)
+                   (company-tooltip-align-annotations . t)
+                   (company-tooltip-flip-when-above . t)
+                   (company-transformers . '(company-sort-by-occurrence))
+                   (company-minimum-prefix-length . 1)
+                   (company-abort-manual-when-too-short . t)
+                   (company-idle-delay . 0.25)
+                   (company-selection-wrap-around . t)
+                   (company-lighter-base . nil)
+                   ;; `company-dabbrev'
+                   (company-dabbrev-other-buffers . t)
+                   (company-dabbrev-downcase . nil)
+                   ;; `company-dabbrev-code'
+                   (company-dabbrev-code-modes . '(batch-file-mode
+                                                   csharp-mode
+                                                   css-mode
+                                                   erlang-mode
+                                                   haskell-mode
+                                                   jde-mode
+                                                   js-mode
+                                                   js2-mode
+                                                   js3-mode
+                                                   lua-mode
+                                                   prog-mode
+                                                   python-mode
+                                                   sass-mode
+                                                   scss-mode))
+                   (company-dabbrev-code-other-buffers . t)
+                   (company-dabbrev-code-everywhere . t)
+                   (company-dabbrev-code-ignore-case . t)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 補完フレームワーク (`company') 拡張（`lsp-mode' サポート）
+       ;; ---------------------------------------------------------------------
+       (leaf company-lsp
+         :after lsp-mode company
+         :package t
+         :require t)
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 補完フレームワーク (`company') 拡張（補完候補のソート）
+       ;; ---------------------------------------------------------------------
+       (leaf company-statistics
+         :after company
+         :package t
+         :custom `((company-statistics-size . 500)
+                   ;; ローカル環境にのみ保存
+                   (company-statistics-file . "~/.emacs.company-statistics-cache.el"))
+         :config
+         (if (fboundp 'company-statistics-mode)
+             (company-statistics-mode +1)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 補完フレームワーク (`company') 拡張（ポップアップドキュメント）
+       ;; ---------------------------------------------------------------------
+       (leaf company-quickhelp
+         :after company
+         :package t
+         :custom `((company-quickhelp-delay . 0.25))
+         :config
+         (if (fboundp 'company-quickhelp-mode)
+             (company-quickhelp-mode +1)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; コンパイル
+       ;; ---------------------------------------------------------------------
+       (leaf compile
+         :after nvm exec-path-from-shell
+         :bind (("C-c C-l" . compile))
+         :hook ((compilation-filter-hook . my-compilation-ansi-color-apply))
+         :custom `((compilation-window-height . 15)
+                   ;; ビルドツール・タスクランナーに依存させない
+                   (compile-command . "")
+                   (compilation-scroll-output . t)
+                   (compilation-always-kill . t)
+                   (compilation-context-lines . t))
+         :init
+         ;; ---------------------------
+         ;; HACK: コンパイル完了後、モードラインにも状態を簡易表示
+         ;; ---------------------------
+         (defun my-compilation-message (cur-buffer msg)
+           "Show status messages when compile done in `compilation-mode'."
+           (let ((msg-text (string-trim msg)) ; 改行文字が含まれうる問題を回避
+                 (msg-title (buffer-name))
+                 (msg-face 'compilation-mode-line-fail))
+             (message "%s: %s"
+                      msg-title
+                      (propertize msg-text
+                                  'face
+                                  (if (string-equal "finished" msg-text)
+                                      'compilation-mode-line-exit
+                                    'compilation-mode-line-fail)))))
+
+         (add-to-list 'compilation-finish-functions 'my-compilation-message)
+
+         ;; ---------------------------
+         ;; HACK: ANSI エスケープシーケンスが正しく解釈されない問題を回避
+         ;; ---------------------------
+         (defun my-compilation-ansi-color-apply ()
+           "Recognize ASCII color escape sequences for `compilation-mode' buffer."
+           (if (and (require 'ansi-color nil :noerror)
+                    (fboundp 'ansi-color-apply-on-region))
+               (let ((start-marker (make-marker))
+                     (end-marker (process-mark (get-buffer-process (current-buffer)))))
+                 (set-marker start-marker (point-min))
+                 (ansi-color-apply-on-region start-marker end-marker))))
+         :config
+         ;; ---------------------------
+         ;; HACK: コンパイル完了後、正常に終了していれば自動でウインドウを閉じる
+         ;; ---------------------------
+         (defcustom my-compilation-auto-quit-window-enable-buffer-names '("*compilation*")
+           "Created buffer names by `compile' command."
+           :group 'compilation
+           :type '(list (repeat string)))
+
+         ;; `process-status' と `exit-status' の値も得たいので、アドバイスを利用
+         ;; `compilation-finish-functions' にフックした関数では `msg' しか
+         ;; 参照できないため
+         (defun my-compilation-auto-quit-window (process-status exit-status msg)
+           "Run `quit-window' when `compile' successed."
+           (if (and (member (buffer-name)
+                            my-compilation-auto-quit-window-enable-buffer-names)
+                    (or (and (equal process-status 'exit)
+                             (zerop exit-status))
+                        ;; 改行文字が含まれうる問題を回避
+                        (string-equal "finished" (string-trim msg))))
+               (quit-window nil (get-buffer-window))))
+
+         (if (fboundp 'compilation-handle-exit)
+             (advice-add 'compilation-handle-exit
+                         :after
+                         #'my-compilation-auto-quit-window)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 矩形選択
+       ;; ---------------------------------------------------------------------
+       (leaf cua-base
+         :config
+         (if (fboundp 'cua-selection-mode)
+             ;; 特殊キーバインド無効
+             (cua-selection-mode +1)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; バッファ内マッチ補完
+       ;; ---------------------------------------------------------------------
+       (leaf dabbrev
+         :custom `(;; 補完時に大小文字を区別しない
+                   (dabbrev-case-fold-search . t)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; デスクトップ環境保存・復旧
+       ;; ---------------------------------------------------------------------
+       (leaf desktop
+         ;; HACK: `:leaf-defer' がないと `eval-after-load' 内で `:init' が
+         ;;       実行される
+         ;;         -> 結果的に `autoload' 関数である `desktop-save-mode' が
+         ;;            実行されなくなる
+         :leaf-defer nil
+         :bind (("C-c d c" . desktop-clear)
+                ("C-c d C-s" . desktop-save)
+                ("C-c d s" . desktop-save-in-desktop-dir)
+                ("C-c d d" . desktop-remove)
+                ("C-c d f" . desktop-change-dir)
+                ("C-c d r" . desktop-revert))
+         :custom `((desktop-save . 'ask-if-new)
+                   (desktop-load-locked-desktop . t)
+                   (desktop-missing-file-warning . t)
+                   ;; 必要最小限の情報のみ保存させる
+                   (desktop-locals-to-save . '(case-fold-search
+                                               case-replace
+                                               desktop-locals-to-save
+                                               fill-column
+                                               truncate-lines))
+                   (desktop-restore-frames . t)
+                   (desktop-restore-in-current-display . t)
+                   (desktop-restore-forces-onscreen . t)
+                   (desktop-restore-reuses-frames . t)
+                   (desktop-file-name-format . 'absolute)
+                   (desktop-restore-eager . t)
+                   (desktop-lazy-verbose . t)
+                   (desktop-lazy-idle-delay . 5))
+         :config
+         (if (fboundp 'desktop-save-mode)
+             (desktop-save-mode +1)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; ディレクトリブラウジング
+       ;; ---------------------------------------------------------------------
+       (leaf dired
+         :hook ((dired-mode-hook . my-dired-mode-initialize))
+         :init
+         (defun my-dired-mode-initialize ()
+           "Initialize `dired-mode'."
+           (if (fboundp 'dired-hide-details-mode)
+               ;; 常にすべての情報を表示（簡易モードにしない）
+               (dired-hide-details-mode -1))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; ディレクトリブラウジング (`dired') 拡張
+       ;; ---------------------------------------------------------------------
+       (leaf dired+
+         :after dired
+         :package t
+         :require t
+         :custom `((diredp-hide-details-initially-flag . nil)
+                   (diredp-hide-details-propagate-flag . nil)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; EditorConfig
+       ;; ---------------------------------------------------------------------
+       (leaf editorconfig
+         :package t
+         :config
+         (if (fboundp 'editorconfig-mode)
+             (editorconfig-mode +1)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; GNU Emacs Lisp ドキュメント表示
+       ;; ---------------------------------------------------------------------
+       (leaf eldoc
+         :hook ((emacs-lisp-mode-hook . eldoc-mode)
+                (ielm-mode-hook . eldoc-mode)
+                (lisp-interaction-mode-hook . eldoc-mode)
+                (lisp-mode-hook . eldoc-mode))
+         :custom `((eldoc-minor-mode-string . nil)
+                   (eldoc-idle-delay . 0.2)
+                   (eldoc-echo-area-use-multiline-p . 'truncate-sym-name-if-fit)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; GNU Emacs Lisp 定義ジャンプ・バック・ドキュメント閲覧
+       ;; ---------------------------------------------------------------------
+       (leaf elisp-slime-nav
+         :after eldoc
+         :package t
+         :config
+         (if (fboundp 'elisp-slime-nav-mode)
+             (elisp-slime-nav-mode +1)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; Markdown プレビュー
+       ;; ---------------------------------------------------------------------
+       (leaf livedown
+         :load-path "~/.emacs.d/site-lisp/emacs-livedown"
+         :after nvm markdown-mode
+         :bind ((:markdown-mode-map
+                 :package markdown-mode
+                 ("C-c l p" . livedown-preview)
+                 ("C-c l k" . livedown-kill)))
+         :custom `((livedown-autostart . nil)
+                   (livedown-open . t)
+                   (livedown-port . 50001)
+                   (livedown-browser . nil)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; `text/enriched' フォーマットファイル
+       ;; ---------------------------------------------------------------------
+       (leaf enriched
+         :config
+         ;; ---------------------------
+         ;; PATCH: v25.3 未満に存在するセキュリティホールの Fix
+         ;;
+         ;; see also:
+         ;; https://lists.gnu.org/archive/html/emacs-devel/2017-09/msg00211.html
+         ;; ---------------------------
+         (if (or (< emacs-major-version 25)
+                 (and (= emacs-major-version 25)
+                      (< emacs-minor-version 3)))
+             (defun enriched-decode-display-prop (start end &optional param)
+               (list start end))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; カーソル下の数値を増減
+       ;; ---------------------------------------------------------------------
+       (leaf evil-numbers
+         :package t
+         :bind (("C-3" . evil-numbers/dec-at-pt)
+                ("C-4" . evil-numbers/inc-at-pt)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; デフォルト行文字数の位置にインジケータを表示
+       ;;
+       ;; see also:
+       ;; `fill-column'
+       ;; ---------------------------------------------------------------------
+       (leaf fill-column-indicator
+         :package t
+         :bind (("C-c q" . fci-mode))
+         :custom `(;; FIXME: `font-lock-comment-face' を用いたい
+                   ;;        しかし、指定すると、なぜか "red" が用いられてしまう
+                   ;;        現状は `default' フェイスで回避中
+                   (fci-rule-color . ,(face-attribute 'default :foreground))
+                   (fci-rule-use-dashes . t)
+                   (fci-dash-pattern . 0.5)
+                   ;; HACK: `fci-mode' を有効にした後、
+                   ;;       `toggle-truncate-lines' で折り返し表示を有効にすると
+                   ;;       `line-move-visual' が強制的に nil となる問題を回避
+                   (fci-handle-line-move-visual . nil)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; `dired' における `find' コマンド実行 (Windows ONLY)
+       ;;
+       ;; see also:
+       ;; `dired'
+       ;; ---------------------------------------------------------------------
+       (leaf find-dired
+         :when (member system-type '(ms-dos windows-nt))
+         :after find-dired
+         :config
+         ;; `:custom' で設定すると `find-exec-terminator' の展開が先になり
+         ;; エラーとなる
+         ;; 仕方なく `:config' で泥臭く設定しなければならない
+         (custom-set-variables
+          `(find-ls-option ,(cons (format "-exec %s -ld {} %s"
+                                          (executable-find "ls")
+                                          find-exec-terminator)
+                                  "-ld"))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 自動静的解析
+       ;; ---------------------------------------------------------------------
+       (leaf flycheck
+         :package t
+         :bind (("C-c f" . flycheck-mode))
+         :hook ((after-init-hook . global-flycheck-mode))
+         :custom `((flycheck-checker-error-threshold . nil)
+                   (flycheck-display-errors-delay . 0.5)
+                   (flycheck-idle-change-delay . 0.25)
+                   (flycheck-mode-line . "")
+                   (flycheck-disabled-checkers . '(javascript-jscs)))
+         :config
+         ;; ---------------------------
+         ;; HACK: `flycheck-checker-error-threshold' 以上の項目が出現すると
+         ;;       生成されうる警告バッファの出現を抑制
+         ;; ---------------------------
+         (eval-after-load 'warnings
+           '(if (boundp 'warning-suppress-log-types)
+                (add-to-list 'warning-suppress-log-types
+                             '(flycheck syntax-checker))))
+
+         ;; ---------------------------
+         ;; PATCH: ESLint 優先利用
+         ;;        JSHint -> ESLint を ESLint -> JSHint 順に変更
+         ;; ---------------------------
+         (if (boundp 'flycheck-checkers)
+             (let* ((target-and-other-checkers (member 'javascript-eslint
+                                                       flycheck-checkers)))
+               (delete 'javascript-jshint flycheck-checkers)
+               (setcdr target-and-other-checkers
+                       (cons 'javascript-jshint
+                             (cdr-safe target-and-other-checkers)))))
+
+         ;; ---------------------------
+         ;; PATCH: v.Nu サポート
+         ;; ---------------------------
+         (unless (flycheck-registered-checker-p 'vnu)
+           ;; FIXME: v.Nu の標準出力が UTF-8 なので、環境によっては文字化けする
+           (flycheck-define-checker vnu
+             "A (X)HTML syntax and style checker using v.NU.
+
+See also: `https://github.com/validator/validator'."
+             :command ("vnu" "--format" "gnu" "--verbose" source)
+             :error-patterns
+             ;; ファイル名はフルパスで入ってくるため、チェックしない
+             ((error line-start (minimal-match (one-or-more not-newline)) ":"
+                     line "." column "-"
+                     ;; `flycheck' は範囲指定（複数の line, column 指定）を
+                     ;; サポートしていない
+                     ;; ゆえに範囲の終了地点は無視
+                     (one-or-more digit) "." (one-or-more digit) ": "
+                     "error: " (message)
+                     line-end)
+              (warning line-start (minimal-match (one-or-more not-newline)) ":"
+                       line "." column "-"
+                       (one-or-more digit) "." (one-or-more digit) ": "
+                       "info warning: " (message)
+                       line-end)
+              (info line-start (minimal-match (one-or-more not-newline)) ":"
+                    line "." column "-"
+                    (one-or-more digit) "." (one-or-more digit) ": "
+                    "info: " (message)
+                    line-end))
+             :modes (html-mode nxhtml-mode web-mode))
+
+           ;; 有効化
+           (let ((target-and-other-checkers (member 'html-tidy flycheck-checkers)))
+             (if target-and-other-checkers
+                 ;; デフォルトの (X)HTML チェッカ `html-tidy' と入れ替える
+                 (setcar target-and-other-checkers 'vnu)
+               ;; 未追加ならリスト先頭に追加
+               (add-to-list 'flycheck-checkers 'vnu))))
+
+         ;; ---------------------------
+         ;; PATCH: Sass（.scss/.sass 両形式）チェック時にキャッシュを使わせない
+         ;; ---------------------------
+         (dolist (checker '(scss sass))
+           (if (and (flycheck-registered-checker-p checker)
+                    (not (member "-C" (flycheck-checker-arguments checker))))
+               ;; あえて破壊的に変更（元のリストに追加したい）
+               (nconc (get checker 'flycheck-command) '("-C"))))
+
+         ;; ---------------------------
+         ;; PATCH: temp ファイルのデフォルトコーディングシステムを、
+         ;;        強制的に UTF-8 (LF) とする
+         ;; ---------------------------
+         ;; オーバーライド
+         (defun flycheck-save-buffer-to-file (file-name)
+           "Save the contents of the current buffer to FILE-NAME."
+           ;; 他の部分は元定義と一致させる
+           (make-directory (file-name-directory file-name) t)
+           ;; FIXME: もっと柔軟に設定できるようにならないか？
+           (let ((coding-system-for-write 'utf-8-unix) ; ここだけ変更・決め打ち
+                 (jka-compr-inhibit t))
+             (write-region nil nil file-name nil 0))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 自動静的解析拡張（モードライン変更）
+       ;; ---------------------------------------------------------------------
+       (leaf flycheck-color-mode-line
+         :after flycheck
+         :package t
+         :hook ((flycheck-mode-hook . flycheck-color-mode-line-mode)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 自動静的解析 (OLD)
+       ;; ---------------------------------------------------------------------
+       (leaf flymake
+         :custom `((flymake-run-in-place . nil)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 自動スペルチェッカ
+       ;; ---------------------------------------------------------------------
+       (leaf flyspell
+         :hook (;; Full
+                (markdown-mode-hook . flyspell-mode)
+                (org-mode-hook . flyspell-mode)
+                (text-mode-hook . flyspell-mode)
+                ;; Comments ONLY
+                (css-mode-hook . flyspell-prog-mode)
+                (emacs-lisp-mode-hook . flyspell-prog-mode)
+                (html-mode-hook . flyspell-prog-mode)
+                (ielm-mode-hook . flyspell-prog-mode)
+                (js2-mode-hook . flyspell-prog-mode)
+                (lisp-interaction-mode-hook . flyspell-prog-mode)
+                (lisp-mode-hook . flyspell-prog-mode)
+                (php-mode-hook . flyspell-prog-mode)
+                (sass-mode-hook . flyspell-prog-mode)
+                (scss-mode-hook . flyspell-prog-mode))
+         :custom `((flyspell-delay . 1.0)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; フレーム
+       ;; ---------------------------------------------------------------------
+       (leaf frame
+         :custom `(;; フレームサイズ変更を px 単位で実行できるようにする
+                   (frame-resize-pixelwise . t))
+         :config
+         (if (fboundp 'blink-cursor-mode)
+             ;; カーソルは点滅させない
+             (blink-cursor-mode -1))
+
+         ;; 半透明化
+         (if (and window-system
+                  (fboundp 'set-frame-parameter))
+             (set-frame-parameter nil 'alpha '(90 . 80))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; フレームセット
+       ;; ---------------------------------------------------------------------
+       (leaf frameset
+         ;; 全設定が完了してから実行しなければならない
+         ;; 途中で追加される項目がありうるため
+         :hook ((after-init-hook . my-frameset-initialize))
+         :init
+         (defun my-frameset-initialize ()
+           "Initialize `frameset' when `after-init-hook' running."
+           (eval-after-load 'frameset
+             '(when (listp frameset-filter-alist)
+                ;; `desktop' で保存不要な項目はすべて `:never' にする
+                (dolist (key '(background-color
+                               foreground-color
+                               font
+                               frameset--text-pixel-height
+                               frameset--text-pixel-width
+                               GUI:font))
+                  (setcdr (assoc key frameset-filter-alist) :never))))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; Google 翻訳インターフェース
+       ;; ---------------------------------------------------------------------
+       (leaf google-translate
+         :package t
+         :bind (("C-c C-t p" . google-translate-at-point)
+                ("C-c C-t o" . google-translate-at-point-reverse)
+                ("C-c C-t q" . google-translate-query-translate)
+                ("C-c C-t w" . google-translate-query-translate-reverse)
+                ("C-c C-t s" . google-translate-smooth-translate))
+         :custom `((google-translate-default-source-language . "auto")
+                   (google-translate-default-target-language . "ja")
+                   (google-translate-enable-ido-completion . t)
+                   (google-translate-show-phonetic . nil)
+                   (google-translate-listen-program . nil)
+                   (google-translate-output-destination . 'popup)
+                   (google-translate-pop-up-buffer-set-focus . t)
+                   (google-translate-listen-button-label . "[Listen]")))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; `grep'
+       ;; ---------------------------------------------------------------------
+       (leaf grep
+         :bind (("C-M-g" . rgrep)))
+
+
+       ;; -----------------------------
+       ;; `grep' (Windows ONLY)
+       ;; -----------------------------
+       (leaf grep
+         :when (member system-type '(ms-dos windows-nt))
+         ;; HACK: `autoload' 未対応変数を変更する必要があるため、
+         ;;       明示的にロードさせる必要がある
+         :require t
+         :custom `(;; 例外が出るため NUL デバイスは使わせない
+                   (grep-use-null-device . nil))
+         :config
+         ;; PATH は通っていないが、`exec-path' は通っている場合を想定
+         ;;
+         ;; すべて `defvar' 定義なので、 `autoload' 前後での
+         ;; `custom-set-variables' による設定は不可能
+         ;; 明示的ロード後～関数実行前までに設定しなければならない
+         (setq grep-program
+               (purecopy (or (executable-find "grep")
+                             "grep")))
+         (setq find-program
+               (purecopy (or (executable-find "find")
+                             "find")))
+         (setq xargs-program
+               (purecopy (or (executable-find "xargs")
+                             "xargs"))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 拡張補完・展開
+       ;; ---------------------------------------------------------------------
+       (leaf hippie-exp
+         :bind (("M-/" . hippie-expand)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; カレントカーソル行強調
+       ;; ---------------------------------------------------------------------
+       (leaf hl-line
+         ;; FIXME: `after-init-hook' 後に実行した `load-theme' に対応したい
+         ;;        `advice-add' の :after で `enable-theme' を実行してもダメ
+         :hook ((after-init-hook . my-hl-line-initialize))
+         :init
+         (defun my-hl-line-initialize ()
+           "Initialize `hl-line' settings."
+           (when (and (require 'color nil :noerror) ; 未ロードがありうるため必須
+                      (fboundp 'color-rgb-to-hsl)
+                      (fboundp 'color-name-to-rgb)
+                      (fboundp 'color-darken-name)
+                      (fboundp 'color-lighten-name))
+             (let* ((L-diff 20)
+                    (background-color (face-attribute 'default :background))
+                    (L (nth 2 (apply 'color-rgb-to-hsl
+                                     (color-name-to-rgb background-color))))
+                    (line-background-color (funcall (if (< L 0.5)
+                                                        'color-lighten-name
+                                                      'color-darken-name)
+                                                    background-color
+                                                    L-diff)))
+               (custom-set-faces
+                `(hl-line ((((class color))
+                            (:background ,line-background-color :inherit nil))))))))
+         :config
+         (if (fboundp 'global-hl-line-mode)
+             (global-hl-line-mode +1)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 強化バッファ一覧
+       ;; ---------------------------------------------------------------------
+       (leaf ibuffer
+         :bind (("C-x C-b" . ibuffer))
+         :custom `((ibuffer-expert . t))
+         :config
+         ;; ---------------------------
+         ;; 機能拡張
+         ;; ---------------------------
+         (when (and (boundp 'ibuffer-formats)
+                    (boundp 'ibuffer-sorting-mode)
+                    (boundp 'ibuffer-last-sorting-mode)
+                    (boundp 'ibuffer-sorting-reversep)
+                    (boundp 'ibuffer-sorting-functions-alist))
+           ;; バッファ名の表示を30文字に拡張
+           ;; カラム幅が揃わなくなるため、-1 にはできない
+           (let* (;; `customize-mark-to-save' の評価を t にするため、
+                  ;; 明示的にコピー
+                  (formats (copy-tree ibuffer-formats))
+                  (settings (assoc 'name (assoc 'mark formats))))
+             ;; 該当する設定項目がなければ何もしない
+             ;; 将来的に項目が変更された場合でも、例外を出さないための対策
+             (when settings
+               (setcdr settings '(30 30 :left :elide))
+               (custom-set-variables
+                `(ibuffer-formats ',formats))))
+
+           ;; メジャーモード名 + ファイルパスでソート
+           ;;
+           ;; see also:
+           ;; https://www.emacswiki.org/emacs/IbufferMode#toc10
+           (define-ibuffer-sorter mode-name-and-path-alphabetic
+             "Sort the buffers by their mode and paths.
 Ordering is lexicographic."
-           (:description "major mode + alphabetic")
-           (string-lessp
-            (with-current-buffer (car a)
-              (let* ((file-path (buffer-file-name))
-                     (buffer-name (buffer-name))
-                     (path file-path)
-                     (mode-name (format-mode-line mode-name))
-                     (prefix "999"))
-                (when (and (not (stringp file-path))
-                           (stringp buffer-name))
-                  (setq prefix "000")
-                  (setq path buffer-name))
-                (concat prefix ": " mode-name ": " path)))
-            (with-current-buffer (car b)
-              (let* ((file-path (buffer-file-name))
-                     (buffer-name (buffer-name))
-                     (path file-path)
-                     (mode-name (format-mode-line mode-name))
-                     (prefix "999"))
-                (when (and (not (stringp file-path))
-                           (stringp buffer-name))
-                  (setq prefix "000")
-                  (setq path buffer-name))
-                (concat prefix ": " mode-name ": " path)))))
+             (:description "major mode + alphabetic")
+             (string-lessp
+              (with-current-buffer (car a)
+                (let* ((file-path (buffer-file-name))
+                       (buffer-name (buffer-name))
+                       (path file-path)
+                       (mode-name (format-mode-line mode-name))
+                       (prefix "999"))
+                  (when (and (not (stringp file-path))
+                             (stringp buffer-name))
+                    (setq prefix "000")
+                    (setq path buffer-name))
+                  (concat prefix ": " mode-name ": " path)))
+              (with-current-buffer (car b)
+                (let* ((file-path (buffer-file-name))
+                       (buffer-name (buffer-name))
+                       (path file-path)
+                       (mode-name (format-mode-line mode-name))
+                       (prefix "999"))
+                  (when (and (not (stringp file-path))
+                             (stringp buffer-name))
+                    (setq prefix "000")
+                    (setq path buffer-name))
+                  (concat prefix ": " mode-name ": " path)))))
 
-         (custom-set-variables
-          '(ibuffer-default-sorting-mode 'mode-name-and-path-alphabetic))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 強化バッファ一覧 (`ibuffer') 拡張（`projectile' サポート）
-     ;; -----------------------------------------------------------------------
-     (use-package ibuffer-projectile
-       ;; :disabled t
-       :after (:all projectile
-                    ibuffer)
-       :ensure t
-       :defer t
-       :hook ((ibuffer . my-ibuffer-projectile-initialize))
-       :init
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-ibuffer-projectile-initialize ()
-         "Initialize `ibuffer' settings."
-         (if (fboundp 'ibuffer-projectile-set-filter-groups)
-             (ibuffer-projectile-set-filter-groups))))
+           (custom-set-variables
+            '(ibuffer-default-sorting-mode 'mode-name-and-path-alphabetic))))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; ファイル操作の簡略化
-     ;; -----------------------------------------------------------------------
-     (use-package ido
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(ido-enable-flex-matching t)
-        '(ido-create-new-buffer 'always)
-        '(ido-use-virtual-buffers t)
-        '(ido-max-file-prompt-width 0)
-        '(ido-use-filename-at-point 'guess)
-        '(ido-unc-hosts t)
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(ido-save-directory-list-file ,(convert-standard-filename "~/.emacs.ido-save-directory-list.el")))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'ido-mode)
-           (ido-mode +1))
-
-       (eval-after-load 'ido
-         '(if (fboundp 'ido-everywhere)
-              (ido-everywhere +1))))
+       ;; ---------------------------------------------------------------------
+       ;; 強化バッファ一覧 (`ibuffer') 拡張（`projectile' サポート）
+       ;; ---------------------------------------------------------------------
+       (leaf ibuffer-projectile
+         :after projectile ibuffer
+         :package t
+         :hook ((ibuffer-hook . my-ibuffer-projectile-initialize))
+         :init
+         (defun my-ibuffer-projectile-initialize ()
+           "Initialize `ibuffer' settings."
+           (if (fboundp 'ibuffer-projectile-set-filter-groups)
+               (ibuffer-projectile-set-filter-groups))))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; 画像の直接表示
-     ;; -----------------------------------------------------------------------
-     (use-package image-file
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'auto-image-file-mode)
-           (auto-image-file-mode +1)))
+       ;; ---------------------------------------------------------------------
+       ;; ファイル操作の簡略化
+       ;; ---------------------------------------------------------------------
+       (leaf ido
+         :custom `((ido-enable-flex-matching . t)
+                   (ido-create-new-buffer . 'always)
+                   (ido-use-virtual-buffers . t)
+                   (ido-max-file-prompt-width . 0)
+                   (ido-use-filename-at-point . 'guess)
+                   (ido-unc-hosts . t)
+                   ;; ローカル環境にのみ保存
+                   (ido-save-directory-list-file . "~/.emacs.ido-save-directory-list.el"))
+         :config
+         (if (fboundp 'ido-mode)
+             (ido-mode +1)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; インクリメンタル検索
-     ;; -----------------------------------------------------------------------
-     (use-package isearch
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; 検索時に大小文字を区別しない
-        ;;
-        '(isearch-case-fold-search t)
-        ;;
-        ;; 逆検索時に大小文字を区別しない
-        ;;
-        '(isearch-last-case-fold-search t)))
+       ;; ---------------------------------------------------------------------
+       ;; ファイル操作の簡略化（全環境に適用）
+       ;; ---------------------------------------------------------------------
+       (leaf ido-everywhere
+         :after ido
+         :config
+         (if (fboundp 'ido-everywhere)
+             (ido-everywhere +1)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; JavaScript リファクタリング補助
-     ;; -----------------------------------------------------------------------
-     (use-package js2-refactor
-       ;; :disabled t
-       :after (:all js2-mode)
-       :ensure t
-       :demand t)
+       ;; ---------------------------------------------------------------------
+       ;; 画像の直接表示
+       ;; ---------------------------------------------------------------------
+       (leaf image-file
+         :config
+         (if (fboundp 'auto-image-file-mode)
+             (auto-image-file-mode +1)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; LSP (Language Server Protocol) クライアント
-     ;;
-     ;; see also:
-     ;; https://microsoft.github.io/language-server-protocol/
-     ;; https://langserver.org/
-     ;; -----------------------------------------------------------------------
-     (use-package lsp-mode
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :hook (;; 現状 `flycheck' が無効化されてしまうため、一部を除き無効化
-              ;; (css-mode . lsp)
-              ;; (html-mode . lsp)
-              ;; (js-mode . lsp)
-              ;; (js2-mode . lsp)
-              ;; (json-mode . lsp)
-              ;; (php-mode . lsp)
-              ;; (sass-mode . lsp)
-              ;; (scss-mode . lsp)
-              ;; (sh-mode . lsp)
-              (typescript-mode . lsp)
-              ;; (vue-mode . lsp)
-              )
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(lsp-auto-guess-root t)
-        '(lsp-restart 'ignore)
-        '(lsp-prefer-flymake nil)
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(lsp-session-file ,(convert-standard-filename "~/.emacs.lsp-session"))))
+       ;; ---------------------------------------------------------------------
+       ;; インクリメンタル検索
+       ;; ---------------------------------------------------------------------
+       (leaf isearch
+         :custom `(;; 検索時に大小文字を区別しない
+                   (isearch-case-fold-search . t)
+                   ;; 逆検索時に大小文字を区別しない
+                   (isearch-last-case-fold-search . t)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; LSP (Language Server Protocol) クライアント拡張 (UI)
-     ;; -----------------------------------------------------------------------
-     (use-package lsp-ui
-       ;; :disabled t
-       :after (:all lsp-mode)
-       :ensure t
-       :demand t
-       :hook ((lsp-after-open . lsp-ui-flycheck-enable)))
+       ;; ---------------------------------------------------------------------
+       ;; JavaScript リファクタリング補助
+       ;; ---------------------------------------------------------------------
+       (leaf js2-refactor
+         :after js2-mode
+         :package t
+         :require t)
 
 
-     ;; -----------------------------------------------------------------------
-     ;; OBSOLETE: 環境に依存しないフレーム状態復元
-     ;; -----------------------------------------------------------------------
-     (use-package maxframe
-       ;; :disabled t
-       :if (and (= emacs-major-version 24)
-                (< emacs-minor-version 4))
-       :ensure t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (when (and (not noninteractive)
-                  (fboundp 'maximize-frame)
-                  (fboundp 'restore-frame))
-         ;; 最大化時は次の条件をすべて満たす必要がある:
-         ;;   * 必ずフレーム構築の最後であること
-         ;;   * 他のフレームサイズ状態変更機能よりもあとで実行されること
-         (add-hook 'window-setup-hook #'maximize-frame)
-         ;; FIXME: (w32-send-sys-command 61728) が async なので
-         ;;        `restore-frame' → `frame-restore-save-parameters' の順に
-         ;;        実行されるよう配慮してもムダ
-         ;;        現状 `frame-restore-save-parameters' 実行時の
-         ;;        フレームサイズが最大化時のものになってしまっている
-         (add-hook 'kill-emacs-hook #'restore-frame)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; メニューバー
-     ;; -----------------------------------------------------------------------
-     (use-package menu-bar
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'menu-bar-mode)
-           ;;
-           ;; 非表示
-           ;;
-           (menu-bar-mode -1)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; ローマ字入力から日本語をインクリメンタル検索
-     ;; -----------------------------------------------------------------------
-     (use-package migemo
-       ;; :disabled t
-       :after (:all exec-path-from-shell)
-       :ensure t
-       :demand t
-       :bind (:map isearch-mode-map
-                   ("C-c C-s" . migemo-isearch-toggle-migemo))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; C/Migemo 利用設定
-        ;;
-        `(migemo-command ,(executable-find "cmigemo"))
-        '(migemo-options '("-q" "--emacs"))
-        ;;
-        ;; 空白文字と認識させる対象を広げる
-        ;;
-        '(migemo-white-space-regexp "[[:space:]\s-]*")
-        ;;
-        ;; ユーザ別基礎ディレクトリは設定ディレクトリ内にまとめる
-        ;;
-        `(migemo-directory ,(convert-standard-filename "~"))
-        ;;
-        ;; `migemo' 側で定義されている `isearch' 関連キーバインドを使わせない
-        ;; ミニバッファ内で `yank' できない現象が発生する問題の対策
-        ;;
-        '(migemo-use-default-isearch-keybinding nil)
-        ;;
-        ;; 辞書ファイルはデフォルトのものを利用
-        ;;
-        `(migemo-dictionary ,(convert-standard-filename
-                              (if (member system-type '(ms-dos windows-nt))
-                                  "C:/programs/cmigemo/share/migemo/utf-8/migemo-dict"
-                                "/usr/local/share/migemo/utf-8/migemo-dict")))
-        '(migemo-user-dictionary nil)
-        '(migemo-regex-dictionary nil)
-        ;;
-        ;; 辞書エンコーディングを明示
-        ;;
-        '(migemo-coding-system 'utf-8-unix)
-        ;;
-        ;; キャッシュを使わせる
-        ;;
-        '(migemo-use-pattern-alist t)
-        '(migemo-use-frequent-pattern-alist t)
-        '(migemo-pattern-alist-length 1024)
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        '(migemo-pattern-alist-file (expand-file-name ".emacs.migemo-pattern" migemo-directory))
-        '(migemo-frequent-pattern-alist-file (expand-file-name ".emacs.migemo-frequent" migemo-directory)))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (and (boundp 'migemo-command)
-                migemo-command
-                (boundp 'migemo-dictionary)
-                (file-exists-p migemo-dictionary))
-           (migemo-init)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 汎用プロジェクト管理
-     ;; -----------------------------------------------------------------------
-     (use-package projectile
-       ;; :disabled t
-       :ensure t
-       :demand t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(projectile-enable-caching t)
-        '(projectile-completion-system (cond ((featurep 'ido) 'ido)
-                                             ((featurep 'ivy) 'ivy)
-                                             ((featurep 'helm) 'helm)
-                                             (t 'default)))
-        '(projectile-mode-line-prefix "")
-        '(projectile-keymap-prefix (kbd "C-c C-p"))
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(projectile-cache-file ,(convert-standard-filename "~/.emacs.projectile.cache"))
-        `(projectile-known-projects-file ,(convert-standard-filename "~/.emacs.projectile-bookmarks.eld")))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'projectile-mode)
-           (projectile-mode +1)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 自動カラー表示
-     ;; -----------------------------------------------------------------------
-     (use-package rainbow-mode
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (eval-after-load 'rainbow-mode
-         '(when (boundp 'rainbow-html-colors-major-mode-list)
-            (add-to-list 'rainbow-html-colors-major-mode-list 'sass-mode)
-            (add-to-list 'rainbow-html-colors-major-mode-list 'scss-mode)
-            (add-to-list 'rainbow-html-colors-major-mode-list 'less-mode)))
-       :config
-       ;; -----------------------------
-       ;; lighter
-       ;; -----------------------------
-       (eval-after-load 'my-utils
-         '(if (fboundp 'rainbow-mode)
-              (my-change-lighter rainbow-mode nil))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; ファイル履歴保存
-     ;; -----------------------------------------------------------------------
-     (use-package recentf
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; すべての履歴を保存
-        ;;
-        '(recentf-max-saved-items nil)
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(recentf-save-file ,(convert-standard-filename "~/.emacs.recentf.el"))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; モードラインからマイナーモードの表示を隠す
-     ;; -----------------------------------------------------------------------
-     (use-package rich-minority
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(rm-blacklist nil)
-        '(rm-whitelist nil)
-        '(rm-text-properties nil))
-
-       ;; -----------------------------
-       ;; 起動
-       ;;------------------------------
-       (if (fboundp 'rich-minority-mode)
-           (rich-minority-mode +1)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; ミニバッファの履歴を残す
-     ;; -----------------------------------------------------------------------
-     (use-package savehist
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; すべての履歴を保存
-        ;;
-        '(history-length t)
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(savehist-file ,(convert-standard-filename "~/.emacs.savehist.el")))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'savehist-mode)
-           (savehist-mode +1)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; ファイルごとにカーソル位置を保存
-     ;; -----------------------------------------------------------------------
-     (use-package saveplace
-       ;; :disabled t
-       :demand t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(save-place-file ,(convert-standard-filename "~/.emacs.saveplace.el")))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (cond ((fboundp 'save-place-mode) ; v25.1 以降
-              (save-place-mode +1))
-             ((boundp 'save-place) ; v25.1 未満
-              (setq-default save-place t))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; スクロールバー
-     ;; -----------------------------------------------------------------------
-     (use-package scroll-bar
-       ;; :disabled t
-       :defer t
-       ;; `after-init-hook' で実行しないと適用されない問題がある
-       :hook ((after-init . my-scroll-bar-initilalize))
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
+       ;; ---------------------------------------------------------------------
+       ;; LSP (Language Server Protocol) クライアント
        ;;
-       ;; ウインドウシステム上では、あらゆるスクロールバーを非表示化
-       ;;
-       ;; v25.1 以降
-       ;;
-       (defun my-scroll-bar-initilalize ()
-         "Initialize `scroll-bar' settings."
-         (eval-after-load 'scroll-bar
-           '(when window-system
-              (if (fboundp 'scroll-bar-mode)
-                  (scroll-bar-mode -1))
-              (if (fboundp 'horizontal-scroll-bar-mode)
-                  (horizontal-scroll-bar-mode -1)))))
-       :config
-       ;;
-       ;; v25.1 未満
-       ;;
-       (if (fboundp 'set-scroll-bar-mode)
-           (set-scroll-bar-mode (if window-system nil 'right))))
+       ;; see also:
+       ;; https://microsoft.github.io/language-server-protocol/
+       ;; https://langserver.org/
+       ;; ---------------------------------------------------------------------
+       (leaf lsp-mode
+         :package t
+         :hook (;; 現状 `flycheck' が無効化されてしまうため、一部を除き無効化
+                ;; (css-mode-hook . lsp)
+                ;; (html-mode-hook . lsp)
+                ;; (js-mode-hook . lsp)
+                ;; (js2-mode-hook . lsp)
+                ;; (json-mode-hook . lsp)
+                ;; (php-mode-hook . lsp)
+                ;; (sass-mode-hook . lsp)
+                ;; (scss-mode-hook . lsp)
+                ;; (sh-mode-hook . lsp)
+                (typescript-mode-hook . lsp)
+                ;; (vue-mode-hook . lsp)
+                )
+         :custom `((lsp-auto-guess-root . t)
+                   (lsp-restart . 'ignore)
+                   (lsp-prefer-flymake . nil)
+                   ;; ローカル環境にのみ保存
+                   (lsp-session-file . "~/.emacs.lsp-session")))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; サーバ化
-     ;; -----------------------------------------------------------------------
-     ;; Windows 環境では `server-auth-dir' の「所有者」が：
-     ;;   * Administrator (RID=500)
-     ;;   * Administrators (RID=544)
-     ;; である場合、`server-ensure-safe-dir' の評価が `nil' になる
-     ;;
-     ;; `server-auth-dir' で指定したフォルダの
-     ;; 「プロパティ」→「セキュリティ」→「詳細設定」→「所有者」→「編集」
-     ;; から、所有者をログオンユーザ自身に変更すること
-     ;; -----------------------------------------------------------------------
-     ;; Windows 環境では emacsclientw.exe 実行時に環境変数
-     ;; %EMACS_SERVER_FILE% でサーバファイルのパスを明示しなければならない
-     ;; （なぜ必要かは不明）
-     ;;
-     ;; この欠点をある程度回避した wemacs.cmd を用いること
-     ;; -----------------------------------------------------------------------
-     (use-package server
-       ;; :disabled t
-       :demand t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; ローカル環境にのみ保存
-        ;;
-        `(server-auth-dir ,(convert-standard-filename "~/.emacs.server")))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'server-force-delete)
-           (server-force-delete))
-       (if (fboundp 'server-start)
-           (server-start)))
+       ;; ---------------------------------------------------------------------
+       ;; LSP (Language Server Protocol) クライアント拡張 (UI)
+       ;; ---------------------------------------------------------------------
+       (leaf lsp-ui
+         :after lsp-mode
+         :package t
+         :require t
+         :hook ((lsp-after-open-hook . lsp-ui-flycheck-enable)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; 基礎編集コマンド集
-     ;; -----------------------------------------------------------------------
-     (use-package simple
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'transient-mark-mode)
-           ;;
-           ;; 暫定マークを使用
-           ;;
-           (transient-mark-mode +1)))
+       ;; ---------------------------------------------------------------------
+       ;; メニューバー
+       ;; ---------------------------------------------------------------------
+       (leaf menu-bar
+         :config
+         (if (fboundp 'menu-bar-mode)
+             ;; 非表示
+             (menu-bar-mode -1)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; 各種カッコ関連機能拡張
-     ;; -----------------------------------------------------------------------
-     (use-package smartparens
-       ;; :disabled t
-       :ensure t
-       :demand t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(sp-show-pair-from-inside nil)
-        '(sp-undo-pairs-separately t))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'show-smartparens-global-mode)
-           (show-smartparens-global-mode +1))
-       (if (fboundp 'smartparens-global-mode)
-           (smartparens-global-mode +1))
-       :config
-       ;; -----------------------------
-       ;; lighter
-       ;; -----------------------------
-       (eval-after-load 'my-utils
-         '(if (fboundp 'smartparens-mode)
-              (my-change-lighter smartparens-mode nil))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; 各種カッコ関連機能拡張・公式デフォルト設定
-     ;; -----------------------------------------------------------------------
-     (use-package smartparens-config
-       ;; :disabled t
-       :after (:all smartparens)
-       :demand t)
-
-
-     ;; -----------------------------------------------------------------------
-     ;; ツールバー
-     ;; -----------------------------------------------------------------------
-     (use-package tool-bar
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'tool-bar-mode)
-           ;;
-           ;; 非表示
-           ;;
-           (tool-bar-mode -1)))
+       ;; ---------------------------------------------------------------------
+       ;; ローマ字入力から日本語をインクリメンタル検索
+       ;; ---------------------------------------------------------------------
+       (leaf migemo
+         :leaf-defer nil
+         :after exec-path-from-shell
+         :package t
+         :require t
+         :bind ((:isearch-mode-map
+                 :package isearch
+                 ("C-c C-s" . migemo-isearch-toggle-migemo)))
+         :custom `(;; C/Migemo 利用設定
+                   (migemo-command . ,(executable-find "cmigemo"))
+                   (migemo-options . '("-q" "--emacs"))
+                   ;; 空白文字と認識させる対象を広げる
+                   (migemo-white-space-regexp . "[[:space:]\s-]*")
+                   ;; ユーザ別基礎ディレクトリは設定ディレクトリ内にまとめる
+                   (migemo-directory . ,(convert-standard-filename "~"))
+                   ;; `migemo' 側で定義されている `isearch' 関連キーバインドを使わせない
+                   ;; ミニバッファ内で `yank' できない現象が発生する問題の対策
+                   (migemo-use-default-isearch-keybinding . nil)
+                   ;; 辞書ファイルはデフォルトのものを利用
+                   (migemo-dictionary . ,(convert-standard-filename
+                                          (if (member system-type '(ms-dos windows-nt))
+                                              "C:/programs/cmigemo/share/migemo/utf-8/migemo-dict"
+                                            "/usr/local/share/migemo/utf-8/migemo-dict")))
+                   (migemo-user-dictionary . nil)
+                   (migemo-regex-dictionary . nil)
+                   ;; 辞書エンコーディングを明示
+                   (migemo-coding-system . 'utf-8-unix)
+                   ;; キャッシュを使わせる
+                   (migemo-use-pattern-alist . t)
+                   (migemo-use-frequent-pattern-alist . t)
+                   (migemo-pattern-alist-length . 1024)
+                   ;; ローカル環境にのみ保存
+                   (migemo-pattern-alist-file . "~/.emacs.migemo-pattern")
+                   (migemo-frequent-pattern-alist-file . "~/.emacs.migemo-frequent"))
+         :config
+         (if (and (boundp 'migemo-command)
+                  (boundp 'migemo-dictionary)
+                  (file-exists-p migemo-dictionary))
+             (migemo-init)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; ツールチップ
-     ;; -----------------------------------------------------------------------
-     (use-package tooltip
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'tooltip-mode)
-           ;;
-           ;; 非表示
-           ;;
-           (tooltip-mode -1)))
+       ;; ---------------------------------------------------------------------
+       ;; 汎用プロジェクト管理
+       ;; ---------------------------------------------------------------------
+       (leaf projectile
+         :package t
+         :require t
+         :custom `((projectile-enable-caching . t)
+                   (projectile-completion-system . ,(cond ((featurep 'ido) 'ido)
+                                                          ((featurep 'ivy) 'ivy)
+                                                          ((featurep 'helm) 'helm)
+                                                          (t 'default)))
+                   (projectile-mode-line-prefix . "")
+                   (projectile-keymap-prefix . ,(kbd "C-c C-p"))
+                   ;; ローカル環境にのみ保存
+                   (projectile-cache-file . "~/.emacs.projectile.cache")
+                   (projectile-known-projects-file . "~/.emacs.projectile-bookmarks.eld"))
+         :config
+         (if (fboundp 'projectile-mode)
+             (projectile-mode +1)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; `undo' 拡張、`redo' 機能追加ならびに分岐履歴実装
-     ;; -----------------------------------------------------------------------
-     (use-package undo-tree
-       ;; :disabled t
-       :ensure t
-       :demand t
-       :bind (("C-." . undo-tree-redo))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        '(undo-tree-mode-lighter ""))
-
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'global-undo-tree-mode)
-           (global-undo-tree-mode)))
+       ;; ---------------------------------------------------------------------
+       ;; 自動カラー表示
+       ;; ---------------------------------------------------------------------
+       (leaf rainbow-mode
+         :config
+         (eval-after-load 'rainbow-mode
+           '(when (boundp 'rainbow-html-colors-major-mode-list)
+              (add-to-list 'rainbow-html-colors-major-mode-list 'sass-mode)
+              (add-to-list 'rainbow-html-colors-major-mode-list 'scss-mode))))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; 空白文字強調
-     ;; -----------------------------------------------------------------------
-     (use-package whitespace
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;;------------------------------
-       (custom-set-variables
-        ;;
-        ;; 「不正」位置の空白文字のみ強調
-        ;;
-        '(whitespace-style '(face
-                             trailing
-                             tabs
-                             newline
-                             empty
-                             space-after-tab
-                             space-before-tab
-                             tab-mark
-                             newline-mark))
-        ;;
-        ;; 行カラム最大値は `fill-column' を参照させる
-        ;;
-        '(whitespace-line-column nil))
+       ;; ---------------------------------------------------------------------
+       ;; ファイル履歴保存
+       ;; ---------------------------------------------------------------------
+       (leaf recentf
+         :custom `(;; すべての履歴を保存
+                   (recentf-max-saved-items . nil)
+                   ;; ローカル環境にのみ保存
+                   (recentf-save-file . "~/.emacs.recentf.el")))
 
-       ;; -----------------------------
-       ;; フェイス強調無効化
-       ;; -----------------------------
-       (custom-set-faces
-        '(whitespace-space ((t
-                             (:background nil)))))
 
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'global-whitespace-mode)
-           (global-whitespace-mode +1))
-       :config
-       ;; -----------------------------
-       ;; lighter
-       ;; -----------------------------
-       (eval-after-load 'my-utils
-         '(progn
-            (if (fboundp 'whitespace-mode)
-                (my-change-lighter whitespace-mode nil))
-            (if (fboundp 'whitespace-newline-mode)
-                (my-change-lighter whitespace-newline-mode nil))
-            (if (fboundp 'global-whitespace-mode)
-                (my-change-lighter global-whitespace-mode nil))
-            (if (fboundp 'global-whitespace-newline-mode)
-                (my-change-lighter global-whitespace-newline-mode nil))))
+       ;; ---------------------------------------------------------------------
+       ;; モードラインからマイナーモードの表示を隠す
+       ;; ---------------------------------------------------------------------
+       (leaf rich-minority
+         :package t
+         :require t
+         :custom `((rm-blacklist . nil)
+                   (rm-whitelist . nil)
+                   (rm-text-properties . nil))
+         :config
+         (if (fboundp 'rich-minority-mode)
+             (ignore-errors (rich-minority-mode +1))))
 
-       ;; -----------------------------
-       ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調表示
-       ;;
-       ;; 表示テスト:
-       ;;   U+0009: 「	」
-       ;;   U+00A0: 「 」
-       ;;   U+3000: 「　」
-       ;; -----------------------------
-       (when (and (boundp 'whitespace-style)
-                  (boundp 'whitespace-display-mappings))
-         (custom-set-variables
-          ;;
-          ;; 空白の強調を明示
-          ;;
-          `(whitespace-style ',(let ((styles (copy-tree whitespace-style)))
-                                 ;; HARD SPACE の ON/OFF も含んでいる
-                                 (add-to-list 'styles 'spaces)
-                                 (add-to-list 'styles 'space-mark)))
-          ;;
-          ;; 検索条件を追加
-          ;;
-          '(whitespace-hspace-regexp "\\(\\(\xA0\\|\x8A0\\|\x920\\|\xE20\\|\xF20\\|\x3000\\)+\\)")
-          '(whitespace-trailing-regexp "\\([\t \u00A0\u3000]+\\)$"))
 
+       ;; ---------------------------------------------------------------------
+       ;; ミニバッファの履歴を残す
+       ;; ---------------------------------------------------------------------
+       (leaf savehist
+         :custom `(;; すべての履歴を保存
+                   (history-length . t)
+                   ;; ローカル環境にのみ保存
+                   (savehist-file . "~/.emacs.savehist.el"))
+         :config
+         (if (fboundp 'savehist-mode)
+             (savehist-mode +1)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; ファイルごとにカーソル位置を保存
+       ;; ---------------------------------------------------------------------
+       (leaf saveplace
+         :require t
+         :custom `(;; ローカル環境にのみ保存
+                   (save-place-file . "~/.emacs.saveplace.el"))
+         :config
+         (cond ((fboundp 'save-place-mode) ; v25.1 以降
+                (save-place-mode +1))
+               ((boundp 'save-place) ; v25.1 未満
+                (setq-default save-place t))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; スクロールバー
+       ;; ---------------------------------------------------------------------
+       (leaf scroll-bar
+         ;; `after-init-hook' で実行しないと適用されない問題がある
+         :hook ((after-init-hook . my-scroll-bar-initilalize))
+         :init
+         ;; ウインドウシステム上では、あらゆるスクロールバーを非表示化
          ;;
-         ;; 表示置換条件を追加
-         ;;
-         (add-to-list 'whitespace-display-mappings
-                      '(space-mark ?\u3000 [?\u25a1] [?_ ?_])))
+         ;; v25.1 以降
+         (defun my-scroll-bar-initilalize ()
+           "Initialize `scroll-bar' settings."
+           (eval-after-load 'scroll-bar
+             '(when window-system
+                (if (fboundp 'scroll-bar-mode)
+                    (scroll-bar-mode -1))
+                (if (fboundp 'horizontal-scroll-bar-mode)
+                    (horizontal-scroll-bar-mode -1)))))
+         :config
+         ;; v25.1 未満
+         (if (fboundp 'set-scroll-bar-mode)
+             (set-scroll-bar-mode (if window-system nil 'right))))
 
-       ;; -----------------------------
-       ;; HACK: 半角空白 (U+0020) を強調しないようにする
+
+       ;; ---------------------------------------------------------------------
+       ;; サーバ化
+       ;; ---------------------------------------------------------------------
+       ;; Windows 環境では `server-auth-dir' の「所有者」が：
+       ;;   * Administrator (RID=500)
+       ;;   * Administrators (RID=544)
+       ;; である場合、`server-ensure-safe-dir' の評価が `nil' になる
        ;;
-       ;; 表示テスト:
-       ;;   U+0020: 「 」
-       ;; -----------------------------
-       (if (boundp 'whitespace-display-mappings)
+       ;; `server-auth-dir' で指定したフォルダの
+       ;; 「プロパティ」→「セキュリティ」→「詳細設定」→「所有者」→「編集」
+       ;; から、所有者をログオンユーザ自身に変更すること
+       ;; ---------------------------------------------------------------------
+       ;; Windows 環境では emacsclientw.exe 実行時に環境変数
+       ;; %EMACS_SERVER_FILE% でサーバファイルのパスを明示しなければならない
+       ;; （なぜ必要かは不明）
+       ;;
+       ;; この欠点をある程度回避した wemacs.cmd を用いること
+       ;; ---------------------------------------------------------------------
+       (leaf server
+         :package t
+         :custom `(;; ローカル環境にのみ保存
+                   (server-auth-dir . "~/.emacs.server"))
+         :config
+         (if (fboundp 'server-force-delete)
+             (server-force-delete))
+
+         (if (fboundp 'server-start)
+             (server-start)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 基礎編集コマンド集
+       ;; ---------------------------------------------------------------------
+       (leaf simple
+         :config
+         (if (fboundp 'transient-mark-mode)
+             ;; 暫定マークを使用
+             (transient-mark-mode +1)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 各種カッコ関連機能拡張
+       ;; ---------------------------------------------------------------------
+       (leaf smartparens
+         :package t
+         :require t
+         :custom `((sp-show-pair-from-inside . nil)
+                   (sp-undo-pairs-separately . t))
+         :config
+         (if (fboundp 'show-smartparens-global-mode)
+             (show-smartparens-global-mode +1))
+
+         (if (fboundp 'smartparens-global-mode)
+             (smartparens-global-mode +1)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 各種カッコ関連機能拡張・公式デフォルト設定
+       ;; ---------------------------------------------------------------------
+       (leaf smartparens-config
+         :after smartparens
+         :require t)
+
+
+       ;; ---------------------------------------------------------------------
+       ;; ツールバー
+       ;; ---------------------------------------------------------------------
+       (leaf tool-bar
+         :config
+         (if (fboundp 'tool-bar-mode)
+             ;; 非表示
+             (tool-bar-mode -1)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; ツールチップ
+       ;; ---------------------------------------------------------------------
+       (leaf tooltip
+         :config
+         (if (fboundp 'tooltip-mode)
+             ;; 非表示
+             (tooltip-mode -1)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; `undo' 拡張、`redo' 機能追加ならびに分岐履歴実装
+       ;; ---------------------------------------------------------------------
+       (leaf undo-tree
+         :leaf-defer nil
+         :package t
+         :require t
+         :bind (("C-." . undo-tree-redo))
+         :custom `((undo-tree-mode-lighter . ""))
+         :config
+         (if (fboundp 'global-undo-tree-mode)
+             (global-undo-tree-mode)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; 空白文字強調
+       ;; ---------------------------------------------------------------------
+       (leaf whitespace
+         :custom `(;; 「不正」位置の空白文字のみ強調
+                   (whitespace-style . '(face
+                                         trailing
+                                         tabs
+                                         newline
+                                         empty
+                                         space-after-tab
+                                         space-before-tab
+                                         tab-mark
+                                         newline-mark))
+                   ;; 行カラム最大値は `fill-column' を参照させる
+                   (whitespace-line-column . nil))
+         :custom-face `((whitespace-space . '((t
+                                               (:background nil)))))
+         :config
+         (if (fboundp 'global-whitespace-mode)
+             (global-whitespace-mode +1))
+
+         ;; ---------------------------
+         ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調表示
+         ;;
+         ;; 表示テスト:
+         ;;   U+0009: 「	」
+         ;;   U+00A0: 「 」
+         ;;   U+3000: 「　」
+         ;; ---------------------------
+         (when (and (boundp 'whitespace-style)
+                    (boundp 'whitespace-display-mappings))
            (custom-set-variables
             ;;
-            ;; 表示置換しないようにする
+            ;; 空白の強調を明示
             ;;
-            `(whitespace-display-mappings ',(delete '(space-mark ?\  [?\u00B7] [?.])
-                                                    whitespace-display-mappings)))))
+            `(whitespace-style ',(let ((styles (copy-tree whitespace-style)))
+                                   ;; HARD SPACE の ON/OFF も含んでいる
+                                   (add-to-list 'styles 'spaces)
+                                   (add-to-list 'styles 'space-mark)))
+            ;;
+            ;; 検索条件を追加
+            ;;
+            '(whitespace-hspace-regexp "\\(\\(\xA0\\|\x8A0\\|\x920\\|\xE20\\|\xF20\\|\x3000\\)+\\)")
+            '(whitespace-trailing-regexp "\\([\t \u00A0\u3000]+\\)$"))
+
+           ;;
+           ;; 表示置換条件を追加
+           ;;
+           (add-to-list 'whitespace-display-mappings
+                        '(space-mark ?\u3000 [?\u25a1] [?_ ?_])))
+
+         ;; ---------------------------
+         ;; HACK: 半角空白 (U+0020) を強調しないようにする
+         ;;
+         ;; 表示テスト:
+         ;;   U+0020: 「 」
+         ;; ---------------------------
+         (if (boundp 'whitespace-display-mappings)
+             (custom-set-variables
+              ;;
+              ;; 表示置換しないようにする
+              ;;
+              `(whitespace-display-mappings ',(delete '(space-mark ?\  [?\u00B7] [?.])
+                                                      whitespace-display-mappings)))))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; ウインドウの状態履歴を undo/redo
-     ;; -----------------------------------------------------------------------
-     (use-package winner
-       ;; :disabled t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'winner-mode)
-           (winner-mode +1)))
+       ;; ---------------------------------------------------------------------
+       ;; ウインドウの状態履歴を undo/redo
+       ;; ---------------------------------------------------------------------
+       (leaf winner
+         :config
+         (if (fboundp 'winner-mode)
+             (winner-mode +1)))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; スニペット挿入
-     ;; -----------------------------------------------------------------------
-     (use-package yasnippet
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :init
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       (if (fboundp 'yas-global-mode)
-           (yas-global-mode +1))
+       ;; ---------------------------------------------------------------------
+       ;; スニペット挿入
+       ;; ---------------------------------------------------------------------
+       (leaf yasnippet
+         :package t
+         :config
+         (if (fboundp 'yas-global-mode)
+             (yas-global-mode +1)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; `yasnippet' 公式コレクション
+       ;; ---------------------------------------------------------------------
+       (leaf yasnippet-snippets
+         :after yasnippet
+         :package t)
+       ) ; END
+
+
+     ;; =======================================================================
+     ;; メジャーモード
+     ;; =======================================================================
+     (leaf *major-mode
        :config
-       ;; -----------------------------
-       ;; lighter
-       ;; -----------------------------
-       (eval-after-load 'my-utils
-         '(if (fboundp 'yas-minor-mode)
-              (my-change-lighter yas-minor-mode nil))))
+       ;; ---------------------------------------------------------------------
+       ;; Apache
+       ;; ---------------------------------------------------------------------
+       (leaf apache-mode
+         :package t
+         :mode (("\\.conf\\'" . apache-mode))
+         :config
+         (eval-after-load 'apache-mode
+           '(if (boundp 'apache-indent-level)
+                (setq-local apache-indent-level 4))))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; END OF CONFIG: 詳細設定（マイナーモード）
-     ;; -----------------------------------------------------------------------
-     ))
+       ;; ---------------------------------------------------------------------
+       ;; CSS
+       ;; ---------------------------------------------------------------------
+       (leaf css-mode
+         :hook ((css-mode-hook . my-css-mode-initialize))
+         :custom `((css-indent-offset . 2))
+         :init
+         (defun my-css-mode-initialize ()
+           "Initialize `css-mode' before file load."
+           (setq-local indent-tabs-mode nil)
+
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab")))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style)))))))
 
 
-;; ============================================================================
-;; 詳細設定（メジャーモード）
-;; ============================================================================
-(eval-after-load 'use-package
-  '(progn
-     ;; -----------------------------------------------------------------------
-     ;; Apache
-     ;; -----------------------------------------------------------------------
-     (use-package apache-mode
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :mode (("\\.conf\\'" . apache-mode))
-       :config
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (eval-after-load 'apache-mode
-         '(if (boundp 'apache-indent-level)
-              (setq-local apache-indent-level 4))))
+       ;; ---------------------------------------------------------------------
+       ;; GNU Emacs Lisp
+       ;; ---------------------------------------------------------------------
+       (leaf elisp-mode
+         :hook ((emacs-lisp-mode-hook . my-emacs-lisp-mode-initialize)
+                (lisp-interaction-mode-hook . my-emacs-lisp-mode-initialize)
+                (lisp-interaction-mode-hook . my-lisp-interaction-mode-initialize))
+         :init
+         ;; 共通
+         (defun my-emacs-lisp-mode-initialize ()
+           "Initialize `emacs-lisp-mode' and `lisp-interaction-mode' before file load."
+           (setq-local indent-tabs-mode nil)
+           (setq-local tab-width 8)
+
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab"))
+                         (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
+                         (tab-width-number (if (and tab-width-number-data
+                                                    (stringp tab-width-number-data))
+                                               (string-to-number tab-width-number-data)
+                                             tab-width)))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style))
+                    (if (not (equal tab-width tab-width-number))
+                        (setq-local tab-width tab-width-number))))))
+
+         ;; `lisp-interaction-mode' ONLY
+         (defun my-lisp-interaction-mode-initialize ()
+           "Initialize `lisp-interaction-mode-initialize' before file load."
+           ;; `whitespace-mode' 無効化
+           (eval-after-load 'whitespace
+             '(progn
+                (if (fboundp 'whitespace-mode)
+                    (whitespace-mode -1))
+                (when (boundp 'whitespace-style)
+                  (setq-local whitespace-style (copy-tree whitespace-style))
+                  (delete 'empty whitespace-style))))))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; CSS
-     ;; -----------------------------------------------------------------------
-     (use-package css-mode
-       ;; :disabled t
-       :defer t
-       :hook ((css-mode . my-css-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (custom-set-variables
-        '(css-indent-offset 2))
+       ;; -----------------------------------------------------------------------
+       ;; Haml
+       ;; -----------------------------------------------------------------------
+       (leaf haml-mode
+         :package t
+         :hook ((haml-mode-hook . my-haml-mode-initialize))
+         :init
+         (defun my-haml-mode-initialize ()
+           "Initialize `haml-mode' before file load."
+           (setq-local indent-tabs-mode nil)
 
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-css-mode-initialize ()
-         "Initialize `css-mode' before file load."
-         (setq-local indent-tabs-mode nil)
-
-         ;; EditorConfig 対応
-         (eval-after-load 'editorconfig
-           '(if (hash-table-p editorconfig-properties-hash)
-                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab")))
-                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style)))))))
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab")))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style)))))))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; GNU Emacs Lisp
-     ;; -----------------------------------------------------------------------
-     (use-package elisp-mode
-       ;; :disabled t
-       :defer t
-       :hook ((emacs-lisp-mode . my-emacs-lisp-mode-initialize)
-              (lisp-interaction-mode . my-emacs-lisp-mode-initialize)
-              (lisp-interaction-mode . my-lisp-interaction-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
+       ;; ---------------------------------------------------------------------
+       ;; Emacs Lisp インタラクション
+       ;; ---------------------------------------------------------------------
+       (leaf ielm
+         :hook ((ielm-mode-hook . my-ielm-mode-initialize))
+         :init
+         (defun my-ielm-mode-initialize ()
+           "Initialize `ielm' major mode before file load."
+           (setq-local indent-tabs-mode nil)
+           (setq-local tab-width 8)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; JavaScript
+       ;; ---------------------------------------------------------------------
+       (leaf js2-mode
+         :package t
+         :mode (("\\.js\\'" . js2-mode)
+                ("\\.pac\\'" . js2-mode))
+         :hook ((js2-mode-hook . my-js2-mode-initialize))
+         :custom `((js2-highlight-level . 3) ; すべての構文強調を有効化
+                   (js2-basic-offset . 4)
+                   (js2-bounce-indent-p . nil)
+                   (js2-pretty-multiline-declarations . t)
+                   (js2-indent-switch-body nil) ; case 文はインデントしない
+                   (js2-idle-timer-delay . 0.25)
+                   (js2-dynamic-idle-timer-adjust . 0)
+                   (js2-concat-multiline-strings . t)
+                   ;; 文法チェック関連
+                   ;;
+                   ;; 他ツールに任せるため、すべて無効化
+                   (js2-mode-show-parse-errors . nil)
+                   (js2-mode-show-strict-warnings . nil)
+                   (js2-strict-trailing-comma-warning . nil)
+                   (js2-strict-missing-semi-warning . nil)
+                   (js2-missing-semi-one-line-override . nil)
+                   (js2-strict-inconsistent-return-warning . nil)
+                   (js2-strict-cond-assign-warning . nil)
+                   (js2-strict-var-redeclaration-warning . nil)
+                   (js2-strict-var-hides-function-arg-warning . nil)
+                   ;; その他
+                   (js2-skip-preprocessor-directives . t)
+                   (js2-language-version . 200)
+                   (js2-instanceof-has-side-effects . nil)
+                   (js2-move-point-on-right-click . nil) ; 使わない
+                   (js2-allow-rhino-new-expr-initializer . nil) ; 使わない
+                   (js2-allow-member-expr-as-function-name . nil)
+                   (js2-include-browser-externs . t)
+                   (js2-include-rhino-externs . nil)
+                   (js2-include-node-externs . nil)
+                   (js2-mode-indent-inhibit-undo . nil)
+                   (js2-mode-indent-ignore-first-tab . nil)
+                   (js2-highlight-external-variables . t)
+                   ;; JSLint
+                   ;;
+                   ;; 他ツールに任せるため、すべて無効化
+                   (js2-include-jslint-globals . nil))
+         :init
+         (defun my-js2-mode-initialize ()
+           "Initialize `js2-mode' before file load."
+           (setq-local indent-tabs-mode nil)
+
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab")))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style)))))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; JSON
+       ;; ---------------------------------------------------------------------
+       (leaf json-mode
+         :package t
+         :mode (("\\.bowerrc\\'" . json-mode)
+                ("\\.ftppass\\'" . json-mode)
+                ("\\.htmlhintrc\\'" . json-mode)
+                ("\\.htmllintrc\\'" . json-mode)
+                ("\\.jscsrc\\'" . json-mode)
+                ("\\.jshintrc\\'" . json-mode)
+                ("\\.json\\'" . json-mode)
+                ("\\.stylelintrc\\'" . json-mode))
+         :hook ((json-mode-hook . my-json-mode-initialize))
+         :init
+         (defun my-json-mode-initialize ()
+           "Initialize `json-mode' before file load."
+           (setq-local indent-tabs-mode nil)
+           (setq-local tab-width 2)
+           (setq-local js-indent-level tab-width)
+
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab"))
+                         (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
+                         (tab-width-number (if (and tab-width-number-data
+                                                    (stringp tab-width-number-data))
+                                               (string-to-number tab-width-number-data)
+                                             tab-width)))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style))
+                    (if (not (equal tab-width tab-width-number))
+                        (setq-local tab-width tab-width-number))
+                    (if (not (equal js-indent-level tab-width))
+                        (setq-local js-indent-level tab-width)))))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; Lisp
+       ;; ---------------------------------------------------------------------
+       (leaf lisp-mode
+         :hook ((lisp-mode-hook . my-lisp-mode-initialize))
+         :init
+         (defun my-lisp-mode-initialize ()
+           "Itialize `lisp-mode' before file load."
+           (setq-local indent-tabs-mode nil)
+           (setq-local tab-width 8)
+
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab"))
+                         (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
+                         (tab-width-number (if (and tab-width-number-data
+                                                    (stringp tab-width-number-data))
+                                               (string-to-number tab-width-number-data)
+                                             tab-width)))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style))
+                    (if (not (equal tab-width tab-width-number))
+                        (setq-local tab-width tab-width-number)))))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; Markdown
+       ;; ---------------------------------------------------------------------
+       (leaf markdown-mode
+         :package t
+         :hook ((markdown-mode-hook . my-markdown-mode-initialize))
+         :custom `((markdown-command . ,(or (executable-find "github-markup")
+                                          (executable-find "markdown")
+                                          "markdown"))
+                   (markdown-command-needs-filename . ,(executable-find "github-markup"))
+                   (markdown-coding-system . 'utf-8-unix)
+                   ;; プレビュー用に生成した実 HTML ファイルの残存を防ぐ
+                   (markdown-live-preview-delete-export . 'delete-on-export))
+         :init
+         (defun my-markdown-mode-initialize ()
+           "Initialize `markdown-mode' before file load."
+           (setq-local indent-tabs-mode nil)
+
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab")))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style))))))
+         :config
+         ;; プレーンテキストファイルは除外
+         (setq auto-mode-alist
+               (delete '("\\.text\\'" . markdown-mode) auto-mode-alist)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; PHP
+       ;; ---------------------------------------------------------------------
+       (leaf php-mode
+         :package t
+         :hook ((php-mode-hook . my-php-mode-initialize))
+         :init
+         (defun my-php-mode-initialize ()
+           "Initialize `php-mode' before file load."
+           (setq-local indent-tabs-mode nil)
+
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab")))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style)))))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; Sass (extension: ".sass")
+       ;; ---------------------------------------------------------------------
+       (leaf sass-mode
+         :package t
+         :mode (("\\.sass\\'" . sass-mode))
+         :hook ((sass-mode-hook . my-sass-mode-initialize))
+         :init
+         (defun my-sass-mode-initialize ()
+           "Initialize `sass-mode' before file load."
+           (setq-local indent-tabs-mode nil)
+
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab")))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style)))))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; Sass (extension: ".scss")
+       ;; ---------------------------------------------------------------------
+       (leaf scss-mode
+         :package t
+         :hook ((scss-mode-hook . my-scss-mode-initialize))
+         :custom `(;; コンパイルは常に手動（保存時は何もしない）
+                   ;; 各種ツール経由でコンパイルされうるため
+                   (scss-compile-at-save . nil))
+         :init
+         (defun my-scss-mode-initialize ()
+           "Initialize `scss-mode' before file load."
+           (setq-local indent-tabs-mode nil)
+
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab")))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style)))))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; SGML, (X)HTML
+       ;; ---------------------------------------------------------------------
+       (leaf sgml-mode
+         :mode (("\\.[sx]?html?\\'" . html-mode))
+         :hook ((html-mode-hook . my-html-mode-initialize)
+                (sgml-mode-hook . my-sgml-mode-initialize))
+         :init
+         ;; SGML
+         (defun my-sgml-mode-initialize ()
+           "Initialize `sgml-mode' before file load."
+           (setq-local indent-tabs-mode nil)
+
+           (when (featurep 'sgml-electric-tag-pair-mode)
+             (declare-function sgml-electric-tag-pair-mode "sgml-mode")
+             (sgml-electric-tag-pair-mode +1))
+
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab")))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style))))))
+
+         ;; (X)HTML
+         (defun my-html-mode-initialize ()
+           "Initialize `html-mode' before file load."
+           (setq-local indent-tabs-mode nil)
+
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab")))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style)))))))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; TeX
+       ;; ---------------------------------------------------------------------
+       (leaf tex-mode
+         :hook ((tex-mode-hook . my-tex-mode-initialize))
+         :init
+         (defun my-tex-mode-initialize ()
+           "Initialize `tex-mode' before file load."
+           (setq-local truncate-lines nil)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; Text
+       ;; ---------------------------------------------------------------------
+       (leaf text-mode
+         :hook ((text-mode-hook . my-tex-mode-initialize))
+         :init
+         (defun my-text-mode-initialize ()
+           "Initialize `text-mode' before file load."
+           (setq-local truncate-lines nil)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; Template Toolkit (tt, written by Perl)
        ;;
-       ;; 共通
-       ;;
-       (defun my-emacs-lisp-mode-initialize ()
-         "Initialize `emacs-lisp-mode' and `lisp-interaction-mode' before file load."
-         (setq-local indent-tabs-mode nil)
-         (setq-local tab-width 8)
-
-         ;; EditorConfig 対応
-         (eval-after-load 'editorconfig
-           '(if (hash-table-p editorconfig-properties-hash)
-                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab"))
-                       (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
-                       (tab-width-number (if (and tab-width-number-data
-                                                  (stringp tab-width-number-data))
-                                             (string-to-number tab-width-number-data)
-                                           tab-width)))
-                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))
-                  (if (not (equal tab-width tab-width-number))
-                      (setq-local tab-width tab-width-number))))))
-
-       ;;
-       ;; `lisp-interaction-mode' ONLY
-       ;;
-       (defun my-lisp-interaction-mode-initialize ()
-         "Initialize `lisp-interaction-mode-initialize' before file load."
-         ;; `whitespace-mode' 無効化
-         (eval-after-load 'whitespace
-           '(progn
-              (if (fboundp 'whitespace-mode)
-                  (whitespace-mode -1))
-              (when (boundp 'whitespace-style)
-                (setq-local whitespace-style (copy-tree whitespace-style))
-                (delete 'empty whitespace-style))))))
+       ;; see also:
+       ;; http://tt2.org/
+       ;; ---------------------------------------------------------------------
+       (leaf tt-mode
+         :package t)
 
 
-     ;; -----------------------------------------------------------------------
-     ;; Haml
-     ;; -----------------------------------------------------------------------
-     (use-package haml-mode
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :hook ((haml-mode . my-haml-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-haml-mode-initialize ()
-         "Initialize `haml-mode' before file load."
-         (setq-local indent-tabs-mode nil)
-
-         ;; EditorConfig 対応
-         (eval-after-load 'editorconfig
-           '(if (hash-table-p editorconfig-properties-hash)
-                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab")))
-                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style)))))))
+       ;; ---------------------------------------------------------------------
+       ;; Vue.js
+       ;; ---------------------------------------------------------------------
+       (leaf vue-mode
+         :package t)
 
 
-     ;; -----------------------------------------------------------------------
-     ;; Emacs Lisp インタラクション
-     ;; -----------------------------------------------------------------------
-     (use-package ielm
-       ;; :disabled t
-       :defer t
-       :hook ((ielm-mode-hook . my-ielm-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-ielm-mode-initialize ()
-         "Initialize `ielm' major mode before file load."
-         (setq-local indent-tabs-mode nil)
-         (setq-local tab-width 8)))
+       ;; ---------------------------------------------------------------------
+       ;; XML
+       ;; ---------------------------------------------------------------------
+       (leaf nxml-mode
+         :mode (("\\.xml\\'" . nxml-mode)
+                ("\\.plist\\'" . nxml-mode))
+         :hook ((nxml-mode-hook . my-nxml-mode-initialize))
+         :custom `((nxml-child-indent . 2)
+                   (nxml-attribute-indent . 0)
+                   (nxml-slash-auto-complete-flag . t)
+                   (nxml-bind-meta-tab-to-complete-flag . t)
+                   (nxml-sexp-element-flag . t)
+                   (nxml-char-ref-display-glyph-flag . t))
+         :init
+         (defun my-nxml-mode-initialize ()
+           "Initialize `nxml-mode' before file load."
+           (setq-local indent-tabs-mode nil)
+
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab")))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style)))))))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; JavaScript
-     ;; -----------------------------------------------------------------------
-     (use-package js2-mode
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :mode (("\\.js\\'" . js2-mode)
-              ("\\.pac\\'" . js2-mode))
-       :hook ((js2-mode . my-js2-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (custom-set-variables
-        '(js2-highlight-level 3) ; すべての構文強調を有効化
-        '(js2-basic-offset 4)
-        '(js2-bounce-indent-p nil)
-        '(js2-pretty-multiline-declarations t)
-        '(js2-indent-switch-body nil) ; case 文はインデントしない
-        '(js2-idle-timer-delay 0.25)
-        '(js2-dynamic-idle-timer-adjust 0)
-        '(js2-concat-multiline-strings t)
-        ;;
-        ;; 文法チェック関連
-        ;;
-        ;; 他ツールに任せるため、すべて無効化
-        '(js2-mode-show-parse-errors nil)
-        '(js2-mode-show-strict-warnings nil)
-        '(js2-strict-trailing-comma-warning nil)
-        '(js2-strict-missing-semi-warning nil)
-        '(js2-missing-semi-one-line-override nil)
-        '(js2-strict-inconsistent-return-warning nil)
-        '(js2-strict-cond-assign-warning nil)
-        '(js2-strict-var-redeclaration-warning nil)
-        '(js2-strict-var-hides-function-arg-warning nil)
-        ;;
-        ;; その他
-        ;;
-        '(js2-skip-preprocessor-directives t)
-        '(js2-language-version 200)
-        '(js2-instanceof-has-side-effects nil)
-        '(js2-move-point-on-right-click nil) ; 使わない
-        '(js2-allow-rhino-new-expr-initializer nil) ; 使わない
-        '(js2-allow-member-expr-as-function-name nil)
-        '(js2-include-browser-externs t)
-        '(js2-include-rhino-externs nil)
-        '(js2-include-node-externs nil)
-        '(js2-mode-indent-inhibit-undo nil)
-        '(js2-mode-indent-ignore-first-tab nil)
-        '(js2-highlight-external-variables t)
-        ;;
-        ;; JSLint
-        ;;
-        ;; 他ツールに任せるため、すべて無効化
-        '(js2-include-jslint-globals nil))
+       ;; ---------------------------------------------------------------------
+       ;; YAML
+       ;; ---------------------------------------------------------------------
+       (leaf yaml-mode
+         :package t
+         :mode (("\\.eslintrc\\'" . nxml-mode))
+         :hook ((yaml-mode-hook . my-yaml-mode-initialize))
+         :custom `((yaml-indent-offset . 2))
+         :init
+         (defun my-yaml-mode-initialize ()
+           "Initialize `yaml-mode' before file load."
+           (setq-local indent-tabs-mode nil)
 
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-js2-mode-initialize ()
-         "Initialize `js2-mode' before file load."
-         (setq-local indent-tabs-mode nil)
-
-         ;; EditorConfig 対応
-         (eval-after-load 'editorconfig
-           '(if (hash-table-p editorconfig-properties-hash)
-                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab")))
-                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style)))))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; JSON
-     ;; -----------------------------------------------------------------------
-     (use-package json-mode
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :mode (("\\.bowerrc\\'" . json-mode)
-              ("\\.ftppass\\'" . json-mode)
-              ("\\.htmlhintrc\\'" . json-mode)
-              ("\\.htmllintrc\\'" . json-mode)
-              ("\\.jscsrc\\'" . json-mode)
-              ("\\.jshintrc\\'" . json-mode)
-              ("\\.json\\'" . json-mode)
-              ("\\.stylelintrc\\'" . json-mode))
-       :hook ((json-mode . my-json-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-json-mode-initialize ()
-         "Initialize `json-mode' before file load."
-         (setq-local indent-tabs-mode nil)
-         (setq-local tab-width 2)
-         (setq-local js-indent-level tab-width)
-
-         ;; EditorConfig 対応
-         (eval-after-load 'editorconfig
-           '(if (hash-table-p editorconfig-properties-hash)
-                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab"))
-                       (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
-                       (tab-width-number (if (and tab-width-number-data
-                                                  (stringp tab-width-number-data))
-                                             (string-to-number tab-width-number-data)
-                                           tab-width)))
-                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))
-                  (if (not (equal tab-width tab-width-number))
-                      (setq-local tab-width tab-width-number))
-                  (if (not (equal js-indent-level tab-width))
-                      (setq-local js-indent-level tab-width)))))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; Lisp
-     ;; -----------------------------------------------------------------------
-     (use-package lisp-mode
-       ;; :disabled t
-       :defer t
-       :hook ((lisp-mode . my-lisp-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-lisp-mode-initialize ()
-         "Itialize `lisp-mode' before file load."
-         (setq-local indent-tabs-mode nil)
-         (setq-local tab-width 8)
-
-         ;; EditorConfig 対応
-         (eval-after-load 'editorconfig
-           '(if (hash-table-p editorconfig-properties-hash)
-                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab"))
-                       (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
-                       (tab-width-number (if (and tab-width-number-data
-                                                  (stringp tab-width-number-data))
-                                             (string-to-number tab-width-number-data)
-                                           tab-width)))
-                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))
-                  (if (not (equal tab-width tab-width-number))
-                      (setq-local tab-width tab-width-number)))))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; Markdown
-     ;; -----------------------------------------------------------------------
-     (use-package markdown-mode
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :hook ((markdown-mode . my-markdown-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (custom-set-variables
-        '(markdown-command (or (executable-find "github-markup")
-                               (executable-find "markdown")
-                               "markdown"))
-        '(markdown-command-needs-filename (equal markdown-command
-                                                 (executable-find "github-markup")))
-        '(markdown-coding-system 'utf-8-unix)
-        ;;
-        ;; プレビュー用に生成した実 HTML ファイルの残存を防ぐ
-        ;;
-        '(markdown-live-preview-delete-export 'delete-on-export))
-
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-markdown-mode-initialize ()
-         "Initialize `markdown-mode' before file load."
-         (setq-local indent-tabs-mode nil)
-
-         ;; EditorConfig 対応
-         (eval-after-load 'editorconfig
-           '(if (hash-table-p editorconfig-properties-hash)
-                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab")))
-                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))))))
-       :config
-       ;; -----------------------------
-       ;; 起動
-       ;; -----------------------------
-       ;;
-       ;; プレーンテキストファイルは除外
-       ;;
-       (setq auto-mode-alist
-             (delete '("\\.text\\'" . markdown-mode) auto-mode-alist)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; PHP
-     ;; -----------------------------------------------------------------------
-     (use-package php-mode
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :hook ((php-mode . my-php-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-php-mode-initialize ()
-         "Initialize `php-mode' before file load."
-         (setq-local indent-tabs-mode nil)
-
-         ;; EditorConfig 対応
-         (eval-after-load 'editorconfig
-           '(if (hash-table-p editorconfig-properties-hash)
-                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab")))
-                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style)))))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; Sass (extension: ".sass")
-     ;; -----------------------------------------------------------------------
-     (use-package sass-mode
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :mode (("\\.sass\\'" . sass-mode))
-       :hook ((sass-mode . my-sass-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-sass-mode-initialize ()
-         "Initialize `sass-mode' before file load."
-         (setq-local indent-tabs-mode nil)
-
-         ;; EditorConfig 対応
-         (eval-after-load 'editorconfig
-           '(if (hash-table-p editorconfig-properties-hash)
-                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab")))
-                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style)))))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; Sass (extension: ".scss")
-     ;; -----------------------------------------------------------------------
-     (use-package scss-mode
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :hook ((scss-mode . my-scss-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (custom-set-variables
-        ;;
-        ;; コンパイルは常に手動（保存時は何もしない）
-        ;; 各種ツール経由でコンパイルされうるため
-        ;;
-        '(scss-compile-at-save nil))
-
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-scss-mode-initialize ()
-         "Initialize `scss-mode' before file load."
-         (setq-local indent-tabs-mode nil)
-
-         ;; EditorConfig 対応
-         (eval-after-load 'editorconfig
-           '(if (hash-table-p editorconfig-properties-hash)
-                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab")))
-                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style)))))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; SGML, (X)HTML
-     ;; -----------------------------------------------------------------------
-     (use-package sgml-mode
-       ;; :disabled t
-       :defer t
-       :mode (("\\.[sx]?html?\\'" . html-mode))
-       :hook ((html-mode . my-html-mode-initialize)
-              (sgml-mode . my-sgml-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       ;;
-       ;; SGML
-       ;;
-       (defun my-sgml-mode-initialize ()
-         "Initialize `sgml-mode' before file load."
-         (setq-local indent-tabs-mode nil)
-
-         (when (featurep 'sgml-electric-tag-pair-mode)
-           (declare-function sgml-electric-tag-pair-mode "sgml-mode")
-           (sgml-electric-tag-pair-mode +1))
-
-         ;; EditorConfig 対応
-         (eval-after-load 'editorconfig
-           '(if (hash-table-p editorconfig-properties-hash)
-                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab")))
-                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style))))))
-
-       ;;
-       ;; (X)HTML
-       ;;
-       (defun my-html-mode-initialize ()
-         "Initialize `html-mode' before file load."
-         (setq-local indent-tabs-mode nil)
-
-         ;; EditorConfig 対応
-         (eval-after-load 'editorconfig
-           '(if (hash-table-p editorconfig-properties-hash)
-                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab")))
-                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style)))))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; TeX
-     ;; -----------------------------------------------------------------------
-     (use-package tex-mode
-       ;; :disabled t
-       :defer t
-       :hook ((tex-mode . my-tex-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-tex-mode-initialize ()
-         "Initialize `tex-mode' before file load."
-         (setq-local truncate-lines nil)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; Text
-     ;; -----------------------------------------------------------------------
-     (use-package text-mode
-       ;; :disabled t
-       :defer t
-       :hook ((text-mode . my-tex-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-text-mode-initialize ()
-         "Initialize `text-mode' before file load."
-         (setq-local truncate-lines nil)))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; Template Toolkit (tt, written by Perl)
-     ;;
-     ;; see also:
-     ;; http://tt2.org/
-     ;; -----------------------------------------------------------------------
-     (use-package tt-mode
-       ;; :disabled t
-       :ensure t
-       :defer t)
-
-
-     ;; -----------------------------------------------------------------------
-     ;; Vue.js
-     ;; -----------------------------------------------------------------------
-     (use-package vue-mode
-       ;; :disabled t
-       :ensure t
-       :defer t)
-
-
-     ;; -----------------------------------------------------------------------
-     ;; XML
-     ;; -----------------------------------------------------------------------
-     (use-package nxml-mode
-       ;; :disabled t
-       :defer t
-       :mode (("\\.xml\\'" . nxml-mode)
-              ("\\.plist\\'" . nxml-mode))
-       :hook ((nxml-mode . my-nxml-mode-initialize))
-       :init
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (custom-set-variables
-        '(nxml-child-indent 2)
-        '(nxml-attribute-indent 0)
-        '(nxml-slash-auto-complete-flag t)
-        '(nxml-bind-meta-tab-to-complete-flag t)
-        '(nxml-sexp-element-flag t)
-        '(nxml-char-ref-display-glyph-flag t))
-
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-nxml-mode-initialize ()
-         "Initialize `nxml-mode' before file load."
-         (setq-local indent-tabs-mode nil)
-
-         ;; EditorConfig 対応
-         (eval-after-load 'editorconfig
-           '(if (hash-table-p editorconfig-properties-hash)
-                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab")))
-                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style)))))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; YAML
-     ;; -----------------------------------------------------------------------
-     (use-package yaml-mode
-       ;; :disabled t
-       :ensure t
-       :defer t
-       :mode (("\\.eslintrc\\'" . nxml-mode))
-       :hook ((yaml-mode . my-yaml-mode-initialize))
-       :init
-
-       ;; -----------------------------
-       ;; デフォルト値
-       ;; -----------------------------
-       (custom-set-variables
-        '(yaml-indent-offset 2))
-
-       ;; -----------------------------
-       ;; 初期化
-       ;; -----------------------------
-       (defun my-yaml-mode-initialize ()
-         "Initialize `yaml-mode' before file load."
-         (setq-local indent-tabs-mode nil)
-
-         ;; EditorConfig 対応
-         (eval-after-load 'editorconfig
-           '(if (hash-table-p editorconfig-properties-hash)
-                (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                       (indent-style (equal indent-style-data "tab")))
-                  (if (not (equal indent-tabs-mode indent-style))
-                      (setq-local indent-tabs-mode indent-style)))))))
-
-
-     ;; -----------------------------------------------------------------------
-     ;; END OF CONFIG: 詳細設定（メジャーモード）
-     ;; -----------------------------------------------------------------------
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab")))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style)))))))
+       ) ; END
      ))
 
 

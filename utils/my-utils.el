@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-02-17T06:04:52+09:00>
+;; Time-stamp: <2019-06-28T12:33:07+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -265,22 +265,6 @@ This feature seems to `car-safe' and `cdr-safe'."
            (debug t))
   ;; 例外を無視
   `(ignore-errors (set-fontset-font ,@args)))
-
-
-;; ============================================================================
-;; lighter
-;; ============================================================================
-;;;###autoload
-(defmacro my-change-lighter (minor-mode value)
-  "Change MINOR-MODE's lighter to VALUE.
-
-Return object of lignter."
-  (declare (indent 0)
-           (debug t))
-  (let ((lighter (make-symbol "lighter")))
-    `(let ((,lighter (cdr-safe (assoc ',minor-mode minor-mode-alist))))
-       (setcar ,lighter ,value)
-       ,lighter)))
 
 
 ;; ============================================================================
