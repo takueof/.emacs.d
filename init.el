@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-06-28T13:08:05+09:00>
+;; Time-stamp: <2019-07-03T09:29:55+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -945,7 +945,6 @@
        ;; 各種検索・置換強化
        ;; ---------------------------------------------------------------------
        (leaf anzu
-         ;; :disabled t
          :package t
          :bind (("M-%" . anzu-query-replace)
                 ("C-M-%" . anzu-query-replace-regexp))
@@ -2656,7 +2655,6 @@ Ordering is lexicographic."
        ;; ---------------------------------------------------------------------
        (leaf yaml-mode
          :package t
-         :mode (("\\.eslintrc\\'" . nxml-mode))
          :hook ((yaml-mode-hook . my-yaml-mode-initialize))
          :custom `((yaml-indent-offset . 2))
          :init
