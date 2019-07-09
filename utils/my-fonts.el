@@ -1,7 +1,7 @@
 ;;; my-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-03-05T10:25:53+09:00>
+;; Time-stamp: <2019-07-09T15:06:13+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -370,18 +370,6 @@
                                                                         "Consolas"
                                                                         "Courier New"
                                                                         "Monospace")))
-  ;; Unicode "Box Drawing"（罫線素片）
-  ;;
-  ;; see also:
-  ;; https://www.unicode.org/charts/PDF/U2500.pdf
-  (my-set-fontset-font-safe "fontset-programming"
-                            (cons (string-to-char "─") (string-to-char "╿"))
-                            (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                        "VL Gothic"
-                                                                        "ヒラギノ角ゴシック"
-                                                                        "游ゴシック Medium"
-                                                                        "YuGothic Medium"
-                                                                        "メイリオ")))
   ;; "§" (U+00A7: SECTION SIGN)
   ;; "¨" (U+00A8: DIAERESIS)
   ;; "°" (U+00B0: DEGREE SIGN)
@@ -548,15 +536,6 @@
                                                                         "Consolas"
                                                                         "Courier New"
                                                                         "Monospace")))
-  ;; Unicode "Box Drawing"（罫線素片）
-  ;;
-  ;; see also:
-  ;; https://www.unicode.org/charts/PDF/U2500.pdf
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            (cons (string-to-char "─") (string-to-char "╿"))
-                            (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
-                                                                        "さざなみフォント"
-                                                                        "東雲フォント")))
   ;; "§" (U+00A7: SECTION SIGN)
   ;; "¨" (U+00A8: DIAERESIS)
   ;; "°" (U+00B0: DEGREE SIGN)
