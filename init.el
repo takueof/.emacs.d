@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-07-03T09:29:55+09:00>
+;; Time-stamp: <2019-07-12T16:36:37+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2599,7 +2599,7 @@ Ordering is lexicographic."
        ;; Text
        ;; ---------------------------------------------------------------------
        (leaf text-mode
-         :hook ((text-mode-hook . my-tex-mode-initialize))
+         :hook ((text-mode-hook . my-text-mode-initialize))
          :init
          (defun my-text-mode-initialize ()
            "Initialize `text-mode' before file load."
