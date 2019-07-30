@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-07-12T16:36:37+09:00>
+;; Time-stamp: <2019-07-30T16:43:34+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1389,13 +1389,13 @@
          :package t
          :bind (("C-c q" . fci-mode))
          :custom `(;; FIXME: `font-lock-comment-face' を用いたい
-                   ;;        しかし、指定すると、なぜか "red" が用いられてしまう
+                   ;;        しかし、指定すると、なぜか "red" が用いられる
                    ;;        現状は `default' フェイスで回避中
                    (fci-rule-color . ,(face-attribute 'default :foreground))
                    (fci-rule-use-dashes . t)
                    (fci-dash-pattern . 0.5)
                    ;; HACK: `fci-mode' を有効にした後、
-                   ;;       `toggle-truncate-lines' で折り返し表示を有効にすると
+                   ;;       `toggle-truncate-lines' で折り返しを有効にすると
                    ;;       `line-move-visual' が強制的に nil となる問題を回避
                    (fci-handle-line-move-visual . nil)))
 
