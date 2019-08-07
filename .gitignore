@@ -1,11 +1,13 @@
 # -----------------------------------------------------------------
 # Git ignored resource file
 # Copyright (C) 2014-2019 Taku Watabe
-# Time-stamp: <2019-02-16T02:41:54+09:00>
+# Time-stamp: <2019-08-07T10:50:12+09:00>
 # -----------------------------------------------------------------
 .AppleDouble
 .DS_Store
 .LSOverride
+.emacs.desktop
+.emacs.desktop.lock
 /custom.el
 /el-get/
 /elpa/
