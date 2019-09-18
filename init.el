@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-07-30T16:43:34+09:00>
+;; Time-stamp: <2019-09-18T19:51:22+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -593,9 +593,11 @@
        ;; `leaf' キーワード群
        ;; ---------------------------------------------------------------------
        (leaf leaf-keywords
+         :disabled t ;; FIXME: "Error msg: Symbol’s value as variable is void: leaf--value" が出ている問題を回避したい
          :package t
          :config
-         (leaf-keywords-init))
+         (if (fboundp 'leaf-keywords-init)
+             (leaf-keywords-init)))
 
 
        ;; ---------------------------------------------------------------------
@@ -689,36 +691,36 @@
                    ;; 用紙1枚につき1ページを印刷
                    (ps-n-up-printing . 1)
                    ;; シートの罫線とページの間に余白を設ける
-                   (ps-n-up-margin . (/ (* 72 1.00) 2.54)) ; 10.0mm
+                   (ps-n-up-margin . ,(/ (* 72 1.00) 2.54)) ; 10.0mm
                    ;; 行番号を印刷させる
                    (ps-line-number . t)
                    (ps-line-number-step . 1)
                    (ps-line-number-start . 1)
                    ;; 水平レイアウト
-                   (ps-left-margin . (/ (* 72 1.40) 2.54)) ; 14.0mm（行番号が切れないようにする）
-                   (ps-inter-column . (/ (* 72 1.00) 2.54)) ; 10.0mm
-                   (ps-right-margin . (/ (* 72 0.54) 2.54)) ; 5.4mm（ヘッダ・フッタの box 右端が切れないようにする）
+                   (ps-left-margin . ,(/ (* 72 1.40) 2.54)) ; 14.0mm（行番号が切れないようにする）
+                   (ps-inter-column . ,(/ (* 72 1.00) 2.54)) ; 10.0mm
+                   (ps-right-margin . ,(/ (* 72 0.54) 2.54)) ; 5.4mm（ヘッダ・フッタの box 右端が切れないようにする）
                    ;; 垂直レイアウト
-                   (ps-bottom-margin . (/ (* 72 0.55) 2.54)) ; 5.5mm（フッタ box 下端が切れないようにする）
-                   (ps-top-margin . (/ (* 72 2.95) 2.54)) ; 29.5mm (24.0mm + 5.5mm)（ヘッダ box 上端が切れないようにする・用紙上端～ヘッダ box 上端までの余白を、フッタ box 下端～用紙下端までの長さと同一にする）
+                   (ps-bottom-margin . ,(/ (* 72 0.55) 2.54)) ; 5.5mm（フッタ box 下端が切れないようにする）
+                   (ps-top-margin . ,(/ (* 72 2.95) 2.54)) ; 29.5mm (24.0mm + 5.5mm)（ヘッダ box 上端が切れないようにする・用紙上端～ヘッダ box 上端までの余白を、フッタ box 下端～用紙下端までの長さと同一にする）
                    (ps-header-offset . 0) ; なし
                    (ps-header-line-pad . 0.15)
-                   (ps-footer-offset . (/ (* 72 0.42) 2.54)) ; 4.2mm (0.5mm + 3.7mm)（フッタ box 上端へカブらないようにする・テキスト box 下端～フッタ box 上端までの余白を、ヘッダ box 下端～テキスト box 上端までの長さと同一にする）
+                   (ps-footer-offset . ,(/ (* 72 0.42) 2.54)) ; 4.2mm (0.5mm + 3.7mm)（フッタ box 上端へカブらないようにする・テキスト box 下端～フッタ box 上端までの余白を、ヘッダ box 下端～テキスト box 上端までの長さと同一にする）
                    (ps-footer-line-pad . 0.15)
                    ;; ヘッダに情報を追加させる
                    (ps-print-header . t)
                    (ps-print-header-frame . t)
                    (ps-header-lines . 2)
-                   (ps-left-header . (list 'ps-get-buffer-name
-                                           'ps-header-dirpart))
-                   (ps-right-header . (list 'ps-time-stamp-yyyy-mm-dd
-                                            'ps-time-stamp-hh:mm:ss))
+                   (ps-left-header . '(ps-get-buffer-name
+                                       ps-header-dirpart))
+                   (ps-right-header . '(ps-time-stamp-yyyy-mm-dd
+                                        ps-time-stamp-hh:mm:ss))
                    ;; フッタに情報を追加させる
                    (ps-print-footer . t)
                    (ps-footer-lines . 1)
                    (ps-print-footer-frame . t)
                    (ps-left-footer . nil)
-                   (ps-right-footer . (list "/pagenumberstring load"))
+                   (ps-right-footer . '("/pagenumberstring load"))
                    ;; monospace なフォントを用いさせる
                    (ps-font-family . 'Courier)
                    (ps-font-size . '(8.0 . 8.0)) ; pt
@@ -2330,7 +2332,8 @@ Ordering is lexicographic."
        ;; ---------------------------------------------------------------------
        (leaf js2-mode
          :package t
-         :mode (("\\.js\\'" . js2-mode)
+         :mode (("\\.es[0-9]\\'" . js2-mode)
+                ("\\.js\\'" . js2-mode)
                 ("\\.pac\\'" . js2-mode))
          :hook ((js2-mode-hook . my-js2-mode-initialize))
          :custom `((js2-highlight-level . 3) ; すべての構文強調を有効化
@@ -2479,6 +2482,29 @@ Ordering is lexicographic."
          ;; プレーンテキストファイルは除外
          (setq auto-mode-alist
                (delete '("\\.text\\'" . markdown-mode) auto-mode-alist)))
+
+
+       ;; ---------------------------------------------------------------------
+       ;; Mustache
+       ;;
+       ;; see also:
+       ;; https://mustache.github.io/
+       ;; ---------------------------------------------------------------------
+       (leaf mustache-mode
+         :package t
+         :hook ((mustache-mode-hook . my-mustache-mode-initialize))
+         :init
+         (defun my-mustache-mode-initialize ()
+           "Initialize `mustache-mode' before file load."
+           (setq-local indent-tabs-mode nil)
+
+           ;; EditorConfig 対応
+           (eval-after-load 'editorconfig
+             '(if (hash-table-p editorconfig-properties-hash)
+                  (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                         (indent-style (equal indent-style-data "tab")))
+                    (if (not (equal indent-tabs-mode indent-style))
+                        (setq-local indent-tabs-mode indent-style)))))))
 
 
        ;; ---------------------------------------------------------------------
