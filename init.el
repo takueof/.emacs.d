@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-09-18T19:51:22+09:00>
+;; Time-stamp: <2019-09-21T14:46:11+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -957,21 +957,11 @@
          :init
          ;; `migemo' 利用可能時
          (leaf anzu
-           :after migemo
+           :after (migemo)
            :custom `((anzu-use-migemo . t)))
          :config
          (if (fboundp 'global-anzu-mode)
              (global-anzu-mode +1)))
-
-
-       ;; ---------------------------------------------------------------------
-       ;; アーカイブファイルを直接編集
-       ;; ---------------------------------------------------------------------
-       (leaf jka-cmpr-hook
-         :require t
-         :config
-         (if (fboundp 'auto-compression-mode)
-             (auto-compression-mode +1)))
 
 
        ;; ---------------------------------------------------------------------
@@ -1013,7 +1003,7 @@
        ;; ブックマーク (`bookmark') 拡張
        ;; ---------------------------------------------------------------------
        (leaf bookmark+
-         :after bookmark
+         :after (bookmark)
          :package t
          :require t)
 
@@ -1123,7 +1113,7 @@
        ;; 補完フレームワーク (`company') 拡張（`lsp-mode' サポート）
        ;; ---------------------------------------------------------------------
        (leaf company-lsp
-         :after lsp-mode company
+         :after (lsp-mode company)
          :package t
          :require t)
 
@@ -1132,7 +1122,7 @@
        ;; 補完フレームワーク (`company') 拡張（補完候補のソート）
        ;; ---------------------------------------------------------------------
        (leaf company-statistics
-         :after company
+         :after (company)
          :package t
          :custom `((company-statistics-size . 500)
                    ;; ローカル環境にのみ保存
@@ -1146,7 +1136,7 @@
        ;; 補完フレームワーク (`company') 拡張（ポップアップドキュメント）
        ;; ---------------------------------------------------------------------
        (leaf company-quickhelp
-         :after company
+         :after (company)
          :package t
          :custom `((company-quickhelp-delay . 0.25))
          :config
@@ -1158,7 +1148,7 @@
        ;; コンパイル
        ;; ---------------------------------------------------------------------
        (leaf compile
-         :after nvm exec-path-from-shell
+         :after (nvm exec-path-from-shell)
          :bind (("C-c C-l" . compile))
          :hook ((compilation-filter-hook . my-compilation-ansi-color-apply))
          :custom `((compilation-window-height . 15)
@@ -1297,7 +1287,7 @@
        ;; ディレクトリブラウジング (`dired') 拡張
        ;; ---------------------------------------------------------------------
        (leaf dired+
-         :after dired
+         :after (dired)
          :package t
          :require t
          :custom `((diredp-hide-details-initially-flag . nil)
@@ -1331,7 +1321,7 @@
        ;; GNU Emacs Lisp 定義ジャンプ・バック・ドキュメント閲覧
        ;; ---------------------------------------------------------------------
        (leaf elisp-slime-nav
-         :after eldoc
+         :after (eldoc)
          :package t
          :config
          (if (fboundp 'elisp-slime-nav-mode)
@@ -1342,8 +1332,8 @@
        ;; Markdown プレビュー
        ;; ---------------------------------------------------------------------
        (leaf livedown
-         :load-path "~/.emacs.d/site-lisp/emacs-livedown"
-         :after nvm markdown-mode
+         :load-path `(,(locate-user-emacs-file "site-lisp/emacs-livedown"))
+         :after (nvm markdown-mode)
          :bind ((:markdown-mode-map
                  :package markdown-mode
                  ("C-c l p" . livedown-preview)
@@ -1410,7 +1400,7 @@
        ;; ---------------------------------------------------------------------
        (leaf find-dired
          :when (member system-type '(ms-dos windows-nt))
-         :after find-dired
+         :after (find-dired)
          :config
          ;; HACK: `:custom' で設定すると `find-exec-terminator' の展開が
          ;;       `find-dired' の `eval-after-load' より先になりエラーとなる
@@ -1524,7 +1514,7 @@ See also: `https://github.com/validator/validator'."
        ;; 自動静的解析拡張（モードライン変更）
        ;; ---------------------------------------------------------------------
        (leaf flycheck-color-mode-line
-         :after flycheck
+         :after (flycheck)
          :package t
          :hook ((flycheck-mode-hook . flycheck-color-mode-line-mode)))
 
@@ -1758,7 +1748,7 @@ Ordering is lexicographic."
        ;; 強化バッファ一覧 (`ibuffer') 拡張（`projectile' サポート）
        ;; ---------------------------------------------------------------------
        (leaf ibuffer-projectile
-         :after projectile ibuffer
+         :after (projectile ibuffer)
          :package t
          :hook ((ibuffer-hook . my-ibuffer-projectile-initialize))
          :init
@@ -1789,7 +1779,7 @@ Ordering is lexicographic."
        ;; ファイル操作の簡略化（全環境に適用）
        ;; ---------------------------------------------------------------------
        (leaf ido-everywhere
-         :after ido
+         :after (ido)
          :config
          (if (fboundp 'ido-everywhere)
              (ido-everywhere +1)))
@@ -1815,10 +1805,20 @@ Ordering is lexicographic."
 
 
        ;; ---------------------------------------------------------------------
+       ;; アーカイブファイルを直接編集
+       ;; ---------------------------------------------------------------------
+       (leaf jka-cmpr-hook
+         :require t
+         :config
+         (if (fboundp 'auto-compression-mode)
+             (auto-compression-mode +1)))
+
+
+       ;; ---------------------------------------------------------------------
        ;; JavaScript リファクタリング補助
        ;; ---------------------------------------------------------------------
        (leaf js2-refactor
-         :after js2-mode
+         :after (js2-mode)
          :package t
          :require t)
 
@@ -1856,7 +1856,7 @@ Ordering is lexicographic."
        ;; LSP (Language Server Protocol) クライアント拡張 (UI)
        ;; ---------------------------------------------------------------------
        (leaf lsp-ui
-         :after lsp-mode
+         :after (lsp-mode)
          :package t
          :require t
          :hook ((lsp-after-open-hook . lsp-ui-flycheck-enable)))
@@ -1877,7 +1877,7 @@ Ordering is lexicographic."
        ;; ---------------------------------------------------------------------
        (leaf migemo
          :leaf-defer nil
-         :after exec-path-from-shell
+         :after (exec-path-from-shell)
          :package t
          :require t
          :bind ((:isearch-mode-map
@@ -1927,7 +1927,7 @@ Ordering is lexicographic."
                                                           ((featurep 'ivy) 'ivy)
                                                           ((featurep 'helm) 'helm)
                                                           (t 'default)))
-                   (projectile-mode-line-prefix . "")
+                   (projectile-mode-line-lighter . "")
                    (projectile-keymap-prefix . ,(kbd "C-c C-p"))
                    ;; ローカル環境にのみ保存
                    (projectile-cache-file . "~/.emacs.projectile.cache")
@@ -1963,13 +1963,23 @@ Ordering is lexicographic."
        ;; ---------------------------------------------------------------------
        (leaf rich-minority
          :package t
-         :require t
-         :custom `((rm-blacklist . nil)
+         ;; `window-setup-hook' で実行しないと適用されない場合がある
+         :hook ((window-setup-hook . my-rich-minority-mode-initialize))
+         :custom `((rm-blacklist . '(" Dim"
+                                     " EditorConfig"
+                                     " Fly"
+                                     " SP"
+                                     " hl-p"
+                                     " WS"
+                                     " yas"))
                    (rm-whitelist . nil)
                    (rm-text-properties . nil))
          :config
-         (if (fboundp 'rich-minority-mode)
-             (ignore-errors (rich-minority-mode +1))))
+         (defun my-rich-minority-mode-initialize ()
+           "Initialize `rich-minority-mode'."
+           (if (fboundp 'rich-minority-mode)
+               ;; エラーは無視
+               (ignore-errors (rich-minority-mode +1)))))
 
 
        ;; ---------------------------------------------------------------------
@@ -2083,7 +2093,7 @@ Ordering is lexicographic."
        ;; 各種カッコ関連機能拡張・公式デフォルト設定
        ;; ---------------------------------------------------------------------
        (leaf smartparens-config
-         :after smartparens
+         :after (smartparens)
          :require t)
 
 
@@ -2211,7 +2221,7 @@ Ordering is lexicographic."
        ;; `yasnippet' 公式コレクション
        ;; ---------------------------------------------------------------------
        (leaf yasnippet-snippets
-         :after yasnippet
+         :after (yasnippet)
          :package t)
        ) ; END
 
