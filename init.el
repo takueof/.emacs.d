@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-09-30T16:59:41+09:00>
+;; Time-stamp: <2019-10-03T13:30:56+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -544,6 +544,23 @@
 
 
 ;; ============================================================================
+;; NSM (Network Security Manager)
+;; ============================================================================
+;; WARNING: `package' といったネットワークセキュリティを利用するパッケージの
+;;          利用前に設定を実施しなければならない
+;;          後のほうで `nsm-settings-file' を設定してしまうと意味がない
+;; ============================================================================
+;; HACK: `require' しておかないと、
+;;       なぜか `custom-set-variables' が効かない
+;; ============================================================================
+(when (and (require 'nsm nil :noerror)
+           (boundp 'nsm-settings-file))
+  (custom-set-variables
+   ;; ローカル環境にのみ保存
+   '(nsm-settings-file "~/.emacs.network-security.data")))
+
+
+;; ============================================================================
 ;; パッケージマネージャ (by `package')
 ;; ============================================================================
 ;; `defcustom' によって定義されたリストヘシンボルを追加したいため、
@@ -573,15 +590,15 @@
        (package-refresh-contents)
        (package-install 'leaf))
 
-     ;; -----------------------------------------------------------------------
-     ;; `leaf' キーワード群
-     ;; -----------------------------------------------------------------------
-     (leaf leaf-keywords
-       ;; :disabled t ;; FIXME: "Error msg: Symbol’s value as variable is void: leaf--value" が出ている問題を回避したい
-       :package t
-       :config
-       (if (fboundp 'leaf-keywords-init)
-           (leaf-keywords-init)))))
+     (if (fboundp 'leaf)
+         ;; -------------------------------------------------------------------
+         ;; `leaf' キーワード群
+         ;; -------------------------------------------------------------------
+         (leaf leaf-keywords
+           :package t
+           :config
+           (if (fboundp 'leaf-keywords-init)
+               (leaf-keywords-init))))))
 
 
 ;; ============================================================================
@@ -598,6 +615,18 @@
      ;; =======================================================================
      (leaf *packages
        :config
+       ;; ---------------------------------------------------------------------
+       ;; パッケージマネージャ (by `el-get')
+       ;; ---------------------------------------------------------------------
+       ;; WARNING: 全てのパッケージに影響するため、
+       ;;          最速のタイミングでインストールされるよう、
+       ;;          意図的にアルファベット降順ソートから除外してある
+       ;; ---------------------------------------------------------------------
+       (leaf el-get
+         :package t
+         :custom `((el-get-git-shallow-clone . t)))
+
+
        ;; ---------------------------------------------------------------------
        ;; EWW (Emacs Web Wowser, Web Browser)
        ;; ---------------------------------------------------------------------
@@ -641,14 +670,6 @@
 
 
        ;; ---------------------------------------------------------------------
-       ;; NSM (Network Security Manager)
-       ;; ---------------------------------------------------------------------
-       (leaf nsm
-         :custom `(;; ローカル環境にのみ保存
-                   (nsm-settings-file . "~/.emacs.network-security.data")))
-
-
-       ;; ---------------------------------------------------------------------
        ;; nvm 経由での Node.js 利用をサポート
        ;; ---------------------------------------------------------------------
        (leaf nvm
@@ -657,16 +678,6 @@
          (if (fboundp 'nvm-use-for)
              ;; `~/.nvmrc' がなければ何もしない
              (ignore-errors (nvm-use-for))))
-
-
-       ;; ---------------------------------------------------------------------
-       ;; カーソルの移動履歴
-       ;; ---------------------------------------------------------------------
-       (leaf point-undo
-         :package t
-         :require t
-         :bind (("M-]" . point-undo)
-                ("M-[" . point-redo)))
 
 
        ;; ---------------------------------------------------------------------
@@ -1001,8 +1012,10 @@
        ;; ブックマーク (`bookmark') 拡張
        ;; ---------------------------------------------------------------------
        (leaf bookmark+
+         :el-get (bookmark+
+                  :type github
+                  :pkgname "emacsmirror/bookmark-plus")
          :after (bookmark)
-         :package t
          :require t)
 
 
@@ -1285,8 +1298,10 @@
        ;; ディレクトリブラウジング (`dired') 拡張
        ;; ---------------------------------------------------------------------
        (leaf dired+
+         :el-get (dired+
+                  :type github
+                  :pkgname "emacsmirror/dired-plus")
          :after (dired)
-         :package t
          :require t
          :custom `((diredp-hide-details-initially-flag . nil)
                    (diredp-hide-details-propagate-flag . nil)))
@@ -1330,7 +1345,9 @@
        ;; Markdown プレビュー
        ;; ---------------------------------------------------------------------
        (leaf livedown
-         :load-path `(,(locate-user-emacs-file "site-lisp/emacs-livedown"))
+         :el-get (livedown
+                  :type github
+                  :pkgname "shime/emacs-livedown")
          :after (nvm markdown-mode)
          :bind ((:markdown-mode-map
                  :package markdown-mode
