@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-09-28T15:21:55+09:00>
+;; Time-stamp: <2019-09-30T16:59:41+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -569,10 +569,19 @@
 (eval-after-load 'package
   '(progn
      ;; `package' が必ず使える状況を前提とする
-     (if (not (package-installed-p 'leaf))
-         (package-install 'leaf))
+     (unless (package-installed-p 'leaf)
+       (package-refresh-contents)
+       (package-install 'leaf))
 
-     (require 'leaf nil :noerror)))
+     ;; -----------------------------------------------------------------------
+     ;; `leaf' キーワード群
+     ;; -----------------------------------------------------------------------
+     (leaf leaf-keywords
+       ;; :disabled t ;; FIXME: "Error msg: Symbol’s value as variable is void: leaf--value" が出ている問題を回避したい
+       :package t
+       :config
+       (if (fboundp 'leaf-keywords-init)
+           (leaf-keywords-init)))))
 
 
 ;; ============================================================================
@@ -589,17 +598,6 @@
      ;; =======================================================================
      (leaf *packages
        :config
-       ;; ---------------------------------------------------------------------
-       ;; `leaf' キーワード群
-       ;; ---------------------------------------------------------------------
-       (leaf leaf-keywords
-         :disabled t ;; FIXME: "Error msg: Symbol’s value as variable is void: leaf--value" が出ている問題を回避したい
-         :package t
-         :config
-         (if (fboundp 'leaf-keywords-init)
-             (leaf-keywords-init)))
-
-
        ;; ---------------------------------------------------------------------
        ;; EWW (Emacs Web Wowser, Web Browser)
        ;; ---------------------------------------------------------------------
