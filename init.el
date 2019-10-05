@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-10-03T13:47:56+09:00>
+;; Time-stamp: <2019-10-05T12:57:54+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1105,15 +1105,16 @@
                                                 css-mode
                                                 erlang-mode
                                                 haskell-mode
+                                                html-mode
                                                 jde-mode
                                                 js-mode
                                                 js2-mode
-                                                js3-mode
                                                 lua-mode
                                                 prog-mode
                                                 python-mode
                                                 sass-mode
-                                                scss-mode))
+                                                scss-mode
+                                                vue-mode))
                 (company-dabbrev-code-other-buffers . t)
                 (company-dabbrev-code-everywhere . t)
                 (company-dabbrev-code-ignore-case . t)))
@@ -1553,12 +1554,14 @@ See also: `https://github.com/validator/validator'."
              (emacs-lisp-mode-hook . flyspell-prog-mode)
              (html-mode-hook . flyspell-prog-mode)
              (ielm-mode-hook . flyspell-prog-mode)
+             (js-mode-hook . flyspell-prog-mode)
              (js2-mode-hook . flyspell-prog-mode)
              (lisp-interaction-mode-hook . flyspell-prog-mode)
              (lisp-mode-hook . flyspell-prog-mode)
              (php-mode-hook . flyspell-prog-mode)
              (sass-mode-hook . flyspell-prog-mode)
-             (scss-mode-hook . flyspell-prog-mode))
+             (scss-mode-hook . flyspell-prog-mode)
+             (vue-mode-hook . flyspell-prog-mode))
       :custom `((flyspell-delay . 1.0)))
 
 
