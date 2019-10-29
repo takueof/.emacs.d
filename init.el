@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-10-05T12:57:54+09:00>
+;; Time-stamp: <2019-10-29T18:01:14+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1691,10 +1691,10 @@ See also: `https://github.com/validator/validator'."
                                                  L-diff)))
             (custom-set-faces
              `(hl-line ((((class color))
-                         (:background ,line-background-color :inherit nil))))))))
-      :config
-      (if (fboundp 'global-hl-line-mode)
-          (global-hl-line-mode +1)))
+                         (:background ,line-background-color :inherit nil)))))))
+        ;; 実行
+        (if (fboundp 'global-hl-line-mode)
+            (global-hl-line-mode +1))))
 
 
     ;; ------------------------------------------------------------------------
