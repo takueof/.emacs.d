@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-10-29T18:01:14+09:00>
+;; Time-stamp: <2019-10-31T10:41:46+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -280,6 +280,10 @@
 ;; デフォルト値
 ;; ============================================================================
 (custom-set-variables
+ ;;
+ ;; 起動時に発生するガベージコレクトを防止
+ ;;
+ `(gc-cons-threshold ,(* 128 1024 1024)) ;; 128MB
  ;;
  ;; `custom-set-variables' と `custom-set-faces' に `user-init-file' への
  ;; 追記を許さない
@@ -2146,6 +2150,19 @@ Ordering is lexicographic."
       :config
       (if (fboundp 'global-undo-tree-mode)
           (global-undo-tree-mode)))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; 巨大ファイル表示
+    ;; ------------------------------------------------------------------------
+    (leaf vlf
+      :package t
+      :require (vlf-setup)
+      :bind ((:vlf-mode-map
+              :package vlf
+              ("C-c C-v" . vlf-prefix-map)))
+      :custom `((vlf-application . 'always)
+                (vlf-batch-size . ,(* 128 1024)))) ;; 128KB
 
 
     ;; ------------------------------------------------------------------------
