@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-10-31T10:41:46+09:00>
+;; Time-stamp: <2019-10-31T10:51:03+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2162,7 +2162,7 @@ Ordering is lexicographic."
               :package vlf
               ("C-c C-v" . vlf-prefix-map)))
       :custom `((vlf-application . 'always)
-                (vlf-batch-size . ,(* 128 1024)))) ;; 128KB
+                (vlf-batch-size . ,(* 1 1024 1024)))) ;; 1MB
 
 
     ;; ------------------------------------------------------------------------
