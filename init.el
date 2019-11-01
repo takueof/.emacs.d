@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-10-31T10:51:03+09:00>
+;; Time-stamp: <2019-11-01T17:32:35+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -764,9 +764,9 @@
             (setcdr (assoc 'border-width ps-header-frame-alist) 0.1)))
       :config
       ;;----------------------------
-      ;; HACK: `ps-lpr-command' と `ps-lpr-switches' だけは、
-      ;;       デフォルト値を利用する可能性がある関係上、
-      ;;       `:config' で設定する必要がある
+      ;; WARNING: `ps-lpr-command' と `ps-lpr-switches' だけは、
+      ;;          デフォルト値を利用する可能性がある関係上、
+      ;;          `:config' で `custom-set-variables' する必要がある
       ;;----------------------------
       (custom-set-variables
        ;; ウインドウシステムごとに、印刷コマンドとオプションを最適化
@@ -840,7 +840,11 @@
                                               (normal bdf "migu-1m.bdf")
                                               (bold bdf "migu-1m-bold.bdf")))
                                            database-bdf))
-                ;; 設定
+                ;;---------------------
+                ;; WARNING: `ps-mule-font-info-database-default' は、
+                ;;          デフォルト値を加工する関係上、
+                ;;          `:config' で `custom-set-variables' する必要がある
+                ;;---------------------
                 (custom-set-variables
                  `(ps-mule-font-info-database-default ',database-bdf)))))))
 
@@ -1726,6 +1730,8 @@ See also: `https://github.com/validator/validator'."
           ;; 将来的に項目が変更された場合でも、例外を出さないための対策
           (when settings
             (setcdr settings '(30 30 :left :elide))
+            ;; WARNING: この `custom-set-variables' は `:custom' に移動できない
+            ;;          変数 `settings' で加工を行った結果が入るため
             (custom-set-variables
              `(ibuffer-formats ',formats))))
 
@@ -1761,6 +1767,8 @@ Ordering is lexicographic."
                  (setq path buffer-name))
                (concat prefix ": " mode-name ": " path)))))
 
+        ;; WARNING: この `custom-set-variables' は `:custom' に移動できない
+        ;;          `define-ibuffer-sorter' で定義したモード名が入るため
         (custom-set-variables
          '(ibuffer-default-sorting-mode 'mode-name-and-path-alphabetic))))
 
@@ -2170,67 +2178,44 @@ Ordering is lexicographic."
     ;; ------------------------------------------------------------------------
     (leaf whitespace
       :custom `(;; 「不正」位置の空白文字のみ強調
-                (whitespace-style . '(face
-                                      trailing
-                                      tabs
+                (whitespace-style . '(empty
+                                      face
                                       newline
-                                      empty
+                                      newline-mark
                                       space-after-tab
                                       space-before-tab
+                                      space-mark ; HARD SPACE の ON/OFF も含む
+                                      spaces ; HARD SPACE の ON/OFF も含む
                                       tab-mark
-                                      newline-mark))
+                                      tabs
+                                      trailing))
+                ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調表示
+                ;;
+                ;; 表示テスト:
+                ;;   U+0009: 「	」
+                ;;   U+00A0: 「 」
+                ;;   U+3000: 「　」
+                (whitespace-hspace-regexp . "\\(\\(\xA0\\|\x8A0\\|\x920\\|\xE20\\|\xF20\\|\x3000\\)+\\)")
+                (whitespace-trailing-regexp . "\\([\t \u00A0\u3000]+\\)$")
                 ;; 行カラム最大値は `fill-column' を参照させる
-                (whitespace-line-column . nil))
+                (whitespace-line-column . nil)
+                ;; HACK: 半角空白 (U+0020) を強調しないようにする
+                ;;
+                ;; 表示テスト:
+                ;;   U+0020: 「 」
+                (whitespace-display-mappings . '(;; EOL -> DOLLAR SIGN
+                                                 (newline-mark ?\n [?$ ?\n])
+                                                 ;; TAB -> CURRENCY SIGN
+                                                 (space-mark ?\u00A0 [?¤] [?_])
+                                                 ;; IDEOGRAPHIC SPACE -> WHITE SQUARE
+                                                 (space-mark ?\u3000 [?\u25a1] [?_ ?_])
+                                                 ;; Tab -> RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
+                                                 (tab-mark ?\t [?» ?\t] [?\\ ?\t]))))
       :custom-face `((whitespace-space . '((t
                                             (:background nil)))))
       :config
       (if (fboundp 'global-whitespace-mode)
-          (global-whitespace-mode +1))
-
-      ;; ---------------------------
-      ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調表示
-      ;;
-      ;; 表示テスト:
-      ;;   U+0009: 「	」
-      ;;   U+00A0: 「 」
-      ;;   U+3000: 「　」
-      ;; ---------------------------
-      (when (and (boundp 'whitespace-style)
-                 (boundp 'whitespace-display-mappings))
-        (custom-set-variables
-         ;;
-         ;; 空白の強調を明示
-         ;;
-         `(whitespace-style ',(let ((styles (copy-tree whitespace-style)))
-                                ;; HARD SPACE の ON/OFF も含んでいる
-                                (add-to-list 'styles 'spaces)
-                                (add-to-list 'styles 'space-mark)))
-         ;;
-         ;; 検索条件を追加
-         ;;
-         '(whitespace-hspace-regexp "\\(\\(\xA0\\|\x8A0\\|\x920\\|\xE20\\|\xF20\\|\x3000\\)+\\)")
-         '(whitespace-trailing-regexp "\\([\t \u00A0\u3000]+\\)$"))
-
-        ;;
-        ;; 表示置換条件を追加
-        ;;
-        (add-to-list 'whitespace-display-mappings
-                     '(space-mark ?\u3000 [?\u25a1] [?_ ?_])))
-
-      ;; ---------------------------
-      ;; HACK: 半角空白 (U+0020) を強調しないようにする
-      ;;
-      ;; 表示テスト:
-      ;;   U+0020: 「 」
-      ;; ---------------------------
-      (if (boundp 'whitespace-display-mappings)
-          (custom-set-variables
-           ;;
-           ;; 表示置換しないようにする
-           ;;
-           `(whitespace-display-mappings ',(delete '(space-mark ?\  [?\u00B7] [?.])
-                                                   whitespace-display-mappings)))))
-
+          (global-whitespace-mode +1)))
 
     ;; ------------------------------------------------------------------------
     ;; ウインドウの状態履歴を undo/redo
@@ -2272,9 +2257,8 @@ Ordering is lexicographic."
       :package t
       :mode (("\\.conf\\'" . apache-mode))
       :config
-      (eval-after-load 'apache-mode
-        '(if (boundp 'apache-indent-level)
-             (setq-local apache-indent-level 4))))
+      (if (boundp 'apache-indent-level)
+          (setq-local apache-indent-level 4)))
 
 
     ;; ------------------------------------------------------------------------
