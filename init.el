@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-11-02T14:25:32+09:00>
+;; Time-stamp: <2019-11-03T05:31:35+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -217,11 +217,17 @@
 
      (defun my-change-cursor-faces-by-current-input-method ()
        "Change cursor color with `current-input-method'."
-       (set-cursor-color
-        (face-attribute (if current-input-method
-                            'my-cursor-input-method-activated
-                          'my-cursor-default)
-                        :background)))
+       (let ((current-input-method (if (fboundp 'mac-input-source)
+                                       (let ((input-source (mac-input-source)))
+                                         (if (numberp (string-match "\\.US\\'" input-source))
+                                             nil
+                                           input-source))
+                                     current-input-method)))
+         (set-cursor-color
+          (face-attribute (if current-input-method
+                              'my-cursor-input-method-activated
+                            'my-cursor-default)
+                          :background))))
 
      (defun my-change-cursor-faces-by-current-input-method-advice (window &optional norecord)
        "Change cursor color with `current-input-method' for `advice-add'."
@@ -234,6 +240,10 @@
      (add-hook 'input-method-activate-hook
                #'my-change-cursor-faces-by-current-input-method)
      (add-hook 'input-method-deactivate-hook
+               #'my-change-cursor-faces-by-current-input-method)
+     (add-hook 'mac-selected-keyboard-input-source-change-hook ;; macOS ONLY
+               #'my-change-cursor-faces-by-current-input-method)
+     (add-hook 'mac-enabled-keyboard-input-sources-change-hook ;; macOS ONLY
                #'my-change-cursor-faces-by-current-input-method)
 
      ;; ウインドウ選択後、input-method の状態に応じてフェイス `cursor' を変更
