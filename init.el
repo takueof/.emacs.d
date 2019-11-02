@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-11-01T17:32:35+09:00>
+;; Time-stamp: <2019-11-02T14:25:32+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -281,15 +281,15 @@
 ;; ============================================================================
 (custom-set-variables
  ;;
- ;; 起動時に発生するガベージコレクトを防止
- ;;
- `(gc-cons-threshold ,(* 128 1024 1024)) ;; 128MB
- ;;
  ;; `custom-set-variables' と `custom-set-faces' に `user-init-file' への
  ;; 追記を許さない
  ;; 自動保存は別ファイルに行わせる
  ;;
  '(custom-file (locate-user-emacs-file "custom.el"))
+ ;;
+ ;; 起動時に発生するガベージコレクトを防止
+ ;;
+ `(gc-cons-threshold ,(* 128 1024 1024)) ;; 128MB
  ;;
  ;; フレームタイトルはカレントバッファ名を基準にする
  ;;
