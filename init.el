@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-11-03T05:31:35+09:00>
+;; Time-stamp: <2019-11-03T15:52:29+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -176,23 +176,6 @@
 ;; 開始させる。
 (if (fboundp 'ansi-color-for-comint-mode-on)
     (ansi-color-for-comint-mode-on))
-
-
-;; ============================================================================
-;; カラーテーマ
-;; ============================================================================
-;; 利用可能なカラーテーマを設定
-(let ((required-themes '(;; 利用したいカラーテーマの一覧
-                         ;; 優先度が高い順に降順ソートしておくこと
-                         my-default
-                         wheatgrass))
-      (availabled-themes (custom-available-themes)))
-  ;; 利用したいカラーテーマが見つからなければ何もしない
-  (catch 'required-theme-found
-    (dolist (theme required-themes)
-      (when (member theme availabled-themes)
-        (load-theme theme t)
-        (throw 'required-theme-found theme)))))
 
 
 ;; ============================================================================
@@ -602,17 +585,7 @@
      ;; `package' が必ず使える状況を前提とする
      (unless (package-installed-p 'leaf)
        (package-refresh-contents)
-       (package-install 'leaf))
-
-     (if (fboundp 'leaf)
-         ;; -------------------------------------------------------------------
-         ;; `leaf' キーワード群
-         ;; -------------------------------------------------------------------
-         (leaf leaf-keywords
-           :package t
-           :config
-           (if (fboundp 'leaf-keywords-init)
-               (leaf-keywords-init))))))
+       (package-install 'leaf))))
 
 
 ;; ============================================================================
@@ -624,22 +597,50 @@
 ;; ============================================================================
 (when (fboundp 'leaf)
   ;; ==========================================================================
+  ;; `leaf' キーワード群
+  ;; ==========================================================================
+  (leaf leaf-keywords
+    :package t
+    :config
+    (if (fboundp 'leaf-keywords-init)
+        (leaf-keywords-init)))
+
+
+  ;; ==========================================================================
+  ;; パッケージマネージャ (by `el-get')
+  ;; ==========================================================================
+  ;; WARNING: 全てのパッケージに影響するため、
+  ;;          なるべく早いタイミングでインストールするようにしてある
+  ;; ==========================================================================
+  (leaf el-get
+    :package t
+    :custom `((el-get-git-shallow-clone . t)))
+
+
+  ;; ==========================================================================
+  ;; カラーテーマ
+  ;; ==========================================================================
+  (leaf *themes
+    :config
+    ;; 利用可能なカラーテーマを設定
+    (let ((required-themes '(;; 利用したいカラーテーマの一覧
+                             ;; 優先度が高い順に降順ソートしておくこと
+                             my-default
+                             wheatgrass))
+          (availabled-themes (custom-available-themes)))
+      ;; 利用したいカラーテーマが見つからなければ何もしない
+      (catch 'required-theme-found
+        (dolist (theme required-themes)
+          (when (member theme availabled-themes)
+            (load-theme theme t)
+            (throw 'required-theme-found theme))))))
+
+
+  ;; ==========================================================================
   ;; 未分類パッケージ（非メジャー／マイナーモード）
   ;; ==========================================================================
   (leaf *packages
     :config
-    ;; ------------------------------------------------------------------------
-    ;; パッケージマネージャ (by `el-get')
-    ;; ------------------------------------------------------------------------
-    ;; WARNING: 全てのパッケージに影響するため、
-    ;;          最速のタイミングでインストールされるよう、
-    ;;          意図的にアルファベット降順ソートから除外してある
-    ;; ------------------------------------------------------------------------
-    (leaf el-get
-      :package t
-      :custom `((el-get-git-shallow-clone . t)))
-
-
     ;; ------------------------------------------------------------------------
     ;; EWW (Emacs Web Wowser, Web Browser)
     ;; ------------------------------------------------------------------------
@@ -1962,10 +1963,10 @@ Ordering is lexicographic."
       :package t
       :require t
       :custom `((projectile-enable-caching . t)
-                (projectile-completion-system . ,(cond ((featurep 'ido) 'ido)
-                                                       ((featurep 'ivy) 'ivy)
-                                                       ((featurep 'helm) 'helm)
-                                                       (t 'default)))
+                (projectile-completion-system . ',(cond ((featurep 'ido) 'ido)
+                                                        ((featurep 'ivy) 'ivy)
+                                                        ((featurep 'helm) 'helm)
+                                                        (t 'default)))
                 (projectile-mode-line-lighter . "")
                 (projectile-keymap-prefix . ,(kbd "C-c C-p"))
                 ;; ローカル環境にのみ保存
