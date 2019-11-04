@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-11-03T15:52:29+09:00>
+;; Time-stamp: <2019-11-04T10:12:23+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -502,7 +502,7 @@
                                        (t
                                         'browse-url-default-browser)))
  ;;
- ;; GnuTLS trustfiles 追加
+ ;; 証明書
  ;;
  `(gnutls-trustfiles ',(mapcar 'convert-standard-filename
                                (if (member system-type '(ms-dos windows-nt))

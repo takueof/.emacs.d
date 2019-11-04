@@ -1,7 +1,7 @@
 ;;; my-default-theme.el --- My original defaut themes -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014-2019 Taku Watabe
-;; Time-stamp: <2019-02-17T06:01:09+09:00>
+;; Time-stamp: <2019-11-04T12:01:17+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: faces
@@ -96,6 +96,12 @@
  '(mode-line-highlight
    ((((class color))
      (:background "dark olive green" :foreground "white" :box nil))))
+ ;; -----------------------------------
+ ;; 縦線
+ ;; -----------------------------------
+ '(vertical-border
+   ((((class color))
+     (:background "gray20" :foreground "white"))))
 
 
  ;; ===========================================================================
