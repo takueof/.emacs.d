@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-11-04T10:12:23+09:00>
+;; Time-stamp: <2019-11-20T11:02:34+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -579,13 +579,18 @@
 
 ;; ============================================================================
 ;; 詳細設定補助 (by `leaf')
+;;
+;; `package' が必ず使える状況を前提とする
 ;; ============================================================================
-(eval-after-load 'package
-  '(progn
-     ;; `package' が必ず使える状況を前提とする
-     (unless (package-installed-p 'leaf)
-       (package-refresh-contents)
-       (package-install 'leaf))))
+;; WARNING: `package' が必ず使える状況を前提とする
+;;          `package' の初期化より後に設定しなければならない
+;; ============================================================================
+(when (and (fboundp 'package-installed-p)
+           (fboundp 'package-refresh-contents)
+           (fboundp 'package-install)
+           (not (package-installed-p 'leaf)))
+  (package-refresh-contents)
+  (package-install 'leaf))
 
 
 ;; ============================================================================
@@ -594,6 +599,9 @@
 ;; see also:
 ;; https://github.com/conao3/leaf.el
 ;; https://qiita.com/conao3/items/dc88bdadb0523ef95878
+;; ============================================================================
+;; WARNING: `leaf' が必ず使える状況を前提とする
+;;          `leaf' のインストールより後に設定しなければならない
 ;; ============================================================================
 (when (fboundp 'leaf)
   ;; ==========================================================================
