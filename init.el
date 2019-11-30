@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-11-30T13:33:35+09:00>
+;; Time-stamp: <2019-11-30T14:04:35+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2767,6 +2767,9 @@ Ordering is lexicographic."
 
     ;; ------------------------------------------------------------------------
     ;; 各種 Web 関連混合
+    ;;
+    ;; See also:
+    ;; http://web-mode.org/
     ;; ------------------------------------------------------------------------
     (leaf web-mode
       :package t
