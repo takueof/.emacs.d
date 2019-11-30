@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-11-30T14:04:35+09:00>
+;; Time-stamp: <2019-11-30T14:06:10+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2778,13 +2778,14 @@ Ordering is lexicographic."
       :init
       (defun my-web-mode-initialize ()
         "Initialize `web-mode' before file load."
-        (when (member web-mode-content-type '("javascript" "jsx"))
+        (when (and (boundp 'web-mode-content-type)
+                   (member web-mode-content-type '("javascript" "jsx"))
           (leaf flycheck
             :config
             (when (and (fboundp 'flycheck-add-mode)
                        (fboundp 'flycheck-mode))
               (flycheck-add-mode 'javascript-eslint 'web-mode)
-              (flycheck-mode +1))))))
+              (flycheck-mode +1)))))))
     ) ; END
   )
 
