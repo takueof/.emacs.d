@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-11-20T11:02:34+09:00>
+;; Time-stamp: <2019-11-30T13:33:35+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -59,7 +59,7 @@
 ;;
 ;; デフォルト名は長いため
 ;;
-;; see also:
+;; See also:
 ;; `mule-conf.el'
 (define-coding-system-alias 'utf-8-bom 'utf-8-with-signature)
 
@@ -81,7 +81,7 @@
 ;; Microsoft Code Page 932 (`japanese-cp932') を、
 ;; デフォルトの Shift_JIS 実装として認識させる
 ;;
-;; see also:
+;; See also:
 ;; `japanese.el'
 (define-coding-system-alias 'japanese-shift-jis 'japanese-cp932)
 (define-coding-system-alias 'shift_jis 'japanese-cp932)
@@ -290,7 +290,7 @@
  ;;
  ;; スタートアップ表示は一切させない
  ;;
- ;; see also:
+ ;; See also:
  ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Startup-Summary.html
  ;;
  '(inhibit-startup-screen t)
@@ -343,7 +343,7 @@
  ;;
  ;; スクロール時、自動スクロールをアグレッシブにする
  ;;
- ;; see also:
+ ;; See also:
  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Scrolling.html
  '(scroll-conservatively 0) ; default
  '(scroll-step 0) ; default
@@ -488,7 +488,7 @@
  ;; 右 <Alt> + 左 <Ctrl> で <AltGr> が発送されないようにする (Windows ONLY)
  ;; <AltGr> は独自のキーコードであり、<C-M-> であるとみなされない
  ;;
- ;; see also:
+ ;; See also:
  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Windows-Keyboard.html
  ;;
  '(w32-recognize-altgr nil)
@@ -596,7 +596,7 @@
 ;; ============================================================================
 ;; 詳細設定
 ;;
-;; see also:
+;; See also:
 ;; https://github.com/conao3/leaf.el
 ;; https://qiita.com/conao3/items/dc88bdadb0523ef95878
 ;; ============================================================================
@@ -649,6 +649,14 @@
   ;; ==========================================================================
   (leaf *packages
     :config
+    ;; ------------------------------------------------------------------------
+    ;; Node.js モジュールパス解決
+    ;; ------------------------------------------------------------------------
+    (leaf add-node-modules-path
+      :package t
+      :hook (prog-mode-hook . #'add-node-modules-path))
+
+
     ;; ------------------------------------------------------------------------
     ;; EWW (Emacs Web Wowser, Web Browser)
     ;; ------------------------------------------------------------------------
@@ -875,7 +883,7 @@
       :hook ((before-save-hook . time-stamp))
       :custom `(;; ISO 8601 (JIS X 0301) 形式にする
                 ;;
-                ;; see also:
+                ;; See also:
                 ;; https://ja.wikipedia.org/wiki/ISO_8601
                 ;;
                 ;; WARNING: `time-stamp-time-zone' を "+09:00" にしても、
@@ -1002,7 +1010,7 @@
     ;; ------------------------------------------------------------------------
     ;; 他ウインドウ弱調化
     ;;
-    ;; see also:
+    ;; See also:
     ;; `my-default-theme.el'
     ;; ------------------------------------------------------------------------
     (leaf auto-dim-other-buffers
@@ -1098,7 +1106,7 @@
       ;; -----------------------------
       ;; プロセスごとのコーディングシステム変換表
       ;;
-      ;; see also:
+      ;; See also:
       ;; https://www.emacswiki.org/emacs/ShellMode#toc1
       ;; -----------------------------
       (add-to-list 'process-coding-system-alist
@@ -1141,7 +1149,7 @@
                                                 python-mode
                                                 sass-mode
                                                 scss-mode
-                                                vue-mode))
+                                                web-mode))
                 (company-dabbrev-code-other-buffers . t)
                 (company-dabbrev-code-everywhere . t)
                 (company-dabbrev-code-ignore-case . t)))
@@ -1394,7 +1402,7 @@
       ;; ---------------------------
       ;; PATCH: v25.3 未満に存在するセキュリティホールの Fix
       ;;
-      ;; see also:
+      ;; See also:
       ;; https://lists.gnu.org/archive/html/emacs-devel/2017-09/msg00211.html
       ;; ---------------------------
       (if (or (< emacs-major-version 25)
@@ -1416,7 +1424,7 @@
     ;; ------------------------------------------------------------------------
     ;; デフォルト行文字数の位置にインジケータを表示
     ;;
-    ;; see also:
+    ;; See also:
     ;; `fill-column'
     ;; ------------------------------------------------------------------------
     (leaf fill-column-indicator
@@ -1437,7 +1445,7 @@
     ;; ------------------------------------------------------------------------
     ;; `dired' における `find' コマンド実行 (Windows ONLY)
     ;;
-    ;; see also:
+    ;; See also:
     ;; `dired'
     ;; ------------------------------------------------------------------------
     (leaf find-dired
@@ -1588,7 +1596,7 @@ See also: `https://github.com/validator/validator'."
              (php-mode-hook . flyspell-prog-mode)
              (sass-mode-hook . flyspell-prog-mode)
              (scss-mode-hook . flyspell-prog-mode)
-             (vue-mode-hook . flyspell-prog-mode))
+             (web-mode-hook . flyspell-prog-mode))
       :custom `((flyspell-delay . 1.0)))
 
 
@@ -1756,7 +1764,7 @@ See also: `https://github.com/validator/validator'."
 
         ;; メジャーモード名 + ファイルパスでソート
         ;;
-        ;; see also:
+        ;; See also:
         ;; https://www.emacswiki.org/emacs/IbufferMode#toc10
         (define-ibuffer-sorter mode-name-and-path-alphabetic
           "Sort the buffers by their mode and paths.
@@ -1874,7 +1882,7 @@ Ordering is lexicographic."
     ;; ------------------------------------------------------------------------
     ;; LSP (Language Server Protocol) クライアント
     ;;
-    ;; see also:
+    ;; See also:
     ;; https://microsoft.github.io/language-server-protocol/
     ;; https://langserver.org/
     ;; ------------------------------------------------------------------------
@@ -1891,7 +1899,7 @@ Ordering is lexicographic."
              ;; (scss-mode-hook . lsp)
              ;; (sh-mode-hook . lsp)
              (typescript-mode-hook . lsp)
-             ;; (vue-mode-hook . lsp)
+             ;; (web-mode-hook . lsp)
              )
       :custom `((lsp-auto-guess-root . t)
                 (lsp-restart . 'ignore)
@@ -2534,7 +2542,7 @@ Ordering is lexicographic."
     ;; ------------------------------------------------------------------------
     ;; Mustache
     ;;
-    ;; see also:
+    ;; See also:
     ;; https://mustache.github.io/
     ;; ------------------------------------------------------------------------
     (leaf mustache-mode
@@ -2702,17 +2710,10 @@ Ordering is lexicographic."
     ;; ------------------------------------------------------------------------
     ;; Template Toolkit (tt, written by Perl)
     ;;
-    ;; see also:
+    ;; See also:
     ;; http://tt2.org/
     ;; ------------------------------------------------------------------------
     (leaf tt-mode
-      :package t)
-
-
-    ;; ------------------------------------------------------------------------
-    ;; Vue.js
-    ;; ------------------------------------------------------------------------
-    (leaf vue-mode
       :package t)
 
 
@@ -2762,6 +2763,25 @@ Ordering is lexicographic."
                       (indent-style (equal indent-style-data "tab")))
                  (if (not (equal indent-tabs-mode indent-style))
                      (setq-local indent-tabs-mode indent-style)))))))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; 各種 Web 関連混合
+    ;; ------------------------------------------------------------------------
+    (leaf web-mode
+      :package t
+      :mode (("\\.vue\\'" . web-mode))
+      :hook ((web-mode-hook . my-web-mode-initialize))
+      :init
+      (defun my-web-mode-initialize ()
+        "Initialize `web-mode' before file load."
+        (when (member web-mode-content-type '("javascript" "jsx"))
+          (leaf flycheck
+            :config
+            (when (and (fboundp 'flycheck-add-mode)
+                       (fboundp 'flycheck-mode))
+              (flycheck-add-mode 'javascript-eslint 'web-mode)
+              (flycheck-mode +1))))))
     ) ; END
   )
 

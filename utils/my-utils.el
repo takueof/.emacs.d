@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-06-28T12:33:07+09:00>
+;; Time-stamp: <2019-11-30T13:34:43+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -38,7 +38,7 @@
 ;; ============================================================================
 ;; 行移動
 ;; ============================================================================
-;; see also:
+;; See also:
 ;; http://gifnksm.hatenablog.jp/entry/20100131/1264956220
 ;; ============================================================================
 ;;;###autoload
@@ -119,7 +119,7 @@ It doesn't depend on `truncate-partial-width-windows' of `toggle-truncate-lines'
     ;; 物理行移動はバッファの折り返し表示が有効でなければ意味がない
     ;; ゆえに強制切替してムダを省く
     ;;
-    ;; see also:
+    ;; See also:
     ;; `fill-column-indicator.el'
     (setq-local line-move-visual (not after))
     ;; `toggle-truncate-lines' は `truncate-partial-width-windows' が

@@ -1,7 +1,7 @@
 ;;; my-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-07-09T15:06:13+09:00>
+;; Time-stamp: <2019-11-30T13:34:20+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -93,7 +93,7 @@
 ;; 全角フォントで表示されてほしいもの：
 ;;   ×│┤┐└┴┬├─┼┘┌´±¶§÷°¨■
 ;;
-;; see also:
+;; See also:
 ;; https://en.wikipedia.org/wiki/Code_page_858
 ;; https://en.wikipedia.org/wiki/Code_page_850
 
@@ -118,7 +118,7 @@
 ;;   霻靃靍靏靑靕顗顥飯飼餧館馞驎髙髜魵魲鮏鮱鮻鰀鵰鵫鶴鸙黑ⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹ
 ;;   ￢￤＇＂
 ;;
-;; see also:
+;; See also:
 ;; https://ja.wikipedia.org/wiki/Cp932
 ;; https://internet.watch.impress.co.jp/www/column/ogata/news4.htm
 ;; http://charset.7jp.net/sjis.html
@@ -149,7 +149,7 @@
 ;; 表示例（一部）：
 ;; ء آ أ ؤ إ ئ ا ب ة ت ث ج ح خ د
 
-;; see also:
+;; See also:
 ;; `my-utils.el': 独自サポート関数・マクロ定義
 ;; `mule-conf.el': 文字セット定義（`set-fontset-font' 第2引数の定義一覧）
 ;; `mule-diag.el': 文字セット・コーディングシステム用ツール定義
@@ -422,7 +422,7 @@
   ;; フォントセット：プログラミング用（低 dpi 環境向け）
   ;;                 ビットマップフォント主体・96dpi 環境で設定済
   ;; --------------------------------------------------------------------------
-  ;; see also:
+  ;; See also:
   ;; https://github.com/chrissimpkins/codeface/tree/master/fonts/pro-font-windows
   ;; http://osaka.is.land.to/
   ;; http://emk.name/2003/12/osakattf.html
