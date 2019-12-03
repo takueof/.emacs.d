@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-11-30T14:06:10+09:00>
+;; Time-stamp: <2019-12-03T12:55:08+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -654,7 +654,11 @@
     ;; ------------------------------------------------------------------------
     (leaf add-node-modules-path
       :package t
-      :hook (prog-mode-hook . #'add-node-modules-path))
+      :hook (prog-mode-hook . my-add-node-modules-path-initialize)
+      :init
+      (defun my-add-node-modules-path-initialize ()
+        (if (fboundp 'add-node-modules-path)
+            (add-node-modules-path))))
 
 
     ;; ------------------------------------------------------------------------
@@ -1149,6 +1153,7 @@
                                                 python-mode
                                                 sass-mode
                                                 scss-mode
+                                                vue-mode
                                                 web-mode))
                 (company-dabbrev-code-other-buffers . t)
                 (company-dabbrev-code-everywhere . t)
@@ -1596,6 +1601,7 @@ See also: `https://github.com/validator/validator'."
              (php-mode-hook . flyspell-prog-mode)
              (sass-mode-hook . flyspell-prog-mode)
              (scss-mode-hook . flyspell-prog-mode)
+             (vue-mode-hook . flyspell-prog-mode)
              (web-mode-hook . flyspell-prog-mode))
       :custom `((flyspell-delay . 1.0)))
 
@@ -1899,6 +1905,7 @@ Ordering is lexicographic."
              ;; (scss-mode-hook . lsp)
              ;; (sh-mode-hook . lsp)
              (typescript-mode-hook . lsp)
+             ;; (vue-mode-hook . lsp)
              ;; (web-mode-hook . lsp)
              )
       :custom `((lsp-auto-guess-root . t)
@@ -2191,6 +2198,7 @@ Ordering is lexicographic."
     ;; 巨大ファイル表示
     ;; ------------------------------------------------------------------------
     (leaf vlf
+      :disabled t ;; FIXME: 妙な挙動が解決するまで OFF
       :package t
       :require (vlf-setup)
       :bind ((:vlf-mode-map
@@ -2222,7 +2230,7 @@ Ordering is lexicographic."
                 ;;   U+0009: 「	」
                 ;;   U+00A0: 「 」
                 ;;   U+3000: 「　」
-                (whitespace-hspace-regexp . "\\(\\(\xA0\\|\x8A0\\|\x920\\|\xE20\\|\xF20\\|\x3000\\)+\\)")
+                (whitespace-hspace-regexp . "\\(\\(\u00A0\\|\u08A0\\|\u0920\\|\u0E20\\|\u0F20\\|\u3000\\)+\\)")
                 (whitespace-trailing-regexp . "\\([\t \u00A0\u3000]+\\)$")
                 ;; 行カラム最大値は `fill-column' を参照させる
                 (whitespace-line-column . nil)
@@ -2718,6 +2726,22 @@ Ordering is lexicographic."
 
 
     ;; ------------------------------------------------------------------------
+    ;; Vue.js
+    ;; ------------------------------------------------------------------------
+    (leaf vue-mode
+      :package t
+      :hook ((vue-mode-hook . my-vue-mode-initialize))
+      :init
+      (defun my-vue-mode-initialize ()
+        "Initialize `vue-mode' before file load."
+        (leaf flycheck
+          :config
+          (when (fboundp 'flycheck-add-mode)
+            (flycheck-add-mode 'javascript-eslint 'vue-mode)
+            (flycheck-add-mode 'javascript-eslint 'vue-html-mode)))))
+
+
+    ;; ------------------------------------------------------------------------
     ;; XML
     ;; ------------------------------------------------------------------------
     (leaf nxml-mode
@@ -2772,20 +2796,25 @@ Ordering is lexicographic."
     ;; http://web-mode.org/
     ;; ------------------------------------------------------------------------
     (leaf web-mode
+      :disabled t ;; FIXME: 将来必要になったとき外す
       :package t
       :mode (("\\.vue\\'" . web-mode))
       :hook ((web-mode-hook . my-web-mode-initialize))
+      :custom `((web-mode-part-padding . nil)
+                (web-mode-script-padding . nil)
+                (web-mode-style-pading . nil))
       :init
       (defun my-web-mode-initialize ()
         "Initialize `web-mode' before file load."
-        (when (and (boundp 'web-mode-content-type)
-                   (member web-mode-content-type '("javascript" "jsx"))
+        (when (and (stringp buffer-file-name)
+                   (string-match "\\.vue\\'" buffer-file-name))
           (leaf flycheck
             :config
             (when (and (fboundp 'flycheck-add-mode)
                        (fboundp 'flycheck-mode))
+              (flycheck-mode -1)
               (flycheck-add-mode 'javascript-eslint 'web-mode)
-              (flycheck-mode +1)))))))
+              (flycheck-mode +1))))))
     ) ; END
   )
 
