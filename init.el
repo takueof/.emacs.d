@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-12-03T12:55:08+09:00>
+;; Time-stamp: <2019-12-12T05:45:39+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2198,7 +2198,6 @@ Ordering is lexicographic."
     ;; 巨大ファイル表示
     ;; ------------------------------------------------------------------------
     (leaf vlf
-      :disabled t ;; FIXME: 妙な挙動が解決するまで OFF
       :package t
       :require (vlf-setup)
       :bind ((:vlf-mode-map
