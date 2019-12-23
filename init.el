@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-12-12T05:45:39+09:00>
+;; Time-stamp: <2019-12-24T07:35:08+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2181,17 +2181,14 @@ Ordering is lexicographic."
 
 
     ;; ------------------------------------------------------------------------
-    ;; `undo' 拡張、`redo' 機能追加ならびに分岐履歴実装
+    ;; `redo' 追加
     ;; ------------------------------------------------------------------------
-    (leaf undo-tree
+    (leaf undo-fu
       :leaf-defer nil
       :package t
       :require t
-      :bind (("C-." . undo-tree-redo))
-      :custom `((undo-tree-mode-lighter . ""))
-      :config
-      (if (fboundp 'global-undo-tree-mode)
-          (global-undo-tree-mode)))
+      :bind (("C-/" . undo-fu-only-undo)
+             ("C-?" . undo-fu-only-redo)))
 
 
     ;; ------------------------------------------------------------------------
