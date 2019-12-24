@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-12-24T07:35:08+09:00>
+;; Time-stamp: <2019-12-24T09:14:59+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2226,7 +2226,7 @@ Ordering is lexicographic."
                 ;;   U+0009: 「	」
                 ;;   U+00A0: 「 」
                 ;;   U+3000: 「　」
-                (whitespace-hspace-regexp . "\\(\\(\u00A0\\|\u08A0\\|\u0920\\|\u0E20\\|\u0F20\\|\u3000\\)+\\)")
+                (whitespace-hspace-regexp . "\\(\u00A0\\|\u08A0\\|\u0920\\|\u0E20\\|\u0F20\\|\u3000\\)+")
                 (whitespace-trailing-regexp . "\\([\t \u00A0\u3000]+\\)$")
                 ;; 行カラム最大値は `fill-column' を参照させる
                 (whitespace-line-column . nil)
