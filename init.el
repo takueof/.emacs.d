@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-12-24T09:14:59+09:00>
+;; Time-stamp: <2019-12-27T16:25:40+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -103,7 +103,6 @@
 ;; ロードパス追加
 ;; ============================================================================
 (add-to-list 'load-path (locate-user-emacs-file "utils"))
-(add-to-list 'load-path (locate-user-emacs-file "site-lisp"))
 
 
 ;; ============================================================================
