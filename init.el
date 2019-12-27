@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-12-27T16:25:40+09:00>
+;; Time-stamp: <2019-12-27T22:41:17+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1632,16 +1632,15 @@ See also: `https://github.com/validator/validator'."
       :init
       (defun my-frameset-initialize ()
         "Initialize `frameset' when `after-init-hook' running."
-        (eval-after-load 'frameset
-          '(when (listp frameset-filter-alist)
-             ;; `desktop' で保存不要な項目はすべて `:never' にする
-             (dolist (key '(background-color
-                            foreground-color
-                            font
-                            frameset--text-pixel-height
-                            frameset--text-pixel-width
-                            GUI:font))
-               (setcdr (assoc key frameset-filter-alist) :never))))))
+        (when (listp frameset-filter-alist)
+          ;; `desktop' で保存不要な項目はすべて `:never' にする
+          (dolist (key '(background-color
+                         foreground-color
+                         font
+                         frameset--text-pixel-height
+                         frameset--text-pixel-width
+                         GUI:font))
+            (setcdr (assoc key frameset-filter-alist) :never)))))
 
 
     ;; ------------------------------------------------------------------------
