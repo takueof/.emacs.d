@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-12-29T15:45:41+09:00>
+;; Time-stamp: <2019-12-29T16:45:52+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1282,6 +1282,16 @@
 
 
     ;; ------------------------------------------------------------------------
+    ;; モードラインからモードの表示を消す
+    ;; ------------------------------------------------------------------------
+    (leaf delight
+      :package t
+      :config
+      (if (fboundp 'delight)
+          (delight '((eldoc-mode nil "eldoc")))))
+
+
+    ;; ------------------------------------------------------------------------
     ;; デスクトップ環境保存・復旧
     ;; ------------------------------------------------------------------------
     (leaf desktop
@@ -2007,30 +2017,6 @@ Ordering is lexicographic."
                 (recentf-max-saved-items . nil)
                 ;; ローカル環境にのみ保存
                 (recentf-save-file . "~/.emacs.recentf.el")))
-
-
-    ;; ------------------------------------------------------------------------
-    ;; モードラインからマイナーモードの表示を隠す
-    ;; ------------------------------------------------------------------------
-    (leaf rich-minority
-      :package t
-      ;; `window-setup-hook' で実行しないと適用されない場合がある
-      :hook ((window-setup-hook . my-rich-minority-mode-initialize))
-      :custom `((rm-blacklist . '(" Dim"
-                                  " EditorConfig"
-                                  " Fly"
-                                  " SP"
-                                  " hl-p"
-                                  " WS"
-                                  " yas"))
-                (rm-whitelist . nil)
-                (rm-text-properties . nil))
-      :config
-      (defun my-rich-minority-mode-initialize ()
-        "Initialize `rich-minority-mode'."
-        (if (fboundp 'rich-minority-mode)
-            ;; エラーは無視
-            (ignore-errors (rich-minority-mode +1)))))
 
 
     ;; ------------------------------------------------------------------------
