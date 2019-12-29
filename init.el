@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-12-29T15:08:45+09:00>
+;; Time-stamp: <2019-12-29T15:19:52+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2060,8 +2060,6 @@ Ordering is lexicographic."
       :hook ((after-init-hook . my-scroll-bar-initilalize))
       :init
       ;; ウインドウシステム上では、あらゆるスクロールバーを非表示化
-      ;;
-      ;; v25.1 以降
       (defun my-scroll-bar-initilalize ()
         "Initialize `scroll-bar' settings."
         (eval-after-load 'scroll-bar
@@ -2069,11 +2067,7 @@ Ordering is lexicographic."
              (if (fboundp 'scroll-bar-mode)
                  (scroll-bar-mode -1))
              (if (fboundp 'horizontal-scroll-bar-mode)
-                 (horizontal-scroll-bar-mode -1)))))
-      :config
-      ;; v25.1 未満
-      (if (fboundp 'set-scroll-bar-mode)
-          (set-scroll-bar-mode (if window-system nil 'right))))
+                 (horizontal-scroll-bar-mode -1))))))
 
 
     ;; ------------------------------------------------------------------------
