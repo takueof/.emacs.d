@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-12-27T22:41:17+09:00>
+;; Time-stamp: <2019-12-29T15:08:45+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1396,24 +1396,6 @@
                 (livedown-open . t)
                 (livedown-port . 50001)
                 (livedown-browser . nil)))
-
-
-    ;; ------------------------------------------------------------------------
-    ;; `text/enriched' フォーマットファイル
-    ;; ------------------------------------------------------------------------
-    (leaf enriched
-      :config
-      ;; ---------------------------
-      ;; PATCH: v25.3 未満に存在するセキュリティホールの Fix
-      ;;
-      ;; See also:
-      ;; https://lists.gnu.org/archive/html/emacs-devel/2017-09/msg00211.html
-      ;; ---------------------------
-      (if (or (< emacs-major-version 25)
-              (and (= emacs-major-version 25)
-                   (< emacs-minor-version 3)))
-          (defun enriched-decode-display-prop (start end &optional param)
-            (list start end))))
 
 
     ;; ------------------------------------------------------------------------
