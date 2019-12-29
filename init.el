@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-12-29T15:19:52+09:00>
+;; Time-stamp: <2019-12-29T15:41:25+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -144,28 +144,27 @@
     (global-set-key (kbd "C-x \\") #'previous-error))
 
 ;; 独自定義
-(eval-after-load 'my-utils
-  '(progn
-     ;; 行頭移動は物理行
-     (global-set-key (kbd "C-a") #'my-beginning-of-smart-indented-line)
+(with-eval-after-load 'my-utils
+  ;; 行頭移動は物理行
+  (global-set-key (kbd "C-a") #'my-beginning-of-smart-indented-line)
 
-     ;; 前のウインドウに移動
-     (global-set-key (kbd "C-x p") #'my-other-window-reverse)
+  ;; 前のウインドウに移動
+  (global-set-key (kbd "C-x p") #'my-other-window-reverse)
 
-     ;; 前のフレームに移動
-     (global-set-key (kbd "C-x 5 p") #'my-other-frame-reverse)
+  ;; 前のフレームに移動
+  (global-set-key (kbd "C-x 5 p") #'my-other-frame-reverse)
 
-     ;; 折り返し表示を強制切替
-     (global-set-key (kbd "C-x w") #'my-toggle-truncate-lines-force)
+  ;; 折り返し表示を強制切替
+  (global-set-key (kbd "C-x w") #'my-toggle-truncate-lines-force)
 
-     ;; カーソル位置にファイル名を挿入
-     (global-set-key (kbd "C-c i f") #'my-insert-file-name)
+  ;; カーソル位置にファイル名を挿入
+  (global-set-key (kbd "C-c i f") #'my-insert-file-name)
 
-     ;; カーソル位置にファイルパスを挿入
-     (global-set-key (kbd "C-c i p") #'my-insert-file-path)
+  ;; カーソル位置にファイルパスを挿入
+  (global-set-key (kbd "C-c i p") #'my-insert-file-path)
 
-     ;; 一括エンコーディング変換
-     (global-set-key (kbd "C-c RET f") #'my-change-files-coding-system)))
+  ;; 一括エンコーディング変換
+  (global-set-key (kbd "C-c RET f") #'my-change-files-coding-system))
 
 
 ;; ============================================================================
@@ -182,69 +181,68 @@
 ;; ============================================================================
 ;; 各種シンボル（`current-input-method' など）が `mule-cmds' で定義されている
 ;; 例外を出さず、確実に初期化する
-(eval-after-load "mule-cmds" ; 未 `provide'
-  '(progn
-     ;; -----------------------------------------------------------------------
-     ;; インプットメソッド切替時に、フェイス `cursor' を変更
-     ;; -----------------------------------------------------------------------
-     (defface my-cursor-default nil
-       "`cursor' face for `current-input-method' is nil."
-       :group 'customize)
-     (copy-face 'cursor 'my-cursor-default)
+(with-eval-after-load "mule-cmds" ; 未 `provide'
+  ;; --------------------------------------------------------------------------
+  ;; インプットメソッド切替時に、フェイス `cursor' を変更
+  ;; --------------------------------------------------------------------------
+  (defface my-cursor-default nil
+    "`cursor' face for `current-input-method' is nil."
+    :group 'customize)
+  (copy-face 'cursor 'my-cursor-default)
 
-     (defface my-cursor-input-method-activated '((t
-                                                  :background "red"))
-       "`cursor' face for `current-input-method' is non-nil."
-       :group 'customize)
+  (defface my-cursor-input-method-activated '((t
+                                               :background "red"))
+    "`cursor' face for `current-input-method' is non-nil."
+    :group 'customize)
 
-     (defun my-change-cursor-faces-by-current-input-method ()
-       "Change cursor color with `current-input-method'."
-       (let ((current-input-method (if (fboundp 'mac-input-source)
-                                       (let ((input-source (mac-input-source)))
-                                         (if (numberp (string-match "\\.US\\'" input-source))
-                                             nil
-                                           input-source))
-                                     current-input-method)))
-         (set-cursor-color
-          (face-attribute (if current-input-method
-                              'my-cursor-input-method-activated
-                            'my-cursor-default)
-                          :background))))
+  (defun my-change-cursor-faces-by-current-input-method ()
+    "Change cursor color with `current-input-method'."
+    (let ((current-input-method (if (fboundp 'mac-input-source)
+                                    (let ((input-source (mac-input-source)))
+                                      (if (numberp (string-match "\\.US\\'" input-source))
+                                          nil
+                                        input-source))
+                                  current-input-method)))
+      (set-cursor-color
+       (face-attribute (if current-input-method
+                           'my-cursor-input-method-activated
+                         'my-cursor-default)
+                       :background))))
 
-     (defun my-change-cursor-faces-by-current-input-method-advice (window &optional norecord)
-       "Change cursor color with `current-input-method' for `advice-add'."
-       (my-change-cursor-faces-by-current-input-method))
+  (defun my-change-cursor-faces-by-current-input-method-advice (window &optional norecord)
+    "Change cursor color with `current-input-method' for `advice-add'."
+    (my-change-cursor-faces-by-current-input-method))
 
 
-     ;; -----------------------------------------------------------------------
-     ;; 有効化
-     ;; -----------------------------------------------------------------------
-     (add-hook 'input-method-activate-hook
-               #'my-change-cursor-faces-by-current-input-method)
-     (add-hook 'input-method-deactivate-hook
-               #'my-change-cursor-faces-by-current-input-method)
-     (add-hook 'mac-selected-keyboard-input-source-change-hook ;; macOS ONLY
-               #'my-change-cursor-faces-by-current-input-method)
-     (add-hook 'mac-enabled-keyboard-input-sources-change-hook ;; macOS ONLY
-               #'my-change-cursor-faces-by-current-input-method)
+  ;; --------------------------------------------------------------------------
+  ;; 有効化
+  ;; --------------------------------------------------------------------------
+  (add-hook 'input-method-activate-hook
+            #'my-change-cursor-faces-by-current-input-method)
+  (add-hook 'input-method-deactivate-hook
+            #'my-change-cursor-faces-by-current-input-method)
+  (add-hook 'mac-selected-keyboard-input-source-change-hook ;; macOS ONLY
+            #'my-change-cursor-faces-by-current-input-method)
+  (add-hook 'mac-enabled-keyboard-input-sources-change-hook ;; macOS ONLY
+            #'my-change-cursor-faces-by-current-input-method)
 
-     ;; ウインドウ選択後、input-method の状態に応じてフェイス `cursor' を変更
-     ;;
-     ;; `cursor' はフレーム単位
-     ;; しかし、`current-input-method' はバッファローカル変数
-     ;; よって、バッファ間で `current-input-method' 値が異なれば、
-     ;; `cursor' が意図せぬ状態になる
-     ;;
-     ;; ゆえに、ウインドウ切替のタイミングでの `cursor' 明示変更が必要
-     ;;
-     ;; バッファ切替時は、特に何もしない
-     ;;
-     ;; `select-window' の実行後に起動するフックが存在しないため、
-     ;; アドバイスでしのぐ
-     (if (fboundp 'select-window)
-         (advice-add 'select-window
-                     :after
-                     #'my-change-cursor-faces-by-current-input-method-advice))))
+  ;; ウインドウ選択後、input-method の状態に応じてフェイス `cursor' を変更
+  ;;
+  ;; `cursor' はフレーム単位
+  ;; しかし、`current-input-method' はバッファローカル変数
+  ;; よって、バッファ間で `current-input-method' 値が異なれば、
+  ;; `cursor' が意図せぬ状態になる
+  ;;
+  ;; ゆえに、ウインドウ切替のタイミングでの `cursor' 明示変更が必要
+  ;;
+  ;; バッファ切替時は、特に何もしない
+  ;;
+  ;; `select-window' の実行後に起動するフックが存在しないため、
+  ;; アドバイスでしのぐ
+  (if (fboundp 'select-window)
+      (advice-add 'select-window
+                  :after
+                  #'my-change-cursor-faces-by-current-input-method-advice)))
 
 
 ;; ============================================================================
@@ -1465,10 +1463,10 @@
       ;; HACK: `flycheck-checker-error-threshold' 以上の項目が出現すると
       ;;       生成されうる警告バッファの出現を抑制
       ;; ---------------------------
-      (eval-after-load 'warnings
-        '(if (boundp 'warning-suppress-log-types)
-             (add-to-list 'warning-suppress-log-types
-                          '(flycheck syntax-checker))))
+      (with-eval-after-load 'warnings
+        (if (boundp 'warning-suppress-log-types)
+            (add-to-list 'warning-suppress-log-types
+                         '(flycheck syntax-checker))))
 
       ;; ---------------------------
       ;; PATCH: ESLint 優先利用
@@ -1716,6 +1714,16 @@ See also: `https://github.com/validator/validator'."
         ;; 実行
         (if (fboundp 'global-hl-line-mode)
             (global-hl-line-mode +1))))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; 特殊コメント強調
+    ;; ------------------------------------------------------------------------
+    (leaf hl-todo
+      :package t
+      :config
+      (if (fboundp 'global-hl-todo-mode)
+          (global-hl-todo-mode +1)))
 
 
     ;; ------------------------------------------------------------------------
@@ -1985,10 +1993,10 @@ Ordering is lexicographic."
     ;; ------------------------------------------------------------------------
     (leaf rainbow-mode
       :config
-      (eval-after-load 'rainbow-mode
-        '(when (boundp 'rainbow-html-colors-major-mode-list)
-           (add-to-list 'rainbow-html-colors-major-mode-list 'sass-mode)
-           (add-to-list 'rainbow-html-colors-major-mode-list 'scss-mode))))
+      (with-eval-after-load 'rainbow-mode
+        (when (boundp 'rainbow-html-colors-major-mode-list)
+          (add-to-list 'rainbow-html-colors-major-mode-list 'sass-mode)
+          (add-to-list 'rainbow-html-colors-major-mode-list 'scss-mode))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2062,12 +2070,12 @@ Ordering is lexicographic."
       ;; ウインドウシステム上では、あらゆるスクロールバーを非表示化
       (defun my-scroll-bar-initilalize ()
         "Initialize `scroll-bar' settings."
-        (eval-after-load 'scroll-bar
-          '(when window-system
-             (if (fboundp 'scroll-bar-mode)
-                 (scroll-bar-mode -1))
-             (if (fboundp 'horizontal-scroll-bar-mode)
-                 (horizontal-scroll-bar-mode -1))))))
+        (with-eval-after-load 'scroll-bar
+          (when window-system
+            (if (fboundp 'scroll-bar-mode)
+                (scroll-bar-mode -1))
+            (if (fboundp 'horizontal-scroll-bar-mode)
+                (horizontal-scroll-bar-mode -1))))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2222,6 +2230,7 @@ Ordering is lexicographic."
       (if (fboundp 'global-whitespace-mode)
           (global-whitespace-mode +1)))
 
+
     ;; ------------------------------------------------------------------------
     ;; ウインドウの状態履歴を undo/redo
     ;; ------------------------------------------------------------------------
@@ -2278,12 +2287,12 @@ Ordering is lexicographic."
         (setq-local indent-tabs-mode nil)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab")))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style)))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2301,31 +2310,31 @@ Ordering is lexicographic."
         (setq-local tab-width 8)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab"))
-                      (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
-                      (tab-width-number (if (and tab-width-number-data
-                                                 (stringp tab-width-number-data))
-                                            (string-to-number tab-width-number-data)
-                                          tab-width)))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style))
-                 (if (not (equal tab-width tab-width-number))
-                     (setq-local tab-width tab-width-number))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab"))
+                     (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
+                     (tab-width-number (if (and tab-width-number-data
+                                                (stringp tab-width-number-data))
+                                           (string-to-number tab-width-number-data)
+                                         tab-width)))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style))
+                (if (not (equal tab-width tab-width-number))
+                    (setq-local tab-width tab-width-number))))))
 
       ;; `lisp-interaction-mode' ONLY
       (defun my-lisp-interaction-mode-initialize ()
         "Initialize `lisp-interaction-mode-initialize' before file load."
         ;; `whitespace-mode' 無効化
-        (eval-after-load 'whitespace
-          '(progn
-             (if (fboundp 'whitespace-mode)
-                 (whitespace-mode -1))
-             (when (boundp 'whitespace-style)
-               (setq-local whitespace-style (copy-tree whitespace-style))
-               (delete 'empty whitespace-style))))))
+        (with-eval-after-load 'whitespace
+          (progn
+            (if (fboundp 'whitespace-mode)
+                (whitespace-mode -1))
+            (when (boundp 'whitespace-style)
+              (setq-local whitespace-style (copy-tree whitespace-style))
+              (delete 'empty whitespace-style))))))
 
 
     ;; --------------------------------------------------------------------------
@@ -2340,12 +2349,12 @@ Ordering is lexicographic."
         (setq-local indent-tabs-mode nil)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab")))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style)))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2412,12 +2421,12 @@ Ordering is lexicographic."
         (setq-local indent-tabs-mode nil)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab")))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style)))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2442,21 +2451,21 @@ Ordering is lexicographic."
         (setq-local js-indent-level tab-width)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab"))
-                      (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
-                      (tab-width-number (if (and tab-width-number-data
-                                                 (stringp tab-width-number-data))
-                                            (string-to-number tab-width-number-data)
-                                          tab-width)))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style))
-                 (if (not (equal tab-width tab-width-number))
-                     (setq-local tab-width tab-width-number))
-                 (if (not (equal js-indent-level tab-width))
-                     (setq-local js-indent-level tab-width)))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab"))
+                     (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
+                     (tab-width-number (if (and tab-width-number-data
+                                                (stringp tab-width-number-data))
+                                           (string-to-number tab-width-number-data)
+                                         tab-width)))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style))
+                (if (not (equal tab-width tab-width-number))
+                    (setq-local tab-width tab-width-number))
+                (if (not (equal js-indent-level tab-width))
+                    (setq-local js-indent-level tab-width)))))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2471,19 +2480,19 @@ Ordering is lexicographic."
         (setq-local tab-width 8)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab"))
-                      (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
-                      (tab-width-number (if (and tab-width-number-data
-                                                 (stringp tab-width-number-data))
-                                            (string-to-number tab-width-number-data)
-                                          tab-width)))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style))
-                 (if (not (equal tab-width tab-width-number))
-                     (setq-local tab-width tab-width-number)))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab"))
+                     (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
+                     (tab-width-number (if (and tab-width-number-data
+                                                (stringp tab-width-number-data))
+                                           (string-to-number tab-width-number-data)
+                                         tab-width)))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style))
+                (if (not (equal tab-width tab-width-number))
+                    (setq-local tab-width tab-width-number)))))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2505,12 +2514,12 @@ Ordering is lexicographic."
         (setq-local indent-tabs-mode nil)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab")))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style))))))
       :config
       ;; プレーンテキストファイルは除外
       (setq auto-mode-alist
@@ -2532,12 +2541,12 @@ Ordering is lexicographic."
         (setq-local indent-tabs-mode nil)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab")))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style)))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2552,12 +2561,12 @@ Ordering is lexicographic."
         (setq-local indent-tabs-mode nil)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab")))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style)))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2572,12 +2581,12 @@ Ordering is lexicographic."
         (setq-local indent-tabs-mode nil)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab")))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style)))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2593,12 +2602,12 @@ Ordering is lexicographic."
         (setq-local indent-tabs-mode nil)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab")))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style)))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2616,12 +2625,12 @@ Ordering is lexicographic."
         (setq-local indent-tabs-mode nil)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab")))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style)))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2642,12 +2651,12 @@ Ordering is lexicographic."
           (sgml-electric-tag-pair-mode +1))
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab")))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style))))))
 
       ;; (X)HTML
       (defun my-html-mode-initialize ()
@@ -2655,12 +2664,12 @@ Ordering is lexicographic."
         (setq-local indent-tabs-mode nil)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab")))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style)))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2730,12 +2739,12 @@ Ordering is lexicographic."
         (setq-local indent-tabs-mode nil)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab")))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style)))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2751,12 +2760,12 @@ Ordering is lexicographic."
         (setq-local indent-tabs-mode nil)
 
         ;; EditorConfig 対応
-        (eval-after-load 'editorconfig
-          '(if (hash-table-p editorconfig-properties-hash)
-               (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                      (indent-style (equal indent-style-data "tab")))
-                 (if (not (equal indent-tabs-mode indent-style))
-                     (setq-local indent-tabs-mode indent-style)))))))
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
 
 
     ;; ------------------------------------------------------------------------
