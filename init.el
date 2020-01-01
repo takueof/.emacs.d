@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2020-01-01T14:04:07+09:00>
+;; Time-stamp: <2020-01-01T14:43:41+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -986,8 +986,7 @@
       :package t
       :bind (("M-%" . anzu-query-replace)
              ("C-M-%" . anzu-query-replace-regexp))
-      :custom `((anzu-mode-lighter . nil)
-                (anzu-minimum-input-length . 3)
+      :custom `((anzu-minimum-input-length . 3)
                 (anzu-search-threshold . 1000)
                 (anzu-replace-to-string-separator . " -> "))
       :init
@@ -1123,7 +1122,6 @@
                 (company-abort-manual-when-too-short . t)
                 (company-idle-delay . 0.25)
                 (company-selection-wrap-around . t)
-                (company-lighter-base . nil)
                 ;; `company-dabbrev'
                 (company-dabbrev-other-buffers . t)
                 (company-dabbrev-downcase . nil)
@@ -1280,7 +1278,31 @@
       :package t
       :config
       (if (fboundp 'delight)
-          (delight '((eldoc-mode nil "eldoc")))))
+          (delight '(;; 降順ソート
+                     (anzu-mode nil "anzu")
+                     (auto-dim-other-buffers-mode nil "auto-dim-other-buffers")
+                     (company-mode nil "company")
+                     (editorconfig-mode nil "editorconfig")
+                     (eldoc-mode nil "eldoc")
+                     (flycheck-mode nil "flycheck")
+                     (flymake-mode nil "flymake")
+                     (flyspell-mode nil "flyspell")
+                     (flyspell-prog-mode nil "flyspell")
+                     (global-anzu-mode nil "anzu")
+                     (global-company-mode nil "company")
+                     (global-flycheck-mode nil "flycheck")
+                     (global-whitespace-mode nil "whitespace")
+                     (projectile-mode nil "projectile")
+                     (show-smartparens-global-mode nil "smartparens")
+                     (show-smartparens-mode nil "smartparens")
+                     (smartparens-global-mode nil "smartparens")
+                     (smartparens-mode nil "smartparens")
+                     (text-scale-mode nil "face-remap")
+                     (whitespace-mode nil "whitespace")
+                     (yas-global-mode nil "yasnippet")
+                     (yas-minor-mode nil "yasnippet")
+                     ))
+        ))
 
 
     ;; ------------------------------------------------------------------------
@@ -1458,7 +1480,6 @@
       :custom `((flycheck-checker-error-threshold . nil)
                 (flycheck-display-errors-delay . 0.5)
                 (flycheck-idle-change-delay . 0.25)
-                (flycheck-mode-line . "")
                 (flycheck-disabled-checkers . '(javascript-jscs)))
       :config
       ;; ---------------------------
@@ -1980,7 +2001,6 @@ Ordering is lexicographic."
                                                         ((featurep 'ivy) 'ivy)
                                                         ((featurep 'helm) 'helm)
                                                         (t 'default)))
-                (projectile-mode-line-lighter . "")
                 (projectile-keymap-prefix . ,(kbd "C-c C-p"))
                 ;; ローカル環境にのみ保存
                 (projectile-cache-file . "~/.emacs.projectile.cache")
