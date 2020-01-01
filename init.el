@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-12-29T16:45:52+09:00>
+;; Time-stamp: <2019-12-30T11:53:48+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -239,6 +239,8 @@
   ;;
   ;; `select-window' の実行後に起動するフックが存在しないため、
   ;; アドバイスでしのぐ
+  ;;
+  ;; TODO: `buffer-list-update-hook' が使えるかも？
   (if (fboundp 'select-window)
       (advice-add 'select-window
                   :after
@@ -2314,13 +2316,13 @@ Ordering is lexicographic."
       (defun my-lisp-interaction-mode-initialize ()
         "Initialize `lisp-interaction-mode-initialize' before file load."
         ;; `whitespace-mode' 無効化
+        ;;
+        ;; FIXME: まったく機能していない問題をどうにかする必要がある
         (with-eval-after-load 'whitespace
-          (progn
-            (if (fboundp 'whitespace-mode)
-                (whitespace-mode -1))
-            (when (boundp 'whitespace-style)
-              (setq-local whitespace-style (copy-tree whitespace-style))
-              (delete 'empty whitespace-style))))))
+          (if (fboundp 'whitespace-mode)
+              (whitespace-mode -1))
+          (if (fboundp 'whitespace-cleanup)
+              (whitespace-cleanup)))))
 
 
     ;; --------------------------------------------------------------------------
@@ -2685,6 +2687,26 @@ Ordering is lexicographic."
 
 
     ;; ------------------------------------------------------------------------
+    ;; ターミナルエミュレータ
+    ;; ------------------------------------------------------------------------
+    (leaf vterm
+      :package t
+      :bind (("C-c C-v" . vterm))
+      :hook ((vterm-mode-hook . my-vterm-mode-initialize))
+      :init
+      (defun my-vterm-mode-initialize ()
+        "Initialize `vterm-mode' before load."
+        ;; `whitespace-mode' 無効化
+        ;;
+        ;; FIXME: まったく機能していない問題をどうにかする必要がある
+        (with-eval-after-load 'whitespace
+          (if (fboundp 'whitespace-mode)
+              (whitespace-mode -1))
+          (if (fboundp 'whitespace-cleanup)
+              (whitespace-cleanup)))))
+
+
+    ;; ------------------------------------------------------------------------
     ;; Vue.js
     ;; ------------------------------------------------------------------------
     (leaf vue-mode
@@ -2767,8 +2789,7 @@ Ordering is lexicographic."
         "Initialize `web-mode' before file load."
         (when (and (stringp buffer-file-name)
                    (string-match "\\.vue\\'" buffer-file-name))
-          (leaf flycheck
-            :config
+          (with-eval-after-load 'flycheck
             (when (and (fboundp 'flycheck-add-mode)
                        (fboundp 'flycheck-mode))
               (flycheck-mode -1)
