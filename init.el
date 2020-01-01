@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-12-30T11:53:48+09:00>
+;; Time-stamp: <2020-01-01T13:58:52+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -209,23 +209,9 @@
                          'my-cursor-default)
                        :background))))
 
-  (defun my-change-cursor-faces-by-current-input-method-advice (window &optional norecord)
-    "Change cursor color with `current-input-method' for `advice-add'."
-    (my-change-cursor-faces-by-current-input-method))
-
-
   ;; --------------------------------------------------------------------------
   ;; 有効化
   ;; --------------------------------------------------------------------------
-  (add-hook 'input-method-activate-hook
-            #'my-change-cursor-faces-by-current-input-method)
-  (add-hook 'input-method-deactivate-hook
-            #'my-change-cursor-faces-by-current-input-method)
-  (add-hook 'mac-selected-keyboard-input-source-change-hook ;; macOS ONLY
-            #'my-change-cursor-faces-by-current-input-method)
-  (add-hook 'mac-enabled-keyboard-input-sources-change-hook ;; macOS ONLY
-            #'my-change-cursor-faces-by-current-input-method)
-
   ;; ウインドウ選択後、input-method の状態に応じてフェイス `cursor' を変更
   ;;
   ;; `cursor' はフレーム単位
@@ -237,14 +223,18 @@
   ;;
   ;; バッファ切替時は、特に何もしない
   ;;
-  ;; `select-window' の実行後に起動するフックが存在しないため、
-  ;; アドバイスでしのぐ
-  ;;
-  ;; TODO: `buffer-list-update-hook' が使えるかも？
-  (if (fboundp 'select-window)
-      (advice-add 'select-window
-                  :after
-                  #'my-change-cursor-faces-by-current-input-method-advice)))
+  ;; `select-window' の実行後に起動するフック `buffer-list-update-hook' を利用
+  (add-hook 'buffer-list-update-hook
+            #'my-change-cursor-faces-by-current-input-method)
+  ;; input-method の activate/deactivate と連動させる
+  (add-hook 'input-method-activate-hook
+            #'my-change-cursor-faces-by-current-input-method)
+  (add-hook 'input-method-deactivate-hook
+            #'my-change-cursor-faces-by-current-input-method)
+  (add-hook 'mac-selected-keyboard-input-source-change-hook ;; macOS ONLY
+            #'my-change-cursor-faces-by-current-input-method)
+  (add-hook 'mac-enabled-keyboard-input-sources-change-hook ;; macOS ONLY
+            #'my-change-cursor-faces-by-current-input-method))
 
 
 ;; ============================================================================
