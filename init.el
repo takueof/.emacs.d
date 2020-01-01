@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2020-01-01T13:58:52+09:00>
+;; Time-stamp: <2020-01-01T14:04:07+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2310,9 +2310,7 @@ Ordering is lexicographic."
         ;; FIXME: まったく機能していない問題をどうにかする必要がある
         (with-eval-after-load 'whitespace
           (if (fboundp 'whitespace-mode)
-              (whitespace-mode -1))
-          (if (fboundp 'whitespace-cleanup)
-              (whitespace-cleanup)))))
+              (whitespace-mode -1)))))
 
 
     ;; --------------------------------------------------------------------------
@@ -2691,9 +2689,7 @@ Ordering is lexicographic."
         ;; FIXME: まったく機能していない問題をどうにかする必要がある
         (with-eval-after-load 'whitespace
           (if (fboundp 'whitespace-mode)
-              (whitespace-mode -1))
-          (if (fboundp 'whitespace-cleanup)
-              (whitespace-cleanup)))))
+              (whitespace-mode -1)))))
 
 
     ;; ------------------------------------------------------------------------
