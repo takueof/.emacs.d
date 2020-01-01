@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2020-01-01T14:43:41+09:00>
+;; Time-stamp: <2020-01-01T18:46:58+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -646,6 +646,7 @@
       :hook (prog-mode-hook . my-add-node-modules-path-initialize)
       :init
       (defun my-add-node-modules-path-initialize ()
+        "Initialize `add-node-modules-path'."
         (if (fboundp 'add-node-modules-path)
             (add-node-modules-path))))
 
@@ -1052,9 +1053,9 @@
       :package t
       :bind (("C-c C-q" . codic))
       :config
-      ;; ---------------------------
+      ;; ------------------------------
       ;; HACK: 専用バッファをコマンドで `quit-window' させる
-      ;; ---------------------------
+      ;; ------------------------------
       (unless (fboundp 'codic-view-kill)
         ;; 専用ウインドウを `quit-window' する関数が
         ;; 定義されていないなら追加
@@ -1091,7 +1092,7 @@
                 (comint-eol-on-send . t))
       :init
       (defun my-comint-mode-initialize ()
-        "Initialize `comint-mode' before file load."
+        "Initialize `comint-mode'."
         (if (boundp 'comint-input-sender-no-newline)
             (setq-local comint-input-sender-no-newline t)))
 
@@ -1196,9 +1197,9 @@
                 (compilation-always-kill . t)
                 (compilation-context-lines . t))
       :init
-      ;; ---------------------------
+      ;; ------------------------------
       ;; HACK: コンパイル完了後、モードラインにも状態を簡易表示
-      ;; ---------------------------
+      ;; ------------------------------
       (defun my-compilation-message (cur-buffer msg)
         "Show status messages when compile done in `compilation-mode'."
         (let ((msg-text (string-trim msg)) ; 改行文字が含まれうる問題を回避
@@ -1214,9 +1215,9 @@
 
       (add-to-list 'compilation-finish-functions 'my-compilation-message)
 
-      ;; ---------------------------
+      ;; ------------------------------
       ;; HACK: ANSI エスケープシーケンスが正しく解釈されない問題を回避
-      ;; ---------------------------
+      ;; ------------------------------
       (defun my-compilation-ansi-color-apply ()
         "Recognize ASCII color escape sequences for `compilation-mode' buffer."
         (if (and (require 'ansi-color nil :noerror)
@@ -1226,9 +1227,9 @@
               (set-marker start-marker (point-min))
               (ansi-color-apply-on-region start-marker end-marker))))
       :config
-      ;; ---------------------------
+      ;; ------------------------------
       ;; HACK: コンパイル完了後、正常に終了していれば自動でウインドウを閉じる
-      ;; ---------------------------
+      ;; ------------------------------
       (defcustom my-compilation-auto-quit-window-enable-buffer-names '("*compilation*")
         "Created buffer names by `compile' command."
         :group 'compilation
@@ -1309,10 +1310,12 @@
     ;; デスクトップ環境保存・復旧
     ;; ------------------------------------------------------------------------
     (leaf desktop
+      ;; ------------------------------
       ;; HACK: `:leaf-defer' がないと `eval-after-load' 内で `:init' が
       ;;       実行される
       ;;         -> 結果的に `autoload' 関数である `desktop-save-mode' が
       ;;            実行されなくなる
+      ;; ------------------------------
       :leaf-defer nil
       :bind (("C-c d c" . desktop-clear)
              ("C-c d C-s" . desktop-save)
@@ -1438,15 +1441,19 @@
     (leaf fill-column-indicator
       :package t
       :bind (("C-c q" . fci-mode))
-      :custom `(;; FIXME: `font-lock-comment-face' を用いたい
+      :custom `(;; --------------------
+                ;; FIXME: `font-lock-comment-face' を用いたい
                 ;;        しかし、指定すると、なぜか "red" が用いられる
                 ;;        現状は `default' フェイスで回避中
+                ;; --------------------
                 (fci-rule-color . ,(face-attribute 'default :foreground))
                 (fci-rule-use-dashes . t)
                 (fci-dash-pattern . 0.5)
+                ;; --------------------
                 ;; HACK: `fci-mode' を有効にした後、
                 ;;       `toggle-truncate-lines' で折り返しを有効にすると
                 ;;       `line-move-visual' が強制的に nil となる問題を回避
+                ;; --------------------
                 (fci-handle-line-move-visual . nil)))
 
 
@@ -1460,9 +1467,11 @@
       :when (member system-type '(ms-dos windows-nt))
       :after (find-dired)
       :config
+      ;; ------------------------------
       ;; HACK: `:custom' で設定すると `find-exec-terminator' の展開が
       ;;       `find-dired' の `eval-after-load' より先になりエラーとなる
       ;;       仕方なく `:config' で泥臭く設定しなければならない
+      ;; ------------------------------
       (custom-set-variables
        `(find-ls-option ,(cons (format "-exec %s -ld {} %s"
                                        (executable-find "ls")
@@ -1482,19 +1491,19 @@
                 (flycheck-idle-change-delay . 0.25)
                 (flycheck-disabled-checkers . '(javascript-jscs)))
       :config
-      ;; ---------------------------
+      ;; ------------------------------
       ;; HACK: `flycheck-checker-error-threshold' 以上の項目が出現すると
       ;;       生成されうる警告バッファの出現を抑制
-      ;; ---------------------------
+      ;; ------------------------------
       (with-eval-after-load 'warnings
         (if (boundp 'warning-suppress-log-types)
             (add-to-list 'warning-suppress-log-types
                          '(flycheck syntax-checker))))
 
-      ;; ---------------------------
+      ;; ------------------------------
       ;; PATCH: ESLint 優先利用
       ;;        JSHint -> ESLint を ESLint -> JSHint 順に変更
-      ;; ---------------------------
+      ;; ------------------------------
       (if (boundp 'flycheck-checkers)
           (let* ((target-and-other-checkers (member 'javascript-eslint
                                                     flycheck-checkers)))
@@ -1503,9 +1512,9 @@
                     (cons 'javascript-jshint
                           (cdr-safe target-and-other-checkers)))))
 
-      ;; ---------------------------
+      ;; ------------------------------
       ;; PATCH: v.Nu サポート
-      ;; ---------------------------
+      ;; ------------------------------
       (unless (flycheck-registered-checker-p 'vnu)
         ;; FIXME: v.Nu の標準出力が UTF-8 なので、環境によっては文字化けする
         (flycheck-define-checker vnu
@@ -1543,19 +1552,19 @@ See also: `https://github.com/validator/validator'."
             ;; 未追加ならリスト先頭に追加
             (add-to-list 'flycheck-checkers 'vnu))))
 
-      ;; ---------------------------
+      ;; ------------------------------
       ;; PATCH: Sass（.scss/.sass 両形式）チェック時にキャッシュを使わせない
-      ;; ---------------------------
+      ;; ------------------------------
       (dolist (checker '(scss sass))
         (if (and (flycheck-registered-checker-p checker)
                  (not (member "-C" (flycheck-checker-arguments checker))))
             ;; あえて破壊的に変更（元のリストに追加したい）
             (nconc (get checker 'flycheck-command) '("-C"))))
 
-      ;; ---------------------------
+      ;; ------------------------------
       ;; PATCH: temp ファイルのデフォルトコーディングシステムを、
       ;;        強制的に UTF-8 (LF) とする
-      ;; ---------------------------
+      ;; ------------------------------
       ;; オーバーライド
       (defun flycheck-save-buffer-to-file (file-name)
         "Save the contents of the current buffer to FILE-NAME."
@@ -1673,13 +1682,15 @@ See also: `https://github.com/validator/validator'."
       :bind (("C-M-g" . rgrep)))
 
 
-    ;; -----------------------------
+    ;; --------------------------------
     ;; `grep' (Windows ONLY)
-    ;; -----------------------------
+    ;; --------------------------------
     (leaf grep
       :when (member system-type '(ms-dos windows-nt))
+      ;; ------------------------------
       ;; HACK: `autoload' 未対応変数を変更する必要があるため、
       ;;       明示的にロードさせる必要がある
+      ;; ------------------------------
       :require t
       :custom `(;; 例外が出るため NUL デバイスは使わせない
                 (grep-use-null-device . nil))
@@ -1716,7 +1727,7 @@ See also: `https://github.com/validator/validator'."
       :hook ((after-init-hook . my-hl-line-initialize))
       :init
       (defun my-hl-line-initialize ()
-        "Initialize `hl-line' settings."
+        "Initialize `hl-line'."
         (when (and (require 'color nil :noerror) ; 未ロードがありうるため必須
                    (fboundp 'color-rgb-to-hsl)
                    (fboundp 'color-name-to-rgb)
@@ -1756,9 +1767,9 @@ See also: `https://github.com/validator/validator'."
       :bind (("C-x C-b" . ibuffer))
       :custom `((ibuffer-expert . t))
       :config
-      ;; ---------------------------
+      ;; ------------------------------
       ;; 機能拡張
-      ;; ---------------------------
+      ;; ------------------------------
       (when (and (boundp 'ibuffer-formats)
                  (boundp 'ibuffer-sorting-mode)
                  (boundp 'ibuffer-last-sorting-mode)
@@ -1826,7 +1837,7 @@ Ordering is lexicographic."
       :hook ((ibuffer-hook . my-ibuffer-projectile-initialize))
       :init
       (defun my-ibuffer-projectile-initialize ()
-        "Initialize `ibuffer' settings."
+        "Initialize `ibuffer'."
         (if (fboundp 'ibuffer-projectile-set-filter-groups)
             (ibuffer-projectile-set-filter-groups))))
 
@@ -2067,7 +2078,7 @@ Ordering is lexicographic."
       :init
       ;; ウインドウシステム上では、あらゆるスクロールバーを非表示化
       (defun my-scroll-bar-initilalize ()
-        "Initialize `scroll-bar' settings."
+        "Initialize `scroll-bar'."
         (with-eval-after-load 'scroll-bar
           (when window-system
             (if (fboundp 'scroll-bar-mode)
@@ -2188,6 +2199,7 @@ Ordering is lexicographic."
     ;; 空白文字強調
     ;; ------------------------------------------------------------------------
     (leaf whitespace
+      :hook ((after-change-major-mode-hook . my-whitespace-mode-initialize))
       :custom `(;; 「不正」位置の空白文字のみ強調
                 (whitespace-style . '(empty
                                       face
@@ -2200,20 +2212,24 @@ Ordering is lexicographic."
                                       tab-mark
                                       tabs
                                       trailing))
+                ;; --------------------
                 ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調表示
                 ;;
                 ;; 表示テスト:
                 ;;   U+0009: 「	」
                 ;;   U+00A0: 「 」
                 ;;   U+3000: 「　」
+                ;; --------------------
                 (whitespace-hspace-regexp . "\\(\u00A0\\|\u08A0\\|\u0920\\|\u0E20\\|\u0F20\\|\u3000\\)+")
                 (whitespace-trailing-regexp . "\\([\t \u00A0\u3000]+\\)$")
                 ;; 行カラム最大値は `fill-column' を参照させる
                 (whitespace-line-column . nil)
+                ;; --------------------
                 ;; HACK: 半角空白 (U+0020) を強調しないようにする
                 ;;
                 ;; 表示テスト:
                 ;;   U+0020: 「 」
+                ;; --------------------
                 (whitespace-display-mappings . '(;; EOL -> DOLLAR SIGN
                                                  (newline-mark ?\n [?$ ?\n])
                                                  ;; TAB -> CURRENCY SIGN
@@ -2224,6 +2240,19 @@ Ordering is lexicographic."
                                                  (tab-mark ?\t [?» ?\t] [?\\ ?\t]))))
       :custom-face `((whitespace-space . '((t
                                             (:background nil)))))
+      :init
+      (defun my-whitespace-mode-initialize ()
+        "Initialize `whitespace'."
+        ;; ----------------------------
+        ;; HACK: 一部メジャーモードでは無効化
+        ;; ----------------------------
+        (with-eval-after-load 'whitespace
+          (if (and (fboundp 'whitespace-mode)
+                   (member major-mode '(;; 降順ソート
+                                        lisp-interaction-mode
+                                        vterm-mode
+                                        )))
+              (whitespace-mode -1))))
       :config
       (if (fboundp 'global-whitespace-mode)
           (global-whitespace-mode +1)))
@@ -2325,12 +2354,8 @@ Ordering is lexicographic."
       ;; `lisp-interaction-mode' ONLY
       (defun my-lisp-interaction-mode-initialize ()
         "Initialize `lisp-interaction-mode-initialize' before file load."
-        ;; `whitespace-mode' 無効化
-        ;;
-        ;; FIXME: まったく機能していない問題をどうにかする必要がある
-        (with-eval-after-load 'whitespace
-          (if (fboundp 'whitespace-mode)
-              (whitespace-mode -1)))))
+        ;; EMPTY
+        ))
 
 
     ;; --------------------------------------------------------------------------
@@ -2699,17 +2724,7 @@ Ordering is lexicographic."
     ;; ------------------------------------------------------------------------
     (leaf vterm
       :package t
-      :bind (("C-c C-v" . vterm))
-      :hook ((vterm-mode-hook . my-vterm-mode-initialize))
-      :init
-      (defun my-vterm-mode-initialize ()
-        "Initialize `vterm-mode' before load."
-        ;; `whitespace-mode' 無効化
-        ;;
-        ;; FIXME: まったく機能していない問題をどうにかする必要がある
-        (with-eval-after-load 'whitespace
-          (if (fboundp 'whitespace-mode)
-              (whitespace-mode -1)))))
+      :bind (("C-c C-v" . vterm)))
 
 
     ;; ------------------------------------------------------------------------
