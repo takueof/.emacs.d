@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2020 Taku Watabe
-;; Time-stamp: <2020-01-08T12:39:47+09:00>
+;; Time-stamp: <2020-01-08T15:37:47+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1759,6 +1759,23 @@ See also: `https://github.com/validator/validator'."
     ;; ------------------------------------------------------------------------
     (leaf hl-todo
       :package t
+      :custom `((hl-todo-keyword-faces . '(("HOLD" . "#d0bf8f")
+                                           ("TODO" . "#cc9393")
+                                           ("NEXT" . "#dca3a3")
+                                           ("THEM" . "#dc8cc3")
+                                           ("PROG" . "#7cb8bb")
+                                           ("OKAY" . "#7cb8bb")
+                                           ("DONT" . "#5f7f5f")
+                                           ("FAIL" . "#8c5353")
+                                           ("DONE" . "#afd8af")
+                                           ("NOTE"   . "#d0bf8f")
+                                           ("KLUDGE" . "#d0bf8f")
+                                           ("HACK"   . "#d0bf8f")
+                                           ("TEMP"   . "#d0bf8f")
+                                           ("FIXME"  . "#cc9393")
+                                           ("XXX+"   . "#cc9393")
+                                           ("CAUTION" . "#ffff66")
+                                           ("WARNING" . "#ff6666"))))
       :config
       (if (fboundp 'global-hl-todo-mode)
           (global-hl-todo-mode +1)))
