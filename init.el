@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2020 Taku Watabe
-;; Time-stamp: <2020-01-08T15:37:47+09:00>
+;; Time-stamp: <2020-01-08T16:29:59+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2810,33 +2810,6 @@ Ordering is lexicographic."
                      (indent-style (equal indent-style-data "tab")))
                 (if (not (equal indent-tabs-mode indent-style))
                     (setq-local indent-tabs-mode indent-style)))))))
-
-
-    ;; ------------------------------------------------------------------------
-    ;; 各種 Web 関連混合
-    ;;
-    ;; See also:
-    ;; http://web-mode.org/
-    ;; ------------------------------------------------------------------------
-    (leaf web-mode
-      :disabled t ;; FIXME: 将来必要になったとき外す
-      :package t
-      :mode (("\\.vue\\'" . web-mode))
-      :hook ((web-mode-hook . my-web-mode-initialize))
-      :custom `((web-mode-part-padding . nil)
-                (web-mode-script-padding . nil)
-                (web-mode-style-pading . nil))
-      :init
-      (defun my-web-mode-initialize ()
-        "Initialize `web-mode' before file load."
-        (when (and (stringp buffer-file-name)
-                   (string-match "\\.vue\\'" buffer-file-name))
-          (with-eval-after-load 'flycheck
-            (when (and (fboundp 'flycheck-add-mode)
-                       (fboundp 'flycheck-mode))
-              (flycheck-mode -1)
-              (flycheck-add-mode 'javascript-eslint 'web-mode)
-              (flycheck-mode +1))))))
     ) ; END
   )
 
