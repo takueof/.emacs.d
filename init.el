@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2020 Taku Watabe
-;; Time-stamp: <2020-01-08T16:29:59+09:00>
+;; Time-stamp: <2020-03-07T20:00:51+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2412,7 +2412,37 @@ Ordering is lexicographic."
 
 
     ;; ------------------------------------------------------------------------
-    ;; JavaScript
+    ;; JavaScript (Basic)
+    ;; ------------------------------------------------------------------------
+    (leaf js-mode
+      :hook ((js-mode-hook . my-js-mode-initialize))
+      :custom `((js-indent-level . 4)
+                (js-expr-indent-offset . 0)
+                (js-paren-indent-offset . 0)
+                (js-square-indent-offset . 0)
+                (js-curly-indent-offset . 0)
+                (js-switch-indent-offset . 0)
+                (js-flat-functions . nil)
+                (js-indent-align-list-continuation . t)
+                (js-js-switch-tabs . t)
+                (js-indent-first-init . 'dynamic)
+                (js-chain-indent . t))
+      :init
+      (defun my-js-mode-initialize ()
+        "Initialize `js-mode' before file load."
+        (setq-local indent-tabs-mode nil)
+
+        ;; EditorConfig 対応
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; JavaScript (Expert)
     ;; ------------------------------------------------------------------------
     (leaf js2-mode
       :package t
@@ -2421,10 +2451,7 @@ Ordering is lexicographic."
              ("\\.pac\\'" . js2-mode))
       :hook ((js2-mode-hook . my-js2-mode-initialize))
       :custom `((js2-highlight-level . 3) ; すべての構文強調を有効化
-                (js2-basic-offset . 4)
                 (js2-bounce-indent-p . nil)
-                (js2-pretty-multiline-declarations . t)
-                (js2-indent-switch-body nil) ; case 文はインデントしない
                 (js2-idle-timer-delay . 0.25)
                 (js2-dynamic-idle-timer-adjust . 0)
                 (js2-concat-multiline-strings . t)
@@ -2432,6 +2459,7 @@ Ordering is lexicographic."
                 ;;
                 ;; 他ツールに任せるため、すべて無効化
                 (js2-mode-show-parse-errors . nil)
+                (js2-mode-assume-strict . nil)
                 (js2-mode-show-strict-warnings . nil)
                 (js2-strict-trailing-comma-warning . nil)
                 (js2-strict-missing-semi-warning . nil)
@@ -2453,10 +2481,12 @@ Ordering is lexicographic."
                 (js2-mode-indent-inhibit-undo . nil)
                 (js2-mode-indent-ignore-first-tab . nil)
                 (js2-highlight-external-variables . t)
+                (js2-warn-about-unused-function-arguments . nil)
                 ;; JSLint
                 ;;
                 ;; 他ツールに任せるため、すべて無効化
-                (js2-include-jslint-globals . nil))
+                (js2-include-jslint-globals . nil)
+                (js2-include-jslint-declaration-externs . nil))
       :init
       (defun my-js2-mode-initialize ()
         "Initialize `js2-mode' before file load."
