@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2020 Taku Watabe
-;; Time-stamp: <2020-03-08T10:58:16+09:00>
+;; Time-stamp: <2020-03-15T16:04:29+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1145,8 +1145,8 @@
                                                 python-mode
                                                 sass-mode
                                                 scss-mode
-                                                vue-mode
-                                                web-mode))
+                                                typescript-mode
+                                                vue-mode))
                 (company-dabbrev-code-other-buffers . t)
                 (company-dabbrev-code-everywhere . t)
                 (company-dabbrev-code-ignore-case . t)))
@@ -1546,7 +1546,7 @@ See also: `https://github.com/validator/validator'."
                  (one-or-more digit) "." (one-or-more digit) ": "
                  "info: " (message)
                  line-end))
-          :modes (html-mode nxhtml-mode web-mode))
+          :modes (html-mode nxhtml-mode))
 
         ;; 有効化
         (let ((target-and-other-checkers (member 'html-tidy flycheck-checkers)))
@@ -1616,8 +1616,7 @@ See also: `https://github.com/validator/validator'."
              (php-mode-hook . flyspell-prog-mode)
              (sass-mode-hook . flyspell-prog-mode)
              (scss-mode-hook . flyspell-prog-mode)
-             (vue-mode-hook . flyspell-prog-mode)
-             (web-mode-hook . flyspell-prog-mode))
+             (vue-mode-hook . flyspell-prog-mode))
       :custom `((flyspell-delay . 1.0)))
 
 
@@ -1949,7 +1948,6 @@ Ordering is lexicographic."
              ;; (sh-mode-hook . lsp)
              (typescript-mode-hook . lsp)
              ;; (vue-mode-hook . lsp)
-             ;; (web-mode-hook . lsp)
              )
       :custom `((lsp-auto-guess-root . t)
                 (lsp-restart . 'ignore)
