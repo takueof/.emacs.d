@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2020 Taku Watabe
-;; Time-stamp: <2020-03-15T16:04:29+09:00>
+;; Time-stamp: <2020-12-29T06:02:48+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1410,24 +1410,6 @@
 
 
     ;; ------------------------------------------------------------------------
-    ;; Markdown プレビュー
-    ;; ------------------------------------------------------------------------
-    (leaf livedown
-      :el-get (livedown
-               :type github
-               :pkgname "shime/emacs-livedown")
-      :after (nvm markdown-mode)
-      :bind ((:markdown-mode-map
-              :package markdown-mode
-              ("C-c l p" . livedown-preview)
-              ("C-c l k" . livedown-kill)))
-      :custom `((livedown-autostart . nil)
-                (livedown-open . t)
-                (livedown-port . 50001)
-                (livedown-browser . nil)))
-
-
-    ;; ------------------------------------------------------------------------
     ;; カーソル下の数値を増減
     ;; ------------------------------------------------------------------------
     (leaf evil-numbers
@@ -2270,7 +2252,6 @@ Ordering is lexicographic."
           (if (and (fboundp 'whitespace-mode)
                    (member major-mode '(;; 降順ソート
                                         lisp-interaction-mode
-                                        vterm-mode
                                         )))
               (whitespace-mode -1))))
       :config
@@ -2767,14 +2748,6 @@ Ordering is lexicographic."
     ;; ------------------------------------------------------------------------
     (leaf tt-mode
       :package t)
-
-
-    ;; ------------------------------------------------------------------------
-    ;; ターミナルエミュレータ
-    ;; ------------------------------------------------------------------------
-    (leaf vterm
-      :package t
-      :bind (("C-c C-v" . vterm)))
 
 
     ;; ------------------------------------------------------------------------
