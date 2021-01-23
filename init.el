@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2020 Taku Watabe
-;; Time-stamp: <2020-12-29T06:02:48+09:00>
+;; Copyright (C) 2013-2021 Taku Watabe
+;; Time-stamp: <2021-01-24T04:11:57+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -561,7 +561,6 @@
            (fboundp 'package-list-packages-no-fetch))
   ;; 確実に定義された後で追加
   (add-to-list 'package-archives '("MELPA" . "https://melpa.org/packages/"))
-  (add-to-list 'package-archives '("marmalade" . "https://marmalade-repo.org/packages/"))
 
   ;; あらゆるパッケージロードに先んじての記述が必須
   (package-initialize)
