@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2021 Taku Watabe
-;; Time-stamp: <2021-01-24T04:11:57+09:00>
+;; Time-stamp: <2021-02-04T22:45:30+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -142,6 +142,13 @@
 ;; 1つ前のエラーを表示
 (if (fboundp 'previous-error)
     (global-set-key (kbd "C-x \\") #'previous-error))
+
+;; タッチパッドによる各種操作を無効化 (macOS ONLY)
+(when (member system-type '(darwin))
+  (global-unset-key [magnify-up])
+  (global-unset-key [magnify-down])
+  (global-unset-key [S-magnify-up])
+  (global-unset-key [S-magnify-down]))
 
 ;; 独自定義
 (with-eval-after-load 'my-utils
