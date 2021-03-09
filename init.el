@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2021 Taku Watabe
-;; Time-stamp: <2021-02-06T23:43:01+09:00>
+;; Time-stamp: <2021-03-09T15:00:42+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2764,6 +2764,69 @@ Ordering is lexicographic."
           (when (fboundp 'flycheck-add-mode)
             (flycheck-add-mode 'javascript-eslint 'vue-mode)
             (flycheck-add-mode 'javascript-eslint 'vue-html-mode)))))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; Web
+    ;; ------------------------------------------------------------------------
+    (leaf web-mode
+      :package t
+      :mode (("\\.njk\\'" . web-mode))
+      :hook ((web-mode-hook . my-web-mode-initialize))
+      :custom `((web-mode-block-padding . nil)
+                (web-mode-part-padding . nil)
+                (web-mode-script-padding . nil)
+                (web-mode-style-padding . nil)
+                (web-mode-attr-indent-offset . nil)
+                (web-mode-attr-value-indent-offset . nil)
+                (web-mode-markup-indent-offset . 0)
+                (web-mode-css-indent-offset . 0)
+                (web-mode-code-indent-offset . 0)
+                (web-mode-sql-indent-offset . 0)
+                (web-mode-enable-css-colorization . ,(display-graphic-p))
+                (web-mode-enable-comment-interpolation . nil)
+                (web-mode-enable-comment-annotation . nil)
+                (web-mode-enable-auto-indentation . nil)
+                (web-mode-enable-auto-closing . nil)
+                (web-mode-enable-auto-pairing . nil)
+                (web-mode-enable-auto-opening . nil)
+                (web-mode-enable-auto-quoting . nil)
+                (web-mode-enable-auto-expanding . nil)
+                (web-mode-enable-curly-brace-indentation . nil)
+                (web-mode-enable-control-block-indentation . nil)
+                (web-mode-enable-current-element-highlight . t)
+                (web-mode-enable-current-column-highlight . t)
+                (web-mode-enable-whitespace-fontification . nil)
+                (web-mode-enable-html-entities-fontification . t)
+                (web-mode-enable-block-face . t)
+                (web-mode-enable-part-face . t)
+                (web-mode-enable-inlays . t)
+                (web-mode-enable-sexp-functions . t)
+                (web-mode-enable-string-interpolation . t)
+                (web-mode-enable-literal-interpolation . t)
+                (web-mode-enable-sql-detection . t)
+                (web-mode-enable-heredoc-fontification . t)
+                (web-mode-enable-element-content-fontification . t)
+                (web-mode-enable-element-tag-fontification . t)
+                (web-mode-enable-front-matter-block . t)
+                (web-mode-enable-engine-detection . t)
+                (web-mode-enable-optional-tags . t)
+                (web-mode-comment-style . 1)
+                (web-mode-indent-style . 1)
+                (web-mode-auto-close-style . 1)
+                (web-mode-auto-quote-style . 1))
+      :init
+      (defun my-web-mode-initialize ()
+        "Initialize `web-mode' before file load."
+        (setq-local indent-tabs-mode nil)
+
+        ;; EditorConfig 対応
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
 
 
     ;; ------------------------------------------------------------------------
