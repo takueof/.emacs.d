@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2021 Taku Watabe
-;; Time-stamp: <2021-03-09T15:00:42+09:00>
+;; Time-stamp: <2021-03-25T04:38:34+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1145,8 +1145,7 @@
                                                 python-mode
                                                 sass-mode
                                                 scss-mode
-                                                typescript-mode
-                                                vue-mode))
+                                                typescript-mode))
                 (company-dabbrev-code-other-buffers . t)
                 (company-dabbrev-code-everywhere . t)
                 (company-dabbrev-code-ignore-case . t)))
@@ -1598,7 +1597,7 @@ See also: `https://github.com/validator/validator'."
              (php-mode-hook . flyspell-prog-mode)
              (sass-mode-hook . flyspell-prog-mode)
              (scss-mode-hook . flyspell-prog-mode)
-             (vue-mode-hook . flyspell-prog-mode))
+             (web-mode-hook . flyspell-prog-mode))
       :custom `((flyspell-delay . 1.0)))
 
 
@@ -1928,9 +1927,7 @@ Ordering is lexicographic."
              ;; (sass-mode-hook . lsp)
              ;; (scss-mode-hook . lsp)
              ;; (sh-mode-hook . lsp)
-             (typescript-mode-hook . lsp)
-             ;; (vue-mode-hook . lsp)
-             )
+             (typescript-mode-hook . lsp))
       :custom `((lsp-auto-guess-root . t)
                 (lsp-restart . 'ignore)
                 (lsp-prefer-flymake . nil)
@@ -2751,27 +2748,12 @@ Ordering is lexicographic."
 
 
     ;; ------------------------------------------------------------------------
-    ;; Vue.js
-    ;; ------------------------------------------------------------------------
-    (leaf vue-mode
-      :package t
-      :hook ((vue-mode-hook . my-vue-mode-initialize))
-      :init
-      (defun my-vue-mode-initialize ()
-        "Initialize `vue-mode' before file load."
-        (leaf flycheck
-          :config
-          (when (fboundp 'flycheck-add-mode)
-            (flycheck-add-mode 'javascript-eslint 'vue-mode)
-            (flycheck-add-mode 'javascript-eslint 'vue-html-mode)))))
-
-
-    ;; ------------------------------------------------------------------------
     ;; Web
     ;; ------------------------------------------------------------------------
     (leaf web-mode
       :package t
-      :mode (("\\.njk\\'" . web-mode))
+      :mode (("\\.njk\\'" . web-mode)
+             ("\\.vue\\'" . web-mode))
       :hook ((web-mode-hook . my-web-mode-initialize))
       :custom `((web-mode-block-padding . nil)
                 (web-mode-part-padding . nil)
