@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2021 Taku Watabe
-;; Time-stamp: <2021-03-25T04:38:34+09:00>
+;; Time-stamp: <2021-04-26T10:25:51+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2753,6 +2753,7 @@ Ordering is lexicographic."
     (leaf web-mode
       :package t
       :mode (("\\.njk\\'" . web-mode)
+             ("\\.tsx\\'" . web-mode)
              ("\\.vue\\'" . web-mode))
       :hook ((web-mode-hook . my-web-mode-initialize))
       :custom `((web-mode-block-padding . nil)
