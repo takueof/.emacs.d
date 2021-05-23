@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2021 Taku Watabe
-;; Time-stamp: <2021-04-26T10:25:51+09:00>
+;; Time-stamp: <2021-05-21T09:33:19+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1143,21 +1143,11 @@
                                                 lua-mode
                                                 prog-mode
                                                 python-mode
-                                                sass-mode
                                                 scss-mode
                                                 typescript-mode))
                 (company-dabbrev-code-other-buffers . t)
                 (company-dabbrev-code-everywhere . t)
                 (company-dabbrev-code-ignore-case . t)))
-
-
-    ;; ------------------------------------------------------------------------
-    ;; 補完フレームワーク (`company') 拡張（`lsp-mode' サポート）
-    ;; ------------------------------------------------------------------------
-    (leaf company-lsp
-      :after (lsp-mode company)
-      :package t
-      :require t)
 
 
     ;; ------------------------------------------------------------------------
@@ -1595,8 +1585,8 @@ See also: `https://github.com/validator/validator'."
              (lisp-interaction-mode-hook . flyspell-prog-mode)
              (lisp-mode-hook . flyspell-prog-mode)
              (php-mode-hook . flyspell-prog-mode)
-             (sass-mode-hook . flyspell-prog-mode)
              (scss-mode-hook . flyspell-prog-mode)
+             (typescript-mode-hook . flyspell-prog-mode)
              (web-mode-hook . flyspell-prog-mode))
       :custom `((flyspell-delay . 1.0)))
 
@@ -1917,22 +1907,16 @@ Ordering is lexicographic."
     ;; ------------------------------------------------------------------------
     (leaf lsp-mode
       :package t
-      :hook (;; 現状 `flycheck' が無効化されてしまうため、一部を除き無効化
-             ;; (css-mode-hook . lsp)
-             ;; (html-mode-hook . lsp)
-             ;; (js-mode-hook . lsp)
-             ;; (js2-mode-hook . lsp)
-             ;; (json-mode-hook . lsp)
-             ;; (php-mode-hook . lsp)
-             ;; (sass-mode-hook . lsp)
-             ;; (scss-mode-hook . lsp)
-             ;; (sh-mode-hook . lsp)
+      :hook (;; 有効化は必要最小限にとどめる
              (typescript-mode-hook . lsp))
       :custom `((lsp-auto-guess-root . t)
-                (lsp-restart . 'ignore)
-                (lsp-prefer-flymake . nil)
+                (lsp-restart . 'auto-restart)
+                (lsp-headerline-breadcrumb-enable . nil)
+                (lsp-progress-function . nil)
                 ;; ローカル環境にのみ保存
-                (lsp-session-file . "~/.emacs.lsp-session")))
+                (lsp-session-file . "~/.emacs.lsp-session")
+                ;; TypeScript
+                (lsp-clients-typescript-log-verbosity . "debug")))
 
 
     ;; ------------------------------------------------------------------------
@@ -2026,7 +2010,6 @@ Ordering is lexicographic."
       :config
       (with-eval-after-load 'rainbow-mode
         (when (boundp 'rainbow-html-colors-major-mode-list)
-          (add-to-list 'rainbow-html-colors-major-mode-list 'sass-mode)
           (add-to-list 'rainbow-html-colors-major-mode-list 'scss-mode))))
 
 
@@ -2617,31 +2600,11 @@ Ordering is lexicographic."
     ;; ------------------------------------------------------------------------
     (leaf typescript-mode
       :package t
+      :mode (("\\.tsx?\\'" . typescript-mode))
       :hook ((typescript-mode-hook . my-typescript-mode-initialize))
       :init
       (defun my-typescript-mode-initialize ()
         "Initialize `typescript-mode' before file load."
-        (setq-local indent-tabs-mode nil)
-
-        ;; EditorConfig 対応
-        (with-eval-after-load 'editorconfig
-          (if (hash-table-p editorconfig-properties-hash)
-              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                     (indent-style (equal indent-style-data "tab")))
-                (if (not (equal indent-tabs-mode indent-style))
-                    (setq-local indent-tabs-mode indent-style)))))))
-
-
-    ;; ------------------------------------------------------------------------
-    ;; Sass (extension: ".sass")
-    ;; ------------------------------------------------------------------------
-    (leaf sass-mode
-      :package t
-      :mode (("\\.sass\\'" . sass-mode))
-      :hook ((sass-mode-hook . my-sass-mode-initialize))
-      :init
-      (defun my-sass-mode-initialize ()
-        "Initialize `sass-mode' before file load."
         (setq-local indent-tabs-mode nil)
 
         ;; EditorConfig 対応
@@ -2753,7 +2716,6 @@ Ordering is lexicographic."
     (leaf web-mode
       :package t
       :mode (("\\.njk\\'" . web-mode)
-             ("\\.tsx\\'" . web-mode)
              ("\\.vue\\'" . web-mode))
       :hook ((web-mode-hook . my-web-mode-initialize))
       :custom `((web-mode-block-padding . nil)
