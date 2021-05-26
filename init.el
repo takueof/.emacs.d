@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2021 Taku Watabe
-;; Time-stamp: <2021-05-21T09:33:19+09:00>
+;; Time-stamp: <2021-05-26T15:07:44+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1294,9 +1294,7 @@
                      (text-scale-mode nil "face-remap")
                      (whitespace-mode nil "whitespace")
                      (yas-global-mode nil "yasnippet")
-                     (yas-minor-mode nil "yasnippet")
-                     ))
-        ))
+                     (yas-minor-mode nil "yasnippet")))))
 
 
     ;; ------------------------------------------------------------------------
@@ -1899,6 +1897,16 @@ Ordering is lexicographic."
 
 
     ;; ------------------------------------------------------------------------
+    ;; LSP (Language Server Protocol) クライアント拡張 (UI)
+    ;; ------------------------------------------------------------------------
+    ;; WARNING: `lsp-mode' が自動ロードする
+    ;;          念のため `lsp-mode' より前にインストール
+    ;; ------------------------------------------------------------------------
+    (leaf lsp-ui
+      :package t)
+
+
+    ;; ------------------------------------------------------------------------
     ;; LSP (Language Server Protocol) クライアント
     ;;
     ;; See also:
@@ -1917,16 +1925,6 @@ Ordering is lexicographic."
                 (lsp-session-file . "~/.emacs.lsp-session")
                 ;; TypeScript
                 (lsp-clients-typescript-log-verbosity . "debug")))
-
-
-    ;; ------------------------------------------------------------------------
-    ;; LSP (Language Server Protocol) クライアント拡張 (UI)
-    ;; ------------------------------------------------------------------------
-    (leaf lsp-ui
-      :after (lsp-mode)
-      :package t
-      :require t
-      :hook ((lsp-after-open-hook . lsp-ui-flycheck-enable)))
 
 
     ;; ------------------------------------------------------------------------
