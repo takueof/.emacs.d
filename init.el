@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2021 Taku Watabe
-;; Time-stamp: <2021-05-26T15:07:44+09:00>
+;; Time-stamp: <2021-06-03T04:05:49+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -508,14 +508,6 @@
 
 
 ;; ============================================================================
-;; インプットメソッド初期化 (Windows ONLY)
-;; ============================================================================
-(if (and (require 'w32-ime nil :noerror)
-         (fboundp 'w32-ime-initialize))
-    (w32-ime-initialize))
-
-
-;; ============================================================================
 ;; 環境変数 (Windows ONLY)
 ;; ============================================================================
 (if (member system-type '(ms-dos windows-nt))
@@ -616,6 +608,22 @@
   (leaf el-get
     :package t
     :custom `((el-get-git-shallow-clone . t)))
+
+
+  ;; ==========================================================================
+  ;; IME patch
+  ;; ==========================================================================
+  ;; WARNING: 全てのパッケージに影響するため、
+  ;;          なるべく早いタイミングでインストールするようにしてある
+  ;; ==========================================================================
+  (leaf tr-ime
+    :when (member system-type '(ms-dos windows-nt))
+    :package t
+    :config
+    (if (fboundp 'tr-ime-advanced-install)
+        (tr-ime-advanced-install))
+    (if (fboundp 'w32-ime-initialize)
+        (w32-ime-initialize)))
 
 
   ;; ==========================================================================
