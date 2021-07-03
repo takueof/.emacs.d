@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2021 Taku Watabe
-;; Time-stamp: <2021-06-03T04:05:49+09:00>
+;; Time-stamp: <2021-07-03T20:19:12+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -662,6 +662,15 @@
         (if (fboundp 'add-node-modules-path)
             (add-node-modules-path))))
 
+
+    ;; ------------------------------------------------------------------------
+    ;; 未コミット diff
+    ;; ------------------------------------------------------------------------
+    (leaf diff-hl
+      :package t
+      :config
+      (if (fboundp 'global-diff-hl-mode)
+          (global-diff-hl-mode)))
 
     ;; ------------------------------------------------------------------------
     ;; EWW (Emacs Web Wowser, Web Browser)
