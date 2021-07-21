@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2021 Taku Watabe
-;; Time-stamp: <2021-07-03T20:19:12+09:00>
+;; Time-stamp: <2021-07-22T02:31:47+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -334,6 +334,10 @@
  ;;
  '(x-select-enable-clipboard t) ; NOTE: obsolete sinse v25.1
  '(select-enable-clipboard t)
+ ;;
+ ;; プレビューウインドウの表示を即時にする
+ ;;
+ '(register-preview-delay nil)
  ;;
  ;; スクロール時、自動スクロールをアグレッシブにする
  ;;
@@ -1002,6 +1006,21 @@
   (leaf *minor-mode
     :config
     ;; ------------------------------------------------------------------------
+    ;; スペース区切りによる複数キーワードを使った絞り込み
+    ;; ------------------------------------------------------------------------
+    (leaf affe
+      :package t
+      :after (consult orderless)
+      :custom `((affe-regexp-function . #'orderless-pattern-compiler)
+                (affe-highlight-function . #'orderless--highlight))
+      :config
+      (if (fboundp 'consult-customize)
+          (consult-customize
+           affe-grep
+           :preview-key (kbd "M-."))))
+
+
+    ;; ------------------------------------------------------------------------
     ;; 各種検索・置換強化
     ;; ------------------------------------------------------------------------
     (leaf anzu
@@ -1095,7 +1114,7 @@
                 (local-set-key (kbd "q") #'my-codic-view-kill))))
 
         (if (fboundp 'codic--view)
-            (advice-add 'codic--view
+            (advice-add #'codic--view
                         :after
                         #'my-codic-local-set-key))))
 
@@ -1187,7 +1206,7 @@
     (leaf company-quickhelp
       :after (company)
       :package t
-      :custom `((company-quickhelp-delay . 0.25))
+      :custom `((company-quickhelp-delay . 0.25))
       :config
       (if (fboundp 'company-quickhelp-mode)
           (company-quickhelp-mode +1)))
@@ -1259,9 +1278,84 @@
             (quit-window nil (get-buffer-window))))
 
       (if (fboundp 'compilation-handle-exit)
-          (advice-add 'compilation-handle-exit
+          (advice-add #'compilation-handle-exit
                       :after
                       #'my-compilation-auto-quit-window)))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; 補完
+    ;; ------------------------------------------------------------------------
+    (leaf consult
+      :package t
+      :bind (;; Overrides
+             ("C-s" . my-consult-line)
+             ("C-x b" . consult-buffer)
+             ("C-x 4 b" . consult-buffer-other-window)
+             ("C-x 5 b" . consult-buffer-other-frame)
+             ;; mode-specific-map
+             ("C-c h" . consult-history)
+             ("C-c m" . consult-mode-command)
+             ("C-c b" . consult-bookmark)
+             ("C-c k" . consult-kmacro)
+             ;; goto-map
+             ("M-g e" . consult-compile-error)
+             ("M-g f" . consult-flymake)
+             ("M-g g" . consult-goto-line)
+             ([remap goto-line] . consult-goto-line)
+             ("M-g o" . consult-outline)
+             ("M-g m" . consult-mark)
+             ("M-g k" . consult-global-mark)
+             ("M-g i" . consult-imenu)
+             ("M-g I" . consult-project-imenu)
+             ;; search-map
+             ("M-s f" . consult-find)
+             ("M-s L" . consult-locate)
+             ("M-s g" . consult-grep)
+             ("M-s G" . consult-git-grep)
+             ("M-s r" . consult-ripgrep)
+             ("M-s l" . consult-line)
+             ("M-s m" . consult-multi-occur)
+             ("M-s k" . consult-keep-lines)
+             ("M-s u" . consult-focus-lines)
+             ("M-s e" . consult-isearch))
+      :hook ((completion-list-mode . consult-preview-at-point-mode))
+      :custom `((register-preview-function . #'consult-register-format)
+                (xref-show-xrefs-function . #'consult-xref)
+                (xref-show-definitions-function . #'consult-xref)
+                (consult-project-root-function . #'my-consult-project-root-function))
+      :init
+      (advice-add #'register-preview
+                  :override
+                  #'consult-register-window)
+
+      (advice-add #'completing-read-multiple
+                  :override
+                  #'consult-completing-read-multiple)
+      :config
+      (defun my-consult-line (&optional at-point)
+        "Consult-line uses things-at-point if set C-u prefix."
+        (interactive "P")
+        (if (fboundp 'consult-line)
+            (if at-point
+                (consult-line (thing-at-point 'symbol))
+              (consult-line))))
+
+      (defun my-consult-project-root-function ()
+        "Function which returns project root directory."
+        (if (and (fboundp 'project-current)
+                 (fboundp 'project-roots))
+            (if-let (project (project-current))
+                (car (project-roots project)))))
+
+      (if (fboundp 'consult-customize)
+          (consult-customize
+           consult-theme
+           :preview-key '(:debounce 0.2 any)
+           consult-ripgrep consult-git-grep consult-grep
+           consult-bookmark consult-recent-file consult-xref
+           consult--source-file consult--source-project-file consult--source-bookmark
+           :preview-key (kbd "M-."))))
 
 
     ;; ------------------------------------------------------------------------
@@ -1411,6 +1505,32 @@
       :config
       (if (fboundp 'elisp-slime-nav-mode)
           (elisp-slime-nav-mode +1)))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; コンテキストメニュー
+    ;; ------------------------------------------------------------------------
+    (leaf embark
+      :package t
+      :bind (("C-." . embark-act)
+             ("C-;" . embark-dwim)
+             ("C-x ? b" . embark-bindings))
+      :custom `((prefix-help-command . #'embark-prefix-help-command))
+      :config
+      (add-to-list 'display-buffer-alist
+                   '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                     nil
+                     (window-parameters (mode-line-format . none)))))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; Embark ⇔ Consult 連携
+    ;; ------------------------------------------------------------------------
+    (leaf embark-consult
+      :package t
+      :leaf-defer nil
+      :after (embark consult)
+      :hook ((embark-collect-mode . consult-preview-at-point-mode)))
 
 
     ;; ------------------------------------------------------------------------
@@ -1945,6 +2065,16 @@ Ordering is lexicographic."
 
 
     ;; ------------------------------------------------------------------------
+    ;; 補完候補一覧の側に項目情報を表示
+    ;; ------------------------------------------------------------------------
+    (leaf marginalia
+      :package t
+      :config
+      (if (fboundp 'marginalia-mode)
+          (marginalia-mode +1)))
+
+
+    ;; ------------------------------------------------------------------------
     ;; メニューバー
     ;; ------------------------------------------------------------------------
     (leaf menu-bar
@@ -1996,6 +2126,15 @@ Ordering is lexicographic."
                (boundp 'migemo-dictionary)
                (file-exists-p migemo-dictionary))
           (migemo-init)))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; 無順序スペース区切り補完
+    ;; ------------------------------------------------------------------------
+    (leaf orderless
+      :package t
+      :require t
+      :custom `((completion-styles . '(orderless))))
 
 
     ;; ------------------------------------------------------------------------
@@ -2176,6 +2315,17 @@ Ordering is lexicographic."
       :require t
       :bind (("C-/" . undo-fu-only-undo)
              ("C-?" . undo-fu-only-redo)))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; 垂直インタラクティブ補完
+    ;; ------------------------------------------------------------------------
+    (leaf vertico
+      :package t
+      :custom `((vertico-count . 20))
+      :config
+      (if (fboundp 'vertico-mode)
+          (vertico-mode +1)))
 
 
     ;; ------------------------------------------------------------------------
