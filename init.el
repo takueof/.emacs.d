@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2021 Taku Watabe
-;; Time-stamp: <2021-07-22T02:31:47+09:00>
+;; Time-stamp: <2021-07-22T03:00:15+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2134,7 +2134,26 @@ Ordering is lexicographic."
     (leaf orderless
       :package t
       :require t
-      :custom `((completion-styles . '(orderless))))
+      :custom `((completion-styles . '(orderless)))
+      :config
+      ;; `migemo' 利用可能時
+      ;;
+      ;; See also:
+      ;; https://nyoho.jp/diary/?date=20210615
+      (leaf orderless
+        :after (migemo)
+        :config
+        (if (fboundp 'migemo-get-pattern)
+            (defun my-orderless-migemo (component)
+              "Match COMPONENT as `migemo'."
+              (let ((pattern (migemo-get-pattern component)))
+                (condition-case nil
+                    (progn (string-match-p pattern "") pattern)
+                  (invalid-regexp nil)))))
+
+        (if (and (boundp 'orderless-matching-styles)
+                 (fboundp 'my-orderless-migemo))
+            (add-to-list 'orderless-matching-styles #'my-orderless-migemo t))))
 
 
     ;; ------------------------------------------------------------------------
