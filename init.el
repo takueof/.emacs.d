@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2021 Taku Watabe
-;; Time-stamp: <2021-07-22T03:00:15+09:00>
+;; Time-stamp: <2021-07-22T17:39:59+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2122,7 +2122,8 @@ Ordering is lexicographic."
                 (migemo-pattern-alist-file . "~/.emacs.migemo-pattern")
                 (migemo-frequent-pattern-alist-file . "~/.emacs.migemo-frequent"))
       :config
-      (if (and (boundp 'migemo-command)
+      (if (and (fboundp 'migemo-init)
+               (boundp 'migemo-command)
                (boundp 'migemo-dictionary)
                (file-exists-p migemo-dictionary))
           (migemo-init)))
