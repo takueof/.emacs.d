@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2021 Taku Watabe
-;; Time-stamp: <2021-07-22T17:39:59+09:00>
+;; Copyright (C) 2013-2022 Taku Watabe
+;; Time-stamp: <2022-03-22T12:24:21+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1354,7 +1354,6 @@
            :preview-key '(:debounce 0.2 any)
            consult-ripgrep consult-git-grep consult-grep
            consult-bookmark consult-recent-file consult-xref
-           consult--source-file consult--source-project-file consult--source-bookmark
            :preview-key (kbd "M-."))))
 
 
