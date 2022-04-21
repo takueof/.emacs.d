@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-04-21T14:50:05+09:00>
+;; Time-stamp: <2022-04-21T15:31:23+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2205,8 +2205,8 @@ Ordering is lexicographic."
     ;; ファイル履歴保存
     ;; ------------------------------------------------------------------------
     (leaf recentf
-      :custom `(;; すべての履歴を保存
-                (recentf-max-saved-items . nil)
+      :custom `(;; 履歴保存数は絞る
+                (recentf-max-saved-items . 25)
                 ;; ローカル環境にのみ保存
                 (recentf-save-file . "~/.emacs.recentf.el")))
 
