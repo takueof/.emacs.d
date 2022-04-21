@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-04-15T11:54:48+09:00>
+;; Time-stamp: <2022-04-21T14:50:05+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2043,6 +2043,17 @@ Ordering is lexicographic."
 
 
     ;; ------------------------------------------------------------------------
+    ;; LSP (Language Server Protocol) クライアント拡張 (Tailwind CSS)
+    ;; ------------------------------------------------------------------------
+    ;; WARNING: `lsp-mode' が自動ロードする
+    ;;          念のため `lsp-mode' より前にインストール
+    ;; ------------------------------------------------------------------------
+    (leaf lsp-tailwindcss
+      :package t
+      :custom `((lsp-tailwindcss-add-on-mode . t)))
+
+
+    ;; ------------------------------------------------------------------------
     ;; LSP (Language Server Protocol) クライアント
     ;;
     ;; See also:
@@ -2052,8 +2063,11 @@ Ordering is lexicographic."
     (leaf lsp-mode
       :package t
       :hook (;; 有効化は必要最小限にとどめる
+             (js-mode-hook . lsp)
+             (js2-mode-hook . lsp)
              (php-mode-hook . lsp)
-             (typescript-mode-hook . lsp))
+             (typescript-mode-hook . lsp)
+             (web-mode-hook . lsp))
       :custom `((lsp-auto-guess-root . t)
                 (lsp-restart . 'auto-restart)
                 (lsp-headerline-breadcrumb-enable . nil)
