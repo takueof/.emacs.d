@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-04-26T19:00:33+09:00>
+;; Time-stamp: <2022-04-27T17:31:09+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2536,6 +2536,26 @@ Ordering is lexicographic."
         "Initialize `lisp-interaction-mode-initialize' before file load."
         ;; EMPTY
         ))
+
+
+    ;; --------------------------------------------------------------------------
+    ;; GraphQL
+    ;; --------------------------------------------------------------------------
+    (leaf graphql-mode
+      :package t
+      :hook ((graphql-mode-hook . my-haml-mode-initialize))
+      :init
+      (defun my-graphql-mode-initialize ()
+        "Initialize `graphql-mode' before file load."
+        (setq-local indent-tabs-mode nil)
+
+        ;; EditorConfig 対応
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
 
 
     ;; --------------------------------------------------------------------------
