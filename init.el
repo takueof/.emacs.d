@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-04-28T09:21:46+09:00>
+;; Time-stamp: <2022-04-28T09:34:27+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2063,10 +2063,12 @@ Ordering is lexicographic."
     (leaf lsp-mode
       :package t
       :hook (;; 有効化は必要最小限にとどめる
+             (css-mode-hook . lsp)
              (graphql-mode-hook . lsp)
              (js-mode-hook . lsp)
              (js2-mode-hook . lsp)
              (php-mode-hook . lsp)
+             (scss-mode-hook . lsp)
              (typescript-mode-hook . lsp)
              (web-mode-hook . lsp))
       :custom `((lsp-auto-guess-root . t)
