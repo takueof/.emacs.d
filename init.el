@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-04-28T09:34:27+09:00>
+;; Time-stamp: <2022-04-28T09:52:54+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2071,14 +2071,11 @@ Ordering is lexicographic."
              (scss-mode-hook . lsp)
              (typescript-mode-hook . lsp)
              (web-mode-hook . lsp))
-      :custom `((lsp-auto-guess-root . t)
-                (lsp-restart . 'auto-restart)
+      :custom `((lsp-restart . 'auto-restart)
                 (lsp-headerline-breadcrumb-enable . nil)
-                (lsp-progress-function . nil)
+                (lsp-progress-function . 'ignore)
                 ;; ローカル環境にのみ保存
-                (lsp-session-file . "~/.emacs.lsp-session")
-                ;; TypeScript
-                (lsp-clients-typescript-log-verbosity . "debug")))
+                (lsp-session-file . "~/.emacs.lsp-session")))
 
 
     ;; ------------------------------------------------------------------------
