@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-05-03T21:55:49+09:00>
+;; Time-stamp: <2022-05-03T21:59:50+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -637,6 +637,7 @@
     :custom `(;; For "Modus"
               (modus-themes-bold-constructs . t)
               (modus-themes-syntax . '(faint alt-syntax green-strings yellow-comments))
+              (modus-themes-mode-line . '(moody accented borderless))
               (modus-themes-paren-match . '(bold intense))
               (modus-themes-region . '(accented bg-only no-extend)))
     :config
