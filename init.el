@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-04-28T09:52:54+09:00>
+;; Time-stamp: <2022-05-03T21:33:34+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -634,12 +634,17 @@
   ;; カラーテーマ
   ;; ==========================================================================
   (leaf *themes
+    :custom `(;; For "Modus"
+              (modus-themes-bold-constructs . t)
+              (modus-themes-syntax . '(faint alt-syntax))
+              (modus-themes-mode-line . '(moody accented borderless))
+              (modus-themes-region . '(bg-only no-extend)))
     :config
     ;; 利用可能なカラーテーマを設定
     (let ((required-themes '(;; 利用したいカラーテーマの一覧
                              ;; 優先度が高い順に降順ソートしておくこと
                              my-default
-                             wheatgrass))
+                             modus-vivendi))
           (availabled-themes (custom-available-themes)))
       ;; 利用したいカラーテーマが見つからなければ何もしない
       (catch 'required-theme-found
