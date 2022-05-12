@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-05-03T21:59:50+09:00>
+;; Time-stamp: <2022-05-12T14:41:04+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2176,6 +2176,14 @@ Ordering is lexicographic."
         (if (and (boundp 'orderless-matching-styles)
                  (fboundp 'my-orderless-migemo))
             (add-to-list 'orderless-matching-styles #'my-orderless-migemo t))))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; 汎用フォーマッタ
+    ;; ------------------------------------------------------------------------
+    (leaf prettier
+      :package t
+      :hook ((after-init-hook . global-prettier-mode)))
 
 
     ;; ------------------------------------------------------------------------
