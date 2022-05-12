@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-05-12T14:41:04+09:00>
+;; Time-stamp: <2022-05-12T14:59:31+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1824,6 +1824,15 @@ See also: `https://github.com/validator/validator'."
       (setq xargs-program
             (purecopy (or (executable-find "xargs")
                           "xargs"))))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; インデントガイド
+    ;; ------------------------------------------------------------------------
+    (leaf highlight-indent-guides
+      :package t
+      :hook ((prog-mode-hook . highlight-indent-guides-mode))
+      :custom `((highlight-indent-guides-method . 'column)))
 
 
     ;; ------------------------------------------------------------------------
