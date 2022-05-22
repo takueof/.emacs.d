@@ -1,7 +1,7 @@
 ;;; my-modeline.el --- 設定 - モードライン -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-12-29T15:42:43+09:00>
+;; Copyright (C) 2013-2022 Taku Watabe
+;; Time-stamp: <2022-05-22T16:24:55+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -86,8 +86,9 @@
   (defun my-coding-system-bom-mnemonic (coding-system)
     "Indicate the presence or absence of BOM."
     (let ((name (symbol-name coding-system)))
-      (cond ((string-match "be-with-signature" name) "[BE]")
-            ((string-match "le-with-signature" name) "[LE]")
+      (cond ((string-match "be-" name) "[BE]")
+            ((string-match "le-" name) "[LE]")
+            ((string-match "-bom-" name) "[BOM]")
             ((string-match "-with-signature" name) "[BOM]")
             (t ""))))
 
