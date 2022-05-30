@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-05-12T15:03:48+09:00>
+;; Time-stamp: <2022-05-30T17:31:03+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1827,16 +1827,6 @@ See also: `https://github.com/validator/validator'."
 
 
     ;; ------------------------------------------------------------------------
-    ;; インデントガイド
-    ;; ------------------------------------------------------------------------
-    (leaf highlight-indent-guides
-      :package t
-      :hook ((prog-mode-hook . highlight-indent-guides-mode))
-      :custom `((highlight-indent-guides-method . 'column)
-                (highlight-indent-guides-responsive . 'stack)))
-
-
-    ;; ------------------------------------------------------------------------
     ;; 拡張補完・展開
     ;; ------------------------------------------------------------------------
     (leaf hippie-exp
@@ -2911,6 +2901,26 @@ Ordering is lexicographic."
       ;; (X)HTML
       (defun my-html-mode-initialize ()
         "Initialize `html-mode' before file load."
+        (setq-local indent-tabs-mode nil)
+
+        ;; EditorConfig 対応
+        (with-eval-after-load 'editorconfig
+          (if (hash-table-p editorconfig-properties-hash)
+              (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                     (indent-style (equal indent-style-data "tab")))
+                (if (not (equal indent-tabs-mode indent-style))
+                    (setq-local indent-tabs-mode indent-style)))))))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; Terraform
+    ;; ------------------------------------------------------------------------
+    (leaf terraform-mode
+      :package t
+      :hook ((terraform-mode-hook . my-terraform-mode-initialize))
+      :init
+      (defun my-terraform-mode-initialize ()
+        "Initialize `terraform-mode' before file load."
         (setq-local indent-tabs-mode nil)
 
         ;; EditorConfig 対応
