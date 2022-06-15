@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-05-30T17:31:03+09:00>
+;; Time-stamp: <2022-06-15T15:32:39+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -171,7 +171,10 @@
   (global-set-key (kbd "C-c i p") #'my-insert-file-path)
 
   ;; 一括エンコーディング変換
-  (global-set-key (kbd "C-c RET f") #'my-change-files-coding-system))
+  (global-set-key (kbd "C-c RET f") #'my-change-files-coding-system)
+
+  ;; 一括ファイル通知ウォッチ削除
+  (global-set-key (kbd "C-c C-c q") #'my-file-notify-rm-all-watches))
 
 
 ;; ============================================================================
