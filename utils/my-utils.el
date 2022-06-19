@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-06-15T15:30:12+09:00>
+;; Time-stamp: <2022-06-19T22:54:11+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -314,10 +314,10 @@ Return converted file numbers."
 (defun my-file-notify-rm-all-watches ()
   "Remove all existing file notification watches from Emacs."
   (interactive)
-  (maphash
-   (lambda (key _value)
-     (file-notify-rm-watch key))
-   file-notify-descriptors))
+  (maphash (lambda (key _value)
+             (file-notify-rm-watch key))
+           file-notify-descriptors)
+  (message "Remove all existing file notification watches"))
 
 
 (provide 'my-utils)
