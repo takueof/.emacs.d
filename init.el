@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-06-21T15:44:18+09:00>
+;; Time-stamp: <2022-07-10T15:10:18+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -994,6 +994,17 @@
     ;; ------------------------------------------------------------------------
     (leaf url
       :custom `((url-using-proxy . t)))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; ターミナルエミュレータ
+    ;; ------------------------------------------------------------------------
+    (leaf vterm
+      :ensure t
+      :custom `((vterm-shell . "bash")
+                (vterm-kill-buffer-on-exit . t)
+                (vterm-ignore-blink-cursor . t)
+                (vterm-max-scrollback . 100000)))
 
 
     ;; ------------------------------------------------------------------------
