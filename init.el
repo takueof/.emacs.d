@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-10T15:10:18+09:00>
+;; Time-stamp: <2022-07-12T22:19:12+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -163,6 +163,9 @@
 
   ;; 折り返し表示を強制切替
   (global-set-key (kbd "C-x w") #'my-toggle-truncate-lines-force)
+
+  ;; カーソル位置に YEN SIGN (U+00A5) を挿入
+  (global-set-key (kbd "C-c i \\") #'my-insert-yen-sign)
 
   ;; カーソル位置にファイル名を挿入
   (global-set-key (kbd "C-c i f") #'my-insert-file-name)

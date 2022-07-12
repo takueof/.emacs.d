@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-06-19T22:54:11+09:00>
+;; Time-stamp: <2022-07-12T22:15:26+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -135,6 +135,12 @@ It doesn't depend on `truncate-partial-width-windows' of `toggle-truncate-lines'
 ;; ============================================================================
 ;; 挿入
 ;; ============================================================================
+;;;###autoload
+(defun my-insert-yen-sign ()
+  "Insert YEN SIGN (U+00A5) character to cursor position."
+  (interactive)
+  (insert "¥"))
+
 ;;;###autoload
 (defun my-insert-file-name (&optional name)
   "Insert current buffer's file name to cursor position.
