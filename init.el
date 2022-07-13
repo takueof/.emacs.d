@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-12T22:19:12+09:00>
+;; Time-stamp: <2022-07-13T22:56:38+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -137,7 +137,7 @@
 
 ;; リージョン範囲をソート
 (if (fboundp 'sort-lines)
-    (global-set-key (kbd "C-c C-c C-s") #'sort-lines))
+    (global-set-key (kbd "C-c s") #'sort-lines))
 
 ;; 1つ前のエラーを表示
 (if (fboundp 'previous-error)
@@ -634,6 +634,36 @@
         (tr-ime-advanced-install))
     (if (fboundp 'w32-ime-initialize)
         (w32-ime-initialize)))
+
+
+  ;; ==========================================================================
+  ;; サーバ化
+  ;; ==========================================================================
+  ;; WARNING: 起動を前提としたパッケージが存在するため、
+  ;;          なるべく早いタイミングで開始するようにしてある
+  ;; ==========================================================================
+  ;; Windows 環境では `server-auth-dir' の「所有者」が：
+  ;;   * Administrator (RID=500)
+  ;;   * Administrators (RID=544)
+  ;; である場合、`server-ensure-safe-dir' の評価が `nil' になる
+  ;;
+  ;; `server-auth-dir' で指定したフォルダの
+  ;; 「プロパティ」→「セキュリティ」→「詳細設定」→「所有者」→「編集」
+  ;; から、所有者をログオンユーザ自身に変更すること
+  ;; ==========================================================================
+  ;; Windows 環境では emacsclientw.exe 実行時に環境変数
+  ;; %EMACS_SERVER_FILE% でサーバファイルのパスを明示しなければならない
+  ;; （なぜ必要かは不明）
+  ;;
+  ;; この欠点をある程度回避した wemacs.cmd を用いること
+  ;; ==========================================================================
+  (leaf server
+    :package t
+    :custom `(;; ローカル環境にのみ保存
+              (server-auth-dir . "~/.emacs.server"))
+    :config
+    (if (fboundp 'server-start)
+        (server-start t)))
 
 
   ;; ==========================================================================
@@ -1796,26 +1826,6 @@ See also: `https://github.com/validator/validator'."
 
 
     ;; ------------------------------------------------------------------------
-    ;; Google 翻訳インターフェース
-    ;; ------------------------------------------------------------------------
-    (leaf google-translate
-      :package t
-      :bind (("C-c C-t p" . google-translate-at-point)
-             ("C-c C-t o" . google-translate-at-point-reverse)
-             ("C-c C-t q" . google-translate-query-translate)
-             ("C-c C-t w" . google-translate-query-translate-reverse)
-             ("C-c C-t s" . google-translate-smooth-translate))
-      :custom `((google-translate-default-source-language . "auto")
-                (google-translate-default-target-language . "ja")
-                (google-translate-enable-ido-completion . t)
-                (google-translate-show-phonetic . nil)
-                (google-translate-listen-program . nil)
-                (google-translate-output-destination . 'popup)
-                (google-translate-pop-up-buffer-set-focus . t)
-                (google-translate-listen-button-label . "[Listen]")))
-
-
-    ;; ------------------------------------------------------------------------
     ;; `grep'
     ;; ------------------------------------------------------------------------
     (leaf grep
@@ -2292,36 +2302,6 @@ Ordering is lexicographic."
                 (scroll-bar-mode -1))
             (if (fboundp 'horizontal-scroll-bar-mode)
                 (horizontal-scroll-bar-mode -1))))))
-
-
-    ;; ------------------------------------------------------------------------
-    ;; サーバ化
-    ;; ------------------------------------------------------------------------
-    ;; Windows 環境では `server-auth-dir' の「所有者」が：
-    ;;   * Administrator (RID=500)
-    ;;   * Administrators (RID=544)
-    ;; である場合、`server-ensure-safe-dir' の評価が `nil' になる
-    ;;
-    ;; `server-auth-dir' で指定したフォルダの
-    ;; 「プロパティ」→「セキュリティ」→「詳細設定」→「所有者」→「編集」
-    ;; から、所有者をログオンユーザ自身に変更すること
-    ;; ------------------------------------------------------------------------
-    ;; Windows 環境では emacsclientw.exe 実行時に環境変数
-    ;; %EMACS_SERVER_FILE% でサーバファイルのパスを明示しなければならない
-    ;; （なぜ必要かは不明）
-    ;;
-    ;; この欠点をある程度回避した wemacs.cmd を用いること
-    ;; ------------------------------------------------------------------------
-    (leaf server
-      :package t
-      :custom `(;; ローカル環境にのみ保存
-                (server-auth-dir . "~/.emacs.server"))
-      :config
-      (if (fboundp 'server-force-delete)
-          (server-force-delete))
-
-      (if (fboundp 'server-start)
-          (server-start)))
 
 
     ;; ------------------------------------------------------------------------
