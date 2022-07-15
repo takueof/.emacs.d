@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-15T22:21:16+09:00>
+;; Time-stamp: <2022-07-15T23:05:09+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -208,23 +208,22 @@
     (copy-face 'cursor 'my-cursor-default)
 
     (defface my-cursor-input-method-activated '((t
-                                                 :background "red"))
+                                                 :background "gold"))
       "`cursor' face for `current-input-method' is non-nil."
       :group 'customize)
 
     (defun my-change-cursor-faces-by-current-input-method ()
       "Change cursor color with `current-input-method'."
-      (let ((current-input-method (if (fboundp 'mac-input-source)
-                                      (let ((input-source (mac-input-source)))
-                                        (if (numberp (string-match "\\.US\\'" input-source))
-                                            nil
-                                          input-source))
-                                    current-input-method)))
-        (set-cursor-color
-         (face-attribute (if current-input-method
-                             'my-cursor-input-method-activated
-                           'my-cursor-default)
-                         :background))))
+      (let* ((current-input-method (if (fboundp 'mac-input-source)
+                                       (let ((input-source (mac-input-source)))
+                                         (if (numberp (string-match "\\.US\\'" input-source))
+                                             nil
+                                           input-source))
+                                     current-input-method))
+             (cursor-face (if current-input-method
+                              'my-cursor-input-method-activated
+                            'my-cursor-default)))
+        (set-cursor-color (face-attribute cursor-face :background))))
 
     ;; ------------------------------------------------------------------------
     ;; 有効化
