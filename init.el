@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-13T22:59:43+09:00>
+;; Time-stamp: <2022-07-15T22:21:16+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -719,6 +719,7 @@
       (if (fboundp 'global-diff-hl-mode)
           (global-diff-hl-mode)))
 
+
     ;; ------------------------------------------------------------------------
     ;; EWW (Emacs Web Wowser, Web Browser)
     ;; ------------------------------------------------------------------------
@@ -832,19 +833,6 @@
       :custom `(;; WARNING: `load' か `autoload' 後に実行しないと適用されない
                 ;; ローカル環境にのみ保存
                 (tramp-persistency-file-name . "~/.emacs.tramp")))
-
-
-    ;; ------------------------------------------------------------------------
-    ;; `undo' 履歴の記憶
-    ;; ------------------------------------------------------------------------
-    (leaf undohist
-      :package t
-      :require t
-      :custom `(;; ローカル環境にのみ保存
-                (undohist-directory . "~/.emacs.undohist"))
-      :config
-      (if (fboundp 'undohist-initialize)
-          (undohist-initialize)))
 
 
     ;; ------------------------------------------------------------------------
