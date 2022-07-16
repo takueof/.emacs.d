@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-16T14:01:29+09:00>
+;; Time-stamp: <2022-07-16T14:14:49+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -756,9 +756,7 @@
     ;; ------------------------------------------------------------------------
     (leaf magit
       :package t
-      :bind (("C-x g" . magit-status))
-      :custom `(;; カレントバッファを表示しているウインドウに表示させる
-                (magit-display-buffer-function . 'magit-display-buffer-same-window-except-diff-v1)))
+      :bind (("C-x g" . magit-status)))
 
 
     ;; ------------------------------------------------------------------------
