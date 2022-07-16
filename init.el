@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-16T08:48:57+09:00>
+;; Time-stamp: <2022-07-16T09:22:26+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1092,7 +1092,7 @@
     ;; ------------------------------------------------------------------------
     (leaf compile
       :after (nvm exec-path-from-shell)
-      :bind (("C-c C-l" . compile))
+      :bind (("C-c c" . compile))
       :hook ((compilation-filter-hook . my-compilation-ansi-color-apply))
       :custom `((compilation-window-height . 15)
                 ;; ビルドツール・タスクランナーに依存させない
