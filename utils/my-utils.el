@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-12T22:15:26+09:00>
+;; Time-stamp: <2022-07-16T15:54:34+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -87,7 +87,7 @@ Move to the beginning of the line if the cursor is at the beginning or middle of
 
 COUNT and ALL-FRAMES are same arguments of `other-window'."
   (interactive "p")
-  (other-window (- arg) all-frames))
+  (other-window (- count) all-frames))
 
 
 ;; ============================================================================
