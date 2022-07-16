@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-16T09:22:26+09:00>
+;; Time-stamp: <2022-07-16T14:01:29+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -353,10 +353,10 @@
  '(scroll-up-aggressively nil) ; default
  '(scroll-down-aggressively nil) ; default
  ;;
- ;; なるべくウインドウ上下から10行目でスクロール開始
+ ;; なるべくウインドウ上下から2行目でスクロール開始
  ;;
- '(scroll-margin 10)
- '(maximum-scroll-margin 10)
+ '(scroll-margin 2)
+ '(maximum-scroll-margin 2)
  ;;
  ;; ページ単位スクロール時に行を重複させる
  ;;
