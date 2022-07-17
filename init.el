@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-18T02:17:48+09:00>
+;; Time-stamp: <2022-07-18T02:19:24+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1657,13 +1657,6 @@ See also: `https://github.com/validator/validator'."
       (setq xargs-program
             (purecopy (or (executable-find "xargs")
                           "xargs"))))
-
-
-    ;; ------------------------------------------------------------------------
-    ;; 拡張補完・展開
-    ;; ------------------------------------------------------------------------
-    (leaf hippie-exp
-      :bind (("M-/" . hippie-expand)))
 
 
     ;; ------------------------------------------------------------------------
