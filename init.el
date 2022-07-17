@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-18T02:14:05+09:00>
+;; Time-stamp: <2022-07-18T02:17:48+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1083,7 +1083,7 @@
     (leaf company-quickhelp
       :after (company)
       :package t
-      :custom `((company-quickhelp-delay . 0.25))
+      :custom `((company-quickhelp-delay . 0.25))
       :config
       (if (fboundp 'company-quickhelp-mode)
           (company-quickhelp-mode +1)))
@@ -1424,31 +1424,6 @@
       :package t
       :bind (("C-3" . evil-numbers/dec-at-pt)
              ("C-4" . evil-numbers/inc-at-pt)))
-
-
-    ;; ------------------------------------------------------------------------
-    ;; デフォルト行文字数の位置にインジケータを表示
-    ;;
-    ;; See also:
-    ;; `fill-column'
-    ;; ------------------------------------------------------------------------
-    (leaf fill-column-indicator
-      :package t
-      :bind (("C-c q" . fci-mode))
-      :custom `(;; --------------------
-                ;; FIXME: `font-lock-comment-face' を用いたい
-                ;;        しかし、指定すると、なぜか "red" が用いられる
-                ;;        現状は `default' フェイスで回避中
-                ;; --------------------
-                (fci-rule-color . ,(face-attribute 'default :foreground))
-                (fci-rule-use-dashes . t)
-                (fci-dash-pattern . 0.5)
-                ;; --------------------
-                ;; HACK: `fci-mode' を有効にした後、
-                ;;       `toggle-truncate-lines' で折り返しを有効にすると
-                ;;       `line-move-visual' が強制的に nil となる問題を回避
-                ;; --------------------
-                (fci-handle-line-move-visual . nil)))
 
 
     ;; ------------------------------------------------------------------------
