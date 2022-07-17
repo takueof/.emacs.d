@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-18T02:19:24+09:00>
+;; Time-stamp: <2022-07-18T02:23:12+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2168,7 +2168,7 @@ Ordering is lexicographic."
 
 
     ;; ------------------------------------------------------------------------
-    ;; 垂直インタラクティブ 補完
+    ;; 垂直インタラクティブ補完
     ;; ------------------------------------------------------------------------
     (leaf vertico
       :package t
