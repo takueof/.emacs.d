@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-16T14:36:15+09:00>
+;; Time-stamp: <2022-07-18T02:14:05+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -968,7 +968,7 @@
     ;; ------------------------------------------------------------------------
     (leaf codic
       :package t
-      :bind (("C-c C-q" . codic))
+      :bind (("C-c C-d" . codic))
       :config
       ;; ------------------------------
       ;; HACK: 専用バッファをコマンドで `quit-window' させる
