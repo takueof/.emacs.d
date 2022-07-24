@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-16T15:54:34+09:00>
+;; Time-stamp: <2022-07-25T00:39:27+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -32,7 +32,34 @@
 ;; ============================================================================
 ;; 依存解決
 ;; ============================================================================
-(require 'fontset nil :noerror)
+(autoload 'create-fontset-from-fontset-spec "fontset"
+  "Create a fontset from fontset specification string FONTSET-SPEC.
+FONTSET-SPEC is a string of the format:
+	FONTSET-NAME[,SCRIPT-NAME0:FONT-NAME0,SCRIPT-NAME1:FONT-NAME1] ...
+Any number of SPACE, TAB, and NEWLINE can be put before and after commas.
+
+When a frame uses the fontset as the `font' parameter, the frame's
+default font name is derived from FONTSET-NAME by substituting
+\"iso8859-1\" for the tail part \"fontset-XXX\".  But, if SCRIPT-NAMEn
+is \"ascii\", use the corresponding FONT-NAMEn as the default font
+name.
+
+Optional 2nd and 3rd arguments exist just for backward compatibility,
+and are ignored.
+
+It returns a name of the created fontset.
+
+For backward compatibility, SCRIPT-NAME may be a charset name, in
+which case, the corresponding script is decided by the variable
+`charset-script-alist' (which see)."
+  t)
+(autoload 'x-compose-font-name "fontset"
+  "Compose X fontname from FIELDS.
+FIELDS is a vector of XLFD fields, of length 12.
+If a field is nil, wild-card letter `*' is embedded.
+Optional argument REDUCE exists just for backward compatibility,
+and is always ignored."
+  t)
 
 
 ;; ============================================================================
