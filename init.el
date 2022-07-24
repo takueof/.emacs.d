@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-24T23:11:27+09:00>
+;; Time-stamp: <2022-07-24T23:15:28+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1859,16 +1859,6 @@ Ordering is lexicographic."
       :config
       (if (fboundp 'marginalia-mode)
           (marginalia-mode +1)))
-
-
-    ;; ------------------------------------------------------------------------
-    ;; メニューバー
-    ;; ------------------------------------------------------------------------
-    (leaf menu-bar
-      :config
-      (if (fboundp 'menu-bar-mode)
-          ;; 非表示
-          (menu-bar-mode -1)))
 
 
     ;; ------------------------------------------------------------------------
