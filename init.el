@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-24T23:31:04+09:00>
+;; Time-stamp: <2022-07-24T23:36:42+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2416,8 +2416,7 @@ Ordering is lexicographic."
     ;; ------------------------------------------------------------------------
     (leaf json-mode
       :package t
-      :mode (("\\.json\\'" . json-mode)
-             ("\\.stylelintrc\\'" . json-mode))
+      :mode (("\\.json\\'" . json-mode))
       :hook ((json-mode-hook . my-json-mode-initialize))
       :init
       (defun my-json-mode-initialize ()
