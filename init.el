@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-24T23:15:28+09:00>
+;; Time-stamp: <2022-07-24T23:23:37+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2043,7 +2043,7 @@ Ordering is lexicographic."
     (leaf smartparens
       :package t
       :require t
-      :custom `((sp-show-pair-from-inside . nil)
+      :custom `((sp-show-pair-from-inside . t)
                 (sp-undo-pairs-separately . t))
       :config
       (if (fboundp 'show-smartparens-global-mode)
