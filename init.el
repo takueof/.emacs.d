@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-24T22:49:34+09:00>
+;; Time-stamp: <2022-07-24T22:56:40+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -873,6 +873,7 @@
     ;; 自動バッファ再読込
     ;; ------------------------------------------------------------------------
     (leaf autorevert
+      :custom `((auto-revert-check-vc-info . t))
       :config
       (if (fboundp 'global-auto-revert-mode)
           (global-auto-revert-mode +1)))
