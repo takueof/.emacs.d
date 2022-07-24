@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-24T13:01:20+09:00>
+;; Time-stamp: <2022-07-24T22:36:16+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -90,7 +90,6 @@
 ;; 「〜」(U+301C) → 「～」(U+FF5E) 自動変換
 (coding-system-put 'japanese-cp932 ; Shift_JIS
                    :encode-translation-table (get 'japanese-ucs-jis-to-cp932-map 'translation-table))
-
 
 ;; 「～」(U+FF5E) → 「〜」(U+301C) 自動変換
 (coding-system-put 'japanese-iso-8bit ; EUC-JP
