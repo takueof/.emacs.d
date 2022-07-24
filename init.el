@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-18T02:23:12+09:00>
+;; Time-stamp: <2022-07-24T13:01:20+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -111,6 +111,7 @@
 (require 'my-utils nil :noerror) ; 共通
 (require 'my-fonts nil :noerror) ; フォント
 (require 'my-modeline nil :noerror) ; モードライン
+(require 'my-im nil :noerror) ; Input Method (IM)
 
 
 ;; ============================================================================
@@ -191,70 +192,6 @@
 ;; 開始させる。
 (if (fboundp 'ansi-color-for-comint-mode-on)
     (ansi-color-for-comint-mode-on))
-
-
-;; ============================================================================
-;; インプットメソッド
-;; ============================================================================
-;; WARNING: `window-system' 外の環境（例：ターミナルエミュレータ）では例外発生
-;;          `window-system' 外の環境は除外することで回避
-;; ============================================================================
-(when window-system
-  ;; 各種シンボル（`current-input-method' など）が `mule-cmds' で定義されている
-  ;; 例外を出さず、確実に初期化する
-  (with-eval-after-load "mule-cmds" ; 未 `provide'
-    ;; ------------------------------------------------------------------------
-    ;; インプットメソッド切替時に、フェイス `cursor' を変更
-    ;; ------------------------------------------------------------------------
-    (defface my-cursor-default nil
-      "`cursor' face for `current-input-method' is nil."
-      :group 'customize)
-    (copy-face 'cursor 'my-cursor-default)
-
-    (defface my-cursor-input-method-activated '((t
-                                                 :background "gold"))
-      "`cursor' face for `current-input-method' is non-nil."
-      :group 'customize)
-
-    (defun my-change-cursor-faces-by-current-input-method ()
-      "Change cursor color with `current-input-method'."
-      (let* ((current-input-method (if (fboundp 'mac-input-source)
-                                       (let ((input-source (mac-input-source)))
-                                         (if (numberp (string-match "\\.US\\'" input-source))
-                                             nil
-                                           input-source))
-                                     current-input-method))
-             (cursor-face (if current-input-method
-                              'my-cursor-input-method-activated
-                            'my-cursor-default)))
-        (set-cursor-color (face-attribute cursor-face :background))))
-
-    ;; ------------------------------------------------------------------------
-    ;; 有効化
-    ;; ------------------------------------------------------------------------
-    ;; ウインドウ選択後、input-method の状態に応じてフェイス `cursor' を変更
-    ;;
-    ;; `cursor' はフレーム単位
-    ;; しかし、`current-input-method' はバッファローカル変数
-    ;; よって、バッファ間で `current-input-method' 値が異なれば、
-    ;; `cursor' が意図せぬ状態になる
-    ;;
-    ;; ゆえに、ウインドウ切替のタイミングでの `cursor' 明示変更が必要
-    ;;
-    ;; バッファ切替時は、特に何もしない
-    ;;
-    ;; `select-window' 実行後に起動するフック `buffer-list-update-hook' を利用
-    (add-hook 'buffer-list-update-hook
-              #'my-change-cursor-faces-by-current-input-method)
-    ;; input-method の activate/deactivate と連動させる
-    (add-hook 'input-method-activate-hook
-              #'my-change-cursor-faces-by-current-input-method)
-    (add-hook 'input-method-deactivate-hook
-              #'my-change-cursor-faces-by-current-input-method)
-    (add-hook 'mac-selected-keyboard-input-source-change-hook ;; macOS ONLY
-              #'my-change-cursor-faces-by-current-input-method)
-    (add-hook 'mac-enabled-keyboard-input-sources-change-hook ;; macOS ONLY
-              #'my-change-cursor-faces-by-current-input-method)))
 
 
 ;; ============================================================================
