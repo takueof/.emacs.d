@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-24T23:10:01+09:00>
+;; Time-stamp: <2022-07-24T23:11:27+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1777,9 +1777,7 @@ Ordering is lexicographic."
     ;; インクリメンタル検索
     ;; ------------------------------------------------------------------------
     (leaf isearch
-      :custom `(;; 検索時に大小文字を区別しない
-                (isearch-case-fold-search . t)
-                ;; 逆検索時に大小文字を区別しない
+      :custom `((isearch-case-fold-search . t)
                 (isearch-last-case-fold-search . t)))
 
 
