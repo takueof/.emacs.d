@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-24T22:56:40+09:00>
+;; Time-stamp: <2022-07-24T23:10:01+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1727,7 +1727,7 @@ Ordering is lexicographic."
     ;; 強化バッファ一覧 (`ibuffer') 拡張（`projectile' サポート）
     ;; ------------------------------------------------------------------------
     (leaf ibuffer-projectile
-      :after (projectile ibuffer)
+      :after (ibuffer projectile)
       :package t
       :hook ((ibuffer-hook . my-ibuffer-projectile-initialize))
       :init
