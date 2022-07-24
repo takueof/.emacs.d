@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-25T00:03:54+09:00>
+;; Time-stamp: <2022-07-25T00:17:29+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2787,6 +2787,13 @@ Ordering is lexicographic."
                     (setq-local indent-tabs-mode indent-style)))))))
     ) ; END
   )
+
+
+;; ============================================================================
+;; 黙らせていた余分なメッセージ I/O を復活させる
+;; ============================================================================
+(custom-set-variables
+ '(inhibit-message nil))
 
 
 ;; ============================================================================

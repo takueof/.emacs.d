@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize config file -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021 Taku Watabe
-;; Time-stamp: <2022-07-25T00:03:59+09:00>
+;; Time-stamp: <2022-07-25T00:24:06+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -37,11 +37,19 @@
  ;; `custom-set-faces' to `user-init-file'.
  ;; Automatic saving is done in another file.
  ;;
+ ;; WARNING: If you don't write this setting at the beginning,
+ ;;          `custom.el' will not be generated.
+ ;;
  '(custom-file (locate-user-emacs-file "custom.el"))
  ;;
  ;; Prevents garbage collection that occurs at startup.
  ;;
  `(gc-cons-threshold ,(* 128 1024 1024)) ;; 128MB
+ ;;
+ ;; Silence extra message I/O.
+ ;;
+ '(inhibit-message t)
+ ;;
  ;;
  ;; Package initialization occurs before `user-init-file' is loaded
  ;; but after `early-init-file'.
