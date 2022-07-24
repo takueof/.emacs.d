@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-24T22:36:16+09:00>
+;; Time-stamp: <2022-07-24T22:49:34+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -672,7 +672,7 @@
     ;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得・設定
     ;; ------------------------------------------------------------------------
     (leaf exec-path-from-shell
-      :when (member window-system '(mac ns x))
+      :when (not (member system-type '(ms-dos windows-nt)))
       :package t
       :require t
       :config
