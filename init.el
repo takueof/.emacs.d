@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-07-25T00:17:29+09:00>
+;; Time-stamp: <2022-08-05T07:23:37+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -790,9 +790,10 @@
     (leaf vterm
       :ensure t
       :custom `((vterm-shell . "bash")
-                (vterm-kill-buffer-on-exit . t)
-                (vterm-ignore-blink-cursor . t)
-                (vterm-max-scrollback . 100000)))
+                (vterm-max-scrollback . 100000)
+                (vterm-clear-scrollback-when-clearing . t)
+                (vterm-enable-manipulate-selection-data-by-osc52 . t )
+                (vterm-copy-exclude-prompt . nil)))
 
 
     ;; ------------------------------------------------------------------------
