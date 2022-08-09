@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-05T07:23:37+09:00>
+;; Time-stamp: <2022-08-10T05:43:04+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1356,6 +1356,7 @@
     ;; ------------------------------------------------------------------------
     (leaf evil-numbers
       :package t
+      :custom `((evil-numbers-pad-default . t))
       :bind (("C-3" . evil-numbers/dec-at-pt)
              ("C-4" . evil-numbers/inc-at-pt)))
 
