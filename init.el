@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-10T05:43:04+09:00>
+;; Time-stamp: <2022-08-10T05:46:57+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1403,18 +1403,6 @@
         (if (boundp 'warning-suppress-log-types)
             (add-to-list 'warning-suppress-log-types
                          '(flycheck syntax-checker))))
-
-      ;; ------------------------------
-      ;; PATCH: ESLint 優先利用
-      ;;        JSHint -> ESLint を ESLint -> JSHint 順に変更
-      ;; ------------------------------
-      (if (boundp 'flycheck-checkers)
-          (let* ((target-and-other-checkers (member 'javascript-eslint
-                                                    flycheck-checkers)))
-            (delete 'javascript-jshint flycheck-checkers)
-            (setcdr target-and-other-checkers
-                    (cons 'javascript-jshint
-                          (cdr-safe target-and-other-checkers)))))
 
       ;; ------------------------------
       ;; PATCH: v.Nu サポート
