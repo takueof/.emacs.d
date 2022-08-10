@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-10T22:18:59+09:00>
+;; Time-stamp: <2022-08-11T07:04:29+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1590,6 +1590,7 @@ See also: `https://github.com/validator/validator'."
       ;; FIXME: `after-init-hook' 後に実行した `load-theme' に対応したい
       ;;        `advice-add' の :after で `enable-theme' を実行してもダメ
       :hook ((after-init-hook . my-hl-line-initialize))
+      :custom `((global-hl-line-sticky-flag . t))
       :init
       (defun my-hl-line-initialize ()
         "Initialize `hl-line'."
