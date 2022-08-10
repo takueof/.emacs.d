@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-10T05:46:57+09:00>
+;; Time-stamp: <2022-08-10T22:18:59+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -51,8 +51,9 @@
 
 ;; macOS ONLY
 (when (member system-type '(darwin))
-  (set-terminal-coding-system 'utf-8-unix)
   (set-keyboard-coding-system 'utf-8-unix)
+  (set-selection-coding-system 'utf-8)
+  (set-terminal-coding-system 'utf-8)
   (setq-default default-process-coding-system '(utf-8 . utf-8)))
 
 ;; 「UTF-8（BOM 有）」のエイリアスを作成
