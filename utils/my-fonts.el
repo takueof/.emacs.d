@@ -1,7 +1,7 @@
 ;;; my-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-11T17:41:37+09:00>
+;; Time-stamp: <2022-08-12T00:52:13+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -201,6 +201,7 @@
   (cond
    ((my-fallback-font-family "Inconsolata")
     (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
@@ -209,21 +210,18 @@
     (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.300))
     (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 0.900))
-    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.844))) ; FIXME: Unadjusted
+    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.846))) ; FIXME: 1px diff
    ((my-fallback-font-family "Menlo")
-    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.100))
-    (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
+    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.300))
+    (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.300))
+    (add-to-list 'face-font-rescale-alist '("-Courier-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.240))
-    (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.240))
-    (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.240))
-    (add-to-list 'face-font-rescale-alist '("-Lantinghei TC-" . 1.167))
-    (add-to-list 'face-font-rescale-alist '("-Heiti TC-" . 1.240))
-    (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.350))
-    (add-to-list 'face-font-rescale-alist '("-PCMyungjo-" . 1.240))
-    (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.240))
-    (add-to-list 'face-font-rescale-alist '("-YuGothic-" . 1.240))
-    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.844))) ; FIXME: Unadjusted
+    (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.300))
+    (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.300))
+    (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.300))
+    (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.400))
+    (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.950)))
    ((my-fallback-font-family "Consolas")
     (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
@@ -237,7 +235,7 @@
    ((my-fallback-font-family "ProFontWindows")
     (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
-    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.100))
@@ -253,7 +251,6 @@
                                (font-spec :size 13.0 ; デフォルトフォントサイズ (pt)
                                           :family (my-fallback-font-family "Inconsolata"
                                                                            "Menlo"
-                                                                           "Monaco"
                                                                            "Consolas"
                                                                            "Courier New"
                                                                            "Monospace")))
@@ -263,7 +260,6 @@
                             (font-spec :family (my-fallback-font-family "Apple Color Emoji"
                                                                         "Segoe UI Emoji"
                                                                         "Segoe UI Symbol"
-                                                                        "AndroidEmoji"
                                                                         "Symbola")))
   ;; 簡体字：GB 18030
   (my-set-fontset-font-safe "fontset-programming"
@@ -299,7 +295,6 @@
   (my-set-fontset-font-safe "fontset-programming"
                             'thai-tis620
                             (font-spec :family (my-fallback-font-family "Ayuthaya"
-                                                                        "Droid Sans Mono"
                                                                         "Tahoma"
                                                                         "Monospace")))
   ;; アラビア文字：Unicode 直接指定
@@ -325,25 +320,18 @@
   (my-set-fontset-font-safe "fontset-programming"
                             'japanese-jisx0213.2004-1
                             (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                        "VL Gothic"
                                                                         "ヒラギノ角ゴシック"
-                                                                        "游ゴシック Medium"
-                                                                        "YuGothic Medium"
                                                                         "メイリオ")))
   (my-set-fontset-font-safe "fontset-programming"
                             'japanese-jisx0213-2
                             (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                        "VL Gothic"
                                                                         "ヒラギノ角ゴシック"
-                                                                        "游ゴシック Medium"
-                                                                        "YuGothic Medium"
                                                                         "メイリオ")))
   ;; ラテン文字：Code page 858 (`cp858')
   (my-set-fontset-font-safe "fontset-programming"
                             'cp858
                             (font-spec :family (my-fallback-font-family "Inconsolata"
                                                                         "Menlo"
-                                                                        "Monaco"
                                                                         "Consolas"
                                                                         "Courier New"
                                                                         "Monospace")))
@@ -356,7 +344,6 @@
                             ;;
                             ;; ゆえに、他フォントによるフォールバックが必要
                             (font-spec :family (my-fallback-font-family "Menlo"
-                                                                        "Monaco"
                                                                         "Courier New"
                                                                         "Monospace")))
   ;; "ı" (U+0131: LATIN SMALL LETTER DOTLESS I) フォント明示
@@ -368,7 +355,6 @@
                             ;;
                             ;; ゆえに、他フォントによるフォールバックが必要
                             (font-spec :family (my-fallback-font-family "Menlo"
-                                                                        "Monaco"
                                                                         "Consolas"
                                                                         "Courier New"
                                                                         "Monospace")))
@@ -404,9 +390,6 @@
                               ;;
                               ;; ゆえに、明示的な除外が必要
                               (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                          "VL Gothic"
-                                                                          "游ゴシック Medium"
-                                                                          "YuGothic Medium"
                                                                           "メイリオ"))))
   ;; ASCII
   (my-set-fontset-font-safe "fontset-programming"
@@ -414,7 +397,6 @@
                             (font-spec :size 13.0 ; デフォルトフォントサイズ (pt)
                                        :family (my-fallback-font-family "Inconsolata"
                                                                         "Menlo"
-                                                                        "Monaco"
                                                                         "Consolas"
                                                                         "Courier New"
                                                                         "Monospace")))
@@ -447,8 +429,8 @@
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             nil
                             (font-spec :family (my-fallback-font-family "Apple Color Emoji"
+                                                                        "Segoe UI Emoji"
                                                                         "Segoe UI Symbol"
-                                                                        "AndroidEmoji"
                                                                         "Symbola")))
   ;; 簡体字：GB 18030
   (my-set-fontset-font-safe "fontset-programmingBMP"
@@ -481,8 +463,8 @@
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'thai-tis620
                             (font-spec :family (my-fallback-font-family "Ayuthaya"
-                                                                        "Droid Sans Mono"
-                                                                        "Tahoma")))
+                                                                        "Tahoma"
+                                                                        "Monospace")))
   ;; アラビア文字：Unicode 直接指定
   ;;               `cp858' との重複を避けるため、`cp1256' による指定はしない
   (dolist (range '((cons #x00600 #x006FF) ; U+0600-U+06FF (Arabic)
