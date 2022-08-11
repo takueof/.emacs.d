@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize config file -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2021 Taku Watabe
-;; Time-stamp: <2022-07-25T00:24:06+09:00>
+;; Copyright (C) 2021-2022 Taku Watabe
+;; Time-stamp: <2022-08-11T17:40:25+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 

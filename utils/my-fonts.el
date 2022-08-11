@@ -1,7 +1,7 @@
 ;;; my-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2019 Taku Watabe
-;; Time-stamp: <2019-11-30T13:34:20+09:00>
+;; Copyright (C) 2013-2022 Taku Watabe
+;; Time-stamp: <2022-08-11T17:41:37+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -199,22 +199,21 @@
   ;; (add-to-list 'face-font-rescale-alist `(,(encode-coding-string "-フォント名-" 'emacs-mule) . 倍率))
   ;; --------------------------------------------------------------------------
   (cond
-   ;;
-   ;; macOS (with "Inconsolata")
-   ;;
-   ((and (my-fallback-font-family "Inconsolata")
-         (my-fallback-font-family "Menlo"))
+   ((my-fallback-font-family "Inconsolata")
+    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.900))
+    (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.300))
     (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 0.900))
-    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.840))) ; unadjusted
-   ;;
-   ;; macOS (with "Menlo")
-   ;;
+    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.844))) ; FIXME: Unadjusted
    ((my-fallback-font-family "Menlo")
+    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.240))
     (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.240))
     (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.240))
@@ -224,24 +223,27 @@
     (add-to-list 'face-font-rescale-alist '("-PCMyungjo-" . 1.240))
     (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.240))
     (add-to-list 'face-font-rescale-alist '("-YuGothic-" . 1.240))
-    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.917))) ; unadjusted
-   ;;
-   ;; Windows (with "Consolas")
-   ;;
+    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.844))) ; FIXME: Unadjusted
    ((my-fallback-font-family "Consolas")
     (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))
     (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Tahoma-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.800))
-    (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.100))
-    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910)))
-   ;;
-   ;; Default
-   ;;
-   (t
-    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.100)))
+   ((my-fallback-font-family "ProFontWindows")
+    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))
+    (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Tahoma-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.800))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.100))))
 
 
   ;; --------------------------------------------------------------------------

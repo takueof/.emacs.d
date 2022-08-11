@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-11T07:04:29+09:00>
+;; Time-stamp: <2022-08-11T17:40:57+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -617,7 +617,6 @@
     (let ((required-themes '(;; 利用したいカラーテーマの一覧
                              ;; 優先度が高い順に降順ソートしておくこと
                              modus-vivendi
-                             my-default
                              wheatgrass))
           (availabled-themes (custom-available-themes)))
       ;; 利用したいカラーテーマが見つからなければ何もしない
