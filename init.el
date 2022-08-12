@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-11T17:40:57+09:00>
+;; Time-stamp: <2022-08-12T23:59:26+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -97,122 +97,6 @@
                    :encode-translation-table (get 'japanese-ucs-cp932-to-jis-map 'translation-table))
 (coding-system-put 'iso-2022-jp ; JIS
                    :encode-translation-table (get 'japanese-ucs-cp932-to-jis-map 'translation-table))
-
-
-;; ============================================================================
-;; ロードパス追加
-;; ============================================================================
-(add-to-list 'load-path (locate-user-emacs-file "utils"))
-
-
-;; ============================================================================
-;; 各ユーティリティをロード
-;; ============================================================================
-(require 'my-utils nil :noerror) ; 共通
-(require 'my-fonts nil :noerror) ; フォント
-(require 'my-modeline nil :noerror) ; モードライン
-(require 'my-im nil :noerror) ; Input Method (IM)
-
-
-;; ============================================================================
-;; グローバルキーバインド
-;; ============================================================================
-;; <Backspace> と <DEL> を 交換
-(keyboard-translate ?\C-h ?\C-?)
-
-;; <DEL> を <C-d> にする
-(keyboard-translate ?\C-? ?\C-d)
-
-;; `ido-undo-merge-work-directory' 実行のため <C-z> を押しすぎた場合、
-;; `suspend-frame' が起動しないよう配慮
-(global-unset-key (kbd "C-z"))
-
-;; ヘルプ表示を割り当てなおす
-(if (fboundp 'help-command)
-    (global-set-key (kbd "C-x ?") #'help-command))
-
-;; ウインドウ中央表示はもっともシンプルなものを用いる
-;; `recenter-top-bottom' は使わない
-(if (fboundp 'recenter)
-    (global-set-key (kbd "C-l") #'recenter))
-
-;; リージョン範囲をソート
-(if (fboundp 'sort-lines)
-    (global-set-key (kbd "C-c s") #'sort-lines))
-
-;; 1つ前のエラーを表示
-(if (fboundp 'previous-error)
-    (global-set-key (kbd "C-x \\") #'previous-error))
-
-;; `revert-buffer-quick' ショートカット
-(if (fboundp 'revert-buffer-quick)
-    (global-set-key (kbd "C-c r") #'revert-buffer-quick))
-
-;; タッチパッドによる各種操作を無効化 (macOS ONLY)
-(when (member system-type '(darwin))
-  (global-unset-key [magnify-up])
-  (global-unset-key [magnify-down])
-  (global-unset-key [S-magnify-up])
-  (global-unset-key [S-magnify-down]))
-
-;; 独自定義
-(with-eval-after-load 'my-utils
-  ;; 行頭移動は物理行
-  (global-set-key (kbd "C-a") #'my-beginning-of-smart-indented-line)
-
-  ;; 前のウインドウに移動
-  (global-set-key (kbd "C-x p") #'my-other-window-reverse)
-
-  ;; 前のフレームに移動
-  (global-set-key (kbd "C-x 5 p") #'my-other-frame-reverse)
-
-  ;; 折り返し表示を強制切替
-  (global-set-key (kbd "C-x w") #'my-toggle-truncate-lines-force)
-
-  ;; カーソル位置に YEN SIGN (U+00A5) を挿入
-  (global-set-key (kbd "C-c i \\") #'my-insert-yen-sign)
-
-  ;; カーソル位置にファイル名を挿入
-  (global-set-key (kbd "C-c i f") #'my-insert-file-name)
-
-  ;; カーソル位置にファイルパスを挿入
-  (global-set-key (kbd "C-c i p") #'my-insert-file-path)
-
-  ;; 一括エンコーディング変換
-  (global-set-key (kbd "C-c RET f") #'my-change-files-coding-system)
-
-  ;; 一括ファイル通知ウォッチ削除
-  (global-set-key (kbd "C-c C-c q") #'my-file-notify-rm-all-watches))
-
-
-;; ============================================================================
-;; ANSI エスケープシーケンス
-;; ============================================================================
-;; `comint-mode' および派生モードで、ANSI エスケープシーケンスの解釈を
-;; 開始させる。
-(if (fboundp 'ansi-color-for-comint-mode-on)
-    (ansi-color-for-comint-mode-on))
-
-
-;; ============================================================================
-;; YES/NO 選択を簡略化
-;; ============================================================================
-(fset 'yes-or-no-p 'y-or-n-p)
-
-
-;; ============================================================================
-;; リージョンの大文字・小文字変換で、実行の是非を問わせない
-;; ============================================================================
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
-
-
-;; ============================================================================
-;; ベル音 (Windows ONLY)
-;; ============================================================================
-(if (fboundp 'set-message-beep)
-    ;; なし
-    (set-message-beep 'silent))
 
 
 ;; ============================================================================
@@ -454,6 +338,130 @@
 
 
 ;; ============================================================================
+;; YES/NO 選択を簡略化
+;; ============================================================================
+(fset 'yes-or-no-p 'y-or-n-p)
+
+
+;; ============================================================================
+;; リージョンの大文字・小文字変換で、実行の是非を問わせない
+;; ============================================================================
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+
+
+;; ============================================================================
+;; ベル音 (Windows ONLY)
+;; ============================================================================
+(if (fboundp 'set-message-beep)
+    ;; なし
+    (set-message-beep 'silent))
+
+
+;; ============================================================================
+;; ロードパス追加
+;; ============================================================================
+(add-to-list 'load-path (locate-user-emacs-file "utils"))
+
+
+;; ============================================================================
+;; `autoload' 自動生成
+;; ============================================================================
+;; FIXME: 生成しても `autoload' が有効にならない
+;;        いつか `autoload' 化すること
+;; (let* ((directory (locate-user-emacs-file "utils"))
+;;        (file (concat directory "/utils-autoloads.el")))
+;;   (make-directory-autoloads directory file))
+
+
+;; ============================================================================
+;; 各ユーティリティをロード
+;; ============================================================================
+(require 'my-utils nil :noerror) ; 共通
+(require 'my-fonts nil :noerror) ; フォント
+(require 'my-modeline nil :noerror) ; モードライン
+(require 'my-im nil :noerror) ; Input Method (IM)
+
+
+;; ============================================================================
+;; グローバルキーバインド
+;; ============================================================================
+;; <Backspace> と <DEL> を 交換
+(keyboard-translate ?\C-h ?\C-?)
+
+;; <DEL> を <C-d> にする
+(keyboard-translate ?\C-? ?\C-d)
+
+;; `ido-undo-merge-work-directory' 実行のため <C-z> を押しすぎた場合、
+;; `suspend-frame' が起動しないよう配慮
+(global-unset-key (kbd "C-z"))
+
+;; ヘルプ表示を割り当てなおす
+(if (fboundp 'help-command)
+    (global-set-key (kbd "C-x ?") #'help-command))
+
+;; ウインドウ中央表示はもっともシンプルなものを用いる
+;; `recenter-top-bottom' は使わない
+(if (fboundp 'recenter)
+    (global-set-key (kbd "C-l") #'recenter))
+
+;; リージョン範囲をソート
+(if (fboundp 'sort-lines)
+    (global-set-key (kbd "C-c s") #'sort-lines))
+
+;; 1つ前のエラーを表示
+(if (fboundp 'previous-error)
+    (global-set-key (kbd "C-x \\") #'previous-error))
+
+;; `revert-buffer-quick' ショートカット
+(if (fboundp 'revert-buffer-quick)
+    (global-set-key (kbd "C-c r") #'revert-buffer-quick))
+
+;; 行頭移動は物理行
+(if (fboundp 'my-beginning-of-smart-indented-line)
+    (global-set-key (kbd "C-a") #'my-beginning-of-smart-indented-line))
+
+  ;; 前のウインドウに移動
+(if (fboundp 'my-other-window-reverse)
+    (global-set-key (kbd "C-x p") #'my-other-window-reverse))
+
+  ;; 前のフレームに移動
+(if (fboundp 'my-other-frame-reverse)
+    (global-set-key (kbd "C-x 5 p") #'my-other-frame-reverse))
+
+  ;; 折り返し表示を強制切替
+(if (fboundp 'my-toggle-truncate-lines-force)
+    (global-set-key (kbd "C-x w") #'my-toggle-truncate-lines-force))
+
+  ;; カーソル位置に YEN SIGN (U+00A5) を挿入
+(if (fboundp 'my-insert-yen-sign)
+    (global-set-key (kbd "C-c i \\") #'my-insert-yen-sign))
+
+  ;; カーソル位置にファイル名を挿入
+(if (fboundp 'my-insert-file-name)
+    (global-set-key (kbd "C-c i f") #'my-insert-file-name))
+
+  ;; カーソル位置にファイルパスを挿入
+(if (fboundp 'my-insert-file-path)
+    (global-set-key (kbd "C-c i p") #'my-insert-file-path))
+
+  ;; 一括エンコーディング変換
+(if (fboundp 'my-change-files-coding-system)
+    (global-set-key (kbd "C-c RET f") #'my-change-files-coding-system))
+
+  ;; 一括ファイル通知ウォッチ削除
+(if (fboundp 'my-file-notify-rm-all-watches)
+    (global-set-key (kbd "C-c C-c q") #'my-file-notify-rm-all-watches))
+
+;; タッチパッドによる各種操作を無効化 (macOS ONLY)
+(when (member system-type '(darwin))
+  (global-unset-key [magnify-up])
+  (global-unset-key [magnify-down])
+  (global-unset-key [S-magnify-up])
+  (global-unset-key [S-magnify-down]))
+
+
+;; ============================================================================
 ;; 環境変数 (Windows ONLY)
 ;; ============================================================================
 (if (member system-type '(ms-dos windows-nt))
@@ -643,6 +651,16 @@
         "Initialize `add-node-modules-path'."
         (if (fboundp 'add-node-modules-path)
             (add-node-modules-path))))
+
+
+    ;; ------------------------------------------------------------------------
+    ;; ANSI エスケープシーケンス
+    ;; ------------------------------------------------------------------------
+    (leaf ansi-color
+      :config
+      ;; `comint-mode' および派生モードで、ANSI エスケープシーケンスの解釈を開始
+      (if (fboundp 'ansi-color-for-comint-mode-on)
+          (ansi-color-for-comint-mode-on)))
 
 
     ;; ------------------------------------------------------------------------
