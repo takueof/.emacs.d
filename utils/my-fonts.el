@@ -1,7 +1,7 @@
 ;;; my-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-12T00:52:13+09:00>
+;; Time-stamp: <2022-08-13T01:04:03+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -200,7 +200,7 @@
   ;; --------------------------------------------------------------------------
   (cond
    ((my-fallback-font-family "Inconsolata")
-    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.077))
     (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
@@ -208,9 +208,9 @@
     (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.100))
-    (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.300))
+    (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.250))
     (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 0.900))
-    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.846))) ; FIXME: 1px diff
+    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.842))) ; FIXME: 1px diff
    ((my-fallback-font-family "Menlo")
     (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.300))
     (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.300))
