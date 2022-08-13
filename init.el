@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-14T00:22:05+09:00>
+;; Time-stamp: <2022-08-14T00:35:56+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -20,8 +20,8 @@
 
 ;;; Commentary:
 
-;; This config file can use "GNU Emacs" ONLY,
-;; unsupported other "emacsen" ("XEmacs" and others).
+;; This config file can use "GNU Emacs" ONLY.
+;; Unsupported other "emacsen" ("XEmacs" and others).
 ;;
 ;; This file is VERY LONG.
 ;; So, I DARE USE file local variables in the FIRST LINE.
