@@ -1,7 +1,7 @@
 ;;; my-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-13T12:24:25+09:00>
+;; Time-stamp: <2022-08-13T15:49:43+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -194,14 +194,13 @@
 
   ;; --------------------------------------------------------------------------
   ;; スケール変換
-  ;;
+  ;; --------------------------------------------------------------------------
   ;; 多バイト文字の認識に支障がある場合の書法：
   ;; (add-to-list 'face-font-rescale-alist `(,(encode-coding-string "-フォント名-" 'emacs-mule) . 倍率))
   ;; --------------------------------------------------------------------------
   (cond
-   ((my-fallback-font-family "Inconsolata")
-    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.070))
-    (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.070))
+   ((my-fallback-font-family "Ricty Discord"
+                             "Ricty")
     (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
@@ -210,9 +209,8 @@
     (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.150))
     (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 0.900))
-    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.785))) ; FIXME: 1px diff
+    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.785)))
    ((my-fallback-font-family "Menlo")
-    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.300))
     (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.300))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
@@ -223,7 +221,7 @@
     (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.950)))
    ((my-fallback-font-family "Consolas")
-    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Meiryo-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))
     (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.100))
@@ -233,7 +231,7 @@
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.800))
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.100)))
    ((my-fallback-font-family "ProFontWindows")
-    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Meiryo-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.100))
@@ -247,9 +245,16 @@
   ;; --------------------------------------------------------------------------
   ;; フォントセット：プログラミング用（高 dpi 環境向け）
   ;; --------------------------------------------------------------------------
+  ;; フォントサイズは 1.5 の倍数（例：9, 10.5, 12, 13.5, 15, 16.5 etc.）を
+  ;; 指定すると半角：全角 = 1:2 で表示されやすくなる
+  ;;
+  ;; See also:
+  ;; https://rictyfonts.github.io/
+  ;; --------------------------------------------------------------------------
   (my-create-fontset-from-spec "programming"
-                               (font-spec :size 14.0 ; デフォルトフォントサイズ (pt)
-                                          :family (my-fallback-font-family "Inconsolata"
+                               (font-spec :size 16.5 ; デフォルトフォントサイズ (pt)
+                                          :family (my-fallback-font-family "Ricty Discord"
+                                                                           "Ricty"
                                                                            "Menlo"
                                                                            "Consolas"
                                                                            "Courier New"
@@ -319,18 +324,21 @@
   ;; 日本語：JIS X 0213:2004
   (my-set-fontset-font-safe "fontset-programming"
                             'japanese-jisx0213.2004-1
-                            (font-spec :family (my-fallback-font-family "Migu 1M"
+                            (font-spec :family (my-fallback-font-family "Ricty Discord"
+                                                                        "Ricty"
                                                                         "ヒラギノ角ゴシック"
                                                                         "メイリオ")))
   (my-set-fontset-font-safe "fontset-programming"
                             'japanese-jisx0213-2
-                            (font-spec :family (my-fallback-font-family "Migu 1M"
+                            (font-spec :family (my-fallback-font-family "Ricty Discord"
+                                                                        "Ricty"
                                                                         "ヒラギノ角ゴシック"
                                                                         "メイリオ")))
   ;; ラテン文字：Code page 858 (`cp858')
   (my-set-fontset-font-safe "fontset-programming"
                             'cp858
-                            (font-spec :family (my-fallback-font-family "Inconsolata"
+                            (font-spec :family (my-fallback-font-family "Ricty Discord"
+                                                                        "Ricty"
                                                                         "Menlo"
                                                                         "Consolas"
                                                                         "Courier New"
@@ -339,6 +347,8 @@
                             (cons (string-to-char "░") (string-to-char "▓"))
                             ;; 次のフォントは U+2591, U+2592, U+2593 未実装：
                             ;;
+                            ;;   * "Ricty"
+                            ;;   * "Ricty Discord"
                             ;;   * "Inconsolata"
                             ;;   * "Consolas"
                             ;;
@@ -351,6 +361,8 @@
                             (cons (string-to-char "ı") (string-to-char "ı"))
                             ;; 次のフォントは "ı" (U+0131) 未実装：
                             ;;
+                            ;;   * "Ricty"
+                            ;;   * "Ricty Discord"
                             ;;   * "Inconsolata"
                             ;;
                             ;; ゆえに、他フォントによるフォールバックが必要
@@ -389,13 +401,15 @@
                               ;;   * "ヒラギノ角ゴシック"
                               ;;
                               ;; ゆえに、明示的な除外が必要
-                              (font-spec :family (my-fallback-font-family "Migu 1M"
+                              (font-spec :family (my-fallback-font-family "Ricty Discord"
+                                                                          "Ricty"
                                                                           "メイリオ"))))
   ;; ASCII
   (my-set-fontset-font-safe "fontset-programming"
                             'ascii
-                            (font-spec :size 14.0 ; デフォルトフォントサイズ (pt)
-                                       :family (my-fallback-font-family "Inconsolata"
+                            (font-spec :size 16.5 ; デフォルトフォントサイズ (pt)
+                                       :family (my-fallback-font-family "Ricty Discord"
+                                                                        "Ricty"
                                                                         "Menlo"
                                                                         "Consolas"
                                                                         "Courier New"
