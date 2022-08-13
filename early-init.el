@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize config file -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2022 Taku Watabe
-;; Time-stamp: <2022-08-11T17:40:25+09:00>
+;; Time-stamp: <2022-08-14T00:05:04+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -31,43 +31,51 @@
 ;; ============================================================================
 ;; Initialize settings
 ;; ============================================================================
-(custom-set-variables
- ;;
- ;; Don't allow additional notes for `custom-set-variables' and
- ;; `custom-set-faces' to `user-init-file'.
- ;; Automatic saving is done in another file.
- ;;
- ;; WARNING: If you don't write this setting at the beginning,
- ;;          `custom.el' will not be generated.
- ;;
- '(custom-file (locate-user-emacs-file "custom.el"))
- ;;
- ;; Prevents garbage collection that occurs at startup.
- ;;
- `(gc-cons-threshold ,(* 128 1024 1024)) ;; 128MB
- ;;
- ;; Silence extra message I/O.
- ;;
- '(inhibit-message t)
- ;;
- ;;
- ;; Package initialization occurs before `user-init-file' is loaded
- ;; but after `early-init-file'.
- ;;
- '(package-enable-at-startup nil)
- ;;
- ;; Prohibit frame resizing, which is affected by font changes.
- ;; Because we easily halve startup times.
- ;;
- '(frame-inhibit-implied-resize t))
-
-
+;; Don't use `custom-set-variables' and `add-to-list'.
+;; Because those functions introduces configuration delays.
 ;; ============================================================================
+;;
+;; Don't allow additional notes for `custom-set-variables' and
+;; `custom-set-faces' to `user-init-file'.
+;; Automatic saving is done in another file.
+;;
+;; WARNING: If you don't write this setting at the beginning,
+;;          `custom.el' will not be generated.
+;;
+(setq custom-file (locate-user-emacs-file "custom.el"))
+;;
+;; Prevents garbage collection that occurs at startup.
+;;
+(setq gc-cons-threshold most-positive-fixnum)
+;;
+;; Silence extra message I/O.
+;;
+(setq inhibit-message t)
+;;
+;; Faster font display.
+;;
+(setq inhibit-compacting-font-caches t)
+;;
+;; Increase subprocess main memory.
+;;
+(setq read-process-output-max (* 4 1024 1024)) ; 4MB
+;;
+;; Package initialization occurs before `user-init-file' is loaded
+;; but after `early-init-file'.
+;;
+(setq package-enable-at-startup nil)
+;;
+;; Prohibit frame resizing, which is affected by font changes.
+;; Because we easily halve startup times.
+;;
+(setq frame-inhibit-implied-resize t)
+;;
 ;; Disable UI elements to prevent the appearance of unstyled frames
-;; ============================================================================
-(add-to-list 'default-frame-alist '(menu-bar-lines . 0))
-(add-to-list 'default-frame-alist '(tool-bar-lines . 0))
-(add-to-list 'default-frame-alist '(vertical-scroll-bars))
+;;
+(setq default-frame-alist (append default-frame-alist
+                                  '((menu-bar-lines . 0)
+                                    (tool-bar-lines . 0)
+                                    (vertical-scroll-bars))))
 
 
 ;; ============================================================================

@@ -1,7 +1,7 @@
 ;;; my-im.el --- 設定 - Input Method (IM) -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2022 Taku Watabe
-;; Time-stamp: <2022-07-24T13:05:26+09:00>
+;; Time-stamp: <2022-08-14T00:00:37+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -50,7 +50,7 @@
 
     (defun my-change-cursor-faces-by-current-input-method ()
       "Change cursor color with `current-input-method'."
-      (let* ((current-input-method (if (fboundp 'mac-input-source)
+      (let* ((current-input-method (if (fboundp #'mac-input-source)
                                        (let ((input-source (mac-input-source)))
                                          (if (numberp (string-match "\\.US\\'" input-source))
                                              nil

@@ -1,7 +1,7 @@
 ;;; my-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-13T16:56:35+09:00>
+;; Time-stamp: <2022-08-13T23:19:51+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -185,11 +185,7 @@
    ;; シンボルや句読点などを表示するフォントを、フォント設定に応じて選択させる
    ;;   → GNU Emacs 25 より前のふるまいに戻す
    ;;
-   '(use-default-font-for-symbols nil)
-   ;;
-   ;; フォント表示高速化（v25.2 以上で有効）
-   ;;
-   '(inhibit-compacting-font-caches t))
+   '(use-default-font-for-symbols nil))
 
 
   ;; --------------------------------------------------------------------------

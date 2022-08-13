@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-13T19:18:53+09:00>
+;; Time-stamp: <2022-08-14T00:03:52+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -159,6 +159,10 @@
  ;; クリップボードと `kill-ring' を同期させる
  ;;
  '(select-enable-clipboard t)
+ ;;
+ ;; Yank (Paste) 時にプロパティを全破棄し、プレーンテキストを利用
+ ;;
+ '(yank-excluded-properties t)
  ;;
  ;; プレビューウインドウの表示を即時にする
  ;;
@@ -352,7 +356,7 @@
 ;; ============================================================================
 ;; ベル音 (Windows ONLY)
 ;; ============================================================================
-(if (fboundp 'set-message-beep)
+(if (fboundp #'set-message-beep)
     ;; なし
     (set-message-beep 'silent))
 
@@ -396,60 +400,60 @@
 (global-unset-key (kbd "C-z"))
 
 ;; ヘルプ表示を割り当てなおす
-(if (fboundp 'help-command)
+(if (fboundp #'help-command)
     (global-set-key (kbd "C-x ?") #'help-command))
 
 ;; ウインドウ中央表示はもっともシンプルなものを用いる
 ;; `recenter-top-bottom' は使わない
-(if (fboundp 'recenter)
+(if (fboundp #'recenter)
     (global-set-key (kbd "C-l") #'recenter))
 
 ;; リージョン範囲をソート
-(if (fboundp 'sort-lines)
+(if (fboundp #'sort-lines)
     (global-set-key (kbd "C-c s") #'sort-lines))
 
 ;; 1つ前のエラーを表示
-(if (fboundp 'previous-error)
+(if (fboundp #'previous-error)
     (global-set-key (kbd "C-x \\") #'previous-error))
 
 ;; `revert-buffer-quick' ショートカット
-(if (fboundp 'revert-buffer-quick)
+(if (fboundp #'revert-buffer-quick)
     (global-set-key (kbd "C-c r") #'revert-buffer-quick))
 
 ;; 行頭移動は物理行
-(if (fboundp 'my-beginning-of-smart-indented-line)
+(if (fboundp #'my-beginning-of-smart-indented-line)
     (global-set-key (kbd "C-a") #'my-beginning-of-smart-indented-line))
 
   ;; 前のウインドウに移動
-(if (fboundp 'my-other-window-reverse)
+(if (fboundp #'my-other-window-reverse)
     (global-set-key (kbd "C-x p") #'my-other-window-reverse))
 
   ;; 前のフレームに移動
-(if (fboundp 'my-other-frame-reverse)
+(if (fboundp #'my-other-frame-reverse)
     (global-set-key (kbd "C-x 5 p") #'my-other-frame-reverse))
 
   ;; 折り返し表示を強制切替
-(if (fboundp 'my-toggle-truncate-lines-force)
+(if (fboundp #'my-toggle-truncate-lines-force)
     (global-set-key (kbd "C-x w") #'my-toggle-truncate-lines-force))
 
   ;; カーソル位置に YEN SIGN (U+00A5) を挿入
-(if (fboundp 'my-insert-yen-sign)
+(if (fboundp #'my-insert-yen-sign)
     (global-set-key (kbd "C-c i \\") #'my-insert-yen-sign))
 
   ;; カーソル位置にファイル名を挿入
-(if (fboundp 'my-insert-file-name)
+(if (fboundp #'my-insert-file-name)
     (global-set-key (kbd "C-c i f") #'my-insert-file-name))
 
   ;; カーソル位置にファイルパスを挿入
-(if (fboundp 'my-insert-file-path)
+(if (fboundp #'my-insert-file-path)
     (global-set-key (kbd "C-c i p") #'my-insert-file-path))
 
   ;; 一括エンコーディング変換
-(if (fboundp 'my-change-files-coding-system)
+(if (fboundp #'my-change-files-coding-system)
     (global-set-key (kbd "C-c RET f") #'my-change-files-coding-system))
 
   ;; 一括ファイル通知ウォッチ削除
-(if (fboundp 'my-file-notify-rm-all-watches)
+(if (fboundp #'my-file-notify-rm-all-watches)
     (global-set-key (kbd "C-c C-c q") #'my-file-notify-rm-all-watches))
 
 ;; タッチパッドによる各種操作を無効化 (macOS ONLY)
@@ -503,8 +507,8 @@
 ;; あえて明示的にロード
 (when (and (require 'package nil :noerror)
            (boundp 'package-archives)
-           (fboundp 'package-initialize)
-           (fboundp 'package-list-packages-no-fetch))
+           (fboundp #'package-initialize)
+           (fboundp #'package-list-packages-no-fetch))
   ;; 確実に定義された後で追加
   (add-to-list 'package-archives '("MELPA" . "https://melpa.org/packages/"))
 
@@ -523,9 +527,9 @@
 ;; WARNING: `package' が必ず使える状況を前提とする
 ;;          `package' の初期化より後に設定しなければならない
 ;; ============================================================================
-(when (and (fboundp 'package-installed-p)
-           (fboundp 'package-refresh-contents)
-           (fboundp 'package-install)
+(when (and (fboundp #'package-installed-p)
+           (fboundp #'package-refresh-contents)
+           (fboundp #'package-install)
            (not (package-installed-p 'leaf)))
   (package-refresh-contents)
   (package-install 'leaf))
@@ -541,14 +545,14 @@
 ;; WARNING: `leaf' が必ず使える状況を前提とする
 ;;          `leaf' のインストールより後に設定しなければならない
 ;; ============================================================================
-(when (fboundp 'leaf)
+(when (fboundp #'leaf)
   ;; ==========================================================================
   ;; `leaf' キーワード群
   ;; ==========================================================================
   (leaf leaf-keywords
     :package t
     :config
-    (if (fboundp 'leaf-keywords-init)
+    (if (fboundp #'leaf-keywords-init)
         (leaf-keywords-init)))
 
 
@@ -573,9 +577,9 @@
     :when (member system-type '(ms-dos windows-nt))
     :package t
     :config
-    (if (fboundp 'tr-ime-advanced-install)
+    (if (fboundp #'tr-ime-advanced-install)
         (tr-ime-advanced-install))
-    (if (fboundp 'w32-ime-initialize)
+    (if (fboundp #'w32-ime-initialize)
         (w32-ime-initialize)))
 
 
@@ -605,7 +609,7 @@
     :custom `(;; ローカル環境にのみ保存
               (server-auth-dir . "~/.emacs.server"))
     :config
-    (if (fboundp 'server-start)
+    (if (fboundp #'server-start)
         (server-start t)))
 
 
@@ -648,7 +652,7 @@
       :init
       (defun my-add-node-modules-path-initialize ()
         "Initialize `add-node-modules-path'."
-        (if (fboundp 'add-node-modules-path)
+        (if (fboundp #'add-node-modules-path)
             (add-node-modules-path))))
 
 
@@ -658,7 +662,7 @@
     (leaf ansi-color
       :config
       ;; `comint-mode' および派生モードで、ANSI エスケープシーケンスの解釈を開始
-      (if (fboundp 'ansi-color-for-comint-mode-on)
+      (if (fboundp #'ansi-color-for-comint-mode-on)
           (ansi-color-for-comint-mode-on)))
 
 
@@ -668,7 +672,7 @@
     (leaf diff-hl
       :package t
       :config
-      (if (fboundp 'global-diff-hl-mode)
+      (if (fboundp #'global-diff-hl-mode)
           (global-diff-hl-mode)))
 
 
@@ -689,7 +693,7 @@
       :package t
       :require t
       :config
-      (if (fboundp 'exec-path-from-shell-initialize)
+      (if (fboundp #'exec-path-from-shell-initialize)
           (exec-path-from-shell-initialize)))
 
 
@@ -718,7 +722,7 @@
     (leaf nvm
       :package t
       :config
-      (if (fboundp 'nvm-use-for)
+      (if (fboundp #'nvm-use-for)
           ;; `~/.nvmrc' がなければ何もしない
           (ignore-errors (nvm-use-for))))
 
@@ -841,7 +845,7 @@
       :custom `((affe-regexp-function . #'orderless-pattern-compiler)
                 (affe-highlight-function . #'orderless--highlight))
       :config
-      (if (fboundp 'consult-customize)
+      (if (fboundp #'consult-customize)
           (consult-customize
            affe-grep
            :preview-key (kbd "M-."))))
@@ -863,7 +867,7 @@
         :after (migemo)
         :custom `((anzu-use-migemo . t)))
       :config
-      (if (fboundp 'global-anzu-mode)
+      (if (fboundp #'global-anzu-mode)
           (global-anzu-mode +1)))
 
 
@@ -876,7 +880,7 @@
       :init
       (defun my-auto-dim-other-buffers-mode-initialize ()
         "Initialize `auto-dim-other-buffers-mode'."
-        (if (fboundp 'auto-dim-other-buffers-mode)
+        (if (fboundp #'auto-dim-other-buffers-mode)
             (auto-dim-other-buffers-mode +1))))
 
 
@@ -886,7 +890,7 @@
     (leaf autorevert
       :custom `((auto-revert-check-vc-info . t))
       :config
-      (if (fboundp 'global-auto-revert-mode)
+      (if (fboundp #'global-auto-revert-mode)
           (global-auto-revert-mode +1)))
 
 
@@ -921,7 +925,7 @@
       ;; ------------------------------
       ;; HACK: 専用バッファをコマンドで `quit-window' させる
       ;; ------------------------------
-      (unless (fboundp 'codic-view-kill)
+      (unless (fboundp #'codic-view-kill)
         ;; 専用ウインドウを `quit-window' する関数が
         ;; 定義されていないなら追加
         (defun my-codic-view-kill ()
@@ -935,10 +939,10 @@
         (defun my-codic-local-set-key (items)
           "Set `local-set-key' for `codic' result buffer."
           (with-current-buffer "*Codic Result*"
-            (if (fboundp 'my-codic-view-kill)
+            (if (fboundp #'my-codic-view-kill)
                 (local-set-key (kbd "q") #'my-codic-view-kill))))
 
-        (if (fboundp 'codic--view)
+        (if (fboundp #'codic--view)
             (advice-add #'codic--view
                         :after
                         #'my-codic-local-set-key))))
@@ -1021,7 +1025,7 @@
                 ;; ローカル環境にのみ保存
                 (company-statistics-file . "~/.emacs.company-statistics-cache.el"))
       :config
-      (if (fboundp 'company-statistics-mode)
+      (if (fboundp #'company-statistics-mode)
           (company-statistics-mode +1)))
 
 
@@ -1033,7 +1037,7 @@
       :package t
       :custom `((company-quickhelp-delay . 0.25))
       :config
-      (if (fboundp 'company-quickhelp-mode)
+      (if (fboundp #'company-quickhelp-mode)
           (company-quickhelp-mode +1)))
 
 
@@ -1075,7 +1079,7 @@
       (defun my-compilation-ansi-color-apply ()
         "Recognize ASCII color escape sequences for `compilation-mode' buffer."
         (if (and (require 'ansi-color nil :noerror)
-                 (fboundp 'ansi-color-apply-on-region))
+                 (fboundp #'ansi-color-apply-on-region))
             (let ((start-marker (make-marker))
                   (end-marker (process-mark (get-buffer-process (current-buffer)))))
               (set-marker start-marker (point-min))
@@ -1102,7 +1106,7 @@
                      (string-equal "finished" (string-trim msg))))
             (quit-window nil (get-buffer-window))))
 
-      (if (fboundp 'compilation-handle-exit)
+      (if (fboundp #'compilation-handle-exit)
           (advice-add #'compilation-handle-exit
                       :after
                       #'my-compilation-auto-quit-window)))
@@ -1161,19 +1165,19 @@
       (defun my-consult-line (&optional at-point)
         "Consult-line uses things-at-point if set C-u prefix."
         (interactive "P")
-        (if (fboundp 'consult-line)
+        (if (fboundp #'consult-line)
             (if at-point
                 (consult-line (thing-at-point 'symbol))
               (consult-line))))
 
       (defun my-consult-project-root-function ()
         "Function which returns project root directory."
-        (if (and (fboundp 'project-current)
-                 (fboundp 'project-roots))
+        (if (and (fboundp #'project-current)
+                 (fboundp #'project-roots))
             (if-let (project (project-current))
                 (car (project-roots project)))))
 
-      (if (fboundp 'consult-customize)
+      (if (fboundp #'consult-customize)
           (consult-customize
            consult-theme
            :preview-key '(:debounce 0.2 any)
@@ -1195,7 +1199,7 @@
     ;; ------------------------------------------------------------------------
     (leaf cua-base
       :config
-      (if (fboundp 'cua-selection-mode)
+      (if (fboundp #'cua-selection-mode)
           ;; 特殊キーバインド無効
           (cua-selection-mode +1)))
 
@@ -1214,7 +1218,7 @@
     (leaf delight
       :package t
       :config
-      (if (fboundp 'delight)
+      (if (fboundp #'delight)
           (delight '(;; 降順ソート
                      (anzu-mode nil "anzu")
                      (auto-dim-other-buffers-mode nil "auto-dim-other-buffers")
@@ -1275,7 +1279,7 @@
                 (desktop-lazy-verbose . t)
                 (desktop-lazy-idle-delay . 5))
       :config
-      (if (fboundp 'desktop-save-mode)
+      (if (fboundp #'desktop-save-mode)
           (desktop-save-mode +1)))
 
 
@@ -1287,7 +1291,7 @@
       :init
       (defun my-dired-mode-initialize ()
         "Initialize `dired-mode'."
-        (if (fboundp 'dired-hide-details-mode)
+        (if (fboundp #'dired-hide-details-mode)
             ;; 常にすべての情報を表示（簡易モードにしない）
             (dired-hide-details-mode -1))))
 
@@ -1311,7 +1315,7 @@
     (leaf editorconfig
       :package t
       :config
-      (if (fboundp 'editorconfig-mode)
+      (if (fboundp #'editorconfig-mode)
           (editorconfig-mode +1)))
 
 
@@ -1335,7 +1339,7 @@
       :after (eldoc)
       :package t
       :config
-      (if (fboundp 'elisp-slime-nav-mode)
+      (if (fboundp #'elisp-slime-nav-mode)
           (elisp-slime-nav-mode +1)))
 
 
@@ -1529,13 +1533,13 @@ See also: `https://github.com/validator/validator'."
       :custom `(;; フレームサイズ変更を px 単位で実行できるようにする
                 (frame-resize-pixelwise . t))
       :config
-      (if (fboundp 'blink-cursor-mode)
+      (if (fboundp #'blink-cursor-mode)
           ;; カーソルは点滅させない
           (blink-cursor-mode -1))
 
       ;; 半透明化
       (if (and window-system
-               (fboundp 'set-frame-parameter))
+               (fboundp #'set-frame-parameter))
           (set-frame-parameter nil 'alpha '(90 . 80))))
 
 
@@ -1608,10 +1612,10 @@ See also: `https://github.com/validator/validator'."
       (defun my-hl-line-initialize ()
         "Initialize `hl-line'."
         (when (and (require 'color nil :noerror) ; 未ロードがありうるため必須
-                   (fboundp 'color-rgb-to-hsl)
-                   (fboundp 'color-name-to-rgb)
-                   (fboundp 'color-darken-name)
-                   (fboundp 'color-lighten-name))
+                   (fboundp #'color-rgb-to-hsl)
+                   (fboundp #'color-name-to-rgb)
+                   (fboundp #'color-darken-name)
+                   (fboundp #'color-lighten-name))
           (let* ((L-diff 20)
                  (background-color (face-attribute 'default :background))
                  (L (nth 2 (apply 'color-rgb-to-hsl
@@ -1625,7 +1629,7 @@ See also: `https://github.com/validator/validator'."
              `(hl-line ((((class color))
                          (:background ,line-background-color :inherit nil)))))))
         ;; 実行
-        (if (fboundp 'global-hl-line-mode)
+        (if (fboundp #'global-hl-line-mode)
             (global-hl-line-mode +1))))
 
 
@@ -1652,7 +1656,7 @@ See also: `https://github.com/validator/validator'."
                                            ("CAUTION" . "#ffff66")
                                            ("WARNING" . "#ff6666"))))
       :config
-      (if (fboundp 'global-hl-todo-mode)
+      (if (fboundp #'global-hl-todo-mode)
           (global-hl-todo-mode +1)))
 
 
@@ -1734,7 +1738,7 @@ Ordering is lexicographic."
       :init
       (defun my-ibuffer-projectile-initialize ()
         "Initialize `ibuffer'."
-        (if (fboundp 'ibuffer-projectile-set-filter-groups)
+        (if (fboundp #'ibuffer-projectile-set-filter-groups)
             (ibuffer-projectile-set-filter-groups))))
 
 
@@ -1751,7 +1755,7 @@ Ordering is lexicographic."
                 ;; ローカル環境にのみ保存
                 (ido-save-directory-list-file . "~/.emacs.ido-save-directory-list.el"))
       :config
-      (if (fboundp 'ido-mode)
+      (if (fboundp #'ido-mode)
           (ido-mode +1)))
 
 
@@ -1761,7 +1765,7 @@ Ordering is lexicographic."
     (leaf ido-everywhere
       :after (ido)
       :config
-      (if (fboundp 'ido-everywhere)
+      (if (fboundp #'ido-everywhere)
           (ido-everywhere +1)))
 
 
@@ -1770,7 +1774,7 @@ Ordering is lexicographic."
     ;; ------------------------------------------------------------------------
     (leaf image-file
       :config
-      (if (fboundp 'auto-image-file-mode)
+      (if (fboundp #'auto-image-file-mode)
           (auto-image-file-mode +1)))
 
 
@@ -1788,7 +1792,7 @@ Ordering is lexicographic."
     (leaf jka-cmpr-hook
       :require t
       :config
-      (if (fboundp 'auto-compression-mode)
+      (if (fboundp #'auto-compression-mode)
           (auto-compression-mode +1)))
 
 
@@ -1858,7 +1862,7 @@ Ordering is lexicographic."
     (leaf marginalia
       :package t
       :config
-      (if (fboundp 'marginalia-mode)
+      (if (fboundp #'marginalia-mode)
           (marginalia-mode +1)))
 
 
@@ -1900,7 +1904,7 @@ Ordering is lexicographic."
                 (migemo-pattern-alist-file . "~/.emacs.migemo-pattern")
                 (migemo-frequent-pattern-alist-file . "~/.emacs.migemo-frequent"))
       :config
-      (if (and (fboundp 'migemo-init)
+      (if (and (fboundp #'migemo-init)
                (boundp 'migemo-command)
                (boundp 'migemo-dictionary)
                (file-exists-p migemo-dictionary))
@@ -1922,7 +1926,7 @@ Ordering is lexicographic."
       (leaf orderless
         :after (migemo)
         :config
-        (if (fboundp 'migemo-get-pattern)
+        (if (fboundp #'migemo-get-pattern)
             (defun my-orderless-migemo (component)
               "Match COMPONENT as `migemo'."
               (let ((pattern (migemo-get-pattern component)))
@@ -1931,7 +1935,7 @@ Ordering is lexicographic."
                   (invalid-regexp nil)))))
 
         (if (and (boundp 'orderless-matching-styles)
-                 (fboundp 'my-orderless-migemo))
+                 (fboundp #'my-orderless-migemo))
             (add-to-list 'orderless-matching-styles #'my-orderless-migemo t))))
 
 
@@ -1959,7 +1963,7 @@ Ordering is lexicographic."
                 (projectile-cache-file . "~/.emacs.projectile.cache")
                 (projectile-known-projects-file . "~/.emacs.projectile-bookmarks.eld"))
       :config
-      (if (fboundp 'projectile-mode)
+      (if (fboundp #'projectile-mode)
           (projectile-mode +1)))
 
 
@@ -1992,7 +1996,7 @@ Ordering is lexicographic."
                 ;; ローカル環境にのみ保存
                 (savehist-file . "~/.emacs.savehist.el"))
       :config
-      (if (fboundp 'savehist-mode)
+      (if (fboundp #'savehist-mode)
           (savehist-mode +1)))
 
 
@@ -2004,7 +2008,7 @@ Ordering is lexicographic."
       :custom `(;; ローカル環境にのみ保存
                 (save-place-file . "~/.emacs.saveplace.el"))
       :config
-      (if (fboundp 'save-place-mode)
+      (if (fboundp #'save-place-mode)
           (save-place-mode +1)))
 
 
@@ -2020,9 +2024,9 @@ Ordering is lexicographic."
         "Initialize `scroll-bar'."
         (with-eval-after-load 'scroll-bar
           (when window-system
-            (if (fboundp 'scroll-bar-mode)
+            (if (fboundp #'scroll-bar-mode)
                 (scroll-bar-mode -1))
-            (if (fboundp 'horizontal-scroll-bar-mode)
+            (if (fboundp #'horizontal-scroll-bar-mode)
                 (horizontal-scroll-bar-mode -1))))))
 
 
@@ -2031,7 +2035,7 @@ Ordering is lexicographic."
     ;; ------------------------------------------------------------------------
     (leaf simple
       :config
-      (if (fboundp 'transient-mark-mode)
+      (if (fboundp #'transient-mark-mode)
           ;; 暫定マークを使用
           (transient-mark-mode +1)))
 
@@ -2045,10 +2049,10 @@ Ordering is lexicographic."
       :custom `((sp-show-pair-from-inside . t)
                 (sp-undo-pairs-separately . t))
       :config
-      (if (fboundp 'show-smartparens-global-mode)
+      (if (fboundp #'show-smartparens-global-mode)
           (show-smartparens-global-mode +1))
 
-      (if (fboundp 'smartparens-global-mode)
+      (if (fboundp #'smartparens-global-mode)
           (smartparens-global-mode +1)))
 
 
@@ -2065,7 +2069,7 @@ Ordering is lexicographic."
     ;; ------------------------------------------------------------------------
     (leaf tooltip
       :config
-      (if (fboundp 'tooltip-mode)
+      (if (fboundp #'tooltip-mode)
           ;; 非表示
           (tooltip-mode -1)))
 
@@ -2088,7 +2092,7 @@ Ordering is lexicographic."
       :package t
       :custom `((vertico-count . 20))
       :config
-      (if (fboundp 'vertico-mode)
+      (if (fboundp #'vertico-mode)
           (vertico-mode +1)))
 
 
@@ -2158,13 +2162,13 @@ Ordering is lexicographic."
         ;; HACK: 一部メジャーモードでは無効化
         ;; ----------------------------
         (with-eval-after-load 'whitespace
-          (if (and (fboundp 'whitespace-mode)
+          (if (and (fboundp #'whitespace-mode)
                    (member major-mode '(;; 降順ソート
                                         lisp-interaction-mode
                                         )))
               (whitespace-mode -1))))
       :config
-      (if (fboundp 'global-whitespace-mode)
+      (if (fboundp #'global-whitespace-mode)
           (global-whitespace-mode +1)))
 
 
@@ -2173,7 +2177,7 @@ Ordering is lexicographic."
     ;; ------------------------------------------------------------------------
     (leaf winner
       :config
-      (if (fboundp 'winner-mode)
+      (if (fboundp #'winner-mode)
           (winner-mode +1)))
 
 
@@ -2183,7 +2187,7 @@ Ordering is lexicographic."
     (leaf yasnippet
       :package t
       :config
-      (if (fboundp 'yas-global-mode)
+      (if (fboundp #'yas-global-mode)
           (yas-global-mode +1)))
 
 
@@ -2793,9 +2797,16 @@ Ordering is lexicographic."
 
 
 ;; ============================================================================
-;; 黙らせていた余分なメッセージ I/O を復活させる
+;; `early-init.el' で設定した項目の変更
 ;; ============================================================================
 (custom-set-variables
+ ;;
+ ;; ガベージコレクション閾値を現実的な値に戻す
+ ;;
+ `(gc-cons-threshold ,(* 128 1024 1024)) ; 128MB
+ ;;
+ ;; 黙らせていた余分なメッセージ I/O を復活
+ ;;
  '(inhibit-message nil))
 
 
