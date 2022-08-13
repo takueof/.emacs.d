@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-12T23:59:26+09:00>
+;; Time-stamp: <2022-08-13T19:18:53+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -158,7 +158,6 @@
  ;;
  ;; クリップボードと `kill-ring' を同期させる
  ;;
- '(x-select-enable-clipboard t) ; NOTE: obsolete sinse v25.1
  '(select-enable-clipboard t)
  ;;
  ;; プレビューウインドウの表示を即時にする
@@ -870,9 +869,6 @@
 
     ;; ------------------------------------------------------------------------
     ;; 他ウインドウ弱調化
-    ;;
-    ;; See also:
-    ;; `my-default-theme.el'
     ;; ------------------------------------------------------------------------
     (leaf auto-dim-other-buffers
       :package t
@@ -2008,10 +2004,8 @@ Ordering is lexicographic."
       :custom `(;; ローカル環境にのみ保存
                 (save-place-file . "~/.emacs.saveplace.el"))
       :config
-      (cond ((fboundp 'save-place-mode) ; v25.1 以降
-             (save-place-mode +1))
-            ((boundp 'save-place) ; v25.1 未満
-             (setq-default save-place t))))
+      (if (fboundp 'save-place-mode)
+          (save-place-mode +1)))
 
 
     ;; ------------------------------------------------------------------------
