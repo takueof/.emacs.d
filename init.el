@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-14T00:08:50+09:00>
+;; Time-stamp: <2022-08-14T00:22:05+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1037,7 +1037,7 @@
     (leaf compile
       :after (nvm exec-path-from-shell)
       :bind (("C-c c" . compile))
-      :hook ((compilation-filter-hook . my-compilation-ansi-color-apply))
+      :hook ((compilation-filter-hook . ansi-color-compilation-filter))
       :custom `((compilation-window-height . 15)
                 ;; ビルドツール・タスクランナーに依存させない
                 (compile-command . "")
@@ -1063,17 +1063,6 @@
 
       (add-to-list 'compilation-finish-functions 'my-compilation-message)
 
-      ;; ------------------------------
-      ;; HACK: ANSI エスケープシーケンスが正しく解釈されない問題を回避
-      ;; ------------------------------
-      (defun my-compilation-ansi-color-apply ()
-        "Recognize ASCII color escape sequences for `compilation-mode' buffer."
-        (if (and (require 'ansi-color nil :noerror)
-                 (fboundp #'ansi-color-apply-on-region))
-            (let ((start-marker (make-marker))
-                  (end-marker (process-mark (get-buffer-process (current-buffer)))))
-              (set-marker start-marker (point-min))
-              (ansi-color-apply-on-region start-marker end-marker))))
       :config
       ;; ------------------------------
       ;; HACK: コンパイル完了後、正常に終了していれば自動でウインドウを閉じる
