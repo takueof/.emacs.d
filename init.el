@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-14T00:03:52+09:00>
+;; Time-stamp: <2022-08-14T00:08:50+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -365,16 +365,6 @@
 ;; ロードパス追加
 ;; ============================================================================
 (add-to-list 'load-path (locate-user-emacs-file "utils"))
-
-
-;; ============================================================================
-;; `autoload' 自動生成
-;; ============================================================================
-;; FIXME: 生成しても `autoload' が有効にならない
-;;        いつか `autoload' 化すること
-;; (let* ((directory (locate-user-emacs-file "utils"))
-;;        (file (concat directory "/utils-autoloads.el")))
-;;   (make-directory-autoloads directory file))
 
 
 ;; ============================================================================
