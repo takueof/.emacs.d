@@ -1,7 +1,7 @@
 ;;; my-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-13T01:04:03+09:00>
+;; Time-stamp: <2022-08-13T12:24:25+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -200,17 +200,17 @@
   ;; --------------------------------------------------------------------------
   (cond
    ((my-fallback-font-family "Inconsolata")
-    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.077))
-    (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.070))
+    (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.070))
     (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.100))
-    (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.100))
-    (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.100))
-    (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.250))
+    (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.150))
     (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 0.900))
-    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.842))) ; FIXME: 1px diff
+    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.785))) ; FIXME: 1px diff
    ((my-fallback-font-family "Menlo")
     (add-to-list 'face-font-rescale-alist '("-Migu 1M-" . 1.300))
     (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.300))
@@ -248,7 +248,7 @@
   ;; フォントセット：プログラミング用（高 dpi 環境向け）
   ;; --------------------------------------------------------------------------
   (my-create-fontset-from-spec "programming"
-                               (font-spec :size 13.0 ; デフォルトフォントサイズ (pt)
+                               (font-spec :size 14.0 ; デフォルトフォントサイズ (pt)
                                           :family (my-fallback-font-family "Inconsolata"
                                                                            "Menlo"
                                                                            "Consolas"
@@ -394,7 +394,7 @@
   ;; ASCII
   (my-set-fontset-font-safe "fontset-programming"
                             'ascii
-                            (font-spec :size 13.0 ; デフォルトフォントサイズ (pt)
+                            (font-spec :size 14.0 ; デフォルトフォントサイズ (pt)
                                        :family (my-fallback-font-family "Inconsolata"
                                                                         "Menlo"
                                                                         "Consolas"
