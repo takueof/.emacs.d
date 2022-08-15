@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-14T00:35:56+09:00>
+;; Time-stamp: <2022-08-16T07:39:09+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1644,7 +1644,8 @@ See also: `https://github.com/validator/validator'."
     ;; ------------------------------------------------------------------------
     (leaf ibuffer
       :bind (("C-x C-b" . ibuffer))
-      :custom `((ibuffer-expert . t))
+      :custom `((ibuffer-default-sorting-mode . 'filename/process)
+                (ibuffer-expert . t))
       :config
       ;; ------------------------------
       ;; 機能拡張
@@ -1667,44 +1668,7 @@ See also: `https://github.com/validator/validator'."
             ;; WARNING: この `custom-set-variables' は `:custom' に移動できない
             ;;          変数 `settings' で加工を行った結果が入るため
             (custom-set-variables
-             `(ibuffer-formats ',formats))))
-
-        ;; メジャーモード名 + ファイルパスでソート
-        ;;
-        ;; See also:
-        ;; https://www.emacswiki.org/emacs/IbufferMode#toc10
-        (define-ibuffer-sorter mode-name-and-path-alphabetic
-          "Sort the buffers by their mode and paths.
-Ordering is lexicographic."
-          (:description "major mode + alphabetic")
-          (string-lessp
-           (with-current-buffer (car a)
-             (let* ((file-path (buffer-file-name))
-                    (buffer-name (buffer-name))
-                    (path file-path)
-                    (mode-name (format-mode-line mode-name))
-                    (prefix "999"))
-               (when (and (not (stringp file-path))
-                          (stringp buffer-name))
-                 (setq prefix "000")
-                 (setq path buffer-name))
-               (concat prefix ": " mode-name ": " path)))
-           (with-current-buffer (car b)
-             (let* ((file-path (buffer-file-name))
-                    (buffer-name (buffer-name))
-                    (path file-path)
-                    (mode-name (format-mode-line mode-name))
-                    (prefix "999"))
-               (when (and (not (stringp file-path))
-                          (stringp buffer-name))
-                 (setq prefix "000")
-                 (setq path buffer-name))
-               (concat prefix ": " mode-name ": " path)))))
-
-        ;; WARNING: この `custom-set-variables' は `:custom' に移動できない
-        ;;          `define-ibuffer-sorter' で定義したモード名が入るため
-        (custom-set-variables
-         '(ibuffer-default-sorting-mode 'mode-name-and-path-alphabetic))))
+             `(ibuffer-formats ',formats))))))
 
 
     ;; ------------------------------------------------------------------------
