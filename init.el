@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-16T07:39:09+09:00>
+;; Time-stamp: <2022-08-17T08:12:28+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -803,6 +803,20 @@
       :custom `((vterm-shell . "bash")
                 (vterm-max-scrollback . 100000)
                 (vterm-clear-scrollback-when-clearing . t)
+                (vterm-keymap-exceptions . '("C-S-b" ; for `windmove'
+                                             "C-S-f" ; for `windmove'
+                                             "C-S-n" ; for `windmove'
+                                             "C-S-p" ; for `windmove'
+                                             "C-c"
+                                             "C-g"
+                                             "C-h"
+                                             "C-l"
+                                             "C-u"
+                                             "C-x"
+                                             "C-y"
+                                             "M-o"
+                                             "M-x"
+                                             "M-y"))
                 (vterm-enable-manipulate-selection-data-by-osc52 . t )
                 (vterm-copy-exclude-prompt . nil)))
 
@@ -813,8 +827,8 @@
     (leaf windmove
       :bind (("C-S-b" . windmove-left)
              ("C-S-f" . windmove-right)
-             ("C-S-p" . windmove-up)
-             ("C-S-n" . windmove-down))
+             ("C-S-n" . windmove-down)
+             ("C-S-p" . windmove-up))
       :custom `(;; フレーム端のウインドウでは無限スクロールするようにふるまう
                 ;; 「マリオブラザーズ」左右画面端におけるループのような動き
                 (windmove-wrap-around . t)))
