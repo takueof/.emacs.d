@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-17T08:12:28+09:00>
+;; Time-stamp: <2022-08-17T09:13:29+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -803,20 +803,22 @@
       :custom `((vterm-shell . "bash")
                 (vterm-max-scrollback . 100000)
                 (vterm-clear-scrollback-when-clearing . t)
-                (vterm-keymap-exceptions . '("C-S-b" ; for `windmove'
-                                             "C-S-f" ; for `windmove'
-                                             "C-S-n" ; for `windmove'
-                                             "C-S-p" ; for `windmove'
+                (vterm-keymap-exceptions . '(;; WARNING: ソート禁止
+                                             ;;          順序にも意味があるため
                                              "C-c"
+                                             "C-x"
+                                             "C-u"
                                              "C-g"
                                              "C-h"
                                              "C-l"
-                                             "C-u"
-                                             "C-x"
-                                             "C-y"
-                                             "M-o"
                                              "M-x"
-                                             "M-y"))
+                                             "M-o"
+                                             "C-y"
+                                             "M-y"
+                                             "C-S-b" ; for `windmove'
+                                             "C-S-f" ; for `windmove'
+                                             "C-S-n" ; for `windmove'
+                                             "C-S-p")) ; for `windmove'
                 (vterm-enable-manipulate-selection-data-by-osc52 . t )
                 (vterm-copy-exclude-prompt . nil)))
 
