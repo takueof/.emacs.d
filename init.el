@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-17T09:13:29+09:00>
+;; Time-stamp: <2022-08-20T05:32:26+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1778,7 +1778,11 @@ See also: `https://github.com/validator/validator'."
     ;;          念のため `lsp-mode' より前にインストール
     ;; ------------------------------------------------------------------------
     (leaf lsp-ui
-      :package t)
+      :package t
+      :custom `((lsp-ui-sideline-show-hover . t)
+                (lsp-ui-sideline-show-code-actions . t)
+                (lsp-ui-sideline-diagnostic-max-lines . 2)
+                (lsp-ui-sideline-diagnostic-max-line-length . 150)))
 
 
     ;; ------------------------------------------------------------------------
