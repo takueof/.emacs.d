@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-20T05:32:26+09:00>
+;; Time-stamp: <2022-08-20T23:44:57+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1030,9 +1030,7 @@
       :custom `((company-statistics-size . 500)
                 ;; ローカル環境にのみ保存
                 (company-statistics-file . "~/.emacs.company-statistics-cache.el"))
-      :config
-      (if (fboundp #'company-statistics-mode)
-          (company-statistics-mode +1)))
+      :global-minor-mode t)
 
 
     ;; ------------------------------------------------------------------------
@@ -1042,9 +1040,7 @@
       :after (company)
       :package t
       :custom `((company-quickhelp-delay . 0.25))
-      :config
-      (if (fboundp #'company-quickhelp-mode)
-          (company-quickhelp-mode +1)))
+      :global-minor-mode t)
 
 
     ;; ------------------------------------------------------------------------
@@ -1334,8 +1330,7 @@
       :after (eldoc)
       :package t
       :config
-      (if (fboundp #'elisp-slime-nav-mode)
-          (elisp-slime-nav-mode +1)))
+      :global-minor-mode t)
 
 
     ;; ------------------------------------------------------------------------
@@ -1713,9 +1708,7 @@ See also: `https://github.com/validator/validator'."
                 (ido-unc-hosts . t)
                 ;; ローカル環境にのみ保存
                 (ido-save-directory-list-file . "~/.emacs.ido-save-directory-list.el"))
-      :config
-      (if (fboundp #'ido-mode)
-          (ido-mode +1)))
+      :global-minor-mode t)
 
 
     ;; ------------------------------------------------------------------------
@@ -1824,9 +1817,7 @@ See also: `https://github.com/validator/validator'."
     ;; ------------------------------------------------------------------------
     (leaf marginalia
       :package t
-      :config
-      (if (fboundp #'marginalia-mode)
-          (marginalia-mode +1)))
+      :global-minor-mode t)
 
 
     ;; ------------------------------------------------------------------------
@@ -1925,9 +1916,7 @@ See also: `https://github.com/validator/validator'."
                 ;; ローカル環境にのみ保存
                 (projectile-cache-file . "~/.emacs.projectile.cache")
                 (projectile-known-projects-file . "~/.emacs.projectile-bookmarks.eld"))
-      :config
-      (if (fboundp #'projectile-mode)
-          (projectile-mode +1)))
+      :global-minor-mode t)
 
 
     ;; ------------------------------------------------------------------------
@@ -1958,9 +1947,7 @@ See also: `https://github.com/validator/validator'."
                 (history-length . 100)
                 ;; ローカル環境にのみ保存
                 (savehist-file . "~/.emacs.savehist.el"))
-      :config
-      (if (fboundp #'savehist-mode)
-          (savehist-mode +1)))
+      :global-minor-mode t)
 
 
     ;; ------------------------------------------------------------------------
@@ -2054,9 +2041,7 @@ See also: `https://github.com/validator/validator'."
     (leaf vertico
       :package t
       :custom `((vertico-count . 20))
-      :config
-      (if (fboundp #'vertico-mode)
-          (vertico-mode +1)))
+      :global-minor-mode t)
 
 
     ;; ------------------------------------------------------------------------
@@ -2139,9 +2124,7 @@ See also: `https://github.com/validator/validator'."
     ;; ウインドウの状態履歴を undo/redo
     ;; ------------------------------------------------------------------------
     (leaf winner
-      :config
-      (if (fboundp #'winner-mode)
-          (winner-mode +1)))
+      :global-minor-mode t)
 
 
     ;; ------------------------------------------------------------------------
