@@ -1,7 +1,7 @@
 ;;; my-fonts.el --- 設定 - フォント -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-13T23:19:51+09:00>
+;; Time-stamp: <2022-08-20T17:35:15+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -195,41 +195,53 @@
   ;; (add-to-list 'face-font-rescale-alist `(,(encode-coding-string "-フォント名-" 'emacs-mule) . 倍率))
   ;; --------------------------------------------------------------------------
   (cond
-   ((my-fallback-font-family "Ricty Discord"
-                             "Ricty")
-    (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.850))
-    (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.850))
-    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.150))
-    (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 0.850))
-    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.785)))
-   ((my-fallback-font-family "Menlo")
-    (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.300))
-    (add-to-list 'face-font-rescale-alist '("-Courier-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.300))
-    (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.300))
-    (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.300))
-    (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.450))
-    (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.950)))
-   ((my-fallback-font-family "Consolas")
-    (add-to-list 'face-font-rescale-alist '("-Meiryo-" . 1.000))
+   (;; Windows (96dpi) ONLY
+    (and (< (car (my-real-display-pixels-per-inch)) 97.0) ; for 96dpi
+         (my-fallback-font-family "ProFontWindows"))
+    (add-to-list 'face-font-rescale-alist '("-Osaka-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-MS Gothic-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
-    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Tahoma-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.800))
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.100)))
-   ((my-fallback-font-family "ProFontWindows")
-    (add-to-list 'face-font-rescale-alist '("-Meiryo-" . 1.100))
+   (;; macOS & Windows
+    (my-fallback-font-family "Ricty Discord"
+                             "Ricty")
+    (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.850))
+    (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.850))
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-MingLiU-ExtB-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.150))
+    (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 0.850))
+    (add-to-list 'face-font-rescale-alist '("-Tahoma-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.785))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.800))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.100)))
+   (;; macOS pre-install fonts ONLY
+    (my-fallback-font-family "Menlo")
+    (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.300))
+    (add-to-list 'face-font-rescale-alist '("-Courier-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.300))
+    (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.300))
+    (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.300))
+    (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.950)))
+   (;; Windows pre-install fonts ONLY
+    (my-fallback-font-family "Consolas")
+    (add-to-list 'face-font-rescale-alist '("-Meiryo-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
-    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.900))
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))
     (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.100))
@@ -253,7 +265,6 @@
                                                                            "Ricty"
                                                                            "Menlo"
                                                                            "Consolas"
-                                                                           "Courier New"
                                                                            "Monospace")))
   ;; Emoji
   (my-set-fontset-font-safe "fontset-programming"
@@ -261,37 +272,32 @@
                             (font-spec :family (my-fallback-font-family "Apple Color Emoji"
                                                                         "Segoe UI Emoji"
                                                                         "Segoe UI Symbol"
-                                                                        "Symbola")))
+                                                                        "Symbola"
+                                                                        "Monospace")))
   ;; 簡体字：GB 18030
   (my-set-fontset-font-safe "fontset-programming"
                             'gb18030
                             (font-spec :family (my-fallback-font-family "PingFang SC"
                                                                         "Microsoft YaHei"
-                                                                        "SimHei"
-                                                                        "SimSun")))
+                                                                        "Monospace")))
   ;; 繁体字（香港・マカオ）：HKSCS-2016
   (my-set-fontset-font-safe "fontset-programming"
                             'big5-hkscs
                             (font-spec :family (my-fallback-font-family "PingFang HK"
-                                                                        "MingLiU-ExtB")))
+                                                                        "MingLiU-ExtB"
+                                                                        "Monospace")))
   ;; 繁体字：Big5
   (my-set-fontset-font-safe "fontset-programming"
                             'big5
                             (font-spec :family (my-fallback-font-family "PingFang TC"
-                                                                        "Lantinghei TC"
-                                                                        "Heiti TC"
-                                                                        "BiauKai"
                                                                         "Microsoft JhengHei"
-                                                                        "MingLiU")))
+                                                                        "Monospace")))
   ;; ハングル：KS C 5601-1987 (a.k.a. KS X 1001:1998)
   (my-set-fontset-font-safe "fontset-programming"
                             'korean-ksc5601
                             (font-spec :family (my-fallback-font-family "Apple SD Gothic Neo"
-                                                                        "PCMyungjo"
                                                                         "Malgun Gothic"
-                                                                        "Gulim"
-                                                                        "Dotum"
-                                                                        "Batang")))
+                                                                        "Monospace")))
   ;; タイ文字：Thai Industrial Standard 620-2533 (TIS-620)
   (my-set-fontset-font-safe "fontset-programming"
                             'thai-tis620
@@ -311,25 +317,23 @@
     (my-set-fontset-font-safe "fontset-programming"
                               range
                               (font-spec :family (my-fallback-font-family "Baghdad"
-                                                                          "Geeza Pro"
-                                                                          "Al Bayan"
-                                                                          "DecoType Naskh"
                                                                           "Microsoft Sans Serif"
-                                                                          "Tahoma"
-                                                                          "Arial"))))
+                                                                          "Monospace"))))
   ;; 日本語：JIS X 0213:2004
   (my-set-fontset-font-safe "fontset-programming"
                             'japanese-jisx0213.2004-1
                             (font-spec :family (my-fallback-font-family "Ricty Discord"
                                                                         "Ricty"
                                                                         "ヒラギノ角ゴシック"
-                                                                        "メイリオ")))
+                                                                        "メイリオ"
+                                                                        "Monospace")))
   (my-set-fontset-font-safe "fontset-programming"
                             'japanese-jisx0213-2
                             (font-spec :family (my-fallback-font-family "Ricty Discord"
                                                                         "Ricty"
                                                                         "ヒラギノ角ゴシック"
-                                                                        "メイリオ")))
+                                                                        "メイリオ"
+                                                                        "Monospace")))
   ;; ラテン文字：Code page 858 (`cp858')
   (my-set-fontset-font-safe "fontset-programming"
                             'cp858
@@ -399,7 +403,8 @@
                               ;; ゆえに、明示的な除外が必要
                               (font-spec :family (my-fallback-font-family "Ricty Discord"
                                                                           "Ricty"
-                                                                          "メイリオ"))))
+                                                                          "メイリオ"
+                                                                          "Monospace"))))
   ;; ASCII
   (my-set-fontset-font-safe "fontset-programming"
                             'ascii
@@ -424,51 +429,40 @@
   (my-create-fontset-from-spec "programmingBMP"
                                (font-spec :size 12 ; デフォルトフォントサイズ (px)
                                           :family (my-fallback-font-family "ProFontWindows"
-                                                                           "Inconsolata"
-                                                                           "Consolas"
                                                                            "Courier New"
                                                                            "Monospace")))
-  ;; 最終フォールバック
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            nil
-                            (font-spec :family (my-fallback-font-family "Inconsolata"
-                                                                        "Consolas"
-                                                                        "Courier New"
-                                                                        "Monospace")))
   ;; Emoji
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             nil
                             (font-spec :family (my-fallback-font-family "Apple Color Emoji"
                                                                         "Segoe UI Emoji"
                                                                         "Segoe UI Symbol"
-                                                                        "Symbola")))
+                                                                        "Symbola"
+                                                                        "Monospace")))
   ;; 簡体字：GB 18030
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'gb18030
                             (font-spec :family (my-fallback-font-family "PingFang SC"
-                                                                        "SimHei"
-                                                                        "SimSun")))
+                                                                        "Microsoft YaHei"
+                                                                        "Monospace")))
   ;; 繁体字（香港・マカオ）：HKSCS-2016
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'big5-hkscs
                             (font-spec :family (my-fallback-font-family "PingFang HK"
-                                                                        "Heiti TC"
-                                                                        "MingLiU-ExtB")))
+                                                                        "MingLiU-ExtB"
+                                                                        "Monospace")))
   ;; 繁体字：Big5
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'big5
                             (font-spec :family (my-fallback-font-family "PingFang TC"
-                                                                        "BiauKai"
-                                                                        "MingLiU"
-                                                                        "Microsoft JhengHei")))
+                                                                        "Microsoft JhengHei"
+                                                                        "Monospace")))
   ;; ハングル：KS C 5601-1987 (a.k.a. KS X 1001:1998)
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'korean-ksc5601
                             (font-spec :family (my-fallback-font-family "Apple SD Gothic Neo"
                                                                         "Malgun Gothic"
-                                                                        "Gulim"
-                                                                        "Dotum"
-                                                                        "Batang")))
+                                                                        "Monospace")))
   ;; タイ文字：Thai Industrial Standard 620-2533 (TIS-620)
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'thai-tis620
@@ -488,23 +482,21 @@
     (my-set-fontset-font-safe "fontset-programmingBMP"
                               range
                               (font-spec :family (my-fallback-font-family "Baghdad"
-                                                                          "Geeza Pro"
-                                                                          "Al Bayan"
-                                                                          "DecoType Naskh"
                                                                           "Microsoft Sans Serif"
-                                                                          "Tahoma"
-                                                                          "Arial"))))
+                                                                          "Monospace"))))
   ;; 日本語：JIS X 0213:2004
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'japanese-jisx0213.2004-1
                             (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
                                                                         "さざなみフォント"
-                                                                        "東雲フォント")))
+                                                                        "東雲フォント"
+                                                                        "Monospace")))
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'japanese-jisx0213-2
                             (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
                                                                         "さざなみフォント"
-                                                                        "東雲フォント")))
+                                                                        "東雲フォント"
+                                                                        "Monospace")))
   ;; 日本語：JIS X 0208
   ;;
   ;; "Osaka－等幅" で対応している文字はできるだけ利用
@@ -513,7 +505,8 @@
                             (font-spec :family (my-fallback-font-family "Osaka－等幅"
                                                                         "ＭＳ ゴシック"
                                                                         "さざなみフォント"
-                                                                        "東雲フォント")))
+                                                                        "東雲フォント"
+                                                                        "Monospace")))
   ;; ラテン文字：Code page 858 (`cp858')
   ;;
   ;; "ProFontWindows" の readme.txt には次の記述がある:
@@ -526,8 +519,6 @@
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'cp858
                             (font-spec :family (my-fallback-font-family "ProFontWindows"
-                                                                        "Inconsolata"
-                                                                        "Consolas"
                                                                         "Courier New"
                                                                         "Monospace")))
   ;; "§" (U+00A7: SECTION SIGN)
@@ -560,7 +551,8 @@
                                                                           "Osaka"
                                                                           "ＭＳ ゴシック"
                                                                           "さざなみフォント"
-                                                                          "東雲フォント"))))
+                                                                          "東雲フォント"
+                                                                          "Monospace"))))
   ;; "Ø" (U+00D8: LATIN CAPITAL LETTER O WITH STROKE)
   ;;
   ;; 次のフォントは "Ø" と "0" (U+0030: DIGIT ZERO) が判別しにくい：
@@ -573,16 +565,13 @@
                             (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
                                                                         "さざなみフォント"
                                                                         "東雲フォント"
-                                                                        "Inconsolata"
-                                                                        "Consolas"
-                                                                        "Courier New")))
+                                                                        "Courier New"
+                                                                        "Monospace")))
   ;; ASCII
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'ascii
                             (font-spec :size 12 ; デフォルトフォントサイズ (px)
                                        :family (my-fallback-font-family "ProFontWindows"
-                                                                        "Inconsolata"
-                                                                        "Consolas"
                                                                         "Courier New"
                                                                         "Monospace")))
 
@@ -591,7 +580,7 @@
   ;; フォントセット設定
   ;; --------------------------------------------------------------------------
   (let ((fontset (if (< (car (my-real-display-pixels-per-inch)) 97.0)
-                     "fontset-programmingBMP"
+                     "fontset-programmingBMP" ; for 96dpi
                    "fontset-programming")))
     (modify-all-frames-parameters `((font . ,fontset)))
 
