@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-21T06:07:19+09:00>
+;; Time-stamp: <2022-08-21T07:05:28+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -550,7 +550,7 @@
 ;; ============================================================================
 (leaf el-get
   :package t
-  :custom `((el-get-git-shallow-clone . t)))
+  :custom ((el-get-git-shallow-clone . t)))
 
 
 ;; ============================================================================
@@ -592,8 +592,8 @@
 ;; ============================================================================
 (leaf server
   :package t
-  :custom `(;; ローカル環境にのみ保存
-            (server-auth-dir . "~/.emacs.server"))
+  :custom (;; ローカル環境にのみ保存
+           (server-auth-dir . "~/.emacs.server"))
   :config
   (if (fboundp #'server-start)
       (server-start t)))
@@ -603,12 +603,12 @@
 ;; カラーテーマ
 ;; ============================================================================
 (leaf *themes
-  :custom `(;; For "Modus"
-            (modus-themes-bold-constructs . t)
-            (modus-themes-syntax . '(faint alt-syntax green-strings yellow-comments))
-            (modus-themes-mode-line . '(moody accented borderless))
-            (modus-themes-paren-match . '(bold intense))
-            (modus-themes-region . '(accented bg-only no-extend)))
+  :custom (;; For "Modus"
+           (modus-themes-bold-constructs . t)
+           (modus-themes-syntax . '(faint alt-syntax green-strings yellow-comments))
+           (modus-themes-mode-line . '(moody accented borderless))
+           (modus-themes-paren-match . '(bold intense))
+           (modus-themes-region . '(accented bg-only no-extend)))
   :config
   ;; 利用可能なカラーテーマを設定
   (let ((required-themes '(;; 利用したいカラーテーマの一覧
@@ -665,8 +665,8 @@
   ;; --------------------------------------------------------------------------
   (leaf eww
     :bind (("C-c C-e" . eww))
-    :custom `((eww-search-prefix . "https://www.google.co.jp/search?&q=")
-              (eww-history-limit . 100)))
+    :custom ((eww-search-prefix . "https://www.google.co.jp/search?&q=")
+             (eww-history-limit . 100)))
 
 
   ;; --------------------------------------------------------------------------
@@ -685,11 +685,11 @@
   ;; スペルチェッカ
   ;; --------------------------------------------------------------------------
   (leaf ispell
-    :custom `((ispell-dictionary . "english")
-              (ispell-extra-args . '("--sug-mode=fast"
-                                     "--run-together"
-                                     "--run-together-limit=5"
-                                     "--run-together-min=2"))))
+    :custom ((ispell-dictionary . "english")
+             (ispell-extra-args . '("--sug-mode=fast"
+                                    "--run-together"
+                                    "--run-together-limit=5"
+                                    "--run-together-min=2"))))
 
 
   ;; --------------------------------------------------------------------------
@@ -768,9 +768,9 @@
   ;; --------------------------------------------------------------------------
   (leaf tramp
     :require t
-    :custom `(;; WARNING: `load' か `autoload' 後に実行しないと適用されない
-              ;; ローカル環境にのみ保存
-              (tramp-persistency-file-name . "~/.emacs.tramp")))
+    :custom (;; WARNING: `load' か `autoload' 後に実行しないと適用されない
+             ;; ローカル環境にのみ保存
+             (tramp-persistency-file-name . "~/.emacs.tramp")))
 
 
   ;; --------------------------------------------------------------------------
@@ -778,43 +778,43 @@
   ;; --------------------------------------------------------------------------
   (leaf uniquify
     :require t
-    :custom `((uniquify-buffer-name-style . 'forward)
-              (uniquify-ignore-buffers-re . "^*[^*]+*\\-")))
+    :custom ((uniquify-buffer-name-style . 'forward)
+             (uniquify-ignore-buffers-re . "^*[^*]+*\\-")))
 
 
   ;; --------------------------------------------------------------------------
   ;; URL ツール
   ;; --------------------------------------------------------------------------
   (leaf url
-    :custom `((url-using-proxy . t)))
+    :custom ((url-using-proxy . t)))
 
 
   ;; --------------------------------------------------------------------------
   ;; ターミナルエミュレータ
   ;; --------------------------------------------------------------------------
   (leaf vterm
-    :ensure t
-    :custom `((vterm-shell . "bash")
-              (vterm-max-scrollback . 100000)
-              (vterm-clear-scrollback-when-clearing . t)
-              (vterm-keymap-exceptions . '(;; WARNING: ソート禁止
-                                           ;;          順序にも意味があるため
-                                           "C-c"
-                                           "C-x"
-                                           "C-u"
-                                           "C-g"
-                                           "C-h"
-                                           "C-l"
-                                           "M-x"
-                                           "M-o"
-                                           "C-y"
-                                           "M-y"
-                                           "C-S-b" ; for `windmove'
-                                           "C-S-f" ; for `windmove'
-                                           "C-S-n" ; for `windmove'
-                                           "C-S-p")) ; for `windmove'
-              (vterm-enable-manipulate-selection-data-by-osc52 . t )
-              (vterm-copy-exclude-prompt . nil)))
+    :package t
+    :custom ((vterm-shell . "bash")
+             (vterm-max-scrollback . 100000)
+             (vterm-clear-scrollback-when-clearing . t)
+             (vterm-keymap-exceptions . '(;; WARNING: ソート禁止
+                                          ;;          順序にも意味があるため
+                                          "C-c"
+                                          "C-x"
+                                          "C-u"
+                                          "C-g"
+                                          "C-h"
+                                          "C-l"
+                                          "M-x"
+                                          "M-o"
+                                          "C-y"
+                                          "M-y"
+                                          "C-S-b" ; for `windmove'
+                                          "C-S-f" ; for `windmove'
+                                          "C-S-n" ; for `windmove'
+                                          "C-S-p")) ; for `windmove'
+             (vterm-enable-manipulate-selection-data-by-osc52 . t)
+             (vterm-copy-exclude-prompt . nil)))
 
 
   ;; --------------------------------------------------------------------------
@@ -825,9 +825,9 @@
            ("C-S-f" . windmove-right)
            ("C-S-n" . windmove-down)
            ("C-S-p" . windmove-up))
-    :custom `(;; フレーム端のウインドウでは無限スクロールするようにふるまう
-              ;; 「マリオブラザーズ」左右画面端におけるループのような動き
-              (windmove-wrap-around . t)))
+    :custom (;; フレーム端のウインドウでは無限スクロールするようにふるまう
+             ;; 「マリオブラザーズ」左右画面端におけるループのような動き
+             (windmove-wrap-around . t)))
   ) ; END
 
 
@@ -842,8 +842,8 @@
   (leaf affe
     :package t
     :after (consult orderless)
-    :custom `((affe-regexp-function . #'orderless-pattern-compiler)
-              (affe-highlight-function . #'orderless--highlight))
+    :custom ((affe-regexp-function . #'orderless-pattern-compiler)
+             (affe-highlight-function . #'orderless--highlight))
     :config
     (if (fboundp #'consult-customize)
         (consult-customize
@@ -858,14 +858,14 @@
     :package t
     :bind (("M-%" . anzu-query-replace)
            ("C-M-%" . anzu-query-replace-regexp))
-    :custom `((anzu-minimum-input-length . 3)
-              (anzu-search-threshold . 1000)
-              (anzu-replace-to-string-separator . " -> "))
+    :custom ((anzu-minimum-input-length . 3)
+             (anzu-search-threshold . 1000)
+             (anzu-replace-to-string-separator . " -> "))
     :init
     ;; `migemo' 利用可能時
     (leaf anzu
-      :after (migemo)
-      :custom `((anzu-use-migemo . t)))
+      :after migemo
+      :custom ((anzu-use-migemo . t)))
     :global-minor-mode global-anzu-mode)
 
 
@@ -886,7 +886,7 @@
   ;; 自動バッファ再読込
   ;; --------------------------------------------------------------------------
   (leaf autorevert
-    :custom `((auto-revert-check-vc-info . t))
+    :custom ((auto-revert-check-vc-info . t))
     :global-minor-mode global-auto-revert-mode)
 
 
@@ -895,9 +895,9 @@
   ;; --------------------------------------------------------------------------
   (leaf bookmark
     :require t
-    :custom `((bookmark-version-control . t)
-              ;; ローカル環境にのみ保存
-              (bookmark-default-file . "~/.emacs.bookmark.el")))
+    :custom ((bookmark-version-control . t)
+             ;; ローカル環境にのみ保存
+             (bookmark-default-file . "~/.emacs.bookmark.el")))
 
 
   ;; --------------------------------------------------------------------------
@@ -907,7 +907,7 @@
     :el-get (bookmark+
              :type github
              :pkgname "emacsmirror/bookmark-plus")
-    :after (bookmark)
+    :after bookmark
     :require t)
 
 
@@ -950,11 +950,11 @@
   (leaf comint
     :when (member system-type '(ms-dos windows-nt))
     :hook ((comint-mode-hook . my-comint-mode-initialize))
-    :custom `((comint-scroll-to-bottom-on-input . 'all)
-              (comint-move-point-for-output . 'all)
-              (comint-buffer-maximum-size . 5000)
-              (comint-process-echoes . t)
-              (comint-eol-on-send . t))
+    :custom ((comint-scroll-to-bottom-on-input . 'all)
+             (comint-move-point-for-output . 'all)
+             (comint-buffer-maximum-size . 5000)
+             (comint-process-echoes . t)
+             (comint-eol-on-send . t))
     :init
     (defun my-comint-mode-initialize ()
       "Initialize `comint-mode'."
@@ -977,49 +977,49 @@
   (leaf company
     :package t
     :hook ((after-init-hook . global-company-mode))
-    :custom `(;; `company'
-              (company-tooltip-limit . 20)
-              (company-tooltip-minimum . 10)
-              (company-tooltip-offset-display . 'lines)
-              (company-tooltip-align-annotations . t)
-              (company-tooltip-flip-when-above . t)
-              (company-transformers . '(company-sort-by-occurrence))
-              (company-minimum-prefix-length . 1)
-              (company-abort-manual-when-too-short . t)
-              (company-idle-delay . 0.25)
-              (company-selection-wrap-around . t)
-              ;; `company-dabbrev'
-              (company-dabbrev-other-buffers . t)
-              (company-dabbrev-downcase . nil)
-              ;; `company-dabbrev-code'
-              (company-dabbrev-code-modes . '(batch-file-mode
-                                              csharp-mode
-                                              css-mode
-                                              erlang-mode
-                                              haskell-mode
-                                              html-mode
-                                              jde-mode
-                                              js-mode
-                                              js2-mode
-                                              lua-mode
-                                              prog-mode
-                                              python-mode
-                                              scss-mode
-                                              typescript-mode))
-              (company-dabbrev-code-other-buffers . t)
-              (company-dabbrev-code-everywhere . t)
-              (company-dabbrev-code-ignore-case . t)))
+    :custom (;; `company'
+             (company-tooltip-limit . 20)
+             (company-tooltip-minimum . 10)
+             (company-tooltip-offset-display . 'lines)
+             (company-tooltip-align-annotations . t)
+             (company-tooltip-flip-when-above . t)
+             (company-transformers . '(company-sort-by-occurrence))
+             (company-minimum-prefix-length . 1)
+             (company-abort-manual-when-too-short . t)
+             (company-idle-delay . 0.25)
+             (company-selection-wrap-around . t)
+             ;; `company-dabbrev'
+             (company-dabbrev-other-buffers . t)
+             (company-dabbrev-downcase . nil)
+             ;; `company-dabbrev-code'
+             (company-dabbrev-code-modes . '(batch-file-mode
+                                             csharp-mode
+                                             css-mode
+                                             erlang-mode
+                                             haskell-mode
+                                             html-mode
+                                             jde-mode
+                                             js-mode
+                                             js2-mode
+                                             lua-mode
+                                             prog-mode
+                                             python-mode
+                                             scss-mode
+                                             typescript-mode))
+             (company-dabbrev-code-other-buffers . t)
+             (company-dabbrev-code-everywhere . t)
+             (company-dabbrev-code-ignore-case . t)))
 
 
   ;; --------------------------------------------------------------------------
   ;; 補完フレームワーク (`company') 拡張（補完候補のソート）
   ;; --------------------------------------------------------------------------
   (leaf company-statistics
-    :after (company)
+    :after company
     :package t
-    :custom `((company-statistics-size . 500)
-              ;; ローカル環境にのみ保存
-              (company-statistics-file . "~/.emacs.company-statistics-cache.el"))
+    :custom ((company-statistics-size . 500)
+             ;; ローカル環境にのみ保存
+             (company-statistics-file . "~/.emacs.company-statistics-cache.el"))
     :global-minor-mode t)
 
 
@@ -1027,9 +1027,9 @@
   ;; 補完フレームワーク (`company') 拡張（ポップアップドキュメント）
   ;; --------------------------------------------------------------------------
   (leaf company-quickhelp
-    :after (company)
+    :after company
     :package t
-    :custom `((company-quickhelp-delay . 0.25))
+    :custom ((company-quickhelp-delay . 0.25))
     :global-minor-mode t)
 
 
@@ -1040,12 +1040,12 @@
     :after (nvm exec-path-from-shell)
     :bind (("C-c c" . compile))
     :hook ((compilation-filter-hook . ansi-color-compilation-filter))
-    :custom `((compilation-window-height . 15)
-              ;; ビルドツール・タスクランナーに依存させない
-              (compile-command . "")
-              (compilation-scroll-output . t)
-              (compilation-always-kill . t)
-              (compilation-context-lines . t))
+    :custom ((compilation-window-height . 15)
+             ;; ビルドツール・タスクランナーに依存させない
+             (compile-command . "")
+             (compilation-scroll-output . t)
+             (compilation-always-kill . t)
+             (compilation-context-lines . t))
     :init
     ;; --------------------------------
     ;; HACK: コンパイル完了後、モードラインにも状態を簡易表示
@@ -1064,7 +1064,6 @@
                                'compilation-mode-line-fail)))))
 
     (add-to-list 'compilation-finish-functions 'my-compilation-message)
-
     :config
     ;; --------------------------------
     ;; HACK: コンパイル完了後、正常に終了していれば自動でウインドウを閉じる
@@ -1130,10 +1129,10 @@
            ("M-s u" . consult-focus-lines)
            ("M-s e" . consult-isearch))
     :hook ((completion-list-mode . consult-preview-at-point-mode))
-    :custom `((register-preview-function . #'consult-register-format)
-              (xref-show-xrefs-function . #'consult-xref)
-              (xref-show-definitions-function . #'consult-xref)
-              (consult-project-root-function . #'my-consult-project-root-function))
+    :custom ((register-preview-function . #'consult-register-format)
+             (xref-show-xrefs-function . #'consult-xref)
+             (xref-show-definitions-function . #'consult-xref)
+             (consult-project-root-function . #'my-consult-project-root-function))
     :init
     (advice-add #'register-preview
                 :override
@@ -1179,18 +1178,16 @@
   ;; 矩形選択
   ;; --------------------------------------------------------------------------
   (leaf cua-base
-    :config
-    (if (fboundp #'cua-selection-mode)
-        ;; 特殊キーバインド無効
-        (cua-selection-mode +1)))
+    ;; 特殊キーバインド無効
+    :global-minor-mode cua-selection-mode)
 
 
   ;; --------------------------------------------------------------------------
   ;; バッファ内マッチ補完
   ;; --------------------------------------------------------------------------
   (leaf dabbrev
-    :custom `(;; 補完時に大小文字を区別しない
-              (dabbrev-case-fold-search . t)))
+    :custom (;; 補完時に大小文字を区別しない
+             (dabbrev-case-fold-search . t)))
 
 
   ;; --------------------------------------------------------------------------
@@ -1229,39 +1226,30 @@
   ;; デスクトップ環境保存・復旧
   ;; --------------------------------------------------------------------------
   (leaf desktop
-    ;; --------------------------------
-    ;; HACK: `:leaf-defer' がないと `eval-after-load' 内で `:init' が
-    ;;       実行される
-    ;;         -> 結果的に `autoload' 関数である `desktop-save-mode' が
-    ;;            実行されなくなる
-    ;; --------------------------------
-    :leaf-defer nil
     :bind (("C-c d c" . desktop-clear)
            ("C-c d C-s" . desktop-save)
            ("C-c d s" . desktop-save-in-desktop-dir)
            ("C-c d d" . desktop-remove)
            ("C-c d f" . desktop-change-dir)
            ("C-c d r" . desktop-revert))
-    :custom `((desktop-save . 'ask-if-new)
-              (desktop-load-locked-desktop . t)
-              (desktop-missing-file-warning . t)
-              ;; 必要最小限の情報のみ保存させる
-              (desktop-locals-to-save . '(case-fold-search
-                                          case-replace
-                                          desktop-locals-to-save
-                                          fill-column
-                                          truncate-lines))
-              (desktop-restore-frames . t)
-              (desktop-restore-in-current-display . t)
-              (desktop-restore-forces-onscreen . t)
-              (desktop-restore-reuses-frames . t)
-              (desktop-file-name-format . 'absolute)
-              (desktop-restore-eager . t)
-              (desktop-lazy-verbose . t)
-              (desktop-lazy-idle-delay . 5))
-    :config
-    (if (fboundp #'desktop-save-mode)
-        (desktop-save-mode +1)))
+    :custom ((desktop-save . 'ask-if-new)
+             (desktop-load-locked-desktop . t)
+             (desktop-missing-file-warning . t)
+             ;; 必要最小限の情報のみ保存させる
+             (desktop-locals-to-save . '(case-fold-search
+                                         case-replace
+                                         desktop-locals-to-save
+                                         fill-column
+                                         truncate-lines))
+             (desktop-restore-frames . t)
+             (desktop-restore-in-current-display . t)
+             (desktop-restore-forces-onscreen . t)
+             (desktop-restore-reuses-frames . t)
+             (desktop-file-name-format . 'absolute)
+             (desktop-restore-eager . t)
+             (desktop-lazy-verbose . t)
+             (desktop-lazy-idle-delay . 5))
+    :global-minor-mode desktop-save-mode)
 
 
   ;; --------------------------------------------------------------------------
@@ -1284,10 +1272,10 @@
     :el-get (dired+
              :type github
              :pkgname "emacsmirror/dired-plus")
-    :after (dired)
+    :after dired
     :require t
-    :custom `((diredp-hide-details-initially-flag . nil)
-              (diredp-hide-details-propagate-flag . nil)))
+    :custom ((diredp-hide-details-initially-flag . nil)
+             (diredp-hide-details-propagate-flag . nil)))
 
 
   ;; --------------------------------------------------------------------------
@@ -1306,18 +1294,17 @@
            (ielm-mode-hook . eldoc-mode)
            (lisp-interaction-mode-hook . eldoc-mode)
            (lisp-mode-hook . eldoc-mode))
-    :custom `((eldoc-minor-mode-string . nil)
-              (eldoc-idle-delay . 0.2)
-              (eldoc-echo-area-use-multiline-p . 'truncate-sym-name-if-fit)))
+    :custom ((eldoc-minor-mode-string . nil)
+             (eldoc-idle-delay . 0.2)
+             (eldoc-echo-area-use-multiline-p . 'truncate-sym-name-if-fit)))
 
 
   ;; --------------------------------------------------------------------------
   ;; GNU Emacs Lisp 定義ジャンプ・バック・ドキュメント閲覧
   ;; --------------------------------------------------------------------------
   (leaf elisp-slime-nav
-    :after (eldoc)
+    :after eldoc
     :package t
-    :config
     :global-minor-mode t)
 
 
@@ -1329,7 +1316,7 @@
     :bind (("C-." . embark-act)
            ("C-;" . embark-dwim)
            ("C-x ? b" . embark-bindings))
-    :custom `((prefix-help-command . #'embark-prefix-help-command))
+    :custom ((prefix-help-command . #'embark-prefix-help-command))
     :config
     (add-to-list 'display-buffer-alist
                  '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
@@ -1342,7 +1329,6 @@
   ;; --------------------------------------------------------------------------
   (leaf embark-consult
     :package t
-    :leaf-defer nil
     :after (embark consult)
     :hook ((embark-collect-mode . consult-preview-at-point-mode)))
 
@@ -1352,7 +1338,7 @@
   ;; --------------------------------------------------------------------------
   (leaf evil-numbers
     :package t
-    :custom `((evil-numbers-pad-default . t))
+    :custom ((evil-numbers-pad-default . t))
     :bind (("C-3" . evil-numbers/dec-at-pt)
            ("C-4" . evil-numbers/inc-at-pt)))
 
@@ -1365,7 +1351,7 @@
   ;; --------------------------------------------------------------------------
   (leaf find-dired
     :when (member system-type '(ms-dos windows-nt))
-    :after (find-dired)
+    :after find-dired
     :config
     ;; --------------------------------
     ;; HACK: `:custom' で設定すると `find-exec-terminator' の展開が
@@ -1386,10 +1372,10 @@
     :package t
     :bind (("C-c f" . flycheck-mode))
     :hook ((after-init-hook . global-flycheck-mode))
-    :custom `((flycheck-checker-error-threshold . nil)
-              (flycheck-display-errors-delay . 0.5)
-              (flycheck-idle-change-delay . 0.25)
-              (flycheck-disabled-checkers . '(javascript-jscs)))
+    :custom ((flycheck-checker-error-threshold . nil)
+             (flycheck-display-errors-delay . 0.5)
+             (flycheck-idle-change-delay . 0.25)
+             (flycheck-disabled-checkers . '(javascript-jscs)))
     :config
     ;; --------------------------------
     ;; HACK: `flycheck-checker-error-threshold' 以上の項目が出現すると
@@ -1468,7 +1454,7 @@ See also: `https://github.com/validator/validator'."
   ;; 自動静的解析拡張（モードライン変更）
   ;; --------------------------------------------------------------------------
   (leaf flycheck-color-mode-line
-    :after (flycheck)
+    :after flycheck
     :package t
     :hook ((flycheck-mode-hook . flycheck-color-mode-line-mode)))
 
@@ -1477,7 +1463,7 @@ See also: `https://github.com/validator/validator'."
   ;; 自動静的解析 (OLD)
   ;; --------------------------------------------------------------------------
   (leaf flymake
-    :custom `((flymake-run-in-place . nil)))
+    :custom ((flymake-run-in-place . nil)))
 
 
   ;; --------------------------------------------------------------------------
@@ -1501,15 +1487,15 @@ See also: `https://github.com/validator/validator'."
            (scss-mode-hook . flyspell-prog-mode)
            (typescript-mode-hook . flyspell-prog-mode)
            (web-mode-hook . flyspell-prog-mode))
-    :custom `((flyspell-delay . 1.0)))
+    :custom ((flyspell-delay . 1.0)))
 
 
   ;; --------------------------------------------------------------------------
   ;; フレーム
   ;; --------------------------------------------------------------------------
   (leaf frame
-    :custom `(;; フレームサイズ変更を px 単位で実行できるようにする
-              (frame-resize-pixelwise . t))
+    :custom (;; フレームサイズ変更を px 単位で実行できるようにする
+             (frame-resize-pixelwise . t))
     :config
     (if (fboundp #'blink-cursor-mode)
         ;; カーソルは点滅させない
@@ -1558,8 +1544,8 @@ See also: `https://github.com/validator/validator'."
       ;;       明示的にロードさせる必要がある
       ;; ------------------------------
       :require t
-      :custom `(;; 例外が出るため NUL デバイスは使わせない
-                (grep-use-null-device . nil))
+      :custom (;; 例外が出るため NUL デバイスは使わせない
+               (grep-use-null-device . nil))
       :config
       ;; PATH は通っていないが、`exec-path' は通っている場合を想定
       ;;
@@ -1584,7 +1570,7 @@ See also: `https://github.com/validator/validator'."
     ;; FIXME: `after-init-hook' 後に実行した `load-theme' に対応したい
     ;;        `advice-add' の :after で `enable-theme' を実行してもダメ
     :hook ((after-init-hook . my-hl-line-initialize))
-    :custom `((global-hl-line-sticky-flag . t))
+    :custom ((global-hl-line-sticky-flag . t))
     :init
     (defun my-hl-line-initialize ()
       "Initialize `hl-line'."
@@ -1613,23 +1599,23 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf hl-todo
     :package t
-    :custom `((hl-todo-keyword-faces . '(("HOLD" . "#d0bf8f")
-                                         ("TODO" . "#cc9393")
-                                         ("NEXT" . "#dca3a3")
-                                         ("THEM" . "#dc8cc3")
-                                         ("PROG" . "#7cb8bb")
-                                         ("OKAY" . "#7cb8bb")
-                                         ("DONT" . "#5f7f5f")
-                                         ("FAIL" . "#8c5353")
-                                         ("DONE" . "#afd8af")
-                                         ("NOTE"   . "#d0bf8f")
-                                         ("KLUDGE" . "#d0bf8f")
-                                         ("HACK"   . "#d0bf8f")
-                                         ("TEMP"   . "#d0bf8f")
-                                         ("FIXME"  . "#cc9393")
-                                         ("XXX+"   . "#cc9393")
-                                         ("CAUTION" . "#ffff66")
-                                         ("WARNING" . "#ff6666"))))
+    :custom ((hl-todo-keyword-faces . '(("HOLD" . "#d0bf8f")
+                                        ("TODO" . "#cc9393")
+                                        ("NEXT" . "#dca3a3")
+                                        ("THEM" . "#dc8cc3")
+                                        ("PROG" . "#7cb8bb")
+                                        ("OKAY" . "#7cb8bb")
+                                        ("DONT" . "#5f7f5f")
+                                        ("FAIL" . "#8c5353")
+                                        ("DONE" . "#afd8af")
+                                        ("NOTE"   . "#d0bf8f")
+                                        ("KLUDGE" . "#d0bf8f")
+                                        ("HACK"   . "#d0bf8f")
+                                        ("TEMP"   . "#d0bf8f")
+                                        ("FIXME"  . "#cc9393")
+                                        ("XXX+"   . "#cc9393")
+                                        ("CAUTION" . "#ffff66")
+                                        ("WARNING" . "#ff6666"))))
     :global-minor-mode global-hl-todo-mode)
 
 
@@ -1638,8 +1624,8 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf ibuffer
     :bind (("C-x C-b" . ibuffer))
-    :custom `((ibuffer-default-sorting-mode . 'filename/process)
-              (ibuffer-expert . t))
+    :custom ((ibuffer-default-sorting-mode . 'filename/process)
+             (ibuffer-expert . t))
     :config
     ;; --------------------------------
     ;; 機能拡張
@@ -1683,14 +1669,14 @@ See also: `https://github.com/validator/validator'."
   ;; ファイル操作の簡略化
   ;; --------------------------------------------------------------------------
   (leaf ido
-    :custom `((ido-enable-flex-matching . t)
-              (ido-create-new-buffer . 'always)
-              (ido-use-virtual-buffers . t)
-              (ido-max-file-prompt-width . 0)
-              (ido-use-filename-at-point . 'guess)
-              (ido-unc-hosts . t)
-              ;; ローカル環境にのみ保存
-              (ido-save-directory-list-file . "~/.emacs.ido-save-directory-list.el"))
+    :custom ((ido-enable-flex-matching . t)
+             (ido-create-new-buffer . 'always)
+             (ido-use-virtual-buffers . t)
+             (ido-max-file-prompt-width . 0)
+             (ido-use-filename-at-point . 'guess)
+             (ido-unc-hosts . t)
+             ;; ローカル環境にのみ保存
+             (ido-save-directory-list-file . "~/.emacs.ido-save-directory-list.el"))
     :global-minor-mode t)
 
 
@@ -1698,7 +1684,7 @@ See also: `https://github.com/validator/validator'."
   ;; ファイル操作の簡略化（全環境に適用）
   ;; --------------------------------------------------------------------------
   (leaf ido-everywhere
-    :after (ido)
+    :after ido
     :config
     (if (fboundp #'ido-everywhere)
         (ido-everywhere +1)))
@@ -1708,34 +1694,29 @@ See also: `https://github.com/validator/validator'."
   ;; 画像の直接表示
   ;; --------------------------------------------------------------------------
   (leaf image-file
-    :config
-    (if (fboundp #'auto-image-file-mode)
-        (auto-image-file-mode +1)))
+    :global-minor-mode auto-image-file-mode)
 
 
   ;; --------------------------------------------------------------------------
   ;; インクリメンタル検索
   ;; --------------------------------------------------------------------------
   (leaf isearch
-    :custom `((isearch-case-fold-search . t)
-              (isearch-last-case-fold-search . t)))
+    :custom ((isearch-case-fold-search . t)
+             (isearch-last-case-fold-search . t)))
 
 
   ;; --------------------------------------------------------------------------
   ;; アーカイブファイルを直接編集
   ;; --------------------------------------------------------------------------
   (leaf jka-cmpr-hook
-    :require t
-    :config
-    (if (fboundp #'auto-compression-mode)
-        (auto-compression-mode +1)))
+    :global-minor-mode auto-compression-mode)
 
 
   ;; --------------------------------------------------------------------------
   ;; JavaScript リファクタリング補助
   ;; --------------------------------------------------------------------------
   (leaf js2-refactor
-    :after (js2-mode)
+    :after js2-mode
     :package t
     :require t)
 
@@ -1755,10 +1736,10 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf lsp-ui
     :package t
-    :custom `((lsp-ui-sideline-show-hover . t)
-              (lsp-ui-sideline-show-code-actions . t)
-              (lsp-ui-sideline-diagnostic-max-lines . 2)
-              (lsp-ui-sideline-diagnostic-max-line-length . 150)))
+    :custom ((lsp-ui-sideline-show-hover . t)
+             (lsp-ui-sideline-show-code-actions . t)
+             (lsp-ui-sideline-diagnostic-max-lines . 2)
+             (lsp-ui-sideline-diagnostic-max-line-length . 150)))
 
 
   ;; --------------------------------------------------------------------------
@@ -1769,7 +1750,7 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf lsp-tailwindcss
     :package t
-    :custom `((lsp-tailwindcss-add-on-mode . t)))
+    :custom ((lsp-tailwindcss-add-on-mode . t)))
 
 
   ;; --------------------------------------------------------------------------
@@ -1789,10 +1770,10 @@ See also: `https://github.com/validator/validator'."
            (scss-mode-hook . lsp)
            (typescript-mode-hook . lsp)
            (web-mode-hook . lsp))
-    :custom `((lsp-headerline-breadcrumb-enable . nil)
-              (lsp-progress-function . 'ignore)
-              ;; ローカル環境にのみ保存
-              (lsp-session-file . "~/.emacs.lsp-session")))
+    :custom ((lsp-headerline-breadcrumb-enable . nil)
+             (lsp-progress-function . 'ignore)
+             ;; ローカル環境にのみ保存
+             (lsp-session-file . "~/.emacs.lsp-session")))
 
 
   ;; --------------------------------------------------------------------------
@@ -1808,7 +1789,7 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf migemo
     :leaf-defer nil
-    :after (exec-path-from-shell)
+    :after exec-path-from-shell
     :package t
     :require t
     :bind ((:isearch-mode-map
@@ -1854,14 +1835,14 @@ See also: `https://github.com/validator/validator'."
   (leaf orderless
     :package t
     :require t
-    :custom `((completion-styles . '(orderless)))
+    :custom ((completion-styles . '(orderless)))
     :config
     ;; `migemo' 利用可能時
     ;;
     ;; See also:
     ;; https://nyoho.jp/diary/?date=20210615
     (leaf orderless
-      :after (migemo)
+      :after migemo
       :config
       (if (fboundp #'migemo-get-pattern)
           (defun my-orderless-migemo (component)
@@ -1892,8 +1873,6 @@ See also: `https://github.com/validator/validator'."
     :require t
     :custom `((projectile-enable-caching . t)
               (projectile-completion-system . ',(cond ((featurep 'ido) 'ido)
-                                                      ((featurep 'ivy) 'ivy)
-                                                      ((featurep 'helm) 'helm)
                                                       (t 'default)))
               (projectile-keymap-prefix . ,(kbd "C-c C-p"))
               ;; ローカル環境にのみ保存
@@ -1916,20 +1895,20 @@ See also: `https://github.com/validator/validator'."
   ;; ファイル履歴保存
   ;; --------------------------------------------------------------------------
   (leaf recentf
-    :custom `(;; 履歴保存数は絞る
-              (recentf-max-saved-items . 20)
-              ;; ローカル環境にのみ保存
-              (recentf-save-file . "~/.emacs.recentf.el")))
+    :custom (;; 履歴保存数は絞る
+             (recentf-max-saved-items . 20)
+             ;; ローカル環境にのみ保存
+             (recentf-save-file . "~/.emacs.recentf.el")))
 
 
   ;; --------------------------------------------------------------------------
   ;; ミニバッファの履歴を残す
   ;; --------------------------------------------------------------------------
   (leaf savehist
-    :custom `(;; 履歴保存数は絞る
-              (history-length . 100)
-              ;; ローカル環境にのみ保存
-              (savehist-file . "~/.emacs.savehist.el"))
+    :custom (;; 履歴保存数は絞る
+             (history-length . 100)
+             ;; ローカル環境にのみ保存
+             (savehist-file . "~/.emacs.savehist.el"))
     :global-minor-mode t)
 
 
@@ -1938,11 +1917,9 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf saveplace
     :require t
-    :custom `(;; ローカル環境にのみ保存
-              (save-place-file . "~/.emacs.saveplace.el"))
-    :config
-    (if (fboundp #'save-place-mode)
-        (save-place-mode +1)))
+    :custom (;; ローカル環境にのみ保存
+             (save-place-file . "~/.emacs.saveplace.el"))
+    :global-minor-mode save-place-mode)
 
 
   ;; --------------------------------------------------------------------------
@@ -1967,10 +1944,8 @@ See also: `https://github.com/validator/validator'."
   ;; 基礎編集コマンド集
   ;; --------------------------------------------------------------------------
   (leaf simple
-    :config
-    (if (fboundp #'transient-mark-mode)
-        ;; 暫定マークを使用
-        (transient-mark-mode +1)))
+    ;; 暫定マークを使用
+    :global-minor-mode transient-mark-mode)
 
 
   ;; --------------------------------------------------------------------------
@@ -1979,8 +1954,8 @@ See also: `https://github.com/validator/validator'."
   (leaf smartparens
     :package t
     :require t
-    :custom `((sp-show-pair-from-inside . t)
-              (sp-undo-pairs-separately . t))
+    :custom ((sp-show-pair-from-inside . t)
+             (sp-undo-pairs-separately . t))
     :global-minor-mode (show-smartparens-global-mode smartparens-global-mode))
 
 
@@ -1988,7 +1963,7 @@ See also: `https://github.com/validator/validator'."
   ;; 各種カッコ関連機能拡張・公式デフォルト設定
   ;; --------------------------------------------------------------------------
   (leaf smartparens-config
-    :after (smartparens)
+    :after smartparens
     :require t)
 
 
@@ -2006,7 +1981,6 @@ See also: `https://github.com/validator/validator'."
   ;; `redo' 追加
   ;; --------------------------------------------------------------------------
   (leaf undo-fu
-    :leaf-defer nil
     :package t
     :require t
     :bind (("C-/" . undo-fu-only-undo)
@@ -2018,7 +1992,7 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf vertico
     :package t
-    :custom `((vertico-count . 20))
+    :custom ((vertico-count . 20))
     :global-minor-mode t)
 
 
@@ -2041,46 +2015,46 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf whitespace
     :hook ((after-change-major-mode-hook . my-whitespace-mode-initialize))
-    :custom `(;; 「不正」位置の空白文字のみ強調
-              (whitespace-style . '(empty
-                                    face
-                                    newline
-                                    newline-mark
-                                    space-after-tab
-                                    space-before-tab
-                                    space-mark ; HARD SPACE の ON/OFF も含む
-                                    spaces ; HARD SPACE の ON/OFF も含む
-                                    tab-mark
-                                    tabs
-                                    trailing))
-              ;; ----------------------
-              ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調表示
-              ;;
-              ;; 表示テスト:
-              ;;   U+0009: 「	」
-              ;;   U+00A0: 「 」
-              ;;   U+3000: 「　」
-              ;; ----------------------
-              (whitespace-hspace-regexp . "\\(\u00A0\\|\u08A0\\|\u0920\\|\u0E20\\|\u0F20\\|\u3000\\)+")
-              (whitespace-trailing-regexp . "\\([\t \u00A0\u3000]+\\)$")
-              ;; 行カラム最大値は `fill-column' を参照させる
-              (whitespace-line-column . nil)
-              ;; ----------------------
-              ;; HACK: 半角空白 (U+0020) を強調しないようにする
-              ;;
-              ;; 表示テスト:
-              ;;   U+0020: 「 」
-              ;; ----------------------
-              (whitespace-display-mappings . '(;; EOL -> DOLLAR SIGN
-                                               (newline-mark ?\n [?$ ?\n])
-                                               ;; TAB -> CURRENCY SIGN
-                                               (space-mark ?\u00A0 [?¤] [?_])
-                                               ;; IDEOGRAPHIC SPACE -> WHITE SQUARE
-                                               (space-mark ?\u3000 [?\u25a1] [?_ ?_])
-                                               ;; Tab -> RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
-                                               (tab-mark ?\t [?» ?\t] [?\\ ?\t]))))
-    :custom-face `((whitespace-space . '((t
-                                          (:background nil)))))
+    :custom (;; 「不正」位置の空白文字のみ強調
+             (whitespace-style . '(empty
+                                   face
+                                   newline
+                                   newline-mark
+                                   space-after-tab
+                                   space-before-tab
+                                   space-mark ; HARD SPACE の ON/OFF も含む
+                                   spaces ; HARD SPACE の ON/OFF も含む
+                                   tab-mark
+                                   tabs
+                                   trailing))
+             ;; ----------------------
+             ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調表示
+             ;;
+             ;; 表示テスト:
+             ;;   U+0009: 「	」
+             ;;   U+00A0: 「 」
+             ;;   U+3000: 「　」
+             ;; ----------------------
+             (whitespace-hspace-regexp . "\\(\u00A0\\|\u08A0\\|\u0920\\|\u0E20\\|\u0F20\\|\u3000\\)+")
+             (whitespace-trailing-regexp . "\\([\t \u00A0\u3000]+\\)$")
+             ;; 行カラム最大値は `fill-column' を参照させる
+             (whitespace-line-column . nil)
+             ;; ----------------------
+             ;; HACK: 半角空白 (U+0020) を強調しないようにする
+             ;;
+             ;; 表示テスト:
+             ;;   U+0020: 「 」
+             ;; ----------------------
+             (whitespace-display-mappings . '(;; EOL -> DOLLAR SIGN
+                                              (newline-mark ?\n [?$ ?\n])
+                                              ;; TAB -> CURRENCY SIGN
+                                              (space-mark ?\u00A0 [?¤] [?_])
+                                              ;; IDEOGRAPHIC SPACE -> WHITE SQUARE
+                                              (space-mark ?\u3000 [?\u25a1] [?_ ?_])
+                                              ;; Tab -> RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
+                                              (tab-mark ?\t [?» ?\t] [?\\ ?\t]))))
+    :custom-face ((whitespace-space . '((t
+                                         (:background nil)))))
     :init
     (defun my-whitespace-mode-initialize ()
       "Initialize `whitespace'."
@@ -2115,8 +2089,8 @@ See also: `https://github.com/validator/validator'."
   ;; `yasnippet' 公式コレクション
   ;; --------------------------------------------------------------------------
   (leaf yasnippet-snippets
-    :after (yasnippet)
-    :package t)
+    :package t
+    :after yasnippet)
   ) ; END
 
 
@@ -2141,7 +2115,7 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf css-mode
     :hook ((css-mode-hook . my-css-mode-initialize))
-    :custom `((css-indent-offset . 2))
+    :custom ((css-indent-offset . 2))
     :init
     (defun my-css-mode-initialize ()
       "Initialize `css-mode' before file load."
@@ -2249,17 +2223,17 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf js-mode
     :hook ((js-mode-hook . my-js-mode-initialize))
-    :custom `((js-indent-level . 4)
-              (js-expr-indent-offset . 0)
-              (js-paren-indent-offset . 0)
-              (js-square-indent-offset . 0)
-              (js-curly-indent-offset . 0)
-              (js-switch-indent-offset . 0)
-              (js-flat-functions . nil)
-              (js-indent-align-list-continuation . t)
-              (js-js-switch-tabs . t)
-              (js-indent-first-init . 'dynamic)
-              (js-chain-indent . t))
+    :custom ((js-indent-level . 4)
+             (js-expr-indent-offset . 0)
+             (js-paren-indent-offset . 0)
+             (js-square-indent-offset . 0)
+             (js-curly-indent-offset . 0)
+             (js-switch-indent-offset . 0)
+             (js-flat-functions . nil)
+             (js-indent-align-list-continuation . t)
+             (js-js-switch-tabs . t)
+             (js-indent-first-init . 'dynamic)
+             (js-chain-indent . t))
     :init
     (defun my-js-mode-initialize ()
       "Initialize `js-mode' before file load."
@@ -2283,43 +2257,43 @@ See also: `https://github.com/validator/validator'."
            ("\\.js\\'" . js2-mode)
            ("\\.pac\\'" . js2-mode))
     :hook ((js2-mode-hook . my-js2-mode-initialize))
-    :custom `((js2-highlight-level . 3) ; すべての構文強調を有効化
-              (js2-bounce-indent-p . nil)
-              (js2-idle-timer-delay . 0.25)
-              (js2-dynamic-idle-timer-adjust . 0)
-              (js2-concat-multiline-strings . t)
-              ;; 文法チェック関連
-              ;;
-              ;; 他ツールに任せるため、すべて無効化
-              (js2-mode-show-parse-errors . nil)
-              (js2-mode-assume-strict . nil)
-              (js2-mode-show-strict-warnings . nil)
-              (js2-strict-trailing-comma-warning . nil)
-              (js2-strict-missing-semi-warning . nil)
-              (js2-missing-semi-one-line-override . nil)
-              (js2-strict-inconsistent-return-warning . nil)
-              (js2-strict-cond-assign-warning . nil)
-              (js2-strict-var-redeclaration-warning . nil)
-              (js2-strict-var-hides-function-arg-warning . nil)
-              ;; その他
-              (js2-skip-preprocessor-directives . t)
-              (js2-language-version . 200)
-              (js2-instanceof-has-side-effects . nil)
-              (js2-move-point-on-right-click . nil) ; 使わない
-              (js2-allow-rhino-new-expr-initializer . nil) ; 使わない
-              (js2-allow-member-expr-as-function-name . nil)
-              (js2-include-browser-externs . t)
-              (js2-include-rhino-externs . nil)
-              (js2-include-node-externs . nil)
-              (js2-mode-indent-inhibit-undo . nil)
-              (js2-mode-indent-ignore-first-tab . nil)
-              (js2-highlight-external-variables . t)
-              (js2-warn-about-unused-function-arguments . nil)
-              ;; JSLint
-              ;;
-              ;; 他ツールに任せるため、すべて無効化
-              (js2-include-jslint-globals . nil)
-              (js2-include-jslint-declaration-externs . nil))
+    :custom ((js2-highlight-level . 3) ; すべての構文強調を有効化
+             (js2-bounce-indent-p . nil)
+             (js2-idle-timer-delay . 0.25)
+             (js2-dynamic-idle-timer-adjust . 0)
+             (js2-concat-multiline-strings . t)
+             ;; 文法チェック関連
+             ;;
+             ;; 他ツールに任せるため、すべて無効化
+             (js2-mode-show-parse-errors . nil)
+             (js2-mode-assume-strict . nil)
+             (js2-mode-show-strict-warnings . nil)
+             (js2-strict-trailing-comma-warning . nil)
+             (js2-strict-missing-semi-warning . nil)
+             (js2-missing-semi-one-line-override . nil)
+             (js2-strict-inconsistent-return-warning . nil)
+             (js2-strict-cond-assign-warning . nil)
+             (js2-strict-var-redeclaration-warning . nil)
+             (js2-strict-var-hides-function-arg-warning . nil)
+             ;; その他
+             (js2-skip-preprocessor-directives . t)
+             (js2-language-version . 200)
+             (js2-instanceof-has-side-effects . nil)
+             (js2-move-point-on-right-click . nil) ; 使わない
+             (js2-allow-rhino-new-expr-initializer . nil) ; 使わない
+             (js2-allow-member-expr-as-function-name . nil)
+             (js2-include-browser-externs . t)
+             (js2-include-rhino-externs . nil)
+             (js2-include-node-externs . nil)
+             (js2-mode-indent-inhibit-undo . nil)
+             (js2-mode-indent-ignore-first-tab . nil)
+             (js2-highlight-external-variables . t)
+             (js2-warn-about-unused-function-arguments . nil)
+             ;; JSLint
+             ;;
+             ;; 他ツールに任せるため、すべて無効化
+             (js2-include-jslint-globals . nil)
+             (js2-include-jslint-declaration-externs . nil))
     :init
     (defun my-js2-mode-initialize ()
       "Initialize `js2-mode' before file load."
@@ -2494,9 +2468,9 @@ See also: `https://github.com/validator/validator'."
   (leaf scss-mode
     :package t
     :hook ((scss-mode-hook . my-scss-mode-initialize))
-    :custom `(;; コンパイルは常に手動（保存時は何もしない）
-              ;; 各種ツール経由でコンパイルされうるため
-              (scss-compile-at-save . nil))
+    :custom (;; コンパイルは常に手動（保存時は何もしない）
+             ;; 各種ツール経由でコンパイルされうるため
+             (scss-compile-at-save . nil))
     :init
     (defun my-scss-mode-initialize ()
       "Initialize `scss-mode' before file load."
@@ -2610,48 +2584,48 @@ See also: `https://github.com/validator/validator'."
     :mode (("\\.njk\\'" . web-mode)
            ("\\.vue\\'" . web-mode))
     :hook ((web-mode-hook . my-web-mode-initialize))
-    :custom `((web-mode-block-padding . nil)
-              (web-mode-part-padding . nil)
-              (web-mode-script-padding . nil)
-              (web-mode-style-padding . nil)
-              (web-mode-attr-indent-offset . nil)
-              (web-mode-attr-value-indent-offset . nil)
-              (web-mode-markup-indent-offset . 0)
-              (web-mode-css-indent-offset . 0)
-              (web-mode-code-indent-offset . 0)
-              (web-mode-sql-indent-offset . 0)
-              (web-mode-enable-css-colorization . ,(display-graphic-p))
-              (web-mode-enable-comment-interpolation . nil)
-              (web-mode-enable-comment-annotation . nil)
-              (web-mode-enable-auto-indentation . nil)
-              (web-mode-enable-auto-closing . nil)
-              (web-mode-enable-auto-pairing . nil)
-              (web-mode-enable-auto-opening . nil)
-              (web-mode-enable-auto-quoting . nil)
-              (web-mode-enable-auto-expanding . nil)
-              (web-mode-enable-curly-brace-indentation . nil)
-              (web-mode-enable-control-block-indentation . nil)
-              (web-mode-enable-current-element-highlight . t)
-              (web-mode-enable-current-column-highlight . t)
-              (web-mode-enable-whitespace-fontification . nil)
-              (web-mode-enable-html-entities-fontification . t)
-              (web-mode-enable-block-face . t)
-              (web-mode-enable-part-face . t)
-              (web-mode-enable-inlays . t)
-              (web-mode-enable-sexp-functions . t)
-              (web-mode-enable-string-interpolation . t)
-              (web-mode-enable-literal-interpolation . t)
-              (web-mode-enable-sql-detection . t)
-              (web-mode-enable-heredoc-fontification . t)
-              (web-mode-enable-element-content-fontification . t)
-              (web-mode-enable-element-tag-fontification . t)
-              (web-mode-enable-front-matter-block . t)
-              (web-mode-enable-engine-detection . t)
-              (web-mode-enable-optional-tags . t)
-              (web-mode-comment-style . 1)
-              (web-mode-indent-style . 1)
-              (web-mode-auto-close-style . 1)
-              (web-mode-auto-quote-style . 1))
+    :custom ((web-mode-block-padding . nil)
+             (web-mode-part-padding . nil)
+             (web-mode-script-padding . nil)
+             (web-mode-style-padding . nil)
+             (web-mode-attr-indent-offset . nil)
+             (web-mode-attr-value-indent-offset . nil)
+             (web-mode-markup-indent-offset . 0)
+             (web-mode-css-indent-offset . 0)
+             (web-mode-code-indent-offset . 0)
+             (web-mode-sql-indent-offset . 0)
+             (web-mode-enable-css-colorization . ,(display-graphic-p))
+             (web-mode-enable-comment-interpolation . nil)
+             (web-mode-enable-comment-annotation . nil)
+             (web-mode-enable-auto-indentation . nil)
+             (web-mode-enable-auto-closing . nil)
+             (web-mode-enable-auto-pairing . nil)
+             (web-mode-enable-auto-opening . nil)
+             (web-mode-enable-auto-quoting . nil)
+             (web-mode-enable-auto-expanding . nil)
+             (web-mode-enable-curly-brace-indentation . nil)
+             (web-mode-enable-control-block-indentation . nil)
+             (web-mode-enable-current-element-highlight . t)
+             (web-mode-enable-current-column-highlight . t)
+             (web-mode-enable-whitespace-fontification . nil)
+             (web-mode-enable-html-entities-fontification . t)
+             (web-mode-enable-block-face . t)
+             (web-mode-enable-part-face . t)
+             (web-mode-enable-inlays . t)
+             (web-mode-enable-sexp-functions . t)
+             (web-mode-enable-string-interpolation . t)
+             (web-mode-enable-literal-interpolation . t)
+             (web-mode-enable-sql-detection . t)
+             (web-mode-enable-heredoc-fontification . t)
+             (web-mode-enable-element-content-fontification . t)
+             (web-mode-enable-element-tag-fontification . t)
+             (web-mode-enable-front-matter-block . t)
+             (web-mode-enable-engine-detection . t)
+             (web-mode-enable-optional-tags . t)
+             (web-mode-comment-style . 1)
+             (web-mode-indent-style . 1)
+             (web-mode-auto-close-style . 1)
+             (web-mode-auto-quote-style . 1))
     :init
     (defun my-web-mode-initialize ()
       "Initialize `web-mode' before file load."
@@ -2673,12 +2647,12 @@ See also: `https://github.com/validator/validator'."
     :mode (("\\.xml\\'" . nxml-mode)
            ("\\.plist\\'" . nxml-mode))
     :hook ((nxml-mode-hook . my-nxml-mode-initialize))
-    :custom `((nxml-child-indent . 2)
-              (nxml-attribute-indent . 0)
-              (nxml-slash-auto-complete-flag . t)
-              (nxml-bind-meta-tab-to-complete-flag . t)
-              (nxml-sexp-element-flag . t)
-              (nxml-char-ref-display-glyph-flag . t))
+    :custom ((nxml-child-indent . 2)
+             (nxml-attribute-indent . 0)
+             (nxml-slash-auto-complete-flag . t)
+             (nxml-bind-meta-tab-to-complete-flag . t)
+             (nxml-sexp-element-flag . t)
+             (nxml-char-ref-display-glyph-flag . t))
     :init
     (defun my-nxml-mode-initialize ()
       "Initialize `nxml-mode' before file load."
@@ -2699,7 +2673,7 @@ See also: `https://github.com/validator/validator'."
   (leaf yaml-mode
     :package t
     :hook ((yaml-mode-hook . my-yaml-mode-initialize))
-    :custom `((yaml-indent-offset . 2))
+    :custom ((yaml-indent-offset . 2))
     :init
     (defun my-yaml-mode-initialize ()
       "Initialize `yaml-mode' before file load."
