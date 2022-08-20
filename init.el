@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-20T23:44:57+09:00>
+;; Time-stamp: <2022-08-20T23:59:28+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -284,6 +284,10 @@
  ;;
  '(delete-by-moving-to-trash t)
  ;;
+ ;; YES/NO 選択を簡略化
+ ;;
+ '(use-short-answers t)
+ ;;
  ;; 人為的に italic/bold フォントを選択 (Windows ONLY)
  ;;
  '(w32-enable-synthesized-fonts t)
@@ -338,12 +342,6 @@
                                    "/usr/local/etc/openssl/cert.pem"
                                    "/private/etc/ssl/cert.pem"
                                    "/etc/ssl/cert.pem")))))
-
-
-;; ============================================================================
-;; YES/NO 選択を簡略化
-;; ============================================================================
-(fset 'yes-or-no-p 'y-or-n-p)
 
 
 ;; ============================================================================
