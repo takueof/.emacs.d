@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-21T00:36:15+09:00>
+;; Time-stamp: <2022-08-21T06:07:19+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -657,9 +657,7 @@
   ;; --------------------------------------------------------------------------
   (leaf diff-hl
     :package t
-    :config
-    (if (fboundp #'global-diff-hl-mode)
-        (global-diff-hl-mode)))
+    :global-minor-mode global-diff-hl-mode)
 
 
   ;; --------------------------------------------------------------------------
@@ -868,9 +866,7 @@
     (leaf anzu
       :after (migemo)
       :custom `((anzu-use-migemo . t)))
-    :config
-    (if (fboundp #'global-anzu-mode)
-        (global-anzu-mode +1)))
+    :global-minor-mode global-anzu-mode)
 
 
   ;; --------------------------------------------------------------------------
@@ -891,9 +887,7 @@
   ;; --------------------------------------------------------------------------
   (leaf autorevert
     :custom `((auto-revert-check-vc-info . t))
-    :config
-    (if (fboundp #'global-auto-revert-mode)
-        (global-auto-revert-mode +1)))
+    :global-minor-mode global-auto-revert-mode)
 
 
   ;; --------------------------------------------------------------------------
@@ -1610,10 +1604,8 @@ See also: `https://github.com/validator/validator'."
                                                L-diff)))
           (custom-set-faces
            `(hl-line ((((class color))
-                       (:background ,line-background-color :inherit nil)))))))
-      ;; 実行
-      (if (fboundp #'global-hl-line-mode)
-          (global-hl-line-mode +1))))
+                       (:background ,line-background-color :inherit nil))))))))
+    :global-minor-mode global-hl-line-mode)
 
 
   ;; --------------------------------------------------------------------------
@@ -1638,9 +1630,7 @@ See also: `https://github.com/validator/validator'."
                                          ("XXX+"   . "#cc9393")
                                          ("CAUTION" . "#ffff66")
                                          ("WARNING" . "#ff6666"))))
-    :config
-    (if (fboundp #'global-hl-todo-mode)
-        (global-hl-todo-mode +1)))
+    :global-minor-mode global-hl-todo-mode)
 
 
   ;; --------------------------------------------------------------------------
@@ -1991,12 +1981,7 @@ See also: `https://github.com/validator/validator'."
     :require t
     :custom `((sp-show-pair-from-inside . t)
               (sp-undo-pairs-separately . t))
-    :config
-    (if (fboundp #'show-smartparens-global-mode)
-        (show-smartparens-global-mode +1))
-
-    (if (fboundp #'smartparens-global-mode)
-        (smartparens-global-mode +1)))
+    :global-minor-mode (show-smartparens-global-mode smartparens-global-mode))
 
 
   ;; --------------------------------------------------------------------------
@@ -2108,9 +2093,7 @@ See also: `https://github.com/validator/validator'."
                                       lisp-interaction-mode
                                       )))
             (whitespace-mode -1))))
-    :config
-    (if (fboundp #'global-whitespace-mode)
-        (global-whitespace-mode +1)))
+    :global-minor-mode global-whitespace-mode)
 
 
   ;; --------------------------------------------------------------------------
@@ -2125,9 +2108,7 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf yasnippet
     :package t
-    :config
-    (if (fboundp #'yas-global-mode)
-        (yas-global-mode +1)))
+    :global-minor-mode yas-global-mode)
 
 
   ;; --------------------------------------------------------------------------
