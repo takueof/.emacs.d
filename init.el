@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-21T10:41:39+09:00>
+;; Time-stamp: <2022-08-21T10:59:33+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -366,107 +366,29 @@
 
 
 ;; ============================================================================
-;; 各ユーティリティをロード
+;; ユーティリティロード
 ;; ============================================================================
-(require 'my-utils nil :noerror) ; 共通
+(require 'my-utils nil :noerror)
 (require 'my-fonts nil :noerror) ; フォント
-
-
-;; ============================================================================
-;; グローバルキーバインド
-;; ============================================================================
-;; <Backspace> と <DEL> を 交換
-(keyboard-translate ?\C-h ?\C-?)
-
-;; <DEL> を <C-d> にする
-(keyboard-translate ?\C-? ?\C-d)
-
-;; `ido-undo-merge-work-directory' 実行のため <C-z> を押しすぎた場合、
-;; `suspend-frame' が起動しないよう配慮
-(global-unset-key (kbd "C-z"))
-
-;; ヘルプ表示を割り当てなおす
-(if (fboundp #'help-command)
-    (global-set-key (kbd "C-x ?") #'help-command))
-
-;; ウインドウ中央表示はもっともシンプルなものを用いる
-;; `recenter-top-bottom' は使わない
-(if (fboundp #'recenter)
-    (global-set-key (kbd "C-l") #'recenter))
-
-;; リージョン範囲をソート
-(if (fboundp #'sort-lines)
-    (global-set-key (kbd "C-c s") #'sort-lines))
-
-;; 1つ前のエラーを表示
-(if (fboundp #'previous-error)
-    (global-set-key (kbd "C-x \\") #'previous-error))
-
-;; `revert-buffer-quick' ショートカット
-(if (fboundp #'revert-buffer-quick)
-    (global-set-key (kbd "C-c r") #'revert-buffer-quick))
-
-;; 行頭移動は物理行
-(if (fboundp #'my-beginning-of-smart-indented-line)
-    (global-set-key (kbd "C-a") #'my-beginning-of-smart-indented-line))
-
-  ;; 前のウインドウに移動
-(if (fboundp #'my-other-window-reverse)
-    (global-set-key (kbd "C-x p") #'my-other-window-reverse))
-
-  ;; 前のフレームに移動
-(if (fboundp #'my-other-frame-reverse)
-    (global-set-key (kbd "C-x 5 p") #'my-other-frame-reverse))
-
-  ;; 折り返し表示を強制切替
-(if (fboundp #'my-toggle-truncate-lines-force)
-    (global-set-key (kbd "C-x w") #'my-toggle-truncate-lines-force))
-
-  ;; カーソル位置に YEN SIGN (U+00A5) を挿入
-(if (fboundp #'my-insert-yen-sign)
-    (global-set-key (kbd "C-c i \\") #'my-insert-yen-sign))
-
-  ;; カーソル位置にファイル名を挿入
-(if (fboundp #'my-insert-file-name)
-    (global-set-key (kbd "C-c i f") #'my-insert-file-name))
-
-  ;; カーソル位置にファイルパスを挿入
-(if (fboundp #'my-insert-file-path)
-    (global-set-key (kbd "C-c i p") #'my-insert-file-path))
-
-  ;; 一括エンコーディング変換
-(if (fboundp #'my-change-files-coding-system)
-    (global-set-key (kbd "C-c RET f") #'my-change-files-coding-system))
-
-  ;; 一括ファイル通知ウォッチ削除
-(if (fboundp #'my-file-notify-rm-all-watches)
-    (global-set-key (kbd "C-c C-c q") #'my-file-notify-rm-all-watches))
-
-;; タッチパッドによる各種操作を無効化 (macOS ONLY)
-(when (member system-type '(darwin))
-  (global-unset-key [magnify-up])
-  (global-unset-key [magnify-down])
-  (global-unset-key [S-magnify-up])
-  (global-unset-key [S-magnify-down]))
 
 
 ;; ============================================================================
 ;; 環境変数 (Windows ONLY)
 ;; ============================================================================
-(if (member system-type '(ms-dos windows-nt))
-    ;; 環境変数 %PATH% では不足している分の追加
-    (let* ((program-files-dir-x86 (or (getenv "PROGRAMFILES\(X86\)")
-                                      (getenv "PROGRAMFILES")
-                                      "C:/programs"))
-           (paths `(,(concat program-files-dir-x86 "/Aspell/bin")
-                    "C:/programs/cmigemo/bin"
-                    "C:/programs/Ghostgum/gsview"
-                    "C:/programs/cygwin/bin")))
-      (dolist (path paths)
-        (setq path (convert-standard-filename path))
-        (if (and (file-exists-p path)
-                 (file-directory-p path))
-            (add-to-list 'exec-path path)))))
+(when (member system-type '(ms-dos windows-nt))
+  ;; 環境変数 %PATH% では不足している分の追加
+  (let* ((program-files-dir-x86 (or (getenv "PROGRAMFILES\(X86\)")
+                                    (getenv "PROGRAMFILES")
+                                    "C:/programs"))
+         (paths `(,(concat program-files-dir-x86 "/Aspell/bin")
+                  "C:/programs/cmigemo/bin"
+                  "C:/programs/Ghostgum/gsview"
+                  "C:/programs/cygwin/bin")))
+    (dolist (path paths)
+      (setq path (convert-standard-filename path))
+      (if (and (file-exists-p path)
+               (file-directory-p path))
+          (add-to-list 'exec-path path)))))
 
 
 ;; ============================================================================
@@ -595,6 +517,57 @@
   :config
   (if (fboundp #'server-start)
       (server-start t)))
+
+
+;; ============================================================================
+;; グローバルキーバインド
+;; ============================================================================
+(leaf *global-keybind
+  :leaf-defer nil
+  :after my-utils
+  :bind (;; ヘルプ表示を割り当てなおす
+         ("C-x ?" . help-command)
+         ;; ウインドウ中央表示はもっともシンプルなものを用いる
+         ;; `recenter-top-bottom' は使わない
+         ("C-l" . recenter)
+         ;; リージョン範囲をソート
+         ("C-c s" . sort-lines)
+         ;; 1つ前のエラーを表示
+         ("C-x \\" . previous-error)
+         ;; `revert-buffer-quick' ショートカット
+         ("C-c r" . revert-buffer-quick)
+         ;; 行頭移動は物理行
+         ("C-a" . my-beginning-of-smart-indented-line)
+         ;; 前のウインドウに移動
+         ("C-x p" . my-other-window-reverse)
+         ;; 前のフレームに移動
+         ("C-x 5 p" . my-other-frame-reverse)
+         ;; 折り返し表示を強制切替
+         ("C-x w" . my-toggle-truncate-lines-force)
+         ;; カーソル位置に YEN SIGN (U+00A5) を挿入
+         ("C-c i \\" . my-insert-yen-sign)
+         ;; カーソル位置にファイル名を挿入
+         ("C-c i f" . my-insert-file-name)
+         ;; カーソル位置にファイルパスを挿入
+         ("C-c i p" . my-insert-file-path)
+         ;; 一括エンコーディング変換
+         ("C-c RET f" . my-change-files-coding-system)
+         ;; 一括ファイル通知ウォッチ削除
+         ("C-c C-c q" . my-file-notify-rm-all-watches))
+  :config
+  ;; <Backspace> と <DEL> を 交換
+  (keyboard-translate ?\C-h ?\C-?)
+  ;; <DEL> を <C-d> にする
+  (keyboard-translate ?\C-? ?\C-d)
+  ;; `ido-undo-merge-work-directory' 実行のため <C-z> を押しすぎた場合、
+  ;; `suspend-frame' が起動しないよう配慮
+  (global-unset-key (kbd "C-z"))
+  ;; タッチパッドによる各種操作を無効化 (macOS ONLY)
+  (when (member system-type '(darwin))
+    (global-unset-key [magnify-up])
+    (global-unset-key [magnify-down])
+    (global-unset-key [S-magnify-up])
+    (global-unset-key [S-magnify-down])))
 
 
 ;; ============================================================================
