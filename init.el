@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-21T17:33:50+09:00>
+;; Time-stamp: <2022-08-21T18:19:05+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2092,15 +2092,12 @@ See also: `https://github.com/validator/validator'."
     :require t
     :custom ((sp-show-pair-from-inside . t)
              (sp-undo-pairs-separately . t))
+    :config
+    ;; 公式デフォルト設定
+    (leaf smartparens-config
+      :after smartparens
+      :require t)
     :global-minor-mode (show-smartparens-global-mode smartparens-global-mode))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 各種カッコ関連機能拡張・公式デフォルト設定
-  ;; --------------------------------------------------------------------------
-  (leaf smartparens-config
-    :after smartparens
-    :require t)
 
 
   ;; --------------------------------------------------------------------------
