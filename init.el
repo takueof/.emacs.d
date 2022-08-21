@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-21T11:52:15+09:00>
+;; Time-stamp: <2022-08-21T11:56:14+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -510,7 +510,6 @@
 ;; この欠点をある程度回避した wemacs.cmd を用いること
 ;; ============================================================================
 (leaf server
-  :package t
   :custom (;; ローカル環境にのみ保存
            (server-auth-dir . "~/.emacs.server"))
   :config
