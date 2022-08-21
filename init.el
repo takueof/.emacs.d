@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-21T17:26:32+09:00>
+;; Time-stamp: <2022-08-21T17:33:50+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -473,7 +473,7 @@
 
 
 ;; ============================================================================
-;; IME patch
+;; IME patch (Windows ONLY)
 ;; ============================================================================
 ;; WARNING: 全てのパッケージに影響するため、
 ;;          なるべく早いタイミングでインストールするようにしてある
@@ -482,10 +482,10 @@
   :when (member system-type '(ms-dos windows-nt))
   :package t
   :config
-  (if (fboundp #'tr-ime-advanced-install)
-      (tr-ime-advanced-install))
-  (if (fboundp #'w32-ime-initialize)
-      (w32-ime-initialize)))
+  (when (and (fboundp #'tr-ime-advanced-install)
+             (fboundp #'w32-ime-initialize))
+    (tr-ime-advanced-install)
+    (w32-ime-initialize)))
 
 
 ;; ============================================================================
