@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-21T12:00:53+09:00>
+;; Time-stamp: <2022-08-21T17:10:36+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -3387,15 +3387,11 @@ See also: `https://github.com/validator/validator'."
 ;; ============================================================================
 ;; `early-init.el' で設定した項目の変更
 ;; ============================================================================
-(custom-set-variables
- ;;
- ;; ガベージコレクション閾値を現実的な値に戻す
- ;;
- `(gc-cons-threshold ,(* 128 1024 1024)) ; 128MB
- ;;
- ;; 黙らせていた余分なメッセージ I/O を復活
- ;;
- '(inhibit-message nil))
+(leaf *early-init-el-restore
+  :custom `(;; ガベージコレクション閾値を現実的な値に戻す
+            (gc-cons-threshold . ,(* 128 1024 1024)) ; 128MB
+            ;; 黙らせていた余分なメッセージ I/O を復活
+            (inhibit-message . nil)))
 
 
 ;; ============================================================================
