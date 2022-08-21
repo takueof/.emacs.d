@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-21T17:10:36+09:00>
+;; Time-stamp: <2022-08-21T17:16:56+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -3019,7 +3019,8 @@ See also: `https://github.com/validator/validator'."
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.800))
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.100)))
    (;; macOS pre-install fonts ONLY
-    (my-fallback-font-family "Menlo")
+    (and (equal window-system 'mac)
+         (my-fallback-font-family "Menlo"))
     (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.300))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
@@ -3029,8 +3030,10 @@ See also: `https://github.com/validator/validator'."
     (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.950)))
    (;; Windows pre-install fonts ONLY
-    (my-fallback-font-family "Consolas")
+    (and (equal window-system 'w32)
+         (my-fallback-font-family "Consolas"))
     (add-to-list 'face-font-rescale-alist '("-Meiryo-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-MS Gothic-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))
     (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.100))
