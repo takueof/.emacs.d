@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-14T00:01:16+09:00>
+;; Time-stamp: <2022-08-21T10:11:11+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -178,6 +178,41 @@ Return string of file path."
                   (buffer-file-name (if (bufferp name)
                                         name
                                       (current-buffer))))))))
+
+
+;; ============================================================================
+;; コーディングシステム表記
+;; ============================================================================
+;;;###autoload
+(defun my-coding-system-name-mnemonic (coding-system)
+  "Specify for CODING-SYSTEM explicitly."
+  (let* ((base (coding-system-base coding-system))
+         (name (symbol-name base)))
+    (cond ((string-prefix-p "utf-8" name) "UTF-8")
+          ((string-prefix-p "utf-16" name) "UTF-16")
+          ((string-prefix-p "utf-7" name) "UTF-7")
+          ((string-prefix-p "japanese-shift-jis" name) "Shift_JIS")
+          ((string-match "cp\\([0-9]+\\)" name) (match-string 1 name))
+          ((string-match "japanese-iso-8bit" name) "EUC-JP")
+          (t "???"))))
+
+;;;###autoload
+(defun my-coding-system-bom-mnemonic (coding-system)
+  "Indicate the presence or absence of BOM for CODING-SYSTEM."
+  (let ((name (symbol-name coding-system)))
+    (cond ((string-match "be-" name) "[BE]")
+          ((string-match "le-" name) "[LE]")
+          ((string-match "-bom-" name) "[BOM]")
+          ((string-match "-with-signature" name) "[BOM]")
+          (t ""))))
+
+;;;###autoload
+(defun my-buffer-coding-system-mnemonic ()
+  "Return a mnemonic for `buffer-file-coding-system'."
+  (let* ((code buffer-file-coding-system)
+         (name (my-coding-system-name-mnemonic code))
+         (bom (my-coding-system-bom-mnemonic code)))
+    (format "%s%s" name bom)))
 
 
 ;; ============================================================================

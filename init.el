@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-21T07:05:28+09:00>
+;; Time-stamp: <2022-08-21T10:18:37+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -370,7 +370,6 @@
 ;; ============================================================================
 (require 'my-utils nil :noerror) ; 共通
 (require 'my-fonts nil :noerror) ; フォント
-(require 'my-modeline nil :noerror) ; モードライン
 (require 'my-im nil :noerror) ; Input Method (IM)
 
 
@@ -625,6 +624,136 @@
 
 
 ;; ============================================================================
+;; モードライン
+;; ============================================================================
+(leaf *modeline
+  :custom (;; ニーモニックを改行コードにちなんだ表現にする
+           (eol-mnemonic-dos . "[CRLF]")
+           (eol-mnemonic-mac . "[CR]")
+           (eol-mnemonic-unix . "[LF]")
+           (eol-mnemonic-undecided . ""))
+  :config
+  (leaf "bindings"
+    :config
+    ;; ------------------------------------------------------------------------
+    ;; モードライン表示領域をスリムにする
+    ;; ------------------------------------------------------------------------
+    (let ((fmt (copy-sequence mode-line-format))
+          (item)
+          (result '()))
+      (while (setq item (car-safe fmt))
+        (setq fmt (cdr-safe fmt))
+        (push
+         ;; 3以上の空白文字のみで構成された項目は、すべて U+0020 2文字に置換
+         (if (and (stringp item)
+                  (numberp (string-match "\\`\\s-\\{3,\\}\\'" item)))
+             "  "
+           item)
+         result))
+      (setq mode-line-format (reverse result)))
+
+    ;; 各種情報の非表示化
+    (delete 'mode-line-client mode-line-format) ; Emacs Client
+    (delete 'mode-line-remote mode-line-format) ; リモートバッファ
+    (delete 'mode-line-frame-identification mode-line-format) ; フレーム名
+    (delete 'mode-line-misc-info mode-line-format) ;その他
+
+    ;; ------------------------------------------------------------------------
+    ;; `mode-line-mule-info' 差替
+    ;;
+    ;; See also:
+    ;; https://qiita.com/kai2nenobu/items/ddf94c0e5a36919bc6db
+    ;; ------------------------------------------------------------------------
+    (let ((mode-line-coding-system-mnemonic (member "%z" mode-line-mule-info)))
+      (if (listp mode-line-coding-system-mnemonic)
+          (setcar mode-line-coding-system-mnemonic
+                  '(:eval (my-buffer-coding-system-mnemonic)))))
+
+    ;; ------------------------------------------------------------------------
+    ;; 各種位置情報
+    ;;
+    ;; すべて独自定義にする
+    ;; (line-number-mode t)
+    ;; (column-number-mode t)
+    ;; (size-indication-mode -1)
+    ;; ------------------------------------------------------------------------
+    ;; `defcustom' 定義ではないため `setq' を利用
+    (setq mode-line-position
+          `(;; カーソル位置情報
+            (:eval (if (use-region-p)
+                       ;; リージョン選択時
+                       (propertize
+                        (format "%d" (abs (- (region-end)
+                                             (region-beginning))))
+                        'local-map mode-line-column-line-number-mode-map
+                        'mouse-face 'mode-line-highlight
+                        'help-echo "リージョン文字数")
+                     ;; 通常
+                     ;;
+                     ;; 行先頭にあるときは0になる（`current-column' と同仕様）
+                     ;; 現状では %c + 1 にはしない
+                     ,(propertize
+                       "%c"
+                       'local-map mode-line-column-line-number-mode-map
+                       'mouse-face 'mode-line-highlight
+                       'help-echo "行内カーソル位置")))
+            ":"
+            ;; FIXME: リージョン選択時に前・次行の同一カラムヘ直接移動すると、
+            ;;        `region-beginning' と `region-end' 値が
+            ;;        更新されない場合がある（視覚表現と一致しなくなる）
+            (:eval (if (use-region-p)
+                       ;; リージョン選択時
+                       (propertize
+                        (format "%d" (count-lines (region-beginning)
+                                                  (region-end)))
+                        'local-map mode-line-column-line-number-mode-map
+                        'mouse-face 'mode-line-highlight
+                        'help-echo "リージョン行数")
+                     ;; 通常
+                     ,(propertize
+                       "%l"
+                       'local-map mode-line-column-line-number-mode-map
+                       'mouse-face 'mode-line-highlight
+                       'help-echo "現在行")))
+            ;; セパレータ
+            " "
+            ;; バッファ情報
+            "["
+            (:eval (propertize
+                    (format "%d"
+                            (abs (- (line-end-position)
+                                    (line-beginning-position))))
+                    'local-map mode-line-column-line-number-mode-map
+                    'mouse-face 'mode-line-highlight
+                    'help-echo "全文字数（現在行）"))
+            ":"
+            (:eval (propertize
+                    (format "%d" (line-number-at-pos (point-max)))
+                    'local-map mode-line-column-line-number-mode-map
+                    'mouse-face 'mode-line-highlight
+                    'help-echo "全行数"))
+            "]"
+            ;; セパレータ
+            " "
+            ;; バッファサイズ
+            ,(concat
+              (propertize
+               "%ic"
+               'local-map mode-line-column-line-number-mode-map
+               'mouse-face 'mode-line-highlight
+               'help-echo "全文字数")
+              "/"
+              (propertize
+               "%I"
+               'local-map mode-line-column-line-number-mode-map
+               'mouse-face 'mode-line-highlight
+               'help-echo "ファイルサイズ"))
+            ))
+    )
+  ) ; End of *modeline
+
+
+;; ============================================================================
 ;; 未分類パッケージ（非メジャー／マイナーモード）
 ;; ============================================================================
 (leaf *packages
@@ -828,7 +957,7 @@
     :custom (;; フレーム端のウインドウでは無限スクロールするようにふるまう
              ;; 「マリオブラザーズ」左右画面端におけるループのような動き
              (windmove-wrap-around . t)))
-  ) ; END
+  ) ; End of *packages
 
 
 ;; ============================================================================
@@ -2091,7 +2220,7 @@ See also: `https://github.com/validator/validator'."
   (leaf yasnippet-snippets
     :package t
     :after yasnippet)
-  ) ; END
+  ) ; End of *minor-mode
 
 
 ;; ============================================================================
@@ -2686,7 +2815,7 @@ See also: `https://github.com/validator/validator'."
                    (indent-style (equal indent-style-data "tab")))
               (if (not (equal indent-tabs-mode indent-style))
                   (setq-local indent-tabs-mode indent-style)))))))
-  ) ; END
+  ) ; End of *major-mode
 
 
 ;; ============================================================================
