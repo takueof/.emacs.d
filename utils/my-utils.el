@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-21T10:11:11+09:00>
+;; Time-stamp: <2022-08-21T10:22:53+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -213,6 +213,24 @@ Return string of file path."
          (name (my-coding-system-name-mnemonic code))
          (bom (my-coding-system-bom-mnemonic code)))
     (format "%s%s" name bom)))
+
+
+;; ============================================================================
+;; Input Method (IM)
+;; ============================================================================
+;;;###autoload
+(defun my-change-cursor-faces-by-current-input-method ()
+  "Change cursor color with `current-input-method'."
+  (let* ((current-input-method (if (fboundp #'mac-input-source)
+                                   (let ((input-source (mac-input-source)))
+                                     (if (numberp (string-match "\\.US\\'" input-source))
+                                         nil
+                                       input-source))
+                                 current-input-method))
+         (cursor-face (if current-input-method
+                          'my-cursor-input-method-activated
+                        'my-cursor-default)))
+    (set-cursor-color (face-attribute cursor-face :background))))
 
 
 ;; ============================================================================

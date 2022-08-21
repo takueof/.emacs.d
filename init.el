@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-21T10:18:37+09:00>
+;; Time-stamp: <2022-08-21T10:41:39+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -370,7 +370,6 @@
 ;; ============================================================================
 (require 'my-utils nil :noerror) ; 共通
 (require 'my-fonts nil :noerror) ; フォント
-(require 'my-im nil :noerror) ; Input Method (IM)
 
 
 ;; ============================================================================
@@ -627,130 +626,167 @@
 ;; モードライン
 ;; ============================================================================
 (leaf *modeline
+  :after my-utils
   :custom (;; ニーモニックを改行コードにちなんだ表現にする
            (eol-mnemonic-dos . "[CRLF]")
            (eol-mnemonic-mac . "[CR]")
            (eol-mnemonic-unix . "[LF]")
            (eol-mnemonic-undecided . ""))
   :config
-  (leaf "bindings"
-    :config
-    ;; ------------------------------------------------------------------------
-    ;; モードライン表示領域をスリムにする
-    ;; ------------------------------------------------------------------------
-    (let ((fmt (copy-sequence mode-line-format))
-          (item)
-          (result '()))
-      (while (setq item (car-safe fmt))
-        (setq fmt (cdr-safe fmt))
-        (push
-         ;; 3以上の空白文字のみで構成された項目は、すべて U+0020 2文字に置換
-         (if (and (stringp item)
-                  (numberp (string-match "\\`\\s-\\{3,\\}\\'" item)))
-             "  "
-           item)
-         result))
-      (setq mode-line-format (reverse result)))
+  ;; --------------------------------------------------------------------------
+  ;; モードライン表示領域をスリムにする
+  ;; --------------------------------------------------------------------------
+  (let ((fmt (copy-sequence mode-line-format))
+        (item)
+        (result '()))
+    (while (setq item (car-safe fmt))
+      (setq fmt (cdr-safe fmt))
+      (push
+       ;; 3以上の空白文字のみで構成された項目は、すべて U+0020 2文字に置換
+       (if (and (stringp item)
+                (numberp (string-match "\\`\\s-\\{3,\\}\\'" item)))
+           "  "
+         item)
+       result))
+    (setq mode-line-format (reverse result)))
 
-    ;; 各種情報の非表示化
-    (delete 'mode-line-client mode-line-format) ; Emacs Client
-    (delete 'mode-line-remote mode-line-format) ; リモートバッファ
-    (delete 'mode-line-frame-identification mode-line-format) ; フレーム名
-    (delete 'mode-line-misc-info mode-line-format) ;その他
+  ;; 各種情報の非表示化
+  (delete 'mode-line-client mode-line-format) ; Emacs Client
+  (delete 'mode-line-remote mode-line-format) ; リモートバッファ
+  (delete 'mode-line-frame-identification mode-line-format) ; フレーム名
+  (delete 'mode-line-misc-info mode-line-format) ;その他
 
-    ;; ------------------------------------------------------------------------
-    ;; `mode-line-mule-info' 差替
-    ;;
-    ;; See also:
-    ;; https://qiita.com/kai2nenobu/items/ddf94c0e5a36919bc6db
-    ;; ------------------------------------------------------------------------
-    (let ((mode-line-coding-system-mnemonic (member "%z" mode-line-mule-info)))
-      (if (listp mode-line-coding-system-mnemonic)
-          (setcar mode-line-coding-system-mnemonic
-                  '(:eval (my-buffer-coding-system-mnemonic)))))
+  ;; --------------------------------------------------------------------------
+  ;; `mode-line-mule-info' 差替
+  ;;
+  ;; See also:
+  ;; https://qiita.com/kai2nenobu/items/ddf94c0e5a36919bc6db
+  ;; --------------------------------------------------------------------------
+  (let ((mode-line-coding-system-mnemonic (member "%z" mode-line-mule-info)))
+    (if (listp mode-line-coding-system-mnemonic)
+        (setcar mode-line-coding-system-mnemonic
+                '(:eval (my-buffer-coding-system-mnemonic)))))
 
-    ;; ------------------------------------------------------------------------
-    ;; 各種位置情報
-    ;;
-    ;; すべて独自定義にする
-    ;; (line-number-mode t)
-    ;; (column-number-mode t)
-    ;; (size-indication-mode -1)
-    ;; ------------------------------------------------------------------------
-    ;; `defcustom' 定義ではないため `setq' を利用
-    (setq mode-line-position
-          `(;; カーソル位置情報
-            (:eval (if (use-region-p)
-                       ;; リージョン選択時
-                       (propertize
-                        (format "%d" (abs (- (region-end)
-                                             (region-beginning))))
-                        'local-map mode-line-column-line-number-mode-map
-                        'mouse-face 'mode-line-highlight
-                        'help-echo "リージョン文字数")
-                     ;; 通常
-                     ;;
-                     ;; 行先頭にあるときは0になる（`current-column' と同仕様）
-                     ;; 現状では %c + 1 にはしない
-                     ,(propertize
-                       "%c"
-                       'local-map mode-line-column-line-number-mode-map
-                       'mouse-face 'mode-line-highlight
-                       'help-echo "行内カーソル位置")))
-            ":"
-            ;; FIXME: リージョン選択時に前・次行の同一カラムヘ直接移動すると、
-            ;;        `region-beginning' と `region-end' 値が
-            ;;        更新されない場合がある（視覚表現と一致しなくなる）
-            (:eval (if (use-region-p)
-                       ;; リージョン選択時
-                       (propertize
-                        (format "%d" (count-lines (region-beginning)
-                                                  (region-end)))
-                        'local-map mode-line-column-line-number-mode-map
-                        'mouse-face 'mode-line-highlight
-                        'help-echo "リージョン行数")
-                     ;; 通常
-                     ,(propertize
-                       "%l"
-                       'local-map mode-line-column-line-number-mode-map
-                       'mouse-face 'mode-line-highlight
-                       'help-echo "現在行")))
-            ;; セパレータ
-            " "
-            ;; バッファ情報
-            "["
-            (:eval (propertize
-                    (format "%d"
-                            (abs (- (line-end-position)
-                                    (line-beginning-position))))
-                    'local-map mode-line-column-line-number-mode-map
-                    'mouse-face 'mode-line-highlight
-                    'help-echo "全文字数（現在行）"))
-            ":"
-            (:eval (propertize
-                    (format "%d" (line-number-at-pos (point-max)))
-                    'local-map mode-line-column-line-number-mode-map
-                    'mouse-face 'mode-line-highlight
-                    'help-echo "全行数"))
-            "]"
-            ;; セパレータ
-            " "
-            ;; バッファサイズ
-            ,(concat
-              (propertize
-               "%ic"
-               'local-map mode-line-column-line-number-mode-map
-               'mouse-face 'mode-line-highlight
-               'help-echo "全文字数")
-              "/"
-              (propertize
-               "%I"
-               'local-map mode-line-column-line-number-mode-map
-               'mouse-face 'mode-line-highlight
-               'help-echo "ファイルサイズ"))
-            ))
-    )
+  ;; --------------------------------------------------------------------------
+  ;; 各種位置情報
+  ;;
+  ;; すべて独自定義にする
+  ;; (line-number-mode t)
+  ;; (column-number-mode t)
+  ;; (size-indication-mode -1)
+  ;; --------------------------------------------------------------------------
+  ;; `defcustom' 定義ではないため `setq' を利用
+  (setq mode-line-position
+        `(;; カーソル位置情報
+          (:eval (if (use-region-p)
+                     ;; リージョン選択時
+                     (propertize
+                      (format "%d" (abs (- (region-end)
+                                           (region-beginning))))
+                      'local-map mode-line-column-line-number-mode-map
+                      'mouse-face 'mode-line-highlight
+                      'help-echo "リージョン文字数")
+                   ;; 通常
+                   ;;
+                   ;; 行先頭にあるときは0になる（`current-column' と同仕様）
+                   ;; 現状では %c + 1 にはしない
+                   ,(propertize
+                     "%c"
+                     'local-map mode-line-column-line-number-mode-map
+                     'mouse-face 'mode-line-highlight
+                     'help-echo "行内カーソル位置")))
+          ":"
+          ;; FIXME: リージョン選択時に前・次行の同一カラムヘ直接移動すると、
+          ;;        `region-beginning' と `region-end' 値が
+          ;;        更新されない場合がある（視覚表現と一致しなくなる）
+          (:eval (if (use-region-p)
+                     ;; リージョン選択時
+                     (propertize
+                      (format "%d" (count-lines (region-beginning)
+                                                (region-end)))
+                      'local-map mode-line-column-line-number-mode-map
+                      'mouse-face 'mode-line-highlight
+                      'help-echo "リージョン行数")
+                   ;; 通常
+                   ,(propertize
+                     "%l"
+                     'local-map mode-line-column-line-number-mode-map
+                     'mouse-face 'mode-line-highlight
+                     'help-echo "現在行")))
+          ;; セパレータ
+          " "
+          ;; バッファ情報
+          "["
+          (:eval (propertize
+                  (format "%d"
+                          (abs (- (line-end-position)
+                                  (line-beginning-position))))
+                  'local-map mode-line-column-line-number-mode-map
+                  'mouse-face 'mode-line-highlight
+                  'help-echo "全文字数（現在行）"))
+          ":"
+          (:eval (propertize
+                  (format "%d" (line-number-at-pos (point-max)))
+                  'local-map mode-line-column-line-number-mode-map
+                  'mouse-face 'mode-line-highlight
+                  'help-echo "全行数"))
+          "]"
+          ;; セパレータ
+          " "
+          ;; バッファサイズ
+          ,(concat
+            (propertize
+             "%ic"
+             'local-map mode-line-column-line-number-mode-map
+             'mouse-face 'mode-line-highlight
+             'help-echo "全文字数")
+            "/"
+            (propertize
+             "%I"
+             'local-map mode-line-column-line-number-mode-map
+             'mouse-face 'mode-line-highlight
+             'help-echo "ファイルサイズ"))
+          ))
   ) ; End of *modeline
+
+
+;; ============================================================================
+;; Input Method (IM)
+;; ============================================================================
+(leaf *input-method
+  ;; WARNING: `window-system' 外の環境（例：ターミナル）では例外発生
+  :when window-system
+  :after my-utils
+  :hook (;; -----------------------------------------------------------------
+         ;; ウインドウ選択後、IM の状態に応じてフェイス `cursor' を変更
+         ;;
+         ;; `cursor' はフレーム単位
+         ;; しかし、`current-input-method' はバッファローカル変数
+         ;; よって、バッファ間で `current-input-method' 値が異なれば、
+         ;; `cursor' が意図せぬ状態になる
+         ;;
+         ;; ゆえに、ウインドウ切替のタイミングでの `cursor' 明示変更が必要
+         ;;
+         ;; バッファ切替時は、特に何もしない
+         ;; -----------------------------------------------------------------
+         ;; `select-window' 実行後に起動するフックを利用
+         (buffer-list-update-hook . my-change-cursor-faces-by-current-input-method)
+         ;; IM の activate/deactivate と連動させる
+         (input-method-activate-hook . my-change-cursor-faces-by-current-input-method)
+         (input-method-deactivate-hook . my-change-cursor-faces-by-current-input-method)
+         ;; macOS ONLY
+         (mac-selected-keyboard-input-source-change-hook . my-change-cursor-faces-by-current-input-method)
+         (mac-enabled-keyboard-input-sources-change-hook . my-change-cursor-faces-by-current-input-method))
+  :init
+  (defface my-cursor-default nil
+    "`cursor' face for `current-input-method' is nil."
+    :group 'customize)
+  (copy-face 'cursor 'my-cursor-default)
+
+  (defface my-cursor-input-method-activated '((t
+                                               :background "gold"))
+    "`cursor' face for `current-input-method' is non-nil."
+    :group 'customize))
 
 
 ;; ============================================================================
@@ -763,7 +799,7 @@
   ;; --------------------------------------------------------------------------
   (leaf add-node-modules-path
     :package t
-    :hook (prog-mode-hook . my-add-node-modules-path-initialize)
+    :hook ((prog-mode-hook . my-add-node-modules-path-initialize))
     :init
     (defun my-add-node-modules-path-initialize ()
       "Initialize `add-node-modules-path'."
