@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-21T11:56:14+09:00>
+;; Time-stamp: <2022-08-21T12:00:53+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -728,7 +728,7 @@
   ;; WARNING: `window-system' 外の環境（例：ターミナル）では例外発生
   :when window-system
   :after my-utils
-  :hook (;; -----------------------------------------------------------------
+  :hook (;; -------------------------------------------------------------------
          ;; ウインドウ選択後、IM の状態に応じてフェイス `cursor' を変更
          ;;
          ;; `cursor' はフレーム単位
@@ -739,7 +739,7 @@
          ;; ゆえに、ウインドウ切替のタイミングでの `cursor' 明示変更が必要
          ;;
          ;; バッファ切替時は、特に何もしない
-         ;; -----------------------------------------------------------------
+         ;; -------------------------------------------------------------------
          ;; `select-window' 実行後に起動するフックを利用
          (buffer-list-update-hook . my-change-cursor-faces-by-current-input-method)
          ;; IM の activate/deactivate と連動させる
