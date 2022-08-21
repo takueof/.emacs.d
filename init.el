@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-21T17:16:56+09:00>
+;; Time-stamp: <2022-08-21T17:19:47+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2987,7 +2987,8 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (cond
    (;; Windows (96dpi) ONLY
-    (and (< (car (my-real-display-pixels-per-inch)) 97.0) ; for 96dpi
+    (and (equal window-system 'w32)
+         (< (car (my-real-display-pixels-per-inch)) 97.0) ; for 96dpi
          (my-fallback-font-family "ProFontWindows"))
     (add-to-list 'face-font-rescale-alist '("-Osaka-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-MS Gothic-" . 1.000))
