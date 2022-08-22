@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize config file -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2022 Taku Watabe
-;; Time-stamp: <2022-08-14T00:05:04+09:00>
+;; Time-stamp: <2022-08-23T07:53:16+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -20,8 +20,8 @@
 
 ;;; Commentary:
 
-;; This config file can use "GNU Emacs" ONLY,
-;; unsupported other "emacsen" ("XEmacs" and others).
+;; This config file can use "GNU Emacs" ONLY.
+;; Unsupported other "emacsen" ("XEmacs" and others).
 
 ;; WARNING: MUST USE English ONLY because `set-language-environment' not set.
 
@@ -58,7 +58,7 @@
 ;;
 ;; Increase subprocess main memory.
 ;;
-(setq read-process-output-max (* 4 1024 1024)) ; 4MB
+(setq read-process-output-max (* 128 1024 1024)) ; 128MB
 ;;
 ;; Package initialization occurs before `user-init-file' is loaded
 ;; but after `early-init-file'.
