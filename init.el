@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-28T00:59:30+09:00>
+;; Time-stamp: <2022-08-28T01:02:18+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -431,7 +431,7 @@
 ;;          `package' の初期化より後に設定しなければならない
 ;; ============================================================================
 (with-eval-after-load 'package
-  (when (not (package-installed-p 'leaf))
+  (unless (package-installed-p 'leaf)
     (package-refresh-contents)
     (package-install 'leaf)))
 
@@ -793,7 +793,7 @@
   ;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得・設定
   ;; --------------------------------------------------------------------------
   (leaf exec-path-from-shell
-    :when (not (member system-type '(ms-dos windows-nt)))
+    :unless (member system-type '(ms-dos windows-nt))
     :package t
     :require t
     :config
