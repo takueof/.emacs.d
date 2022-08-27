@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-23T07:52:49+09:00>
+;; Time-stamp: <2022-08-27T13:16:28+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -255,9 +255,9 @@
  '(make-backup-files nil)
  `(auto-save-list-file-prefix ,(convert-standard-filename "~/.emacs.auto-save-list/.saves-")) ; ローカル環境化
  ;;
- ;; ロックファイルは生成させる
+ ;; ロックファイル不要
  ;;
- '(create-lockfiles t)
+ '(create-lockfiles nil)
  ;;
  ;; `eval-expression' 時の出力を省略させない
  ;;
