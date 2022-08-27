@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-28T00:22:26+09:00>
+;; Time-stamp: <2022-08-28T00:55:20+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -400,8 +400,7 @@
 ;; HACK: `require' しておかないと、
 ;;       なぜか `custom-set-variables' が効かない
 ;; ============================================================================
-(when (and (require 'nsm nil :noerror)
-           (boundp 'nsm-settings-file))
+(when (require 'nsm nil :noerror)
   (custom-set-variables
    ;; ローカル環境にのみ保存
    '(nsm-settings-file "~/.emacs.network-security.data")))
@@ -412,10 +411,7 @@
 ;; ============================================================================
 ;; `defcustom' によって定義されたリストヘシンボルを追加したいため、
 ;; あえて明示的にロード
-(when (and (require 'package nil :noerror)
-           (boundp 'package-archives)
-           (fboundp #'package-initialize)
-           (fboundp #'package-list-packages-no-fetch))
+(when (require 'package nil :noerror)
   ;; 確実に定義された後で追加
   (add-to-list 'package-archives '("MELPA" . "https://melpa.org/packages/"))
 
@@ -434,12 +430,10 @@
 ;; WARNING: `package' が必ず使える状況を前提とする
 ;;          `package' の初期化より後に設定しなければならない
 ;; ============================================================================
-(when (and (fboundp #'package-installed-p)
-           (fboundp #'package-refresh-contents)
-           (fboundp #'package-install)
-           (not (package-installed-p 'leaf)))
-  (package-refresh-contents)
-  (package-install 'leaf))
+(with-eval-after-load 'package
+  (when (not (package-installed-p 'leaf))
+    (package-refresh-contents)
+    (package-install 'leaf)))
 
 
 ;; ============================================================================
@@ -457,8 +451,7 @@
 (leaf leaf-keywords
   :package t
   :config
-  (if (fboundp #'leaf-keywords-init)
-      (leaf-keywords-init)))
+  (leaf-keywords-init))
 
 
 ;; ============================================================================
@@ -482,10 +475,8 @@
   :when (member system-type '(ms-dos windows-nt))
   :package t
   :config
-  (when (and (fboundp #'tr-ime-advanced-install)
-             (fboundp #'w32-ime-initialize))
-    (tr-ime-advanced-install)
-    (w32-ime-initialize)))
+  (tr-ime-advanced-install)
+  (w32-ime-initialize))
 
 
 ;; ============================================================================
@@ -513,8 +504,7 @@
   :custom (;; ローカル環境にのみ保存
            (server-auth-dir . "~/.emacs.server"))
   :config
-  (if (fboundp #'server-start)
-      (server-start t)))
+  (server-start t))
 
 
 ;; ============================================================================
@@ -770,12 +760,7 @@
   ;; --------------------------------------------------------------------------
   (leaf add-node-modules-path
     :package t
-    :hook ((prog-mode-hook . my-add-node-modules-path-initialize))
-    :init
-    (defun my-add-node-modules-path-initialize ()
-      "Initialize `add-node-modules-path'."
-      (if (fboundp #'add-node-modules-path)
-          (add-node-modules-path))))
+    :hook ((prog-mode-hook . add-node-modules-path)))
 
 
   ;; --------------------------------------------------------------------------
@@ -784,8 +769,7 @@
   (leaf ansi-color
     :config
     ;; `comint-mode' および派生モードで、ANSI エスケープシーケンスの解釈を開始
-    (if (fboundp #'ansi-color-for-comint-mode-on)
-        (ansi-color-for-comint-mode-on)))
+    (ansi-color-for-comint-mode-on))
 
 
   ;; --------------------------------------------------------------------------
@@ -813,8 +797,7 @@
     :package t
     :require t
     :config
-    (if (fboundp #'exec-path-from-shell-initialize)
-        (exec-path-from-shell-initialize)))
+    (exec-path-from-shell-initialize))
 
 
   ;; --------------------------------------------------------------------------
@@ -842,9 +825,8 @@
   (leaf nvm
     :package t
     :config
-    (if (fboundp #'nvm-use-for)
-        ;; `~/.nvmrc' がなければ何もしない
-        (ignore-errors (nvm-use-for))))
+    ;; `~/.nvmrc' がなければ何もしない
+    (ignore-errors (nvm-use-for)))
 
 
   ;; --------------------------------------------------------------------------
@@ -981,10 +963,8 @@
     :custom ((affe-regexp-function . #'orderless-pattern-compiler)
              (affe-highlight-function . #'orderless--highlight))
     :config
-    (if (fboundp #'consult-customize)
-        (consult-customize
-         affe-grep
-         :preview-key (kbd "M-."))))
+    (consult-customize affe-grep
+                       :preview-key (kbd "M-.")))
 
 
   ;; --------------------------------------------------------------------------
@@ -1014,8 +994,7 @@
     :init
     (defun my-auto-dim-other-buffers-mode-initialize ()
       "Initialize `auto-dim-other-buffers-mode'."
-      (if (fboundp #'auto-dim-other-buffers-mode)
-          (auto-dim-other-buffers-mode +1))))
+      (auto-dim-other-buffers-mode +1)))
 
 
   ;; --------------------------------------------------------------------------
@@ -1071,13 +1050,11 @@
       (defun my-codic-local-set-key (items)
         "Set `local-set-key' for `codic' result buffer."
         (with-current-buffer "*Codic Result*"
-          (if (fboundp #'my-codic-view-kill)
-              (local-set-key (kbd "q") #'my-codic-view-kill))))
+          (local-set-key (kbd "q") #'my-codic-view-kill)))
 
-      (if (fboundp #'codic--view)
-          (advice-add #'codic--view
-                      :after
-                      #'my-codic-local-set-key))))
+      (advice-add #'codic--view
+                  :after
+                  #'my-codic-local-set-key)))
 
 
   ;; --------------------------------------------------------------------------
@@ -1094,8 +1071,7 @@
     :init
     (defun my-comint-mode-initialize ()
       "Initialize `comint-mode'."
-      (if (boundp 'comint-input-sender-no-newline)
-          (setq-local comint-input-sender-no-newline t)))
+      (setq-local comint-input-sender-no-newline t))
 
     ;; --------------------------------
     ;; プロセスごとのコーディングシステム変換表
@@ -1222,10 +1198,9 @@
                    (string-equal "finished" (string-trim msg))))
           (quit-window nil (get-buffer-window))))
 
-    (if (fboundp #'compilation-handle-exit)
-        (advice-add #'compilation-handle-exit
-                    :after
-                    #'my-compilation-auto-quit-window)))
+    (advice-add #'compilation-handle-exit
+                :after
+                #'my-compilation-auto-quit-window))
 
 
   ;; --------------------------------------------------------------------------
@@ -1281,25 +1256,20 @@
     (defun my-consult-line (&optional at-point)
       "Consult-line uses things-at-point if set C-u prefix."
       (interactive "P")
-      (if (fboundp #'consult-line)
-          (if at-point
-              (consult-line (thing-at-point 'symbol))
-            (consult-line))))
+      (if at-point
+          (consult-line (thing-at-point 'symbol))
+        (consult-line)))
 
     (defun my-consult-project-root-function ()
       "Function which returns project root directory."
-      (if (and (fboundp #'project-current)
-               (fboundp #'project-roots))
-          (if-let (project (project-current))
-              (car (project-roots project)))))
+      (if-let (project (project-current))
+          (car (project-roots project))))
 
-    (if (fboundp #'consult-customize)
-        (consult-customize
-         consult-theme
-         :preview-key '(:debounce 0.2 any)
-         consult-ripgrep consult-git-grep consult-grep
-         consult-bookmark consult-recent-file consult-xref
-         :preview-key (kbd "M-."))))
+    (consult-customize consult-theme
+                       :preview-key '(:debounce 0.2 any)
+                       consult-ripgrep consult-git-grep consult-grep
+                       consult-bookmark consult-recent-file consult-xref
+                       :preview-key (kbd "M-.")))
 
 
   ;; --------------------------------------------------------------------------
@@ -1332,30 +1302,29 @@
   (leaf delight
     :package t
     :config
-    (if (fboundp #'delight)
-        (delight '(;; 降順ソート
-                   (anzu-mode nil "anzu")
-                   (auto-dim-other-buffers-mode nil "auto-dim-other-buffers")
-                   (company-mode nil "company")
-                   (editorconfig-mode nil "editorconfig")
-                   (eldoc-mode nil "eldoc")
-                   (flycheck-mode nil "flycheck")
-                   (flymake-mode nil "flymake")
-                   (flyspell-mode nil "flyspell")
-                   (flyspell-prog-mode nil "flyspell")
-                   (global-anzu-mode nil "anzu")
-                   (global-company-mode nil "company")
-                   (global-flycheck-mode nil "flycheck")
-                   (global-whitespace-mode nil "whitespace")
-                   (projectile-mode nil "projectile")
-                   (show-smartparens-global-mode nil "smartparens")
-                   (show-smartparens-mode nil "smartparens")
-                   (smartparens-global-mode nil "smartparens")
-                   (smartparens-mode nil "smartparens")
-                   (text-scale-mode nil "face-remap")
-                   (whitespace-mode nil "whitespace")
-                   (yas-global-mode nil "yasnippet")
-                   (yas-minor-mode nil "yasnippet")))))
+    (delight '(;; 降順ソート
+               (anzu-mode nil "anzu")
+               (auto-dim-other-buffers-mode nil "auto-dim-other-buffers")
+               (company-mode nil "company")
+               (editorconfig-mode nil "editorconfig")
+               (eldoc-mode nil "eldoc")
+               (flycheck-mode nil "flycheck")
+               (flymake-mode nil "flymake")
+               (flyspell-mode nil "flyspell")
+               (flyspell-prog-mode nil "flyspell")
+               (global-anzu-mode nil "anzu")
+               (global-company-mode nil "company")
+               (global-flycheck-mode nil "flycheck")
+               (global-whitespace-mode nil "whitespace")
+               (projectile-mode nil "projectile")
+               (show-smartparens-global-mode nil "smartparens")
+               (show-smartparens-mode nil "smartparens")
+               (smartparens-global-mode nil "smartparens")
+               (smartparens-mode nil "smartparens")
+               (text-scale-mode nil "face-remap")
+               (whitespace-mode nil "whitespace")
+               (yas-global-mode nil "yasnippet")
+               (yas-minor-mode nil "yasnippet"))))
 
 
   ;; --------------------------------------------------------------------------
@@ -1396,9 +1365,8 @@
     :init
     (defun my-dired-mode-initialize ()
       "Initialize `dired-mode'."
-      (if (fboundp #'dired-hide-details-mode)
-          ;; 常にすべての情報を表示（簡易モードにしない）
-          (dired-hide-details-mode -1))))
+      ;; 常にすべての情報を表示（簡易モードにしない）
+      (dired-hide-details-mode -1)))
 
 
   ;; --------------------------------------------------------------------------
@@ -1509,9 +1477,7 @@
     ;;       生成されうる警告バッファの出現を抑制
     ;; --------------------------------
     (with-eval-after-load 'warnings
-      (if (boundp 'warning-suppress-log-types)
-          (add-to-list 'warning-suppress-log-types
-                       '(flycheck syntax-checker))))
+      (add-to-list 'warning-suppress-log-types '(flycheck syntax-checker)))
 
     ;; --------------------------------
     ;; PATCH: v.Nu サポート
@@ -1624,13 +1590,11 @@ See also: `https://github.com/validator/validator'."
     :custom (;; フレームサイズ変更を px 単位で実行できるようにする
              (frame-resize-pixelwise . t))
     :config
-    (if (fboundp #'blink-cursor-mode)
-        ;; カーソルは点滅させない
-        (blink-cursor-mode -1))
+    ;; カーソルは点滅させない
+    (blink-cursor-mode -1)
 
     ;; 半透明化
-    (if (and window-system
-             (fboundp #'set-frame-parameter))
+    (if window-system
         (set-frame-parameter nil 'alpha '(90 . 80))))
 
 
@@ -1701,11 +1665,7 @@ See also: `https://github.com/validator/validator'."
     :init
     (defun my-hl-line-initialize ()
       "Initialize `hl-line'."
-      (when (and (require 'color nil :noerror) ; 未ロードがありうるため必須
-                 (fboundp #'color-rgb-to-hsl)
-                 (fboundp #'color-name-to-rgb)
-                 (fboundp #'color-darken-name)
-                 (fboundp #'color-lighten-name))
+      (when (require 'color nil :noerror) ; 未ロードがありうるため必須
         (let* ((L-diff 20)
                (background-color (face-attribute 'default :background))
                (L (nth 2 (apply 'color-rgb-to-hsl
@@ -1757,25 +1717,20 @@ See also: `https://github.com/validator/validator'."
     ;; --------------------------------
     ;; 機能拡張
     ;; --------------------------------
-    (when (and (boundp 'ibuffer-formats)
-               (boundp 'ibuffer-sorting-mode)
-               (boundp 'ibuffer-last-sorting-mode)
-               (boundp 'ibuffer-sorting-reversep)
-               (boundp 'ibuffer-sorting-functions-alist))
-      ;; バッファ名の表示を30文字に拡張
-      ;; カラム幅が揃わなくなるため、-1 にはできない
-      (let* (;; `customize-mark-to-save' の評価を t にするため、
-             ;; 明示的にコピー
-             (formats (copy-tree ibuffer-formats))
-             (settings (assoc 'name (assoc 'mark formats))))
-        ;; 該当する設定項目がなければ何もしない
-        ;; 将来的に項目が変更された場合でも、例外を出さないための対策
-        (when settings
-          (setcdr settings '(30 30 :left :elide))
-          ;; WARNING: この `custom-set-variables' は `:custom' に移動できない
-          ;;          変数 `settings' で加工を行った結果が入るため
-          (custom-set-variables
-           `(ibuffer-formats ',formats))))))
+    ;; バッファ名の表示を30文字に拡張
+    ;; カラム幅が揃わなくなるため、-1 にはできない
+    (let* (;; `customize-mark-to-save' の評価を t にするため、
+           ;; 明示的にコピー
+           (formats (copy-tree ibuffer-formats))
+           (settings (assoc 'name (assoc 'mark formats))))
+      ;; 該当する設定項目がなければ何もしない
+      ;; 将来的に項目が変更された場合でも、例外を出さないための対策
+      (when settings
+        (setcdr settings '(30 30 :left :elide))
+        ;; WARNING: この `custom-set-variables' は `:custom' に移動できない
+        ;;          変数 `settings' で加工を行った結果が入るため
+        (custom-set-variables
+         `(ibuffer-formats ',formats)))))
 
 
   ;; --------------------------------------------------------------------------
@@ -1784,12 +1739,7 @@ See also: `https://github.com/validator/validator'."
   (leaf ibuffer-projectile
     :after (ibuffer projectile)
     :package t
-    :hook ((ibuffer-hook . my-ibuffer-projectile-initialize))
-    :init
-    (defun my-ibuffer-projectile-initialize ()
-      "Initialize `ibuffer'."
-      (if (fboundp #'ibuffer-projectile-set-filter-groups)
-          (ibuffer-projectile-set-filter-groups))))
+    :hook ((ibuffer-hook . ibuffer-projectile-set-filter-groups)))
 
 
   ;; --------------------------------------------------------------------------
@@ -1813,8 +1763,7 @@ See also: `https://github.com/validator/validator'."
   (leaf ido-everywhere
     :after ido
     :config
-    (if (fboundp #'ido-everywhere)
-        (ido-everywhere +1)))
+    (ido-everywhere +1))
 
 
   ;; --------------------------------------------------------------------------
@@ -1949,11 +1898,7 @@ See also: `https://github.com/validator/validator'."
               (migemo-pattern-alist-file . "~/.emacs.migemo-pattern")
               (migemo-frequent-pattern-alist-file . "~/.emacs.migemo-frequent"))
     :config
-    (if (and (fboundp #'migemo-init)
-             (boundp 'migemo-command)
-             (boundp 'migemo-dictionary)
-             (file-exists-p migemo-dictionary))
-        (migemo-init)))
+    (migemo-init))
 
 
   ;; --------------------------------------------------------------------------
@@ -1971,17 +1916,14 @@ See also: `https://github.com/validator/validator'."
     (leaf orderless
       :after migemo
       :config
-      (if (fboundp #'migemo-get-pattern)
-          (defun my-orderless-migemo (component)
-            "Match COMPONENT as `migemo'."
-            (let ((pattern (migemo-get-pattern component)))
-              (condition-case nil
-                  (progn (string-match-p pattern "") pattern)
-                (invalid-regexp nil)))))
+      (defun my-orderless-migemo (component)
+        "Match COMPONENT as `migemo'."
+        (let ((pattern (migemo-get-pattern component)))
+          (condition-case nil
+              (progn (string-match-p pattern "") pattern)
+            (invalid-regexp nil))))
 
-      (if (and (boundp 'orderless-matching-styles)
-               (fboundp #'my-orderless-migemo))
-          (add-to-list 'orderless-matching-styles #'my-orderless-migemo t))))
+      (add-to-list 'orderless-matching-styles #'my-orderless-migemo t)))
 
 
   ;; --------------------------------------------------------------------------
@@ -2012,10 +1954,9 @@ See also: `https://github.com/validator/validator'."
   ;; 自動カラー表示
   ;; --------------------------------------------------------------------------
   (leaf rainbow-mode
+    :after rainbow-mode
     :config
-    (with-eval-after-load 'rainbow-mode
-      (when (boundp 'rainbow-html-colors-major-mode-list)
-        (add-to-list 'rainbow-html-colors-major-mode-list 'scss-mode))))
+    (add-to-list 'rainbow-html-colors-major-mode-list 'scss-mode))
 
 
   ;; --------------------------------------------------------------------------
@@ -2061,10 +2002,8 @@ See also: `https://github.com/validator/validator'."
       "Initialize `scroll-bar'."
       (with-eval-after-load 'scroll-bar
         (when window-system
-          (if (fboundp #'scroll-bar-mode)
-              (scroll-bar-mode -1))
-          (if (fboundp #'horizontal-scroll-bar-mode)
-              (horizontal-scroll-bar-mode -1))))))
+          (scroll-bar-mode -1)
+          (horizontal-scroll-bar-mode -1)))))
 
 
   ;; --------------------------------------------------------------------------
@@ -2096,9 +2035,8 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf tooltip
     :config
-    (if (fboundp #'tooltip-mode)
-        ;; 非表示
-        (tooltip-mode -1)))
+    ;; 非表示
+    (tooltip-mode -1))
 
 
   ;; --------------------------------------------------------------------------
@@ -2186,10 +2124,9 @@ See also: `https://github.com/validator/validator'."
       ;; HACK: 一部メジャーモードでは無効化
       ;; ------------------------------
       (with-eval-after-load 'whitespace
-        (if (and (fboundp #'whitespace-mode)
-                 (member major-mode '(;; 降順ソート
-                                      lisp-interaction-mode
-                                      )))
+        (if (member major-mode '(;; 降順ソート
+                                 lisp-interaction-mode
+                                 ))
             (whitespace-mode -1))))
     :global-minor-mode global-whitespace-mode)
 
@@ -2231,8 +2168,7 @@ See also: `https://github.com/validator/validator'."
     :package t
     :mode (("\\.conf\\'" . apache-mode))
     :config
-    (if (boundp 'apache-indent-level)
-        (setq-local apache-indent-level 4)))
+    (setq-local apache-indent-level 4))
 
 
   ;; --------------------------------------------------------------------------
