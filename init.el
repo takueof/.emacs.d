@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-27T20:19:57+09:00>
+;; Time-stamp: <2022-08-27T23:00:13+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -3168,8 +3168,8 @@ See also: `https://github.com/validator/validator'."
                               (cons code code)
                               ;; 次のフォントは一部記号が全角になる：
                               ;;
-                              ;;   * "Ritcy Discord"
-                              ;;   * "Ritcy"
+                              ;;   * "Ricty Discord"
+                              ;;   * "Ricty"
                               ;;
                               ;; ゆえに、明示的な除外が必要
                               (font-spec :family (my-fallback-font-family "Menlo"
