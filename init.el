@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-27T13:16:28+09:00>
+;; Time-stamp: <2022-08-27T20:19:57+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2882,13 +2882,13 @@ See also: `https://github.com/validator/validator'."
 ;;   * `cp858' は `cp585' に "€" (U+20AC) を追加したもの
 ;;
 ;; 追加文字:
-;;   ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£Ø×ƒáíóúñÑªº¿®¬½¼¡«»░▒▓│┤ÁÂÀ©╣║╗╝¢¥┐└┴┬├─┼ãÃ╚╔╩╦╠═╬¤ðÐÊËÈ€ÍÎÏ┘┌█▄¦Ì▀ÓßÔÒõÕµþÞÚÛÙýÝ¯´±‗¾¶§÷¸°¨·¹³²■
+;;   ¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿƒ‗€─│┌┐└┘├┤┬┴┼═║╔╗╚╝╠╣╦╩╬▀▄█░▒▓■
 ;;
-;; 英字フォント（半角）で表示されてほしいもの：
-;;   ÇüéâäàåçêëèïîìÄÅÉæÆôöòûùÿÖÜø£ØƒáíóúñÑªº¿®¬½¼¡«»░▒▓ÁÂÀ©╣║╗╝¢¥ãÃ╚╔╩╦╠═╬¤ðÐÊËÈ€ÍÎÏ█▄¦Ì▀ÓßÔÒõÕµþÞÚÛÙýÝ¯‗¾¸·¹³²
+;; 半角フォントで表示されてほしいもの：
+;;   ¡¢£¤¥¦©ª«¬®¯²³µ·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿƒ‗€═║╔╗╚╝╠╣╦╩╬▀▄█░▒▓
 ;;
 ;; 全角フォントで表示されてほしいもの：
-;;   ×│┤┐└┴┬├─┼┘┌´±¶§÷°¨■
+;;   §¨°±´¶×÷─│┌┐└┘├┤┬┴┼■
 ;;
 ;; フォントによっては、他の文字と判別しにくいもの：
 ;;   "Ø" (U+00d8: LATIN CAPITAL LETTER O WITH STROKE)
@@ -3149,6 +3149,33 @@ See also: `https://github.com/validator/validator'."
                             (font-spec :family (my-fallback-font-family "Menlo"
                                                                         "Courier New"
                                                                         "Monospace")))
+  ;; "═" (U+2550: BOX DRAWINGS DOUBLE HORIZONTAL)
+  ;; "║" (U+2551: BOX DRAWINGS DOUBLE VERTICAL)
+  ;; "╔" (U+2554: BOX DRAWINGS DOUBLE DOWN AND RIGHT)
+  ;; "╗" (U+2557: BOX DRAWINGS DOUBLE DOWN AND LEFT)
+  ;; "╚" (U+255A: BOX DRAWINGS DOUBLE UP AND RIGHT)
+  ;; "╝" (U+255D: BOX DRAWINGS DOUBLE UP AND LEFT)
+  ;; "╠" (U+2560: BOX DRAWINGS DOUBLE VERTICAL AND RIGHT)
+  ;; "╣" (U+2563: BOX DRAWINGS DOUBLE VERTICAL AND LEFT)
+  ;; "╦" (U+2566: BOX DRAWINGS DOUBLE DOWN AND HORIZONTAL)
+  ;; "╩" (U+2569: BOX DRAWINGS DOUBLE UP AND HORIZONTAL)
+  ;; "╬" (U+256C: BOX DRAWINGS DOUBLE VERTICAL AND HORIZONTAL)
+  ;;
+  ;; `cp858' に含まれているが、全角フォントが利用されてしまう問題を回避
+  (dolist (code (mapcar 'string-to-char
+                        (split-string "═║╔╗╚╝╠╣╦╩╬" "" t)))
+    (my-set-fontset-font-safe "fontset-programming"
+                              (cons code code)
+                              ;; 次のフォントは一部記号が全角になる：
+                              ;;
+                              ;;   * "Ritcy Discord"
+                              ;;   * "Ritcy"
+                              ;;
+                              ;; ゆえに、明示的な除外が必要
+                              (font-spec :family (my-fallback-font-family "Menlo"
+                                                                          "Consolas"
+                                                                          "Courier New"
+                                                                          "Monospace"))))
   ;; "ı" (U+0131: LATIN SMALL LETTER DOTLESS I) フォント明示
   (my-set-fontset-font-safe "fontset-programming"
                             (cons (string-to-char "ı") (string-to-char "ı"))
