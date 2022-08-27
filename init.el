@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-27T23:00:13+09:00>
+;; Time-stamp: <2022-08-28T00:22:26+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1433,15 +1433,6 @@
     :custom ((eldoc-minor-mode-string . nil)
              (eldoc-idle-delay . 0.2)
              (eldoc-echo-area-use-multiline-p . 'truncate-sym-name-if-fit)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; GNU Emacs Lisp 定義ジャンプ・バック・ドキュメント閲覧
-  ;; --------------------------------------------------------------------------
-  (leaf elisp-slime-nav
-    :after eldoc
-    :package t
-    :global-minor-mode t)
 
 
   ;; --------------------------------------------------------------------------
