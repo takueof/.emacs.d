@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-28T00:55:20+09:00>
+;; Time-stamp: <2022-08-28T00:59:30+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -354,7 +354,7 @@
 ;; ============================================================================
 ;; ベル音 (Windows ONLY)
 ;; ============================================================================
-(if (fboundp #'set-message-beep)
+(if (fboundp #'set-message-beep) ; Windows 環境でのみ存在
     ;; なし
     (set-message-beep 'silent))
 
