@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize config file -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2022 Taku Watabe
-;; Time-stamp: <2022-08-23T07:53:16+09:00>
+;; Time-stamp: <2022-08-30T02:55:06+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -58,7 +58,7 @@
 ;;
 ;; Increase subprocess main memory.
 ;;
-(setq read-process-output-max (* 128 1024 1024)) ; 128MB
+(setq read-process-output-max (* 512 1024 1024)) ; 512MB
 ;;
 ;; Package initialization occurs before `user-init-file' is loaded
 ;; but after `early-init-file'.
