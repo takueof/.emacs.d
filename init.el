@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-28T01:02:18+09:00>
+;; Time-stamp: <2022-08-29T18:52:58+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1244,14 +1244,8 @@
              (xref-show-xrefs-function . #'consult-xref)
              (xref-show-definitions-function . #'consult-xref)
              (consult-project-root-function . #'my-consult-project-root-function))
-    :init
-    (advice-add #'register-preview
-                :override
-                #'consult-register-window)
-
-    (advice-add #'completing-read-multiple
-                :override
-                #'consult-completing-read-multiple)
+    :advice ((:override register-preview consult-register-window)
+             (:override completing-read-multiple consult-completing-read-multiple))
     :config
     (defun my-consult-line (&optional at-point)
       "Consult-line uses things-at-point if set C-u prefix."
