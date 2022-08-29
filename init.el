@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-30T03:24:23+09:00>
+;; Time-stamp: <2022-08-30T04:44:36+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1843,7 +1843,8 @@ See also: `https://github.com/validator/validator'."
            (php-mode-hook . lsp)
            (scss-mode-hook . lsp)
            (typescript-mode-hook . lsp)
-           (web-mode-hook . lsp))
+           (web-mode-hook . lsp)
+           (yaml-mode-hook . lsp))
     :custom ((lsp-headerline-breadcrumb-enable . nil)
              (lsp-progress-function . 'ignore)
              ;; ローカル環境にのみ保存
