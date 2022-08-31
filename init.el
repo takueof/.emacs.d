@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-30T04:44:36+09:00>
+;; Time-stamp: <2022-08-31T20:53:55+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2179,6 +2179,26 @@ See also: `https://github.com/validator/validator'."
     :init
     (defun my-css-mode-initialize ()
       "Initialize `css-mode' before file load."
+      (setq-local indent-tabs-mode nil)
+
+      ;; EditorConfig 対応
+      (with-eval-after-load 'editorconfig
+        (if (hash-table-p editorconfig-properties-hash)
+            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                   (indent-style (equal indent-style-data "tab")))
+              (if (not (equal indent-tabs-mode indent-style))
+                  (setq-local indent-tabs-mode indent-style)))))))
+
+
+  ;; --------------------------------------------------------------------------
+  ;; Docker's Dockerfile
+  ;; --------------------------------------------------------------------------
+  (leaf dockerfile-mode
+    :package t
+    :hook ((dockerfile-mode-hook . my-dockerfile-mode-initialize))
+    :init
+    (defun my-dockerfile-mode-initialize ()
+      "Initialize `dockerfile-mode' before file load."
       (setq-local indent-tabs-mode nil)
 
       ;; EditorConfig 対応
