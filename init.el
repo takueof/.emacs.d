@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-31T20:53:55+09:00>
+;; Time-stamp: <2022-09-07T19:28:10+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2992,14 +2992,8 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   ;; フォントセット：プログラミング用（高 dpi 環境向け）
   ;; --------------------------------------------------------------------------
-  ;; フォントサイズは 1.5 の倍数（例：9, 10.5, 12, 13.5, 15, 16.5 etc.）を
-  ;; 指定すると半角：全角 = 1:2 で表示されやすくなる
-  ;;
-  ;; See also:
-  ;; https://rictyfonts.github.io/
-  ;; --------------------------------------------------------------------------
   (my-create-fontset-from-spec "programming"
-                               (font-spec :size 16.5 ; デフォルトフォントサイズ (pt)
+                               (font-spec :size 14.0 ; デフォルトフォントサイズ (pt)
                                           :family (my-fallback-font-family "Ricty Discord"
                                                                            "Ricty"
                                                                            "Menlo"
@@ -3174,7 +3168,7 @@ See also: `https://github.com/validator/validator'."
   ;; ASCII
   (my-set-fontset-font-safe "fontset-programming"
                             'ascii
-                            (font-spec :size 16.5 ; デフォルトフォントサイズ (pt)
+                            (font-spec :size 14.0 ; デフォルトフォントサイズ (pt)
                                        :family (my-fallback-font-family "Ricty Discord"
                                                                         "Ricty"
                                                                         "Menlo"
