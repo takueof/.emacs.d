@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-09-07T19:28:10+09:00>
+;; Time-stamp: <2022-09-11T23:47:11+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1001,7 +1001,16 @@
   ;; 自動バッファ再読込
   ;; --------------------------------------------------------------------------
   (leaf autorevert
-    :custom ((auto-revert-check-vc-info . t))
+    :custom (;; ファイル監視（通知）関数を使わない
+             ;;
+             ;; GNU Emacs の仕様では 1024 - 50 = 974 個以上のファイル監視を
+             ;; 登録できない
+             ;; 少しでもファイル監視を減らすため無効化
+             ;;
+             ;; See also:
+             ;; https://www.reddit.com/r/emacs/comments/mq2znn/comment/gugo0n4/?context=3
+             (auto-revert-use-notify . nil)
+             (auto-revert-check-vc-info . t))
     :global-minor-mode global-auto-revert-mode)
 
 
@@ -1845,10 +1854,21 @@ See also: `https://github.com/validator/validator'."
            (typescript-mode-hook . lsp)
            (web-mode-hook . lsp)
            (yaml-mode-hook . lsp))
-    :custom ((lsp-headerline-breadcrumb-enable . nil)
-             (lsp-progress-function . 'ignore)
-             ;; ローカル環境にのみ保存
-             (lsp-session-file . "~/.emacs.lsp-session")))
+    :custom (;; ローカル環境にのみ保存
+             (lsp-session-file . "~/.emacs.lsp-session")
+             ;; LSP サーバからのファイル監視要求を無視
+             ;;
+             ;; GNU Emacs の仕様では 1024 - 50 = 974 個以上のファイル監視を
+             ;; 登録できない
+             ;; LSP サーバによっては大量のファイル監視要求を行うため、意図的に無視
+             ;;
+             ;; See also:
+             ;; https://www.reddit.com/r/emacs/comments/mq2znn/no_file_descriptors_left/
+             ;; https://apple.stackexchange.com/a/418699
+             ;; https://github.com/emacs-mirror/emacs/blob/0008003c3e466269074001d637cda872d6fee9be/src/kqueue.c#L387-L401
+             (lsp-enable-file-watchers . nil)
+             (lsp-headerline-breadcrumb-enable . nil)
+             (lsp-progress-function . 'ignore)))
 
 
   ;; --------------------------------------------------------------------------
