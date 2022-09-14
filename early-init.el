@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize config file -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2022 Taku Watabe
-;; Time-stamp: <2022-08-30T02:55:06+09:00>
+;; Time-stamp: <2022-09-14T22:21:44+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -43,6 +43,14 @@
 ;;          `custom.el' will not be generated.
 ;;
 (setq custom-file (locate-user-emacs-file "custom.el"))
+;;
+;; Set maximum optimization level with native compiling.
+;;
+(setq native-comp-speed 3)
+;;
+;; Don't show `*Warnings*' buffer when asynchronous native compiling.
+;;
+(setq native-comp-async-report-warnings-errors nil)
 ;;
 ;; Prevents garbage collection that occurs at startup.
 ;;
