@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------
 # Git ignored resource file
 # Copyright (C) 2014-2022 Taku Watabe
-# Time-stamp: <2022-08-14T07:31:49+09:00>
+# Time-stamp: <2022-09-14T22:09:56+09:00>
 # -----------------------------------------------------------------
 .AppleDouble
 .DS_Store
@@ -9,12 +9,13 @@
 .cache
 .emacs.desktop
 .emacs.desktop.lock
-/custom.el
-/el-get/
-/elpa/
-/lsp-cache/
-/site-lisp/
-/snippets/
-/transient/
-/url/
 Thumbs.db
+custom.el
+el-get
+eln-cache
+elpa
+lsp-cache
+site-lisp
+snippets
+transient
+url
