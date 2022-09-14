@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-09-15T07:27:49+09:00>
+;; Time-stamp: <2022-09-15T08:35:20+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1246,8 +1246,7 @@
            ("M-s l" . consult-line)
            ("M-s m" . consult-multi-occur)
            ("M-s k" . consult-keep-lines)
-           ("M-s u" . consult-focus-lines)
-           ("M-s e" . consult-isearch))
+           ("M-s u" . consult-focus-lines))
     :hook ((completion-list-mode . consult-preview-at-point-mode))
     :custom ((register-preview-function . #'consult-register-format)
              (xref-show-xrefs-function . #'consult-xref)
