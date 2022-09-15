@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-09-15T08:35:20+09:00>
+;; Time-stamp: <2022-09-15T14:41:20+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -541,7 +541,7 @@
          ;; 一括エンコーディング変換
          ("C-c RET f" . my-change-files-coding-system)
          ;; 一括ファイル通知ウォッチ削除
-         ("C-c C-c q" . my-file-notify-rm-all-watches))
+         ("C-c q" . my-file-notify-rm-all-watches))
   :config
   ;; <Backspace> と <DEL> を 交換
   (keyboard-translate ?\C-h ?\C-?)
@@ -1159,7 +1159,7 @@
   ;; --------------------------------------------------------------------------
   (leaf compile
     :after (nvm exec-path-from-shell)
-    :bind (("C-c c" . compile))
+    :bind (("C-c x" . compile))
     :hook ((compilation-filter-hook . ansi-color-compilation-filter))
     :custom ((compilation-window-height . 15)
              ;; ビルドツール・タスクランナーに依存させない
@@ -1217,36 +1217,34 @@
   ;; --------------------------------------------------------------------------
   (leaf consult
     :package t
-    :bind (;; Overrides
+    :bind (;; 上書き
            ("C-s" . my-consult-line)
            ("C-x b" . consult-buffer)
            ("C-x 4 b" . consult-buffer-other-window)
            ("C-x 5 b" . consult-buffer-other-frame)
-           ;; mode-specific-map
-           ("C-c h" . consult-history)
-           ("C-c m" . consult-mode-command)
-           ("C-c b" . consult-bookmark)
-           ("C-c k" . consult-kmacro)
-           ;; goto-map
-           ("M-g e" . consult-compile-error)
-           ("M-g f" . consult-flymake)
-           ("M-g g" . consult-goto-line)
+           ;; コマンド群
+           ;; `C-c c' プレフィクスを用いる
+           ("C-c c h" . consult-history)
+           ("C-c c m" . consult-mode-command)
+           ("C-c c b" . consult-bookmark)
+           ("C-c c k" . consult-kmacro)
+           ("C-c c e" . consult-compile-error)
+           ("C-c c g" . consult-goto-line)
            ([remap goto-line] . consult-goto-line)
-           ("M-g o" . consult-outline)
-           ("M-g m" . consult-mark)
-           ("M-g k" . consult-global-mark)
-           ("M-g i" . consult-imenu)
-           ("M-g I" . consult-project-imenu)
-           ;; search-map
-           ("M-s f" . consult-find)
-           ("M-s L" . consult-locate)
-           ("M-s g" . consult-grep)
-           ("M-s G" . consult-git-grep)
-           ("M-s r" . consult-ripgrep)
-           ("M-s l" . consult-line)
-           ("M-s m" . consult-multi-occur)
-           ("M-s k" . consult-keep-lines)
-           ("M-s u" . consult-focus-lines))
+           ("C-c c o" . consult-outline)
+           ("C-c c m" . consult-mark)
+           ("C-c c M" . consult-global-mark)
+           ("C-c c i" . consult-imenu)
+           ("C-c c I" . consult-project-imenu)
+           ("C-c c f" . consult-focus-lines)
+           ;; コマンド群（検索）
+           ;; "C-c c s" プレフィクスを用いる
+           ("C-c c s f" . consult-find)
+           ("C-c c s L" . consult-locate)
+           ("C-c c s g" . consult-grep)
+           ("C-c c s G" . consult-git-grep)
+           ("C-c c s r" . consult-ripgrep)
+           ("C-c c s l" . consult-line))
     :hook ((completion-list-mode . consult-preview-at-point-mode))
     :custom ((register-preview-function . #'consult-register-format)
              (xref-show-xrefs-function . #'consult-xref)
@@ -1279,7 +1277,7 @@
   ;; --------------------------------------------------------------------------
   (leaf consult-lsp
     :package t
-    :bind (("C-c ." . consult-lsp-diagnostics)))
+    :bind (("C-c c ." . consult-lsp-diagnostics)))
 
 
   ;; --------------------------------------------------------------------------
@@ -1333,7 +1331,8 @@
   ;; デスクトップ環境保存・復旧
   ;; --------------------------------------------------------------------------
   (leaf desktop
-    :bind (("C-c d c" . desktop-clear)
+    :bind (;; "C-c d" プレフィクスを用いる
+           ("C-c d c" . desktop-clear)
            ("C-c d C-s" . desktop-save)
            ("C-c d s" . desktop-save-in-desktop-dir)
            ("C-c d d" . desktop-remove)
@@ -1885,9 +1884,6 @@ See also: `https://github.com/validator/validator'."
     :after exec-path-from-shell
     :package t
     :require t
-    :bind ((:isearch-mode-map
-            :package isearch
-            ("C-c C-s" . migemo-isearch-toggle-migemo)))
     :custom `(;; C/Migemo 利用設定
               (migemo-command . ,(executable-find "cmigemo"))
               (migemo-options . '("-q" "--emacs"))
@@ -2080,6 +2076,7 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf vlf
     :package t
+    :require vlf-setup
     :bind ((:vlf-mode-map
             :package vlf
             ("C-c C-v" . vlf-prefix-map)))
