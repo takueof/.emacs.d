@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-09-15T14:41:20+09:00>
+;; Time-stamp: <2022-09-18T09:43:30+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2067,7 +2067,9 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf vertico
     :package t
-    :custom ((vertico-count . 20))
+    :custom ((vertico-count . 20)
+             (vertico-cycle . t)
+             (vertico-sort-function . #'vertico-sort-history-alpha))
     :global-minor-mode t)
 
 
