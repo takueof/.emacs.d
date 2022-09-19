@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-09-18T09:43:30+09:00>
+;; Time-stamp: <2022-09-20T07:56:25+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1315,7 +1315,10 @@
                (global-anzu-mode nil "anzu")
                (global-company-mode nil "company")
                (global-flycheck-mode nil "flycheck")
+               (global-prettier-mode nil "prettier")
                (global-whitespace-mode nil "whitespace")
+               (lsp-mode nil "lsp-mode")
+               (prettier-mode nil "prettier")
                (projectile-mode nil "projectile")
                (show-smartparens-global-mode nil "smartparens")
                (show-smartparens-mode nil "smartparens")
