@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-09-20T07:56:25+09:00>
+;; Time-stamp: <2022-10-29T14:21:46+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1865,7 +1865,9 @@ See also: `https://github.com/validator/validator'."
              ;; https://apple.stackexchange.com/a/418699
              ;; https://github.com/emacs-mirror/emacs/blob/0008003c3e466269074001d637cda872d6fee9be/src/kqueue.c#L387-L401
              (lsp-enable-file-watchers . nil)
+             (lsp-eldoc-render-all . t)
              (lsp-headerline-breadcrumb-enable . nil)
+             (lsp-signature-doc-lines . t)
              (lsp-progress-function . 'ignore)))
 
 
