@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-10-29T14:21:46+09:00>
+;; Time-stamp: <2022-11-01T17:14:06+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1804,8 +1804,8 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   ;; 行番号表示
   ;; --------------------------------------------------------------------------
-  (leaf linum
-    :bind (("C-c l" . linum-mode)))
+  (leaf display-line-numbers
+    :bind (("C-c l" . display-line-numbers-mode)))
 
 
   ;; --------------------------------------------------------------------------
