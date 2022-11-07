@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-11-01T17:14:06+09:00>
+;; Time-stamp: <2022-11-07T13:03:29+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -3102,7 +3102,6 @@ See also: `https://github.com/validator/validator'."
                             ;;
                             ;;   * "Ricty"
                             ;;   * "Ricty Discord"
-                            ;;   * "Inconsolata"
                             ;;   * "Consolas"
                             ;;
                             ;; ゆえに、他フォントによるフォールバックが必要
@@ -3143,7 +3142,6 @@ See also: `https://github.com/validator/validator'."
                             ;;
                             ;;   * "Ricty"
                             ;;   * "Ricty Discord"
-                            ;;   * "Inconsolata"
                             ;;
                             ;; ゆえに、他フォントによるフォールバックが必要
                             (font-spec :family (my-fallback-font-family "Menlo"
