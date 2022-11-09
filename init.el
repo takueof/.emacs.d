@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-11-07T13:03:29+09:00>
+;; Time-stamp: <2022-11-09T13:01:42+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -915,24 +915,19 @@
     :custom ((vterm-shell . "bash")
              (vterm-max-scrollback . 100000)
              (vterm-clear-scrollback-when-clearing . t)
-             (vterm-keymap-exceptions . '(;; WARNING: ソート禁止
-                                          ;;          順序にも意味があるため
-                                          "C-c"
-                                          "C-x"
-                                          "C-u"
-                                          "C-g"
-                                          "C-h"
-                                          "C-l"
-                                          "M-x"
-                                          "M-o"
-                                          "C-y"
-                                          "M-y"
-                                          "C-S-b" ; for `windmove'
-                                          "C-S-f" ; for `windmove'
-                                          "C-S-n" ; for `windmove'
-                                          "C-S-p")) ; for `windmove'
              (vterm-enable-manipulate-selection-data-by-osc52 . t)
-             (vterm-copy-exclude-prompt . nil)))
+             (vterm-copy-exclude-prompt . nil))
+    :init
+    (leaf vterm
+      :after vterm
+      :init
+      ;; WARNING: 確実に `vterm-keymap-exceptions' が存在する状態で、
+      ;;          「定義」ではなく「追加」しないと
+      ;;          他のキーバインドに影響が出てしまう
+      (add-to-list 'vterm-keymap-exceptions "C-S-b") ; for `windmove'
+      (add-to-list 'vterm-keymap-exceptions "C-S-f") ; for `windmove'
+      (add-to-list 'vterm-keymap-exceptions "C-S-n") ; for `windmove'
+      (add-to-list 'vterm-keymap-exceptions "C-S-p"))) ; for `windmove'
 
 
   ;; --------------------------------------------------------------------------
