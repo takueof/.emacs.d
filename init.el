@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-11-09T13:01:42+09:00>
+;; Time-stamp: <2022-11-09T21:18:54+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1863,7 +1863,8 @@ See also: `https://github.com/validator/validator'."
              (lsp-eldoc-render-all . t)
              (lsp-headerline-breadcrumb-enable . nil)
              (lsp-signature-doc-lines . t)
-             (lsp-progress-function . 'ignore)))
+             (lsp-progress-function . 'ignore)
+             (lsp-warn-no-matched-clients . nil)))
 
 
   ;; --------------------------------------------------------------------------
