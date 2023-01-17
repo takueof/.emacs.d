@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2023-01-09T07:27:33+09:00>
+;; Time-stamp: <2023-01-17T20:08:37+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2042,6 +2042,15 @@ See also: `https://github.com/validator/validator'."
       :after smartparens
       :require t)
     :global-minor-mode (show-smartparens-global-mode smartparens-global-mode))
+
+
+  ;; --------------------------------------------------------------------------
+  ;; 同時置換
+  ;; --------------------------------------------------------------------------
+  (leaf substitute
+    :package t
+    :bind (("C-M-b" . substitute-target-in-buffer))
+    :custom ((substitute-highlight . t)))
 
 
   ;; --------------------------------------------------------------------------
