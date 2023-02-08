@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2023-01-17T20:08:37+09:00>
+;; Time-stamp: <2023-02-08T16:05:59+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2970,8 +2970,8 @@ See also: `https://github.com/validator/validator'."
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.800))
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.100)))
    (;; macOS & Windows
-    (my-fallback-font-family "Ricty Discord"
-                             "Ricty")
+    (and (my-fallback-font-family "Inconsolata")
+         (my-fallback-font-family "Migu 1M"))
     (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.850))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.850))
     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
@@ -3019,8 +3019,7 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (my-create-fontset-from-spec "programming"
                                (font-spec :size 14.0 ; デフォルトフォントサイズ (pt)
-                                          :family (my-fallback-font-family "Ricty Discord"
-                                                                           "Ricty"
+                                          :family (my-fallback-font-family "Inconsolata"
                                                                            "Menlo"
                                                                            "Consolas"
                                                                            "Monospace")))
@@ -3080,23 +3079,20 @@ See also: `https://github.com/validator/validator'."
   ;; 日本語：JIS X 0213:2004
   (my-set-fontset-font-safe "fontset-programming"
                             'japanese-jisx0213.2004-1
-                            (font-spec :family (my-fallback-font-family "Ricty Discord"
-                                                                        "Ricty"
+                            (font-spec :family (my-fallback-font-family "Migu 1M"
                                                                         "ヒラギノ角ゴシック"
                                                                         "メイリオ"
                                                                         "Monospace")))
   (my-set-fontset-font-safe "fontset-programming"
                             'japanese-jisx0213-2
-                            (font-spec :family (my-fallback-font-family "Ricty Discord"
-                                                                        "Ricty"
+                            (font-spec :family (my-fallback-font-family "Migu 1M"
                                                                         "ヒラギノ角ゴシック"
                                                                         "メイリオ"
                                                                         "Monospace")))
   ;; ラテン文字：Code page 858 (`cp858')
   (my-set-fontset-font-safe "fontset-programming"
                             'cp858
-                            (font-spec :family (my-fallback-font-family "Ricty Discord"
-                                                                        "Ricty"
+                            (font-spec :family (my-fallback-font-family "Inconsolata"
                                                                         "Menlo"
                                                                         "Consolas"
                                                                         "Courier New"
@@ -3105,48 +3101,19 @@ See also: `https://github.com/validator/validator'."
                             (cons (string-to-char "░") (string-to-char "▓"))
                             ;; 次のフォントは U+2591, U+2592, U+2593 未実装：
                             ;;
-                            ;;   * "Ricty"
-                            ;;   * "Ricty Discord"
+                            ;;   * "Inconsolata"
                             ;;   * "Consolas"
                             ;;
                             ;; ゆえに、他フォントによるフォールバックが必要
                             (font-spec :family (my-fallback-font-family "Menlo"
                                                                         "Courier New"
                                                                         "Monospace")))
-  ;; "═" (U+2550: BOX DRAWINGS DOUBLE HORIZONTAL)
-  ;; "║" (U+2551: BOX DRAWINGS DOUBLE VERTICAL)
-  ;; "╔" (U+2554: BOX DRAWINGS DOUBLE DOWN AND RIGHT)
-  ;; "╗" (U+2557: BOX DRAWINGS DOUBLE DOWN AND LEFT)
-  ;; "╚" (U+255A: BOX DRAWINGS DOUBLE UP AND RIGHT)
-  ;; "╝" (U+255D: BOX DRAWINGS DOUBLE UP AND LEFT)
-  ;; "╠" (U+2560: BOX DRAWINGS DOUBLE VERTICAL AND RIGHT)
-  ;; "╣" (U+2563: BOX DRAWINGS DOUBLE VERTICAL AND LEFT)
-  ;; "╦" (U+2566: BOX DRAWINGS DOUBLE DOWN AND HORIZONTAL)
-  ;; "╩" (U+2569: BOX DRAWINGS DOUBLE UP AND HORIZONTAL)
-  ;; "╬" (U+256C: BOX DRAWINGS DOUBLE VERTICAL AND HORIZONTAL)
-  ;;
-  ;; `cp858' に含まれているが、全角フォントが利用されてしまう問題を回避
-  (dolist (code (mapcar 'string-to-char
-                        (split-string "═║╔╗╚╝╠╣╦╩╬" "" t)))
-    (my-set-fontset-font-safe "fontset-programming"
-                              (cons code code)
-                              ;; 次のフォントは一部記号が全角になる：
-                              ;;
-                              ;;   * "Ricty Discord"
-                              ;;   * "Ricty"
-                              ;;
-                              ;; ゆえに、明示的な除外が必要
-                              (font-spec :family (my-fallback-font-family "Menlo"
-                                                                          "Consolas"
-                                                                          "Courier New"
-                                                                          "Monospace"))))
   ;; "ı" (U+0131: LATIN SMALL LETTER DOTLESS I) フォント明示
   (my-set-fontset-font-safe "fontset-programming"
                             (cons (string-to-char "ı") (string-to-char "ı"))
                             ;; 次のフォントは "ı" (U+0131) 未実装：
                             ;;
-                            ;;   * "Ricty"
-                            ;;   * "Ricty Discord"
+                            ;;   * "Inconsolata"
                             ;;
                             ;; ゆえに、他フォントによるフォールバックが必要
                             (font-spec :family (my-fallback-font-family "Menlo"
@@ -3184,16 +3151,14 @@ See also: `https://github.com/validator/validator'."
                               ;;   * "ヒラギノ角ゴシック"
                               ;;
                               ;; ゆえに、明示的な除外が必要
-                              (font-spec :family (my-fallback-font-family "Ricty Discord"
-                                                                          "Ricty"
+                              (font-spec :family (my-fallback-font-family "Migu 1M"
                                                                           "メイリオ"
                                                                           "Monospace"))))
   ;; ASCII
   (my-set-fontset-font-safe "fontset-programming"
                             'ascii
                             (font-spec :size 14.0 ; デフォルトフォントサイズ (pt)
-                                       :family (my-fallback-font-family "Ricty Discord"
-                                                                        "Ricty"
+                                       :family (my-fallback-font-family "Inconsolata"
                                                                         "Menlo"
                                                                         "Consolas"
                                                                         "Courier New"
