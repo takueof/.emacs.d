@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2023-09-19T07:29:22+09:00>
+;; Time-stamp: <2023-09-21T19:30:51+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1818,6 +1818,16 @@ See also: `https://github.com/validator/validator'."
 
 
   ;; --------------------------------------------------------------------------
+  ;; LSP (Language Server Protocol) クライアント拡張 (Java)
+  ;; --------------------------------------------------------------------------
+  ;; WARNING: `lsp-mode' が自動ロードする
+  ;;          念のため `lsp-mode' より前にインストール
+  ;; --------------------------------------------------------------------------
+  (leaf lsp-java
+    :package t)
+
+
+  ;; --------------------------------------------------------------------------
   ;; LSP (Language Server Protocol) クライアント拡張 (Tailwind CSS)
   ;; --------------------------------------------------------------------------
   ;; WARNING: `lsp-mode' が自動ロードする
@@ -1840,6 +1850,7 @@ See also: `https://github.com/validator/validator'."
     :package t
     :hook (;; 有効化は必要最小限にとどめる
            (css-mode-hook . lsp)
+           (java-mode-hook . lsp)
            (js-mode-hook . lsp)
            (js2-mode-hook . lsp)
            (json-mode-hook . lsp)
@@ -2322,6 +2333,25 @@ See also: `https://github.com/validator/validator'."
       "Initialize `ielm' major mode before file load."
       (setq-local indent-tabs-mode nil)
       (setq-local tab-width 8)))
+
+
+  ;; --------------------------------------------------------------------------
+  ;; Java
+  ;; --------------------------------------------------------------------------
+  (leaf java-mode
+    :hook ((java-mode-hook . my-java-mode-initialize))
+    :init
+    (defun my-java-mode-initialize ()
+      "Initialize `java-mode' before file load."
+      (setq-local indent-tabs-mode nil)
+
+      ;; EditorConfig 対応
+      (with-eval-after-load 'editorconfig
+        (if (hash-table-p editorconfig-properties-hash)
+            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                   (indent-style (equal indent-style-data "tab")))
+              (if (not (equal indent-tabs-mode indent-style))
+                  (setq-local indent-tabs-mode indent-style)))))))
 
 
   ;; --------------------------------------------------------------------------
