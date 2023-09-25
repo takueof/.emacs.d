@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2023-09-21T19:30:51+09:00>
+;; Time-stamp: <2023-09-25T12:25:20+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1824,7 +1824,20 @@ See also: `https://github.com/validator/validator'."
   ;;          念のため `lsp-mode' より前にインストール
   ;; --------------------------------------------------------------------------
   (leaf lsp-java
-    :package t)
+    :package t
+    :init
+    (leaf lsp-java
+      :after lsp-java
+      :init
+      ;; WARNING: 確実に `defcustom' 定義済変数が存在する状態で、
+      ;;          「定義」ではなく「追加」
+      (add-to-list 'lsp-java-vmargs "-Djsse.enableSNIExtension=false")
+      (add-to-list 'lsp-java-9-args "-Djsse.enableSNIExtension=false"))
+    ;; For "SpringBoot"
+    (leaf lsp-java-boot
+      :require t
+      :hook ((lsp-mode-hook . lsp-lens-mode)
+             (java-mode-hook . lsp-java-boot-lens-mode))))
 
 
   ;; --------------------------------------------------------------------------
