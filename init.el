@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-09-25T12:28:01+09:00>
+;; Time-stamp: <2023-09-26T17:34:17+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1825,6 +1825,8 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf lsp-java
     :package t
+    :custom (;; 旧バージョン（11.x 系）を利用するため旧い `jdtls' を指定
+             (lsp-java-jdt-download-url . "https://download.eclipse.org/jdtls/milestones/1.12.0/jdt-language-server-1.12.0-202206011637.tar.gz"))
     :init
     (leaf lsp-java
       :after lsp-java

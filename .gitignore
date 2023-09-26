@@ -1,12 +1,13 @@
 # -----------------------------------------------------------------
 # Git ignored resource file
 # Copyright (C) 2014-2023 Taku Watabe
-# Time-stamp: <2023-09-25T12:28:15+09:00>
+# Time-stamp: <2023-09-26T17:39:38+09:00>
 # -----------------------------------------------------------------
 .AppleDouble
 .DS_Store
 .LSOverride
 .cache
+.dap-breakpoints
 .emacs.desktop
 .emacs.desktop.lock
 Thumbs.db
