@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-09-26T17:34:17+09:00>
+;; Time-stamp: <2023-09-28T13:59:53+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1292,6 +1292,16 @@
 
 
   ;; --------------------------------------------------------------------------
+  ;; Debug Adapter Protocol
+  ;; --------------------------------------------------------------------------
+  (leaf dap-mode
+    :package t
+    :after dap-mode
+    :config
+    (dap-ui-mode +1))
+
+
+  ;; --------------------------------------------------------------------------
   ;; モードラインからモードの表示を消す
   ;; --------------------------------------------------------------------------
   (leaf delight
@@ -1354,6 +1364,13 @@
              (desktop-lazy-verbose . t)
              (desktop-lazy-idle-delay . 5))
     :global-minor-mode desktop-save-mode)
+
+
+  ;; --------------------------------------------------------------------------
+  ;; 行番号表示
+  ;; --------------------------------------------------------------------------
+  (leaf display-line-numbers
+    :bind (("C-c l" . display-line-numbers-mode)))
 
 
   ;; --------------------------------------------------------------------------
@@ -1797,13 +1814,6 @@ See also: `https://github.com/validator/validator'."
 
 
   ;; --------------------------------------------------------------------------
-  ;; 行番号表示
-  ;; --------------------------------------------------------------------------
-  (leaf display-line-numbers
-    :bind (("C-c l" . display-line-numbers-mode)))
-
-
-  ;; --------------------------------------------------------------------------
   ;; LSP (Language Server Protocol) クライアント拡張 (UI)
   ;; --------------------------------------------------------------------------
   ;; WARNING: `lsp-mode' が自動ロードする
@@ -1831,6 +1841,9 @@ See also: `https://github.com/validator/validator'."
     (leaf lsp-java
       :after lsp-java
       :init
+      ;; For "DAP"
+      (leaf dap-java
+        :require t)
       ;; WARNING: 確実に `defcustom' 定義済変数が存在する状態で、
       ;;          「定義」ではなく「追加」
       (add-to-list 'lsp-java-vmargs "-Djsse.enableSNIExtension=false")
