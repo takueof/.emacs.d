@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-09-28T13:59:53+09:00>
+;; Time-stamp: <2023-10-06T12:57:52+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1674,26 +1674,7 @@ See also: `https://github.com/validator/validator'."
   ;; カレントカーソル行強調
   ;; --------------------------------------------------------------------------
   (leaf hl-line
-    ;; FIXME: `after-init-hook' 後に実行した `load-theme' に対応したい
-    ;;        `advice-add' の :after で `enable-theme' を実行してもダメ
-    :hook ((after-init-hook . my-hl-line-initialize))
     :custom ((global-hl-line-sticky-flag . t))
-    :init
-    (defun my-hl-line-initialize ()
-      "Initialize `hl-line'."
-      (when (require 'color nil :noerror) ; 未ロードがありうるため必須
-        (let* ((L-diff 20)
-               (background-color (face-attribute 'default :background))
-               (L (nth 2 (apply 'color-rgb-to-hsl
-                                (color-name-to-rgb background-color))))
-               (line-background-color (funcall (if (< L 0.5)
-                                                   'color-lighten-name
-                                                 'color-darken-name)
-                                               background-color
-                                               L-diff)))
-          (custom-set-faces
-           `(hl-line ((((class color))
-                       (:background ,line-background-color :inherit nil))))))))
     :global-minor-mode global-hl-line-mode)
 
 
