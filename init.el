@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-10-06T12:57:52+09:00>
+;; Time-stamp: <2023-10-15T04:58:31+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1230,7 +1230,6 @@
            ("C-c c m" . consult-mark)
            ("C-c c M" . consult-global-mark)
            ("C-c c i" . consult-imenu)
-           ("C-c c I" . consult-project-imenu)
            ("C-c c f" . consult-focus-lines)
            ;; コマンド群（検索）
            ;; "C-c c s" プレフィクスを用いる
@@ -1243,28 +1242,15 @@
     :hook ((completion-list-mode . consult-preview-at-point-mode))
     :custom ((register-preview-function . #'consult-register-format)
              (xref-show-xrefs-function . #'consult-xref)
-             (xref-show-definitions-function . #'consult-xref)
-             (consult-project-root-function . #'my-consult-project-root-function))
-    :advice ((:override register-preview consult-register-window)
-             (:override completing-read-multiple consult-completing-read-multiple))
+             (xref-show-definitions-function . #'consult-xref))
+    :advice ((:override register-preview consult-register-window))
     :config
     (defun my-consult-line (&optional at-point)
       "Consult-line uses things-at-point if set C-u prefix."
       (interactive "P")
       (if at-point
           (consult-line (thing-at-point 'symbol))
-        (consult-line)))
-
-    (defun my-consult-project-root-function ()
-      "Function which returns project root directory."
-      (if-let (project (project-current))
-          (car (project-roots project))))
-
-    (consult-customize consult-theme
-                       :preview-key '(:debounce 0.2 any)
-                       consult-ripgrep consult-git-grep consult-grep
-                       consult-bookmark consult-recent-file consult-xref
-                       :preview-key (kbd "M-.")))
+        (consult-line))))
 
 
   ;; --------------------------------------------------------------------------
@@ -2399,7 +2385,7 @@ See also: `https://github.com/validator/validator'."
   (leaf js2-mode
     :package t
     :mode (("\\.es[0-9]\\'" . js2-mode)
-           ("\\.js\\'" . js2-mode)
+           ("\\.[cm]jsx?\\'" . js2-mode)
            ("\\.pac\\'" . js2-mode))
     :hook ((js2-mode-hook . my-js2-mode-initialize))
     :custom ((js2-highlight-level . 3) ; すべての構文強調を有効化
@@ -2631,10 +2617,10 @@ See also: `https://github.com/validator/validator'."
 
 
   ;; --------------------------------------------------------------------------
-  ;; SGML, (X)HTML
+  ;; SGML
   ;; --------------------------------------------------------------------------
   (leaf sgml-mode
-    :mode (("\\.[sx]?html?\\'" . html-mode))
+    :mode (("\\.sgml\\'" . html-mode))
     :hook ((html-mode-hook . my-html-mode-initialize)
            (sgml-mode-hook . my-sgml-mode-initialize))
     :init
@@ -2726,7 +2712,8 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf web-mode
     :package t
-    :mode (("\\.njk\\'" . web-mode)
+    :mode (("\\.[sx]?html?\\'" . web-mode)
+           ("\\.njk\\'" . web-mode)
            ("\\.vue\\'" . web-mode))
     :hook ((web-mode-hook . my-web-mode-initialize))
     :custom ((web-mode-block-padding . nil)
