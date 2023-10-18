@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-10-15T04:58:31+09:00>
+;; Time-stamp: <2023-10-19T04:49:22+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1306,10 +1306,8 @@
                (global-anzu-mode nil "anzu")
                (global-company-mode nil "company")
                (global-flycheck-mode nil "flycheck")
-               (global-prettier-mode nil "prettier")
                (global-whitespace-mode nil "whitespace")
                (lsp-mode nil "lsp-mode")
-               (prettier-mode nil "prettier")
                (projectile-mode nil "projectile")
                (show-smartparens-global-mode nil "smartparens")
                (show-smartparens-mode nil "smartparens")
@@ -1948,10 +1946,11 @@ See also: `https://github.com/validator/validator'."
 
 
   ;; --------------------------------------------------------------------------
-  ;; 汎用フォーマッタ
+  ;; コードフォーマッタ
   ;; --------------------------------------------------------------------------
   (leaf prettier
     :package t
+    :custom ((prettier-lighter . nil))
     :hook ((after-init-hook . global-prettier-mode)))
 
 
