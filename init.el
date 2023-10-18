@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-10-19T04:49:22+09:00>
+;; Time-stamp: <2023-10-19T04:50:38+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2384,7 +2384,7 @@ See also: `https://github.com/validator/validator'."
   (leaf js2-mode
     :package t
     :mode (("\\.es[0-9]\\'" . js2-mode)
-           ("\\.[cm]jsx?\\'" . js2-mode)
+           ("\\.[cm]?jsx?\\'" . js2-mode)
            ("\\.pac\\'" . js2-mode))
     :hook ((js2-mode-hook . my-js2-mode-initialize))
     :custom ((js2-highlight-level . 3) ; すべての構文強調を有効化
