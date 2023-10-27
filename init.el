@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-10-19T04:50:38+09:00>
+;; Time-stamp: <2023-10-28T08:24:14+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1128,6 +1128,14 @@
 
 
   ;; --------------------------------------------------------------------------
+  ;; 補完フレームワーク (`company') 拡張（ポップアップ）
+  ;; --------------------------------------------------------------------------
+  (leaf company-box
+    :package t
+    :hook ((company-mode-hook . company-box-mode)))
+
+
+  ;; --------------------------------------------------------------------------
   ;; 補完フレームワーク (`company') 拡張（補完候補のソート）
   ;; --------------------------------------------------------------------------
   (leaf company-statistics
@@ -1136,16 +1144,6 @@
     :custom ((company-statistics-size . 500)
              ;; ローカル環境にのみ保存
              (company-statistics-file . "~/.emacs.company-statistics-cache.el"))
-    :global-minor-mode t)
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 補完フレームワーク (`company') 拡張（ポップアップドキュメント）
-  ;; --------------------------------------------------------------------------
-  (leaf company-quickhelp
-    :after company
-    :package t
-    :custom ((company-quickhelp-delay . 0.25))
     :global-minor-mode t)
 
 
