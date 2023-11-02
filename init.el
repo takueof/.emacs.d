@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-10-29T02:57:20+09:00>
+;; Time-stamp: <2023-11-03T09:34:59+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -424,16 +424,13 @@
 
 ;; ============================================================================
 ;; 詳細設定補助 (by `leaf')
-;;
-;; `package' が必ず使える状況を前提とする
 ;; ============================================================================
 ;; WARNING: `package' が必ず使える状況を前提とする
 ;;          `package' の初期化より後に設定しなければならない
 ;; ============================================================================
-(with-eval-after-load 'package
-  (unless (package-installed-p 'leaf)
-    (package-refresh-contents)
-    (package-install 'leaf)))
+(unless (package-installed-p 'leaf)
+  (package-refresh-contents)
+  (package-install 'leaf))
 
 
 ;; ============================================================================
