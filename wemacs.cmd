@@ -1,10 +1,10 @@
 @echo off
 setlocal
-rem ---------------------------------------------------------------------------
-rem GNU Emacs クライアント `emacsclientw' ラッパー
-rem Copyright (C) 2014-2022 Taku Watabe
-rem Time-stamp: <2022-08-21T11:47:57+09:00>
-rem ---------------------------------------------------------------------------
+rem ===========================================================================
+rem GNU Emacs client `emacsclientw' wrapper
+rem Copyright (C) 2014-2023 Taku Watabe
+rem Time-stamp: <2023-11-03T10:15:09+09:00>
+rem ===========================================================================
 rem This program is free software; you can redistribute it and/or modify
 rem it under the terms of the GNU General Public License as published by
 rem the Free Software Foundation, either version 3 of the License, or
@@ -17,7 +17,7 @@ rem GNU General Public License for more details.
 rem
 rem You should have received a copy of the GNU General Public License
 rem along with this program.  If not, see <https://www.gnu.org/licenses/>.
-rem ---------------------------------------------------------------------------
+rem ===========================================================================
 set EMACS_DIR=C:\programs\emacs\bin
 set EMACS_BIN=runemacs.exe
 set EMACS_CLIENT=emacsclientw.exe
@@ -32,8 +32,9 @@ set EMACS_SERVER_FILE=%APPDATA%\.emacs.server\server
 rem 実行
 "%EMACS_DIR%\%EMACS_CLIENT%" -n -a "%EMACS_DIR%\%EMACS_BIN%" %*
 
-rem ---------------------------------------------------------------------------
+rem ===========================================================================
 endlocal
 rem Local Variables:
 rem coding: japanese-cp932-dos
-rem End
+rem mode: bat-mode
+rem End:
