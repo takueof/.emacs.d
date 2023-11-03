@@ -2,7 +2,7 @@
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftakueof%2F.emacs.d.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Ftakueof%2F.emacs.d?ref=badge_shield)
 
-There are my public/private [GNU Emacs](https://www.gnu.org/software/emacs/) configuration files in `~/.emacs.d/` directory (**unsupported other "_emacsen_"**).
+[GNU Emacs](https://www.gnu.org/software/emacs/) configuration files in my `~/.emacs.d/` directory (**other "_emacsen_" are not supported**).
 
 I wrote these files for "**macOS**" and "**Microsoft Windows**" environments, but perhaps it will work under "**GNU/Linux**" and "**UNIX**" environments.
 
