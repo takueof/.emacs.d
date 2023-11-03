@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-03T09:34:59+09:00>
+;; Time-stamp: <2023-11-03T16:33:06+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -338,8 +338,8 @@
  `(gnutls-trustfiles ',(mapcar 'convert-standard-filename
                                (if (member system-type '(ms-dos windows-nt))
                                    '("C:/programs/cygwin/usr/ssl/certs/ca-bundle.crt")
-                                 '("/usr/local/etc/libressl/cert.pem"
-                                   "/usr/local/etc/openssl/cert.pem"
+                                 '("/usr/local/etc/openssl/cert.pem"
+                                   "/usr/local/etc/libressl/cert.pem"
                                    "/private/etc/ssl/cert.pem"
                                    "/etc/ssl/cert.pem")))))
 
