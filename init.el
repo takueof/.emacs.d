@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-17T18:23:15+09:00>
+;; Time-stamp: <2023-11-17T19:19:19+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2767,6 +2767,10 @@ See also: `https://github.com/validator/validator'."
     (defun my-web-mode-initialize ()
       "Initialize `web-mode' before file load."
       (setq-local indent-tabs-mode nil)
+
+      ;; Prettier 対応
+      (if (boundp prettier-mode)
+          (prettier-mode +1))
 
       ;; EditorConfig 対応
       (with-eval-after-load 'editorconfig
