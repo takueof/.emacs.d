@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-06T09:15:26+09:00>
+;; Time-stamp: <2023-11-17T18:23:15+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1867,7 +1867,15 @@ See also: `https://github.com/validator/validator'."
              (lsp-headerline-breadcrumb-enable . nil)
              (lsp-signature-doc-lines . t)
              (lsp-progress-function . 'ignore)
-             (lsp-warn-no-matched-clients . nil)))
+             (lsp-warn-no-matched-clients . nil)
+             ;; For ESLint
+             ;;
+             ;; Enable ESLint flat config
+             ;;
+             ;; See also:
+             ;; https://discord.com/channels/789885435026604033/1167077517157470278/1174364060712714310
+             ;; https://github.com/microsoft/vscode-eslint/issues/1518#issuecomment-1319753092
+             (lsp-eslint-experimental . '((useFlatConfig . true)))))
 
 
   ;; --------------------------------------------------------------------------
