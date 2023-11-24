@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-24T16:22:59+09:00>
+;; Time-stamp: <2023-11-24T18:00:13+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2730,6 +2730,9 @@ See also: `https://github.com/validator/validator'."
 ;; 全角フォントで表示されてほしいもの：
 ;;   ±×÷
 ;;
+;; フォントによっては、他の文字と判別しにくいもの：
+;;   "Ø" (U+00d8: LATIN CAPITAL LETTER O WITH STROKE)
+;;
 ;; See also:
 ;; https://en.wikipedia.org/wiki/ISO/IEC_8859-1
 ;; ============================================================================
@@ -2743,9 +2746,6 @@ See also: `https://github.com/validator/validator'."
 ;;
 ;; 全角フォントで表示されてほしいもの
 ;;   │┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌∩≡■
-;;
-;; フォントによっては、他の文字と判別しにくいもの：
-;;   "Ø" (U+00d8: LATIN CAPITAL LETTER O WITH STROKE)
 ;;
 ;; See also:
 ;; https://en.wikipedia.org/wiki/Code_page_437
