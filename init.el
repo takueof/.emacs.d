@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-24T13:18:54+09:00>
+;; Time-stamp: <2023-11-24T16:22:59+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2580,7 +2580,13 @@ See also: `https://github.com/validator/validator'."
              (web-mode-markup-indent-offset . 0)
              (web-mode-markup-comment-indent-offset . 0)
              (web-mode-sql-indent-offset . 0)
+             (web-mode-enable-auto-indentation . nil)
+             (web-mode-enable-auto-closing . t)
+             (web-mode-enable-auto-pairing . t)
+             (web-mode-enable-auto-opening . nil)
+             (web-mode-enable-auto-quoting . nil)
              (web-mode-enable-auto-expanding . t)
+             (web-mode-enable-control-block-indentation . nil)
              (web-mode-enable-current-element-highlight . t)
              (web-mode-enable-current-column-highlight . t)
              (web-mode-enable-html-entities-fontification . t)
@@ -2589,13 +2595,7 @@ See also: `https://github.com/validator/validator'."
              (web-mode-enable-inlays . t)
              (web-mode-enable-sql-detection . t)
              (web-mode-enable-element-content-fontification . t)
-             (web-mode-enable-element-tag-fontification . t)
-             (web-mode-enable-front-matter-block . t)
-             (web-mode-enable-engine-detection . t)
-             (web-mode-enable-optional-tags . t)
-             (web-mode-indent-style . 1)
-             (web-mode-auto-close-style . 3)
-             (web-mode-auto-quote-style . 1))
+             (web-mode-enable-element-tag-fontification . t))
     :init
     (defun my-web-mode-initialize ()
       "Initialize `web-mode' before file load."
