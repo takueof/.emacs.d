@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-20T14:21:39+09:00>
+;; Time-stamp: <2023-11-24T13:14:46+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1384,6 +1384,11 @@
   ;; --------------------------------------------------------------------------
   (leaf editorconfig
     :package t
+    :custom ((editorconfig-exclude-modes . '(lisp-mode
+                                             lisp-data-mode
+                                             emacs-lisp-mode
+                                             lisp-interaction-mode
+                                             elisp-byte-code-mode)))
     :global-minor-mode t)
 
 
@@ -2247,42 +2252,6 @@ See also: `https://github.com/validator/validator'."
                   (setq-local indent-tabs-mode indent-style)))))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; GNU Emacs Lisp
-  ;; --------------------------------------------------------------------------
-  (leaf elisp-mode
-    :hook ((emacs-lisp-mode-hook . my-emacs-lisp-mode-initialize)
-           (lisp-interaction-mode-hook . my-emacs-lisp-mode-initialize)
-           (lisp-interaction-mode-hook . my-lisp-interaction-mode-initialize))
-    :init
-    ;; 共通
-    (defun my-emacs-lisp-mode-initialize ()
-      "Initialize `emacs-lisp-mode' and `lisp-interaction-mode' before file load."
-      (setq-local indent-tabs-mode nil)
-      (setq-local tab-width 8)
-
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab"))
-                   (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
-                   (tab-width-number (if (and tab-width-number-data
-                                              (stringp tab-width-number-data))
-                                         (string-to-number tab-width-number-data)
-                                       tab-width)))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style))
-              (if (not (equal tab-width tab-width-number))
-                  (setq-local tab-width tab-width-number))))))
-
-    ;; `lisp-interaction-mode' ONLY
-    (defun my-lisp-interaction-mode-initialize ()
-      "Initialize `lisp-interaction-mode-initialize' before file load."
-      ;; EMPTY
-      ))
-
-
   ;; ----------------------------------------------------------------------------
   ;; GraphQL
   ;; ----------------------------------------------------------------------------
@@ -2474,33 +2443,6 @@ See also: `https://github.com/validator/validator'."
                   (setq-local tab-width tab-width-number))
               (if (not (equal js-indent-level tab-width))
                   (setq-local js-indent-level tab-width)))))))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; Lisp
-  ;; --------------------------------------------------------------------------
-  (leaf lisp-mode
-    :hook ((lisp-mode-hook . my-lisp-mode-initialize))
-    :init
-    (defun my-lisp-mode-initialize ()
-      "Itialize `lisp-mode' before file load."
-      (setq-local indent-tabs-mode nil)
-      (setq-local tab-width 8)
-
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab"))
-                   (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
-                   (tab-width-number (if (and tab-width-number-data
-                                              (stringp tab-width-number-data))
-                                         (string-to-number tab-width-number-data)
-                                       tab-width)))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style))
-              (if (not (equal tab-width tab-width-number))
-                  (setq-local tab-width tab-width-number)))))))
 
 
   ;; --------------------------------------------------------------------------
