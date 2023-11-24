@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-24T18:00:13+09:00>
+;; Time-stamp: <2023-11-24T18:08:37+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2755,10 +2755,9 @@ See also: `https://github.com/validator/validator'."
 ;; 概要：
 ;;   * Code Page 437 (`cp437') を基底に、更なる文字が追加されたもの
 ;;   * `cp850' の "ı" (U+0131) が "€" (U+20AC) に置換されている
-;;   * `cp858' の "ø" (U+294C) は `iso-8859-1' にある "Ø" (U+00D8) の小文字
 ;;
 ;; 視覚可能な追加文字：
-;;   ø€ıþ‗
+;;   €ıþ‗
 ;;
 ;; See also:
 ;; https://en.wikipedia.org/wiki/Code_page_850 (include `cp858' document)
