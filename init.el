@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-24T13:17:15+09:00>
+;; Time-stamp: <2023-11-24T13:18:54+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2672,7 +2672,8 @@ See also: `https://github.com/validator/validator'."
 ;;
 ;; 独自定義したフォント設定
 ;; ============================================================================
-;; 文字幅調整テスト：
+;; 文字幅調整テスト
+;;
 ;;   aa| アルファベット
 ;;   ıı| ラテン文字
 ;;   あ| ひらがな（日本語）
@@ -2683,65 +2684,88 @@ See also: `https://github.com/validator/validator'."
 ;;   ░▓| 記号
 ;;   😊| 絵文字
 ;; ============================================================================
-;; 波ダッシュ字形テスト：
+;; 波ダッシュ字形テスト
+;;
 ;;   「〜」(U+301C: WAVE DASH)
 ;;   「～」(U+FF5E: FULLWIDTH TILDE)
 ;; ============================================================================
+;; 関連コマンド一覧
+;;
 ;; 文字拡大・縮小モード：
 ;;   C-x C-0
-;;
 ;; カーソルがポイントしている文字の「簡易」情報を表示：
 ;;   C-x =
-;;
 ;; カーソルがポイントしている文字の「詳細」情報を表示：
 ;;   C-u C-x =
-;;
-;; 各種フォントセットの詳細を、別バッファに表示：
+;; フォントセットの詳細を別バッファに表示：
 ;;   M-x describe-fontset
-;;
-;; 定義されているフォントセットの一覧を、別バッファに表示：
+;; 定義済フォントセット一覧を別バッファに表示：
 ;;   M-x list-fontsets
-;;
-;; 利用可能なフォントの一覧：
+;; 利用可能フォント一覧：
 ;;   (dolist (xlfd (x-list-fonts "*")) (insert (format "%S" xlfd) "\n"))
-;;
 ;; 該当ファミリフォントの一覧：
 ;;   (list-fonts (font-spec :family "ファミリ名"))
-;;
-;; 定義されているフォントセットの一覧：
+;; 定義済フォントセット一覧：
 ;;   (fontset-list)
-;;
-;; 定義されているフォントセットと、別名（短縮名、エイリアス）の alist：
-;;   fontset-alias-alist
-;;
-;; フレームが使用中のフォントを表示：
+;; 定義済フォントセットと別名（短縮名、エイリアス）の `alist'：
+;;   `fontset-alias-alist'
+;; フレーム使用中フォント表示：
 ;;   (frame-parameter nil 'font)
 ;; ============================================================================
-;; Microsoft Code page 858 (`cp858')
+;; 関連 GNU Emacs Lisp
+;;
+;; `my-utils.el': 独自サポート関数・マクロ定義
+;; `mule-conf.el': 文字セット定義（`set-fontset-font' 第2引数の定義一覧）
+;; `mule-diag.el': 文字セット・コーディングシステム用ツール定義
+;; ============================================================================
+;; ISO/IEC 8859-1 (`iso-8859-1')
 ;;
 ;; 概要：
-;;   * ラテン文字
-;;   * 基底である ISO/IEC 8859-1 にはない文字を補完するときに利用する
-;;   * `cp858' は `cp850' の "ı" (U+0131) を "€" (U+20AC) に置換したもの
-;;   * `cp858' は `cp585' に "€" (U+20AC) を追加したもの
+;;   * 国際標準のラテン文字セット
+;;   * ASCII (`ascii') を基底に、更なる文字が追加されたもの
 ;;
-;; 追加文字:
-;;   ¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿƒ‗€─│┌┐└┘├┤┬┴┼═║╔╗╚╝╠╣╦╩╬▀▄█░▒▓■
-;;
-;; 半角フォントで表示されてほしいもの：
-;;   ¡¢£¤¥¦©ª«¬®¯²³µ·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿƒ‗€═║╔╗╚╝╠╣╦╩╬▀▄█░▒▓
+;; 視覚可能な追加文字：
+;;   ¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ
 ;;
 ;; 全角フォントで表示されてほしいもの：
-;;   §¨°±´¶×÷─│┌┐└┘├┤┬┴┼■
+;;   ±×÷
+;;
+;; See also:
+;; https://en.wikipedia.org/wiki/ISO/IEC_8859-1
+;; ============================================================================
+;; Code page 437 (`cp437')
+;;
+;; 概要：
+;;   * ISO/IEC 8859-1 (`iso-8859-1') を基底に、更なる文字が追加されたもの
+;;
+;; 視覚可能な追加文字：
+;;   ₧ƒ⌐¬░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡≥≤⌠⌡≈∙√ⁿ■
+;;
+;; 全角フォントで表示されてほしいもの
+;;   │┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌∩≡■
 ;;
 ;; フォントによっては、他の文字と判別しにくいもの：
 ;;   "Ø" (U+00d8: LATIN CAPITAL LETTER O WITH STROKE)
 ;;
 ;; See also:
-;; https://en.wikipedia.org/wiki/Code_page_858
-;; https://en.wikipedia.org/wiki/Code_page_850
+;; https://en.wikipedia.org/wiki/Code_page_437
+;; ============================================================================
+;; Code page 858 (`cp858')
+;;
+;; 概要：
+;;   * Code Page 437 (`cp437') を基底に、更なる文字が追加されたもの
+;;   * `cp850' の "ı" (U+0131) が "€" (U+20AC) に置換されている
+;;   * `cp858' の "ø" (U+294C) は `iso-8859-1' にある "Ø" (U+00D8) の小文字
+;;
+;; 視覚可能な追加文字：
+;;   ø€ıþ‗
+;;
+;; See also:
+;; https://en.wikipedia.org/wiki/Code_page_850 (include `cp858' document)
 ;; ============================================================================
 ;; Microsoft Code page 932 (`cp932')
+;;
+;; FIXME: `cp932' 用の定義を書くこと！
 ;;
 ;; 概要：
 ;;   * 日本語
@@ -2765,7 +2789,6 @@ See also: `https://github.com/validator/validator'."
 ;; See also:
 ;; https://ja.wikipedia.org/wiki/Cp932
 ;; https://internet.watch.impress.co.jp/www/column/ogata/news4.htm
-;; http://charset.7jp.net/sjis.html
 ;; ============================================================================
 ;; JIS X 0213:2004 (`japanese-jisx0213.2004-1' and `japanese-jisx0213-2')
 ;;
@@ -2793,10 +2816,8 @@ See also: `https://github.com/validator/validator'."
 ;; 表示例（一部）：
 ;; ء آ أ ؤ إ ئ ا ب ة ت ث ج ح خ د
 ;; ============================================================================
-;; See also:
-;; `my-utils.el': 独自サポート関数・マクロ定義
-;; `mule-conf.el': 文字セット定義（`set-fontset-font' 第2引数の定義一覧）
-;; `mule-diag.el': 文字セット・コーディングシステム用ツール定義
+;; 参考文献
+;;
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-Lookup.html
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-Selection.html
 ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Fontsets.html
@@ -2805,13 +2826,7 @@ See also: `https://github.com/validator/validator'."
 ;; https://www.gnu.org/software/emacs/manual/html_node/efaq-w32/Fonts-and-text-translation.html
 ;; https://www.emacswiki.org/emacs/DisplayingNonAsciiCharacters
 ;; https://www.emacswiki.org/emacs/FontSets
-;; http://d.hatena.ne.jp/setoryohei/20110117
-;; http://d.hatena.ne.jp/tomoya/20090519/1242687354
-;; http://d.hatena.ne.jp/tomoya/20090807/1249641049
 ;; https://emacs.g.hatena.ne.jp/sakito/20100127
-;; http://macemacsjp.osdn.jp/matsuan/FontSettingJp.html
-;; http://www.shuiren.org/chuden/teach/code/main5.htm
-;; http://lioon.net/emacs-change-font-size-quickly
 ;; ============================================================================
 (leaf *font
   ;; ターミナルエミュレータ上では何もしない（設定する意味がないため）
@@ -2844,7 +2859,7 @@ See also: `https://github.com/validator/validator'."
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.100)))
    (;; macOS & Windows
     (and (my-fallback-font-family "Inconsolata")
-         (my-fallback-font-family "Migu 1M"))
+         (my-fallback-font-family "VL Gothic"))
     (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.850))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.850))
     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
@@ -2952,13 +2967,13 @@ See also: `https://github.com/validator/validator'."
   ;; 日本語：JIS X 0213:2004
   (my-set-fontset-font-safe "fontset-programming"
                             'japanese-jisx0213.2004-1
-                            (font-spec :family (my-fallback-font-family "Migu 1M"
+                            (font-spec :family (my-fallback-font-family "VL Gothic"
                                                                         "ヒラギノ角ゴシック"
                                                                         "メイリオ"
                                                                         "Monospace")))
   (my-set-fontset-font-safe "fontset-programming"
                             'japanese-jisx0213-2
-                            (font-spec :family (my-fallback-font-family "Migu 1M"
+                            (font-spec :family (my-fallback-font-family "VL Gothic"
                                                                         "ヒラギノ角ゴシック"
                                                                         "メイリオ"
                                                                         "Monospace")))
@@ -2970,72 +2985,58 @@ See also: `https://github.com/validator/validator'."
                                                                         "Consolas"
                                                                         "Courier New"
                                                                         "Monospace")))
-  (my-set-fontset-font-safe "fontset-programming"
-                            (cons (string-to-char "░") (string-to-char "▓"))
-                            ;; 次のフォントは U+2591, U+2592, U+2593 未実装：
-                            ;;
-                            ;;   * "Inconsolata"
-                            ;;   * "Consolas"
-                            ;;
-                            ;; ゆえに、他フォントによるフォールバックが必要
-                            (font-spec :family (my-fallback-font-family "Menlo"
-                                                                        "Courier New"
-                                                                        "Monospace")))
-  ;; "ı" (U+0131: LATIN SMALL LETTER DOTLESS I) フォント明示
-  (my-set-fontset-font-safe "fontset-programming"
-                            (cons (string-to-char "ı") (string-to-char "ı"))
-                            ;; 次のフォントは "ı" (U+0131) 未実装：
-                            ;;
-                            ;;   * "Inconsolata"
-                            ;;
-                            ;; ゆえに、他フォントによるフォールバックが必要
-                            (font-spec :family (my-fallback-font-family "Menlo"
-                                                                        "Consolas"
-                                                                        "Courier New"
-                                                                        "Monospace")))
-  ;; "§" (U+00A7: SECTION SIGN)
-  ;; "¨" (U+00A8: DIAERESIS)
-  ;; "°" (U+00B0: DEGREE SIGN)
-  ;; "±" (U+00B1: PLUS-MINUS SIGN)
-  ;; "´" (U+00B4: ACUTE ACCENT)
-  ;; "¶" (U+00B6: PILCROW SIGN)
-  ;; "×" (U+00D7: LATIN CAPITAL LETTER O WITH STROKE)
-  ;; "÷" (U+00F7: DIVISION SIGN)
-  ;; "─" (U+2500: BOX DRAWINGS LIGHT HORIZONTAL)
-  ;; "│" (U+2502: BOX DRAWINGS LIGHT VERTICAL)
-  ;; "┌" (U+250c: BOX DRAWINGS LIGHT DOWN AND RIGHT)
-  ;; "┐" (U+2510: BOX DRAWINGS LIGHT DOWN AND LEFT)
-  ;; "└" (U+2514: BOX DRAWINGS LIGHT UP AND RIGHT)
-  ;; "┘" (U+2518: BOX DRAWINGS LIGHT UP AND LEFT)
-  ;; "├" (U+251c: BOX DRAWINGS LIGHT VERTICAL AND RIGHT)
-  ;; "┤" (U+2524: BOX DRAWINGS LIGHT VERTICAL AND LEFT)
-  ;; "┬" (U+252c: BOX DRAWINGS LIGHT DOWN AND HORIZONTAL)
-  ;; "┴" (U+2534: BOX DRAWINGS LIGHT UP AND HORIZONTAL)
-  ;; "┼" (U+253c: BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL)
-  ;; "■" (U+25A0: BLACK SQUARE)
-  ;;
-  ;; `cp858' に含まれているため、半角フォントが利用されてしまう問題を回避
+  ;; `cp858' に含まれているため半角になる状態を回避
   (dolist (code (mapcar 'string-to-char
-                        (split-string "§¨°±´¶×÷─│┌┐└┘├┤┬┴┼■" "" t)))
+                        (split-string "│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌∩≡■" "" t)))
     (my-set-fontset-font-safe "fontset-programming"
                               (cons code code)
-                              ;; 次のフォントは一部記号が全角にならない：
-                              ;;
-                              ;;   * "ヒラギノ角ゴシック"
-                              ;;
-                              ;; ゆえに、明示的な除外が必要
-                              (font-spec :family (my-fallback-font-family "Migu 1M"
+                              (font-spec :family (my-fallback-font-family "VL Gothic"
+                                                                          "ヒラギノ角ゴシック"
                                                                           "メイリオ"
                                                                           "Monospace"))))
-  ;; ASCII
-  (my-set-fontset-font-safe "fontset-programming"
-                            'ascii
-                            (font-spec :size 14.0 ; デフォルトフォントサイズ (pt)
-                                       :family (my-fallback-font-family "Inconsolata"
-                                                                        "Menlo"
-                                                                        "Consolas"
-                                                                        "Courier New"
-                                                                        "Monospace")))
+  ;; 一部グリフが次のフォントで半角になる状態を回避
+  ;;
+  ;;   * "ヒラギノ角ゴシック"
+  ;;   * "VL Gothic"
+  ;;
+  ;; 前述のフォントは除外
+  (dolist (code (mapcar 'string-to-char
+                        (split-string "±×÷" "" t)))
+    (my-set-fontset-font-safe "fontset-programming"
+                              (cons code code)
+                              (font-spec :family (my-fallback-font-family "Osaka"
+                                                                          "メイリオ"
+                                                                          "Monospace"))))
+  ;; 未実装グリフのフォールバック
+  ;;
+  ;; 対象：
+  ;;
+  ;;   * "Inconsolata"
+  ;;   * "Consolas"
+  ;;
+  ;; 前述のフォントは除外
+  (dolist (code (mapcar 'string-to-char
+                        (split-string "ı░▒▓" "" t)))
+    (my-set-fontset-font-safe "fontset-programming"
+                              (cons code code)
+                              (font-spec :family (my-fallback-font-family "Menlo"
+                                                                          "Courier New"
+                                                                          "Monospace"))))
+  ;; 未実装グリフのフォールバック
+  ;;
+  ;; 対象：
+  ;;
+  ;;   * "Inconsolata"
+  ;;   * "Consolas"
+  ;;   * "Menlo"
+  ;;
+  ;; 前述のフォントは除外
+  (dolist (code (mapcar 'string-to-char
+                        (split-string "⌐‗" "" t)))
+    (my-set-fontset-font-safe "fontset-programming"
+                              (cons code code)
+                              (font-spec :family (my-fallback-font-family "Courier New"
+                                                                          "Monospace"))))
 
 
   ;; --------------------------------------------------------------------------
@@ -3130,42 +3131,20 @@ See also: `https://github.com/validator/validator'."
                                                                         "Monospace")))
   ;; ラテン文字：Code page 858 (`cp858')
   ;;
-  ;; "ProFontWindows" の readme.txt には次の記述がある:
+  ;; "ProFontWindows" の readme.txt には次の記述がある：
   ;;
   ;;   * "€" (U+20AC) サポートを投入
   ;;   * `cp585' フルサポート
   ;;
-  ;; ゆえに、明示はないものの "ProFontWindows" の範囲は
-  ;; `cp858' と同一であると仮定・設定する
+  ;; 明示はないものの "ProFontWindows" の範囲は `cp858' と同一であると仮定
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'cp858
                             (font-spec :family (my-fallback-font-family "ProFontWindows"
                                                                         "Courier New"
                                                                         "Monospace")))
-  ;; "§" (U+00A7: SECTION SIGN)
-  ;; "¨" (U+00A8: DIAERESIS)
-  ;; "°" (U+00B0: DEGREE SIGN)
-  ;; "±" (U+00B1: PLUS-MINUS SIGN)
-  ;; "´" (U+00B4: ACUTE ACCENT)
-  ;; "¶" (U+00B6: PILCROW SIGN)
-  ;; "×" (U+00D7: LATIN CAPITAL LETTER O WITH STROKE)
-  ;; "÷" (U+00F7: DIVISION SIGN)
-  ;; "─" (U+2500: BOX DRAWINGS LIGHT HORIZONTAL)
-  ;; "│" (U+2502: BOX DRAWINGS LIGHT VERTICAL)
-  ;; "┌" (U+250c: BOX DRAWINGS LIGHT DOWN AND RIGHT)
-  ;; "┐" (U+2510: BOX DRAWINGS LIGHT DOWN AND LEFT)
-  ;; "└" (U+2514: BOX DRAWINGS LIGHT UP AND RIGHT)
-  ;; "┘" (U+2518: BOX DRAWINGS LIGHT UP AND LEFT)
-  ;; "├" (U+251c: BOX DRAWINGS LIGHT VERTICAL AND RIGHT)
-  ;; "┤" (U+2524: BOX DRAWINGS LIGHT VERTICAL AND LEFT)
-  ;; "┬" (U+252c: BOX DRAWINGS LIGHT DOWN AND HORIZONTAL)
-  ;; "┴" (U+2534: BOX DRAWINGS LIGHT UP AND HORIZONTAL)
-  ;; "┼" (U+253c: BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL)
-  ;; "■" (U+25A0: BLACK SQUARE)
-  ;;
-  ;; `cp858' に含まれているため、半角フォントが利用されてしまう問題を回避
+  ;; `cp858' に含まれているため半角になる状態を回避
   (dolist (code (mapcar 'string-to-char
-                        (split-string "§¨°±´¶×÷─│┌┐└┘├┤┬┴┼■" "" t)))
+                        (split-string "±×÷│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌∩≡■" "" t)))
     (my-set-fontset-font-safe "fontset-programmingBMP"
                               (cons code code)
                               (font-spec :family (my-fallback-font-family "Osaka－等幅"
@@ -3186,13 +3165,6 @@ See also: `https://github.com/validator/validator'."
                             (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
                                                                         "さざなみフォント"
                                                                         "東雲フォント"
-                                                                        "Courier New"
-                                                                        "Monospace")))
-  ;; ASCII
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            'ascii
-                            (font-spec :size 12 ; デフォルトフォントサイズ (px)
-                                       :family (my-fallback-font-family "ProFontWindows"
                                                                         "Courier New"
                                                                         "Monospace")))
 
