@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-26T16:22:28+09:00>
+;; Time-stamp: <2023-11-26T16:26:46+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2672,8 +2672,8 @@ See also: `https://github.com/validator/validator'."
 ;;
 ;; 独自定義したフォント設定
 ;; ============================================================================
-;; CAUTION: CSS と同じで、後に書いた定義のほうが強制利用される
-;;          そのため「上書きしたい定義は後に書く」よう気をつけること
+;; WARNING: CSS と同じで、後に書いた定義のほうが強制利用される
+;;          そのため「上書きしたい定義は後に書く」よう注意せよ
 ;; ============================================================================
 ;; 文字幅調整テスト
 ;;
@@ -2859,7 +2859,7 @@ See also: `https://github.com/validator/validator'."
     (add-to-list 'face-font-rescale-alist '("-MingLiU-ExtB-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.100))
-    (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.150))
+    (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.200))
     (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 0.850))
     (add-to-list 'face-font-rescale-alist '("-Tahoma-" . 1.100))
