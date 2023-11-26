@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-24T18:08:37+09:00>
+;; Time-stamp: <2023-11-26T16:22:28+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2672,6 +2672,9 @@ See also: `https://github.com/validator/validator'."
 ;;
 ;; 独自定義したフォント設定
 ;; ============================================================================
+;; CAUTION: CSS と同じで、後に書いた定義のほうが強制利用される
+;;          そのため「上書きしたい定義は後に書く」よう気をつけること
+;; ============================================================================
 ;; 文字幅調整テスト
 ;;
 ;;   aa| アルファベット
@@ -2762,43 +2765,14 @@ See also: `https://github.com/validator/validator'."
 ;; See also:
 ;; https://en.wikipedia.org/wiki/Code_page_850 (include `cp858' document)
 ;; ============================================================================
-;; Microsoft Code page 932 (`cp932')
-;;
-;; FIXME: `cp932' 用の定義を書くこと！
-;;
-;; 概要：
-;;   * 日本語
-;;   * 俗称「Microsoft Shift_JIS」
-;;   * `cp932' にはあるが、JIS X 0213:2004 にはない文字群がある
-;;     例：「カナダ漢字」
-;;
-;; 特殊文字（マップ順でソート済）：
-;;   纊褜鍈銈蓜俉炻昱棈鋹曻彅丨仡仼伀伃伹佖侒侊侚侔俍偀倢俿倞偆偰偂傔僴僘兊兤冝
-;;   冾凬刕劜劦勀勛匀匇匤卲厓厲叝﨎咜咊咩哿喆坙坥垬埈埇﨏塚增墲夋奓奛奝奣妤妺孖
-;;   寀甯寘寬尞岦岺峵崧嵓﨑嵂嵭嶸嶹巐弡弴彧德忞恝悅悊惞惕愠惲愑愷愰憘戓抦揵摠撝
-;;   擎敎昀昕昻昉昮昞昤晥晗晙晴晳暙暠暲暿曺朎朗杦枻桒柀栁桄棏﨓楨﨔榘槢樰橫橆橳
-;;   橾櫢櫤毖氿汜沆汯泚洄涇浯涖涬淏淸淲淼渹湜渧渼溿澈澵濵瀅瀇瀨炅炫焏焄煜煆煇凞
-;;   燁燾犱犾猤猪獷玽珉珖珣珒琇珵琦琪琩琮瑢璉璟甁畯皂皜皞皛皦益睆劯砡硎硤硺礰礼
-;;   神祥禔福禛竑竧靖竫箞精絈絜綷綠緖繒罇羡羽茁荢荿菇菶葈蒴蕓蕙蕫﨟薰蘒﨡蠇裵訒
-;;   訷詹誧誾諟諸諶譓譿賰賴贒赶﨣軏﨤逸遧郞都鄕鄧釚釗釞釭釮釤釥鈆鈐鈊鈺鉀鈼鉎鉙
-;;   鉑鈹鉧銧鉷鉸鋧鋗鋙鋐﨧鋕鋠鋓錥錡鋻﨨錞鋿錝錂鍰鍗鎤鏆鏞鏸鐱鑅鑈閒隆﨩隝隯霳
-;;   霻靃靍靏靑靕顗顥飯飼餧館馞驎髙髜魵魲鮏鮱鮻鰀鵰鵫鶴鸙黑ⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹ
-;;   ￢￤＇＂
-;;
-;; See also:
-;; https://ja.wikipedia.org/wiki/Cp932
-;; https://internet.watch.impress.co.jp/www/column/ogata/news4.htm
-;; ============================================================================
 ;; JIS X 0213:2004 (`japanese-jisx0213.2004-1' and `japanese-jisx0213-2')
 ;;
 ;; 字形変更：
-;;   逢芦飴溢茨鰯淫迂厩噂餌襖迦牙廻恢晦蟹葛鞄釜翰翫徽
-;;   祇汲灸笈卿饗僅喰櫛屑粂祁隙倦捲牽鍵諺巷梗膏鵠甑叉
-;;   榊薩鯖錆鮫餐杓灼酋楯薯藷哨鞘杖蝕訊逗摺撰煎煽穿箭
-;;   詮噌遡揃遜腿蛸辿樽歎註瀦捗槌鎚辻挺鄭擢溺兎堵屠賭
-;;   瀞遁謎灘楢禰牌這秤駁箸叛挽誹樋稗逼謬豹廟瀕斧蔽瞥
-;;   蔑篇娩鞭庖蓬鱒迄儲餅籾爺鑓愈猷漣煉簾榔屢冤叟咬嘲
-;;   囀徘扁棘橙狡甕甦疼祟竈筵篝腱艘芒虔蜃蠅訝靄靱騙鴉
+;;   逢芦飴溢茨鰯淫迂厩噂餌襖迦牙廻恢晦蟹葛鞄釜翰翫徽祇汲灸笈卿饗僅喰櫛屑粂祁隙
+;;   倦捲牽鍵諺巷梗膏鵠甑叉榊薩鯖錆鮫餐杓灼酋楯薯藷哨鞘杖蝕訊逗摺撰煎煽穿箭詮噌
+;;   遡揃遜腿蛸辿樽歎註瀦捗槌鎚辻挺鄭擢溺兎堵屠賭瀞遁謎灘楢禰牌這秤駁箸叛挽誹樋
+;;   稗逼謬豹廟瀕斧蔽瞥蔑篇娩鞭庖蓬鱒迄儲餅籾爺鑓愈猷漣煉簾榔屢冤叟咬嘲囀徘扁棘
+;;   橙狡甕甦疼祟竈筵篝腱艘芒虔蜃蠅訝靄靱騙鴉
 ;;
 ;; 平仮名・片仮名・記号など：
 ;;   ゔヿヷヸヹヺㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽ
@@ -2809,6 +2783,23 @@ See also: `https://github.com/validator/validator'."
 ;;
 ;; 第4水準（一部・2面）：
 ;;   𠂉𪚲
+;; ============================================================================
+;; Microsoft Code page 932 (`cp932')
+;;
+;; 概要：
+;;   * 日本語
+;;   * 俗称「Microsoft Shift_JIS」
+;;   * JIS X 0213:2004 にはない文字が定義されている
+;;
+;; `cp932' にあるが JIS X 0213:2004 には存在しない文字（マップ順でソート済）：
+;;   仼伹俍僴僘兤冾凬劜勀卲叝﨎坙坥墲奓奣妺峵巐弡恝悅惞愠愰戓敎昻昮晴朎櫢汯浯涖
+;;   淸淲渹猤玽珒珵琩皂益硺礼靖精羡羽菶蕫蠇譓赶﨣軏逸遧釞鈆鉷﨧鋕﨨鎤鏸鐱鑈閒﨩
+;;   靃靑飯飼餧館髙鮻鶴￢￤
+;;
+;; See also:
+;; https://ja.wikipedia.org/wiki/Cp932
+;; https://internet.watch.impress.co.jp/www/column/ogata/news4.htm
+;; https://seiai.ed.jp/sys/text/csd/cf14/c14b050.html
 ;; ============================================================================
 ;; アラビア文字
 ;;
@@ -2963,6 +2954,13 @@ See also: `https://github.com/validator/validator'."
                               (font-spec :family (my-fallback-font-family "Baghdad"
                                                                           "Microsoft Sans Serif"
                                                                           "Monospace"))))
+  ;; 日本語：Code page 932 (`cp932')
+  (my-set-fontset-font-safe "fontset-programming"
+                            'cp932
+                            (font-spec :family (my-fallback-font-family "VL Gothic"
+                                                                        "ヒラギノ角ゴシック"
+                                                                        "メイリオ"
+                                                                        "Monospace")))
   ;; 日本語：JIS X 0213:2004
   (my-set-fontset-font-safe "fontset-programming"
                             'japanese-jisx0213.2004-1
@@ -3105,6 +3103,13 @@ See also: `https://github.com/validator/validator'."
                               (font-spec :family (my-fallback-font-family "Baghdad"
                                                                           "Microsoft Sans Serif"
                                                                           "Monospace"))))
+  ;; 日本語：Code page 932 (`cp932')
+  (my-set-fontset-font-safe "fontset-programmingBMP"
+                            'cp932
+                            (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
+                                                                        "さざなみフォント"
+                                                                        "東雲フォント"
+                                                                        "Monospace")))
   ;; 日本語：JIS X 0213:2004
   (my-set-fontset-font-safe "fontset-programmingBMP"
                             'japanese-jisx0213.2004-1
