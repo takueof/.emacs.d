@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-26T16:26:46+09:00>
+;; Time-stamp: <2023-11-27T21:09:33+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2835,7 +2835,8 @@ See also: `https://github.com/validator/validator'."
   (cond
    (;; Windows (96dpi) ONLY
     (and (equal window-system 'w32)
-         (< (car (my-real-display-pixels-per-inch)) 97.0) ; for 96dpi
+         ;; for 96dpi
+         (< (car (my-real-display-pixels-per-inch (selected-frame))) 97.0)
          (my-fallback-font-family "ProFontWindows"))
     (add-to-list 'face-font-rescale-alist '("-Osaka-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-MS Gothic-" . 1.000))
@@ -3176,7 +3177,9 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   ;; フォントセット設定
   ;; --------------------------------------------------------------------------
-  (let ((fontset (if (< (car (my-real-display-pixels-per-inch)) 97.0)
+  (let ((fontset (if (< (car (my-real-display-pixels-per-inch
+                               (selected-frame)))
+                        97.0)
                      "fontset-programmingBMP" ; for 96dpi
                    "fontset-programming")))
     (modify-all-frames-parameters `((font . ,fontset)))

@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2022 Taku Watabe
-;; Time-stamp: <2022-08-23T07:53:44+09:00>
+;; Copyright (C) 2013-2023 Taku Watabe
+;; Time-stamp: <2023-11-27T21:06:21+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -237,8 +237,8 @@ Return string of file path."
 ;; ディスプレイ
 ;; ============================================================================
 ;;;###autoload
-(defmacro my-real-display-pixels-per-inch ()
-  "Calculate real pixels per inch (ppi) by real display.
+(defmacro my-real-display-pixels-per-inch (&optional display)
+  "Calculate real pixels per inch (ppi) by real DISPLAY.
 
 Return cons of (WIDTH-DPI . HEIGHT-DPI).
 
@@ -247,10 +247,10 @@ Return cons of (WIDTH-DPI . HEIGHT-DPI).
            (debug t))
   (let ((mm-to-inch-multiple 25.4))
     ;; PPI = px / (mm / 25.4)
-    `(cons (/ (display-pixel-width)
-              (/ (display-mm-width) ,mm-to-inch-multiple))
-           (/ (display-pixel-height)
-              (/ (display-mm-height) ,mm-to-inch-multiple)))))
+    `(cons (/ (display-pixel-width ,display)
+              (/ (display-mm-width ,display) ,mm-to-inch-multiple))
+           (/ (display-pixel-height ,display)
+              (/ (display-mm-height ,display) ,mm-to-inch-multiple)))))
 
 
 ;; ============================================================================
