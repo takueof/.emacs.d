@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-27T21:09:33+09:00>
+;; Time-stamp: <2023-11-27T21:20:36+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2896,145 +2896,161 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   ;; フォントセット：プログラミング用（高 dpi 環境向け）
   ;; --------------------------------------------------------------------------
-  (my-create-fontset-from-spec "programming"
-                               (font-spec :size 14.0 ; デフォルトフォントサイズ (pt)
-                                          :family (my-fallback-font-family "Inconsolata"
-                                                                           "Menlo"
-                                                                           "Consolas"
-                                                                           "Monospace")))
-  ;; Emoji
-  (my-set-fontset-font-safe "fontset-programming"
-                            nil
-                            (font-spec :family (my-fallback-font-family "Apple Color Emoji"
-                                                                        "Segoe UI Emoji"
-                                                                        "Segoe UI Symbol"
-                                                                        "Symbola"
-                                                                        "Monospace")))
-  ;; 簡体字：GB 18030
-  (my-set-fontset-font-safe "fontset-programming"
-                            'gb18030
-                            (font-spec :family (my-fallback-font-family "PingFang SC"
-                                                                        "Microsoft YaHei"
-                                                                        "Monospace")))
-  ;; 繁体字（香港・マカオ）：HKSCS-2016
-  (my-set-fontset-font-safe "fontset-programming"
-                            'big5-hkscs
-                            (font-spec :family (my-fallback-font-family "PingFang HK"
-                                                                        "MingLiU-ExtB"
-                                                                        "Monospace")))
-  ;; 繁体字：Big5
-  (my-set-fontset-font-safe "fontset-programming"
-                            'big5
-                            (font-spec :family (my-fallback-font-family "PingFang TC"
-                                                                        "Microsoft JhengHei"
-                                                                        "Monospace")))
-  ;; ハングル：KS C 5601-1987 (a.k.a. KS X 1001:1998)
-  (my-set-fontset-font-safe "fontset-programming"
-                            'korean-ksc5601
-                            (font-spec :family (my-fallback-font-family "Apple SD Gothic Neo"
-                                                                        "Malgun Gothic"
-                                                                        "Monospace")))
-  ;; タイ文字：Thai Industrial Standard 620-2533 (TIS-620)
-  (my-set-fontset-font-safe "fontset-programming"
-                            'thai-tis620
-                            (font-spec :family (my-fallback-font-family "Ayuthaya"
-                                                                        "Tahoma"
-                                                                        "Monospace")))
-  ;; アラビア文字：Unicode 直接指定
-  ;;               `cp858' との重複を避けるため、`cp1256' による指定はしない
-  (dolist (range '((cons #x00600 #x006FF) ; U+0600-U+06FF (Arabic)
-                   (cons #x00750 #x0077F) ; U+0750–U+077F (Arabic Supplement)
-                   (cons #x008A0 #x008FF) ; U+08A0–U+08FF (Arabic Extended-A)
-                   (cons #x0FB50 #x0FDFF) ; U+FB50–U+FDFF (Arabic Presentation Forms-A)
-                   (cons #x0FE70 #X0FEFF) ; U+FE70–U+FEFF (Arabic Presentation Forms-B)
-                   (cons #x10E60 #x10E7F) ; U+10E60–U+10E7F (Rumi Numeral Symbols)
-                   (cons #x1EC70 #x1ECBF) ; U+1EC70–U+1ECBF (Indic Siyaq Numbers)
-                   (cons #x1EE00 #x1EEFF))) ; U+1EE00-U+1EEFF (Arabic Mathematical Alphabetic Symbols)
+  (let ((font-size 14.0)) ; デフォルトフォントサイズ (pt)
+    (my-create-fontset-from-spec "programming"
+                                 (font-spec :size font-size
+                                            :family (my-fallback-font-family "Inconsolata"
+                                                                             "Menlo"
+                                                                             "Consolas"
+                                                                             "Monospace")))
+    ;; Emoji
     (my-set-fontset-font-safe "fontset-programming"
-                              range
-                              (font-spec :family (my-fallback-font-family "Baghdad"
-                                                                          "Microsoft Sans Serif"
-                                                                          "Monospace"))))
-  ;; 日本語：Code page 932 (`cp932')
-  (my-set-fontset-font-safe "fontset-programming"
-                            'cp932
-                            (font-spec :family (my-fallback-font-family "VL Gothic"
-                                                                        "ヒラギノ角ゴシック"
-                                                                        "メイリオ"
-                                                                        "Monospace")))
-  ;; 日本語：JIS X 0213:2004
-  (my-set-fontset-font-safe "fontset-programming"
-                            'japanese-jisx0213.2004-1
-                            (font-spec :family (my-fallback-font-family "VL Gothic"
-                                                                        "ヒラギノ角ゴシック"
-                                                                        "メイリオ"
-                                                                        "Monospace")))
-  (my-set-fontset-font-safe "fontset-programming"
-                            'japanese-jisx0213-2
-                            (font-spec :family (my-fallback-font-family "VL Gothic"
-                                                                        "ヒラギノ角ゴシック"
-                                                                        "メイリオ"
-                                                                        "Monospace")))
-  ;; ラテン文字：Code page 858 (`cp858')
-  (my-set-fontset-font-safe "fontset-programming"
-                            'cp858
-                            (font-spec :family (my-fallback-font-family "Inconsolata"
-                                                                        "Menlo"
-                                                                        "Consolas"
-                                                                        "Courier New"
-                                                                        "Monospace")))
-  ;; `cp858' に含まれているため半角になる状態を回避
-  (dolist (code (mapcar 'string-to-char
-                        (split-string "│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌∩≡■" "" t)))
+                              nil
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "Apple Color Emoji"
+                                                                          "Segoe UI Emoji"
+                                                                          "Segoe UI Symbol"
+                                                                          "Symbola"
+                                                                          "Monospace")))
+    ;; 簡体字：GB 18030
     (my-set-fontset-font-safe "fontset-programming"
-                              (cons code code)
-                              (font-spec :family (my-fallback-font-family "VL Gothic"
+                              'gb18030
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "PingFang SC"
+                                                                          "Microsoft YaHei"
+                                                                          "Monospace")))
+    ;; 繁体字（香港・マカオ）：HKSCS-2016
+    (my-set-fontset-font-safe "fontset-programming"
+                              'big5-hkscs
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "PingFang HK"
+                                                                          "MingLiU-ExtB"
+                                                                          "Monospace")))
+    ;; 繁体字：Big5
+    (my-set-fontset-font-safe "fontset-programming"
+                              'big5
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "PingFang TC"
+                                                                          "Microsoft JhengHei"
+                                                                          "Monospace")))
+    ;; ハングル：KS C 5601-1987 (a.k.a. KS X 1001:1998)
+    (my-set-fontset-font-safe "fontset-programming"
+                              'korean-ksc5601
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "Apple SD Gothic Neo"
+                                                                          "Malgun Gothic"
+                                                                          "Monospace")))
+    ;; タイ文字：Thai Industrial Standard 620-2533 (TIS-620)
+    (my-set-fontset-font-safe "fontset-programming"
+                              'thai-tis620
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "Ayuthaya"
+                                                                          "Tahoma"
+                                                                          "Monospace")))
+    ;; アラビア文字：Unicode 直接指定
+    ;;               `cp858' との重複を避けるため、`cp1256' による指定はしない
+    (dolist (range '((cons #x00600 #x006FF) ; U+0600-U+06FF (Arabic)
+                     (cons #x00750 #x0077F) ; U+0750–U+077F (Arabic Supplement)
+                     (cons #x008A0 #x008FF) ; U+08A0–U+08FF (Arabic Extended-A)
+                     (cons #x0FB50 #x0FDFF) ; U+FB50–U+FDFF (Arabic Presentation Forms-A)
+                     (cons #x0FE70 #X0FEFF) ; U+FE70–U+FEFF (Arabic Presentation Forms-B)
+                     (cons #x10E60 #x10E7F) ; U+10E60–U+10E7F (Rumi Numeral Symbols)
+                     (cons #x1EC70 #x1ECBF) ; U+1EC70–U+1ECBF (Indic Siyaq Numbers)
+                     (cons #x1EE00 #x1EEFF))) ; U+1EE00-U+1EEFF (Arabic Mathematical Alphabetic Symbols)
+      (my-set-fontset-font-safe "fontset-programming"
+                                range
+                                (font-spec :size font-size
+                                           :family (my-fallback-font-family "Baghdad"
+                                                                            "Microsoft Sans Serif"
+                                                                            "Monospace"))))
+    ;; 日本語：Code page 932 (`cp932')
+    (my-set-fontset-font-safe "fontset-programming"
+                              'cp932
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "VL Gothic"
                                                                           "ヒラギノ角ゴシック"
                                                                           "メイリオ"
-                                                                          "Monospace"))))
-  ;; 一部グリフが次のフォントで半角になる状態を回避
-  ;;
-  ;;   * "ヒラギノ角ゴシック"
-  ;;   * "VL Gothic"
-  ;;
-  ;; 前述のフォントは除外
-  (dolist (code (mapcar 'string-to-char
-                        (split-string "±×÷" "" t)))
+                                                                          "Monospace")))
+    ;; 日本語：JIS X 0213:2004
     (my-set-fontset-font-safe "fontset-programming"
-                              (cons code code)
-                              (font-spec :family (my-fallback-font-family "Osaka"
+                              'japanese-jisx0213.2004-1
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "VL Gothic"
+                                                                          "ヒラギノ角ゴシック"
                                                                           "メイリオ"
-                                                                          "Monospace"))))
-  ;; 未実装グリフのフォールバック
-  ;;
-  ;; 対象：
-  ;;
-  ;;   * "Inconsolata"
-  ;;   * "Consolas"
-  ;;
-  ;; 前述のフォントは除外
-  (dolist (code (mapcar 'string-to-char
-                        (split-string "ı░▒▓" "" t)))
+                                                                          "Monospace")))
     (my-set-fontset-font-safe "fontset-programming"
-                              (cons code code)
-                              (font-spec :family (my-fallback-font-family "Menlo"
+                              'japanese-jisx0213-2
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "VL Gothic"
+                                                                          "ヒラギノ角ゴシック"
+                                                                          "メイリオ"
+                                                                          "Monospace")))
+    ;; ラテン文字：Code page 858 (`cp858')
+    (my-set-fontset-font-safe "fontset-programming"
+                              'cp858
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "Inconsolata"
+                                                                          "Menlo"
+                                                                          "Consolas"
                                                                           "Courier New"
-                                                                          "Monospace"))))
-  ;; 未実装グリフのフォールバック
-  ;;
-  ;; 対象：
-  ;;
-  ;;   * "Inconsolata"
-  ;;   * "Consolas"
-  ;;   * "Menlo"
-  ;;
-  ;; 前述のフォントは除外
-  (dolist (code (mapcar 'string-to-char
-                        (split-string "⌐‗" "" t)))
-    (my-set-fontset-font-safe "fontset-programming"
-                              (cons code code)
-                              (font-spec :family (my-fallback-font-family "Courier New"
-                                                                          "Monospace"))))
+                                                                          "Monospace")))
+    ;; `cp858' に含まれているため半角になる状態を回避
+    (dolist (code (mapcar 'string-to-char
+                          (split-string "│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌∩≡■" "" t)))
+      (my-set-fontset-font-safe "fontset-programming"
+                                (cons code code)
+                                (font-spec :size font-size
+                                           :family (my-fallback-font-family "VL Gothic"
+                                                                            "ヒラギノ角ゴシック"
+                                                                            "メイリオ"
+                                                                            "Monospace"))))
+    ;; 一部グリフが次のフォントで半角になる状態を回避
+    ;;
+    ;;   * "ヒラギノ角ゴシック"
+    ;;   * "VL Gothic"
+    ;;
+    ;; 前述のフォントは除外
+    (dolist (code (mapcar 'string-to-char
+                          (split-string "±×÷" "" t)))
+      (my-set-fontset-font-safe "fontset-programming"
+                                (cons code code)
+                                (font-spec :size font-size
+                                           :family (my-fallback-font-family "Osaka"
+                                                                            "メイリオ"
+                                                                            "Monospace"))))
+    ;; 未実装グリフのフォールバック
+    ;;
+    ;; 対象：
+    ;;
+    ;;   * "Inconsolata"
+    ;;   * "Consolas"
+    ;;
+    ;; 前述のフォントは除外
+    (dolist (code (mapcar 'string-to-char
+                          (split-string "ı░▒▓" "" t)))
+      (my-set-fontset-font-safe "fontset-programming"
+                                (cons code code)
+                                (font-spec :size font-size
+                                           :family (my-fallback-font-family "Menlo"
+                                                                            "Courier New"
+                                                                            "Monospace"))))
+    ;; 未実装グリフのフォールバック
+    ;;
+    ;; 対象：
+    ;;
+    ;;   * "Inconsolata"
+    ;;   * "Consolas"
+    ;;   * "Menlo"
+    ;;
+    ;; 前述のフォントは除外
+    (dolist (code (mapcar 'string-to-char
+                          (split-string "⌐‗" "" t)))
+      (my-set-fontset-font-safe "fontset-programming"
+                                (cons code code)
+                                (font-spec :size font-size
+                                           :family (my-fallback-font-family "Courier New"
+                                                                            "Monospace")))))
 
 
   ;; --------------------------------------------------------------------------
@@ -3046,132 +3062,147 @@ See also: `https://github.com/validator/validator'."
   ;; http://osaka.is.land.to/
   ;; http://emk.name/2003/12/osakattf.html
   ;; --------------------------------------------------------------------------
-  (my-create-fontset-from-spec "programmingBMP"
-                               (font-spec :size 12 ; デフォルトフォントサイズ (px)
-                                          :family (my-fallback-font-family "ProFontWindows"
-                                                                           "Courier New"
-                                                                           "Monospace")))
-  ;; Emoji
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            nil
-                            (font-spec :family (my-fallback-font-family "Apple Color Emoji"
-                                                                        "Segoe UI Emoji"
-                                                                        "Segoe UI Symbol"
-                                                                        "Symbola"
-                                                                        "Monospace")))
-  ;; 簡体字：GB 18030
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            'gb18030
-                            (font-spec :family (my-fallback-font-family "PingFang SC"
-                                                                        "Microsoft YaHei"
-                                                                        "Monospace")))
-  ;; 繁体字（香港・マカオ）：HKSCS-2016
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            'big5-hkscs
-                            (font-spec :family (my-fallback-font-family "PingFang HK"
-                                                                        "MingLiU-ExtB"
-                                                                        "Monospace")))
-  ;; 繁体字：Big5
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            'big5
-                            (font-spec :family (my-fallback-font-family "PingFang TC"
-                                                                        "Microsoft JhengHei"
-                                                                        "Monospace")))
-  ;; ハングル：KS C 5601-1987 (a.k.a. KS X 1001:1998)
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            'korean-ksc5601
-                            (font-spec :family (my-fallback-font-family "Apple SD Gothic Neo"
-                                                                        "Malgun Gothic"
-                                                                        "Monospace")))
-  ;; タイ文字：Thai Industrial Standard 620-2533 (TIS-620)
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            'thai-tis620
-                            (font-spec :family (my-fallback-font-family "Ayuthaya"
-                                                                        "Tahoma"
-                                                                        "Monospace")))
-  ;; アラビア文字：Unicode 直接指定
-  ;;               `cp858' との重複を避けるため、`cp1256' による指定はしない
-  (dolist (range '((cons #x00600 #x006FF) ; U+0600-U+06FF (Arabic)
-                   (cons #x00750 #x0077F) ; U+0750–U+077F (Arabic Supplement)
-                   (cons #x008A0 #x008FF) ; U+08A0–U+08FF (Arabic Extended-A)
-                   (cons #x0FB50 #x0FDFF) ; U+FB50–U+FDFF (Arabic Presentation Forms-A)
-                   (cons #x0FE70 #X0FEFF) ; U+FE70–U+FEFF (Arabic Presentation Forms-B)
-                   (cons #x10E60 #x10E7F) ; U+10E60–U+10E7F (Rumi Numeral Symbols)
-                   (cons #x1EC70 #x1ECBF) ; U+1EC70–U+1ECBF (Indic Siyaq Numbers)
-                   (cons #x1EE00 #x1EEFF))) ; U+1EE00-U+1EEFF (Arabic Mathematical Alphabetic Symbols)
+  (let ((font-size 12)) ; デフォルトフォントサイズ (px)
+    (my-create-fontset-from-spec "programmingBMP"
+                                 (font-spec :size font-size
+                                            :family (my-fallback-font-family "ProFontWindows"
+                                                                             "Courier New"
+                                                                             "Monospace")))
+    ;; Emoji
     (my-set-fontset-font-safe "fontset-programmingBMP"
-                              range
-                              (font-spec :family (my-fallback-font-family "Baghdad"
-                                                                          "Microsoft Sans Serif"
-                                                                          "Monospace"))))
-  ;; 日本語：Code page 932 (`cp932')
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            'cp932
-                            (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
-                                                                        "さざなみフォント"
-                                                                        "東雲フォント"
-                                                                        "Monospace")))
-  ;; 日本語：JIS X 0213:2004
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            'japanese-jisx0213.2004-1
-                            (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
-                                                                        "さざなみフォント"
-                                                                        "東雲フォント"
-                                                                        "Monospace")))
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            'japanese-jisx0213-2
-                            (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
-                                                                        "さざなみフォント"
-                                                                        "東雲フォント"
-                                                                        "Monospace")))
-  ;; 日本語：JIS X 0208
-  ;;
-  ;; "Osaka－等幅" で対応している文字はできるだけ利用
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            'japanese-jisx0208
-                            (font-spec :family (my-fallback-font-family "Osaka－等幅"
-                                                                        "ＭＳ ゴシック"
-                                                                        "さざなみフォント"
-                                                                        "東雲フォント"
-                                                                        "Monospace")))
-  ;; ラテン文字：Code page 858 (`cp858')
-  ;;
-  ;; "ProFontWindows" の readme.txt には次の記述がある：
-  ;;
-  ;;   * "€" (U+20AC) サポートを投入
-  ;;   * `cp585' フルサポート
-  ;;
-  ;; 明示はないものの "ProFontWindows" の範囲は `cp858' と同一であると仮定
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            'cp858
-                            (font-spec :family (my-fallback-font-family "ProFontWindows"
-                                                                        "Courier New"
-                                                                        "Monospace")))
-  ;; `cp858' に含まれているため半角になる状態を回避
-  (dolist (code (mapcar 'string-to-char
-                        (split-string "±×÷│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌∩≡■" "" t)))
+                              nil
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "Apple Color Emoji"
+                                                                          "Segoe UI Emoji"
+                                                                          "Segoe UI Symbol"
+                                                                          "Symbola"
+                                                                          "Monospace")))
+    ;; 簡体字：GB 18030
     (my-set-fontset-font-safe "fontset-programmingBMP"
-                              (cons code code)
-                              (font-spec :family (my-fallback-font-family "Osaka－等幅"
-                                                                          "Osaka"
+                              'gb18030
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "PingFang SC"
+                                                                          "Microsoft YaHei"
+                                                                          "Monospace")))
+    ;; 繁体字（香港・マカオ）：HKSCS-2016
+    (my-set-fontset-font-safe "fontset-programmingBMP"
+                              'big5-hkscs
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "PingFang HK"
+                                                                          "MingLiU-ExtB"
+                                                                          "Monospace")))
+    ;; 繁体字：Big5
+    (my-set-fontset-font-safe "fontset-programmingBMP"
+                              'big5
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "PingFang TC"
+                                                                          "Microsoft JhengHei"
+                                                                          "Monospace")))
+    ;; ハングル：KS C 5601-1987 (a.k.a. KS X 1001:1998)
+    (my-set-fontset-font-safe "fontset-programmingBMP"
+                              'korean-ksc5601
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "Apple SD Gothic Neo"
+                                                                          "Malgun Gothic"
+                                                                          "Monospace")))
+    ;; タイ文字：Thai Industrial Standard 620-2533 (TIS-620)
+    (my-set-fontset-font-safe "fontset-programmingBMP"
+                              'thai-tis620
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "Ayuthaya"
+                                                                          "Tahoma"
+                                                                          "Monospace")))
+    ;; アラビア文字：Unicode 直接指定
+    ;;               `cp858' との重複を避けるため、`cp1256' による指定はしない
+    (dolist (range '((cons #x00600 #x006FF) ; U+0600-U+06FF (Arabic)
+                     (cons #x00750 #x0077F) ; U+0750–U+077F (Arabic Supplement)
+                     (cons #x008A0 #x008FF) ; U+08A0–U+08FF (Arabic Extended-A)
+                     (cons #x0FB50 #x0FDFF) ; U+FB50–U+FDFF (Arabic Presentation Forms-A)
+                     (cons #x0FE70 #X0FEFF) ; U+FE70–U+FEFF (Arabic Presentation Forms-B)
+                     (cons #x10E60 #x10E7F) ; U+10E60–U+10E7F (Rumi Numeral Symbols)
+                     (cons #x1EC70 #x1ECBF) ; U+1EC70–U+1ECBF (Indic Siyaq Numbers)
+                     (cons #x1EE00 #x1EEFF))) ; U+1EE00-U+1EEFF (Arabic Mathematical Alphabetic Symbols)
+      (my-set-fontset-font-safe "fontset-programmingBMP"
+                                range
+                                (font-spec :size font-size
+                                           :family (my-fallback-font-family "Baghdad"
+                                                                            "Microsoft Sans Serif"
+                                                                            "Monospace"))))
+    ;; 日本語：Code page 932 (`cp932')
+    (my-set-fontset-font-safe "fontset-programmingBMP"
+                              'cp932
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "ＭＳ ゴシック"
+                                                                          "さざなみフォント"
+                                                                          "東雲フォント"
+                                                                          "Monospace")))
+    ;; 日本語：JIS X 0213:2004
+    (my-set-fontset-font-safe "fontset-programmingBMP"
+                              'japanese-jisx0213.2004-1
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "ＭＳ ゴシック"
+                                                                          "さざなみフォント"
+                                                                          "東雲フォント"
+                                                                          "Monospace")))
+    (my-set-fontset-font-safe "fontset-programmingBMP"
+                              'japanese-jisx0213-2
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "ＭＳ ゴシック"
+                                                                          "さざなみフォント"
+                                                                          "東雲フォント"
+                                                                          "Monospace")))
+    ;; 日本語：JIS X 0208
+    ;;
+    ;; "Osaka－等幅" で対応している文字はできるだけ利用
+    (my-set-fontset-font-safe "fontset-programmingBMP"
+                              'japanese-jisx0208
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "Osaka－等幅"
                                                                           "ＭＳ ゴシック"
                                                                           "さざなみフォント"
                                                                           "東雲フォント"
+                                                                          "Monospace")))
+    ;; ラテン文字：Code page 858 (`cp858')
+    ;;
+    ;; "ProFontWindows" の readme.txt には次の記述がある：
+    ;;
+    ;;   * "€" (U+20AC) サポートを投入
+    ;;   * `cp585' フルサポート
+    ;;
+    ;; 明示はないものの "ProFontWindows" の範囲は `cp858' と同一であると仮定
+    (my-set-fontset-font-safe "fontset-programmingBMP"
+                              'cp858
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "ProFontWindows"
+                                                                          "Courier New"
+                                                                          "Monospace")))
+    ;; `cp858' に含まれているため半角になる状態を回避
+    (dolist (code (mapcar 'string-to-char
+                          (split-string "±×÷│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌∩≡■" "" t)))
+      (my-set-fontset-font-safe "fontset-programmingBMP"
+                                (cons code code)
+                                (font-spec :size font-size
+                                           :family (my-fallback-font-family "Osaka－等幅"
+                                                                            "Osaka"
+                                                                            "ＭＳ ゴシック"
+                                                                            "さざなみフォント"
+                                                                            "東雲フォント"
+                                                                            "Monospace"))))
+    ;; "Ø" (U+00D8: LATIN CAPITAL LETTER O WITH STROKE)
+    ;;
+    ;; 次のフォントは "Ø" と "0" (U+0030: DIGIT ZERO) が判別しにくい：
+    ;;
+    ;;     * "ProFontWindows"
+    ;;
+    ;; ゆえに、他フォントで表示させる
+    (my-set-fontset-font-safe "fontset-programmingBMP"
+                              (cons (string-to-char "Ø") (string-to-char "Ø"))
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "ＭＳ ゴシック"
+                                                                          "さざなみフォント"
+                                                                          "東雲フォント"
+                                                                          "Courier New"
                                                                           "Monospace"))))
-  ;; "Ø" (U+00D8: LATIN CAPITAL LETTER O WITH STROKE)
-  ;;
-  ;; 次のフォントは "Ø" と "0" (U+0030: DIGIT ZERO) が判別しにくい：
-  ;;
-  ;;     * "ProFontWindows"
-  ;;
-  ;; ゆえに、他フォントで表示させる
-  (my-set-fontset-font-safe "fontset-programmingBMP"
-                            (cons (string-to-char "Ø") (string-to-char "Ø"))
-                            (font-spec :family (my-fallback-font-family "ＭＳ ゴシック"
-                                                                        "さざなみフォント"
-                                                                        "東雲フォント"
-                                                                        "Courier New"
-                                                                        "Monospace")))
 
 
   ;; --------------------------------------------------------------------------
