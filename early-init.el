@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize config file -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2021-2022 Taku Watabe
-;; Time-stamp: <2022-09-14T22:21:44+09:00>
+;; Copyright (C) 2021-2023 Taku Watabe
+;; Time-stamp: <2023-11-29T13:27:39+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -44,19 +44,19 @@
 ;;
 (setq custom-file (locate-user-emacs-file "custom.el"))
 ;;
-;; Set maximum optimization level with native compiling.
-;;
-(setq native-comp-speed 3)
-;;
 ;; Don't show `*Warnings*' buffer when asynchronous native compiling.
 ;;
 (setq native-comp-async-report-warnings-errors nil)
 ;;
 ;; Prevents garbage collection that occurs at startup.
 ;;
+;; WARNING: Must set the values really need at the end of `init.el'.
+;;
 (setq gc-cons-threshold most-positive-fixnum)
 ;;
 ;; Silence extra message I/O.
+;;
+;; WARNING: Must set the values really need at the end of `init.el'.
 ;;
 (setq inhibit-message t)
 ;;
@@ -78,12 +78,21 @@
 ;;
 (setq frame-inhibit-implied-resize t)
 ;;
+;; Enable frame resizing in px units.
+;;
+(setq frame-resize-pixelwise t)
+;;
 ;; Disable UI elements to prevent the appearance of unstyled frames
 ;;
 (setq default-frame-alist (append default-frame-alist
                                   '((menu-bar-lines . 0)
                                     (tool-bar-lines . 0)
                                     (vertical-scroll-bars))))
+;;
+;; Make frame translucent.
+;;
+(if window-system
+    (set-frame-parameter nil 'alpha '(75 . 50)))
 
 
 ;; ============================================================================

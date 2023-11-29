@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-29T09:28:55+09:00>
+;; Time-stamp: <2023-11-29T13:36:49+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1502,24 +1502,18 @@ See also: `https://github.com/validator/validator'."
   ;; フレーム
   ;; --------------------------------------------------------------------------
   (leaf frame
-    :custom (;; フレームサイズ変更を px 単位で実行できるようにする
-             (frame-resize-pixelwise . t))
     :config
     ;; カーソルは点滅させない
-    (blink-cursor-mode -1)
-
-    ;; 半透明化
-    (if window-system
-        (set-frame-parameter nil 'alpha '(90 . 80))))
+    (blink-cursor-mode -1))
 
 
   ;; --------------------------------------------------------------------------
   ;; フレームセット
   ;; --------------------------------------------------------------------------
   (leaf frameset
-    ;; 全設定が完了してから実行しなければならない
-    ;; 途中で追加される項目がありうるため
-    :hook ((after-init-hook . my-frameset-initialize))
+    :hook (;; 全設定が完了してから実行しなければならない
+           ;; 途中で追加される項目がありうるため
+           (after-init-hook . my-frameset-initialize))
     :init
     (defun my-frameset-initialize ()
       "Initialize `frameset' when `after-init-hook' running."
@@ -1582,23 +1576,23 @@ See also: `https://github.com/validator/validator'."
   ;; --------------------------------------------------------------------------
   (leaf hl-todo
     :package t
-    :custom ((hl-todo-keyword-faces . '(("HOLD" . "#d0bf8f")
-                                        ("TODO" . "#cc9393")
-                                        ("NEXT" . "#dca3a3")
-                                        ("THEM" . "#dc8cc3")
-                                        ("PROG" . "#7cb8bb")
-                                        ("OKAY" . "#7cb8bb")
-                                        ("DONT" . "#5f7f5f")
-                                        ("FAIL" . "#8c5353")
-                                        ("DONE" . "#afd8af")
-                                        ("NOTE"   . "#d0bf8f")
-                                        ("KLUDGE" . "#d0bf8f")
-                                        ("HACK"   . "#d0bf8f")
-                                        ("TEMP"   . "#d0bf8f")
-                                        ("FIXME"  . "#cc9393")
-                                        ("XXX+"   . "#cc9393")
-                                        ("CAUTION" . "#ffff66")
-                                        ("WARNING" . "#ff6666"))))
+    :custom ((hl-todo-keyword-faces . '(("HOLD" . "#99ff99")
+                                        ("TODO" . "#99ff99")
+                                        ("NEXT" . "#99ff99")
+                                        ("THEM" . "#99ff99")
+                                        ("PROG" . "#99ffff")
+                                        ("OKAY" . "#99ffff")
+                                        ("DONT" . "#ffffcc")
+                                        ("FAIL" . "#ff0000")
+                                        ("DONE" . "#00ff00")
+                                        ("NOTE"   . "#ffcc99")
+                                        ("KLUDGE" . "#ffcc99")
+                                        ("HACK"   . "#ffcc99")
+                                        ("TEMP"   . "#ffcc99")
+                                        ("FIXME"  . "#ffcccc")
+                                        ("XXX"   . "#ffcccc")
+                                        ("CAUTION" . "#ffff00")
+                                        ("WARNING" . "#ff0000"))))
     :global-minor-mode global-hl-todo-mode)
 
 
