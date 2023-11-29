@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize config file -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2023 Taku Watabe
-;; Time-stamp: <2023-11-29T13:27:39+09:00>
+;; Time-stamp: <2023-11-29T13:41:25+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -92,7 +92,11 @@
 ;; Make frame translucent.
 ;;
 (if window-system
-    (set-frame-parameter nil 'alpha '(75 . 50)))
+    (set-frame-parameter nil 'alpha '(90 . 50)))
+;;
+;; Do not blink cursor.
+;;
+(blink-cursor-mode -1)
 
 
 ;; ============================================================================

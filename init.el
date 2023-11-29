@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-29T13:36:49+09:00>
+;; Time-stamp: <2023-11-29T13:40:44+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1496,15 +1496,6 @@ See also: `https://github.com/validator/validator'."
            (typescript-mode-hook . flyspell-prog-mode)
            (web-mode-hook . flyspell-prog-mode))
     :custom ((flyspell-delay . 1.0)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; フレーム
-  ;; --------------------------------------------------------------------------
-  (leaf frame
-    :config
-    ;; カーソルは点滅させない
-    (blink-cursor-mode -1))
 
 
   ;; --------------------------------------------------------------------------
