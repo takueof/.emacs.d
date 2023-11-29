@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-29T13:40:44+09:00>
+;; Time-stamp: <2023-11-30T07:05:19+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -66,7 +66,7 @@
 
 ;; `japanese-cp932' を `shift_jis' として強制認識
 ;;
-;; MIME を用いた自動エンコーディング判定を行うコード（`sgml-mode' など）でも
+;; MIME を使用した自動エンコーディング判定を行うコード（`sgml-mode' など）でも
 ;; 例外が出ないようにする
 (coding-system-put 'japanese-cp932
                    :mime-charset 'shift_jis)
@@ -199,7 +199,7 @@
  ;;
  '(line-spacing nil)
  ;;
- ;; 行間移動に論理行を用いる
+ ;; 行間移動に論理行を使用
  ;;
  '(line-move-visual t)
  ;;
@@ -495,7 +495,7 @@
 ;; サーバファイルのパスを明示する必要がある
 ;; なぜ必要かは不明
 ;;
-;; この欠点をある程度回避した wemacs.cmd を用いること
+;; この欠点をある程度回避した wemacs.cmd を使用すること
 ;; ============================================================================
 (leaf server
   :custom (;; ローカル環境にのみ保存
@@ -512,7 +512,7 @@
   :after my-utils
   :bind (;; ヘルプ表示を割り当てなおす
          ("C-x ?" . help-command)
-         ;; ウインドウ中央表示はもっともシンプルなものを用いる
+         ;; ウインドウ中央表示はもっともシンプルなものを使用
          ;; `recenter-top-bottom' は使わない
          ("C-l" . recenter)
          ;; リージョン範囲をソート
@@ -769,7 +769,7 @@
               ;; 環境次第で文字化けする
               ;;
               ;; Windows 環境（環境変数 %TZ% 未指定・+09:00 ゾーン）では
-              ;; 次の値が用いられてしまう
+              ;; 次の値が使用されてしまう
               ;; （どちらもエンコーディングは `cp932-2-byte'）：
               ;;
               ;; "%Z" (≒ "%Z"):  #("東京 (標準時)" 0 8
@@ -1127,7 +1127,7 @@
            ("C-x 4 b" . consult-buffer-other-window)
            ("C-x 5 b" . consult-buffer-other-frame)
            ;; コマンド群
-           ;; `C-c c' プレフィクスを用いる
+           ;; `C-c c' プレフィクスを使用
            ("C-c c h" . consult-history)
            ("C-c c m" . consult-mode-command)
            ("C-c c b" . consult-bookmark)
@@ -1141,7 +1141,7 @@
            ("C-c c i" . consult-imenu)
            ("C-c c f" . consult-focus-lines)
            ;; コマンド群（検索）
-           ;; "C-c c s" プレフィクスを用いる
+           ;; "C-c c s" プレフィクスを使用
            ("C-c c s f" . consult-find)
            ("C-c c s L" . consult-locate)
            ("C-c c s g" . consult-grep)
@@ -1233,7 +1233,7 @@
   ;; デスクトップ環境保存・復旧
   ;; --------------------------------------------------------------------------
   (leaf desktop
-    :bind (;; "C-c d" プレフィクスを用いる
+    :bind (;; "C-c d" プレフィクスを使用
            ("C-c d c" . desktop-clear)
            ("C-c d C-s" . desktop-save)
            ("C-c d s" . desktop-save-in-desktop-dir)
@@ -1243,12 +1243,13 @@
     :custom ((desktop-save . 'ask-if-new)
              (desktop-load-locked-desktop . t)
              (desktop-missing-file-warning . t)
-             ;; 必要最小限の情報のみ保存させる
-             (desktop-locals-to-save . '(case-fold-search
-                                         case-replace
-                                         desktop-locals-to-save
-                                         fill-column
-                                         truncate-lines))
+             ;; 必要最小限の情報のみ保存
+             (desktop-locals-to-save . '(;; WARNING: ソート厳禁！
+                                         ;;          正常に動作しなくなるため
+                                         desktop-locals-to-save ; 先頭＆必須
+                                         truncate-lines
+                                         case-fold-search
+                                         case-replace))
              (desktop-restore-frames . t)
              (desktop-restore-in-current-display . t)
              (desktop-restore-forces-onscreen . t)
@@ -1496,6 +1497,15 @@ See also: `https://github.com/validator/validator'."
            (typescript-mode-hook . flyspell-prog-mode)
            (web-mode-hook . flyspell-prog-mode))
     :custom ((flyspell-delay . 1.0)))
+
+
+  ;; --------------------------------------------------------------------------
+  ;; フレーム
+  ;; --------------------------------------------------------------------------
+  (leaf frame
+    :init
+    (if window-system
+        (set-frame-parameter nil 'alpha '(90 . 50))))
 
 
   ;; --------------------------------------------------------------------------
