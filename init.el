@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-27T21:20:36+09:00>
+;; Time-stamp: <2023-11-29T09:28:55+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -682,6 +682,11 @@
   ;; --------------------------------------------------------------------------
   (leaf diff-hl
     :package t
+    :hook ((magit-pre-refresh-hook . diff-hl-magit-pre-refresh)
+           (magit-post-refresh-hook . diff-hl-magit-post-refresh))
+    :init
+    (diff-hl-margin-mode +1)
+    (diff-hl-dired-mode +1)
     :global-minor-mode global-diff-hl-mode)
 
 
