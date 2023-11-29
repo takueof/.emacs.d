@@ -1,6 +1,6 @@
 <!--
 Copyright (C) 2013-2023 Taku Watabe
-Time-stamp: <2023-11-03T09:49:17+09:00>
+Time-stamp: <2023-11-29T13:45:31+09:00>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -28,6 +28,4 @@ I wrote these files for "**macOS**" and "**Microsoft Windows**" environments, bu
 
 [GNU GENERAL PUBLIC LICENSE Version 3 (GNU GPLv3)](https://www.gnu.org/licenses/gpl-3.0) (at your option) or any later version.
 
-See also: [`LICENSE`](/LICENSE) file.
-
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftakueof%2F.emacs.d.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Ftakueof%2F.emacs.d?ref=badge_large)
+See [`LICENSE`](/LICENSE) file.
