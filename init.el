@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-30T07:05:19+09:00>
+;; Time-stamp: <2023-11-30T17:14:40+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1505,7 +1505,7 @@ See also: `https://github.com/validator/validator'."
   (leaf frame
     :init
     (if window-system
-        (set-frame-parameter nil 'alpha '(90 . 50))))
+        (set-frame-parameter nil 'alpha '(90 . 80))))
 
 
   ;; --------------------------------------------------------------------------
