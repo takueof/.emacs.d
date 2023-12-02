@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-30T17:14:40+09:00>
+;; Time-stamp: <2023-12-02T10:41:06+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1505,7 +1505,15 @@ See also: `https://github.com/validator/validator'."
   (leaf frame
     :init
     (if window-system
-        (set-frame-parameter nil 'alpha '(90 . 80))))
+        ;; 背景のみ半透明とし、前景（文字）は不透明のままとする (over v29.x)
+        ;; ただし、macOS & Windows では動作もしなけければエラーにもならない
+        ;;
+        ;; 参考（前景も含めて半透明にする）：
+        ;;   (set-frame-parameter nil 'alpha '(90 . 80))
+        ;;
+        ;; See also:
+        ;; https://www.emacswiki.org/emacs/TransparentEmacs
+        (set-frame-parameter nil 'alpha-background 50)))
 
 
   ;; --------------------------------------------------------------------------
