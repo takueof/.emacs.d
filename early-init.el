@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize config file -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2023 Taku Watabe
-;; Time-stamp: <2023-11-30T07:01:21+09:00>
+;; Time-stamp: <2023-12-03T08:21:21+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -82,16 +82,14 @@
 ;;
 (setq frame-resize-pixelwise t)
 ;;
-;; Disable UI elements to prevent the appearance of unstyled frames
-;;
-(setq default-frame-alist (append default-frame-alist
-                                  '((menu-bar-lines . 0)
-                                    (tool-bar-lines . 0)
-                                    (vertical-scroll-bars))))
-;;
-;; Do not blink cursor.
+;; Disable UI elements
 ;;
 (blink-cursor-mode -1)
+(horizontal-scroll-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(tab-bar-mode -1)
+(tool-bar-mode -1)
 
 
 ;; ============================================================================
