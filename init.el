@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-02T10:41:06+09:00>
+;; Time-stamp: <2023-12-02T14:21:06+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -896,11 +896,7 @@
   ;; --------------------------------------------------------------------------
   (leaf auto-dim-other-buffers
     :package t
-    :hook ((after-init-hook . my-auto-dim-other-buffers-mode-initialize))
-    :init
-    (defun my-auto-dim-other-buffers-mode-initialize ()
-      "Initialize `auto-dim-other-buffers-mode'."
-      (auto-dim-other-buffers-mode +1)))
+    :hook ((after-init-hook . auto-dim-other-buffers-mode)))
 
 
   ;; --------------------------------------------------------------------------
