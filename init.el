@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-03T08:28:24+09:00>
+;; Time-stamp: <2023-12-03T08:29:15+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1541,7 +1541,8 @@
   ;; --------------------------------------------------------------------------
   (leaf hl-todo
     :package t
-    :custom ((hl-todo-keyword-faces . '(("HOLD" . "#99ff99")
+    :custom ((hl-todo-keyword-faces . '(;; 既存
+                                        ("HOLD" . "#99ff99")
                                         ("TODO" . "#99ff99")
                                         ("NEXT" . "#99ff99")
                                         ("THEM" . "#99ff99")
@@ -1557,7 +1558,9 @@
                                         ("FIXME"  . "#ffcccc")
                                         ("XXX"   . "#ffcccc")
                                         ("CAUTION" . "#ffff00")
-                                        ("WARNING" . "#ff0000"))))
+                                        ("WARNING" . "#ff0000")
+                                        ;; 追加
+                                        ("PATCH" . "#ffcc00"))))
     :global-minor-mode global-hl-todo-mode)
 
 
