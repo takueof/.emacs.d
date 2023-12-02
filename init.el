@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-02T14:21:06+09:00>
+;; Time-stamp: <2023-12-03T08:28:24+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1390,46 +1390,6 @@
     ;; --------------------------------
     (with-eval-after-load 'warnings
       (add-to-list 'warning-suppress-log-types '(flycheck syntax-checker)))
-
-    ;; --------------------------------
-    ;; PATCH: v.Nu サポート
-    ;; --------------------------------
-    (unless (flycheck-registered-checker-p 'vnu)
-      ;; FIXME: v.Nu の標準出力が UTF-8 なので、環境によっては文字化けする
-      (flycheck-define-checker vnu
-        "A (X)HTML syntax and style checker using v.NU.
-
-See also: `https://github.com/validator/validator'."
-        :command ("vnu" "--format" "gnu" "--verbose" source)
-        :error-patterns
-        ;; ファイル名はフルパスで入ってくるため、チェックしない
-        ((error line-start (minimal-match (one-or-more not-newline)) ":"
-                line "." column "-"
-                ;; `flycheck' は範囲指定（複数の line, column 指定）を
-                ;; サポートしていない
-                ;; ゆえに範囲の終了地点は無視
-                (one-or-more digit) "." (one-or-more digit) ": "
-                "error: " (message)
-                line-end)
-         (warning line-start (minimal-match (one-or-more not-newline)) ":"
-                  line "." column "-"
-                  (one-or-more digit) "." (one-or-more digit) ": "
-                  "info warning: " (message)
-                  line-end)
-         (info line-start (minimal-match (one-or-more not-newline)) ":"
-               line "." column "-"
-               (one-or-more digit) "." (one-or-more digit) ": "
-               "info: " (message)
-               line-end))
-        :modes (html-mode nxhtml-mode))
-
-      ;; 有効化
-      (let ((target-and-other-checkers (member 'html-tidy flycheck-checkers)))
-        (if target-and-other-checkers
-            ;; デフォルトの (X)HTML チェッカ `html-tidy' と入れ替える
-            (setcar target-and-other-checkers 'vnu)
-          ;; 未追加ならリスト先頭に追加
-          (add-to-list 'flycheck-checkers 'vnu))))
 
     ;; --------------------------------
     ;; PATCH: Sass（.scss/.sass 両形式）チェック時にキャッシュを使わせない
