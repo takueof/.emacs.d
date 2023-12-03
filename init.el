@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-03T15:32:17+09:00>
+;; Time-stamp: <2023-12-03T20:51:19+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -416,8 +416,8 @@
    ;; ビルトインパッケージの更新を許可
    '(package-install-upgrade-built-in t)
    ;; アップデートすると問題のでるパッケージを対象外 (ignore) 化
-   '(package-hidden-regexps '(;; ビルトイン
-                              "\\`tramp\\'")))
+   '(package-pinned-packages '(;; ビルトイン
+                              (tramp . "__IGNORE__"))))
   ;; 確実に定義された後で追加
   (add-to-list 'package-archives '("MELPA" . "https://melpa.org/packages/"))
   ;; `list-packages' のような短縮版を用意
