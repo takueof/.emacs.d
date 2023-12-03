@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-03T13:05:51+09:00>
+;; Time-stamp: <2023-12-03T15:00:11+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -412,14 +412,15 @@
 ;; `defcustom' によって定義されたリストヘシンボルを追加したいため、
 ;; あえて明示的にロード
 (when (require 'package nil :noerror)
+  (custom-set-variables
+   ;; ビルトインパッケージの更新を許可
+   '(package-install-upgrade-built-in t))
   ;; 確実に定義された後で追加
   (add-to-list 'package-archives '("MELPA" . "https://melpa.org/packages/"))
-  ;; あらゆるパッケージロードに先んじての記述が必須
-  (package-initialize)
   ;; `list-packages' のような短縮版を用意
   (defalias 'list-packages-no-fetch 'package-list-packages-no-fetch)
-  ;; ビルトインパッケージの更新を許可
-  (custom-set-variables '(package-install-upgrade-built-in t)))
+  ;; あらゆるパッケージロードに先んじての記述が必須
+  (package-initialize))
 
 
 ;; ============================================================================
