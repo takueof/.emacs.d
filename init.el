@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-03T15:02:40+09:00>
+;; Time-stamp: <2023-12-03T15:28:52+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -73,8 +73,8 @@
 
 ;; `japanese-shift-jis' を Microsoft Code Page 932 (`japanese-cp932') に変更
 ;;
-;; GNU Emacs における Shift_JIS 実装 `japanese-shift-jis' は、
-;; JIS X 0208 附属書1にある定義を厳格に実装したもの
+;; GNU Emacs における Shift_JIS 定義 `japanese-shift-jis' は、
+;; 「JIS X 0208 附属書1」を厳格に実装したもの
 ;; ゆえに、一部文字（例：「～」(U+FF5E)）が未定義であるなどし、
 ;; 実用上問題が発生しやすい
 ;;
@@ -3011,7 +3011,7 @@
       (my-set-fontset-font-safe "fontset-programming"
                                 (cons code code)
                                 (font-spec :size font-size
-                                           :family (my-fallback-font-family "Osaka"
+                                           :family (my-fallback-font-family "Migu 1M"
                                                                             "メイリオ"
                                                                             "Monospace"))))
     ;; 未実装グリフのフォールバック
