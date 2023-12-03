@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-03T15:28:52+09:00>
+;; Time-stamp: <2023-12-03T15:32:17+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2822,7 +2822,7 @@
          (my-fallback-font-family "VL Gothic"))
     (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.850))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.850))
-    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.850))
     (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.000))
