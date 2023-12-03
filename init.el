@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-03T09:13:43+09:00>
+;; Time-stamp: <2023-12-03T09:51:40+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -449,17 +449,6 @@
   :package t
   :config
   (leaf-keywords-init))
-
-
-;; ============================================================================
-;; パッケージマネージャ (by `el-get')
-;; ============================================================================
-;; WARNING: 全てのパッケージに影響するため、
-;;          なるべく早いタイミングでインストールするようにしてある
-;; ============================================================================
-(leaf el-get
-  :package t
-  :custom ((el-get-git-shallow-clone . t)))
 
 
 ;; ============================================================================
@@ -930,9 +919,8 @@
   ;; ブックマーク (`bookmark') 拡張
   ;; --------------------------------------------------------------------------
   (leaf bookmark+
-    :el-get (bookmark+
-             :type github
-             :pkgname "emacsmirror/bookmark-plus")
+    :vc (bookmark+
+         :url "https://github.com/emacsmirror/bookmark-plus")
     :after bookmark
     :require t)
 
@@ -1280,9 +1268,8 @@
   ;; ディレクトリブラウジング (`dired') 拡張
   ;; --------------------------------------------------------------------------
   (leaf dired+
-    :el-get (dired+
-             :type github
-             :pkgname "emacsmirror/dired-plus")
+    :vc (dired+
+         :url "https://github.com/emacsmirror/dired-plus.git")
     :after dired
     :require t
     :custom ((diredp-hide-details-initially-flag . nil)
