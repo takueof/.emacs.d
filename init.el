@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-03T13:05:08+09:00>
+;; Time-stamp: <2023-12-03T13:05:51+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2360,6 +2360,16 @@
                    (indent-style (equal indent-style-data "tab")))
               (if (not (equal indent-tabs-mode indent-style))
                   (setq-local indent-tabs-mode indent-style)))))))
+
+
+  ;; --------------------------------------------------------------------------
+  ;; Org
+  ;; --------------------------------------------------------------------------
+  (leaf org
+    :bind (("C-c l" . org-store-link)
+           ("C-c a" . org-agenda)
+           ("C-c r" . org-capture))
+    :custom ((org-use-speed-commands . t)))
 
 
   ;; --------------------------------------------------------------------------
