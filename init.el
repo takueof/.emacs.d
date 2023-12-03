@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-03T08:30:01+09:00>
+;; Time-stamp: <2023-12-03T09:13:43+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2951,6 +2951,32 @@
                               'japanese-jisx0213-2
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
+                                                                          "ヒラギノ角ゴシック"
+                                                                          "メイリオ"
+                                                                          "Monospace")))
+    ;; 「〜」(U+301C: WAVE DASH) と「～」(U+FF5E: FULLWIDTH TILDE) の字形を変更
+    ;;
+    ;; 対象：
+    ;;
+    ;;   * "Migu 1M"
+    ;;
+    ;; 前述のフォントは「〜」と「～」で字形が異なるので、視覚的な区別が可能
+    ;;
+    (my-set-fontset-font-safe "fontset-programming"
+                              ;; 「〜」(U+301C: WAVE DASH)
+                              (cons (string-to-char "〜") (string-to-char "〜"))
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "Migu 1M"
+                                                                          "VL Gothic"
+                                                                          "ヒラギノ角ゴシック"
+                                                                          "メイリオ"
+                                                                          "Monospace")))
+    (my-set-fontset-font-safe "fontset-programming"
+                              ;; 「～」(U+FF5E: FULLWIDTH TILDE)
+                              (cons (string-to-char "～") (string-to-char "～"))
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "Migu 1M"
+                                                                          "VL Gothic"
                                                                           "ヒラギノ角ゴシック"
                                                                           "メイリオ"
                                                                           "Monospace")))
