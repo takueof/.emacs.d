@@ -1,9 +1,10 @@
 @echo off
+rem -*- mode: Bat; coding: utf-8-unix; -*-
 setlocal
 rem ===========================================================================
 rem GNU Emacs client `emacsclientw' wrapper
 rem Copyright (C) 2014-2023 Taku Watabe
-rem Time-stamp: <2023-11-03T10:15:09+09:00>
+rem Time-stamp: <2023-12-06T22:19:05+09:00>
 rem ===========================================================================
 rem This program is free software; you can redistribute it and/or modify
 rem it under the terms of the GNU General Public License as published by
@@ -18,23 +19,20 @@ rem
 rem You should have received a copy of the GNU General Public License
 rem along with this program.  If not, see <https://www.gnu.org/licenses/>.
 rem ===========================================================================
-set EMACS_DIR=C:\programs\emacs\bin
-set EMACS_BIN=runemacs.exe
-set EMACS_CLIENT=emacsclientw.exe
+set EMACS_DIR="C:\programs\emacs\bin"
+set EMACS_BIN="runemacs.exe"
+set EMACS_CLIENT="emacsclientw.exe"
 
-rem クライアントサーバファイル
+rem Client Server File
 rem
-rem WARNING: Windows 環境は EMACS_CLIENT 実行時に環境変数 EMACS_SERVER_FILE へ
-rem          サーバファイルのパスを明示する必要がある
-rem          なぜ必要かは不明
-set EMACS_SERVER_FILE=%APPDATA%\.emacs.server\server
+rem WARNING: In Windows environment, it is necessary to specify the server file
+rem          path to the environment variable EMACS_SERVER_FILE when executing
+rem          EMACS_CLIENT.
+rem          It is unclear why it is necessary.
+set EMACS_SERVER_FILE="%APPDATA%\.emacs.server\server"
 
-rem 実行
+rem Execute
 "%EMACS_DIR%\%EMACS_CLIENT%" -n -a "%EMACS_DIR%\%EMACS_BIN%" %*
 
 rem ===========================================================================
 endlocal
-rem Local Variables:
-rem coding: japanese-cp932-dos
-rem mode: bat-mode
-rem End:
