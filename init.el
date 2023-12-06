@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-04T05:30:14+09:00>
+;; Time-stamp: <2023-12-06T22:22:42+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2370,7 +2370,8 @@
   ;; Org
   ;; --------------------------------------------------------------------------
   (leaf org
-    :bind (("C-c l" . org-store-link)
+    :bind (;; FIXME: `display-line-numbers-mode' とカブるため一時的に無効化
+           ;; ("C-c l" . org-store-link)
            ("C-c a" . org-agenda)
            ("C-c r" . org-capture))
     :custom ((org-use-speed-commands . t)))
