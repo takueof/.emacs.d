@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-09T20:13:00+09:00>
+;; Time-stamp: <2023-12-10T07:15:24+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -465,7 +465,7 @@
   :when (member system-type '(ms-dos windows-nt))
   :package t
   :config
-  (tr-ime-advanced-install)
+  (tr-ime-advanced-install t)
   (w32-ime-initialize))
 
 
