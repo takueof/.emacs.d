@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-10T07:15:24+09:00>
+;; Time-stamp: <2023-12-10T09:29:24+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -302,20 +302,6 @@
                                (t
                                 default-input-method)))
  ;;
- ;; バッファごとのインプットメソッド状態モードライン表示 (Windows ONLY)
- ;;
- '(w32-ime-mode-line-state-indicator "[Aa]")
- ;;
- ;; インプットメソッド状態モードライン表示の一覧 (Windows ONLY)
- ;;
- ;; 順に「IM OFF」「IM ON: 日本語入力」「IM ON: 英字入力」
- ;;
- '(w32-ime-mode-line-state-indicator-list '("[--]" "[あ]" "[Aa]"))
- ;;
- ;; バッファ切替時にはインプットメソッド状態を引き継がない (Windows ONLY)
- ;;
- '(w32-ime-buffer-switch-p t)
- ;;
  ;; 右 <Alt> + 左 <Ctrl> で <AltGr> が発送されないようにする (Windows ONLY)
  ;; <AltGr> は独自のキーコードであり、<C-M-> であるとみなされない
  ;;
@@ -458,12 +444,15 @@
 ;; ============================================================================
 ;; IME patch (Windows ONLY)
 ;; ============================================================================
-;; WARNING: 全てのパッケージに影響するため、
-;;          なるべく早いタイミングでインストールするようにしてある
+;; WARNING: 全ての IM に影響するため、
+;;          なるべく早いタイミングでインストール
 ;; ============================================================================
 (leaf tr-ime
   :when (member system-type '(ms-dos windows-nt))
   :package t
+  :custom '((w32-ime-buffer-switch-p . t)
+            (w32-ime-mode-line-state-indicator . "[Aa]")
+            (w32-ime-mode-line-state-indicator-list . '("[--]" "[あ]" "[Aa]")))
   :config
   (tr-ime-advanced-install t)
   (w32-ime-initialize))
@@ -473,7 +462,7 @@
 ;; サーバ化
 ;; ============================================================================
 ;; WARNING: 起動を前提としたパッケージが存在するため、
-;;          なるべく早いタイミングで開始するようにしてある
+;;          なるべく早いタイミングで開始
 ;; ============================================================================
 ;; Windows 環境では `server-auth-dir' の「所有者」が：
 ;;   * Administrator (RID=500)
@@ -545,7 +534,8 @@
     (global-unset-key [magnify-up])
     (global-unset-key [magnify-down])
     (global-unset-key [S-magnify-up])
-    (global-unset-key [S-magnify-down])))
+    (global-unset-key [S-magnify-down]))
+  ) ; End of *global-keybind
 
 
 ;; ============================================================================
@@ -570,7 +560,8 @@
       (dolist (theme required-themes)
         (when (member theme availabled-themes)
           (load-theme theme t)
-          (throw 'required-theme-found theme))))))
+          (throw 'required-theme-found theme)))))
+  ) ; End of *themes
 
 
 ;; ============================================================================
