@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-10T09:29:24+09:00>
+;; Time-stamp: <2023-12-10T18:56:43+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1219,23 +1219,20 @@
            ("C-c d d" . desktop-remove)
            ("C-c d f" . desktop-change-dir)
            ("C-c d r" . desktop-revert))
-    :custom ((desktop-save . 'ask-if-new)
-             (desktop-load-locked-desktop . t)
-             (desktop-missing-file-warning . t)
-             ;; 必要最小限の情報のみ保存
-             (desktop-locals-to-save . '(;; WARNING: ソート厳禁！
+    :custom ((desktop-load-locked-desktop . t)
+             (desktop-globals-to-save . '(;; 保存は必要最小限
+                                          search-ring
+                                          register-alist
+                                          file-name-history))
+             (desktop-locals-to-save . '(;; 保存は必要最小限
+                                         ;;
+                                         ;; WARNING: ソート厳禁！
                                          ;;          正常に動作しなくなるため
                                          desktop-locals-to-save ; 先頭＆必須
                                          truncate-lines
                                          case-fold-search
                                          case-replace))
-             (desktop-restore-frames . t)
-             (desktop-restore-in-current-display . t)
-             (desktop-restore-forces-onscreen . t)
-             (desktop-restore-reuses-frames . t)
-             (desktop-file-name-format . 'absolute)
-             (desktop-restore-eager . t)
-             (desktop-lazy-verbose . t)
+             (desktop-lazy-verbose . nil)
              (desktop-lazy-idle-delay . 5))
     :global-minor-mode desktop-save-mode)
 
@@ -1453,27 +1450,6 @@
         ;;
         ;; 半透明化（前景も含む）
         (set-frame-parameter nil 'alpha '(90 . 80))))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; フレームセット
-  ;; --------------------------------------------------------------------------
-  (leaf frameset
-    :hook (;; 全設定が完了してから実行しなければならない
-           ;; 途中で追加される項目がありうるため
-           (after-init-hook . my-frameset-initialize))
-    :init
-    (defun my-frameset-initialize ()
-      "Initialize `frameset' when `after-init-hook' running."
-      (when (listp frameset-filter-alist)
-        ;; `desktop' で保存不要な項目はすべて `:never' にする
-        (dolist (key '(background-color
-                       foreground-color
-                       font
-                       frameset--text-pixel-height
-                       frameset--text-pixel-width
-                       GUI:font))
-          (setcdr (assoc key frameset-filter-alist) :never)))))
 
 
   ;; --------------------------------------------------------------------------
