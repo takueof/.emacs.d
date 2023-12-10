@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-11-27T21:06:21+09:00>
+;; Time-stamp: <2023-12-10T17:52:55+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -288,23 +288,48 @@ Return nil to all XLFDS are unavaliabled."
 (defun my-create-fontset-spec-string (name spec)
   "Return string for 1st argument of `create-fontset-from-fontset-spec'.
 
-NAME is fontset name without \"fontset-\" prefix (example: \"fontset-NAME\").
+NAME is fontset name without \"fontset-\" prefix,
+because \"NAME\" is automatically converted to \"fontset-NAME\".
+
 SPEC is font object (`font-spec' return value)."
-  (let ((fontset-spec (x-decompose-font-name
-                       (font-xlfd-name (find-font spec)))))
-    ;; XLFD のエンコーディング部をフォントセット名に置換
-    (aset fontset-spec
-          xlfd-regexp-registry-subnum
-          (downcase (format "fontset-%s" name)))
-    ;; フォントセット名を含んだ XLFD 文字列を生成
-    (x-compose-font-name fontset-spec)))
+  (let* (;; フォントセット名は大文字厳禁
+         (name-downcased (downcase name))
+         (fontset-name (concat "fontset-" name-downcased))
+         ;; `spec' から XLFD 情報を取得
+         (font-spec-xlfd-name (font-xlfd-name spec))
+         (font-spec-xlfd-array (x-decompose-font-name font-spec-xlfd-name))
+         ;; `spec' からフォントエンティティを取得
+         (font-entity (find-font spec))
+         ;; font 情報エンティティから XLFD 情報を取得
+         ;;
+         ;; WARNING: この XLFD は情報（フォントサイズなど）が欠落しているので、
+         ;;          後ほど `spec' から取得した XLFD 情報で埋め合わせる
+         (font-entity-xlfd-name (font-xlfd-name font-entity))
+         (font-entity-xlfd-array (x-decompose-font-name font-entity-xlfd-name))
+         ;; 完全版 XLFD 情報
+         (font-xlfd-array (copy-sequence font-entity-xlfd-array))
+         (font-xlfd-array-length (length font-xlfd-array)))
+    ;; `font-xlfd-array' では欠落している（nil である）要素が
+    ;; `font-spec-xlfd-array' では存在している（nil でない）ならば、
+    ;; `font-spec-xlfd-array' の要素を採用
+    (dotimes (index font-xlfd-array-length)
+      (let ((element (aref font-xlfd-array index))
+            (element-of-spec (aref font-spec-xlfd-array index)))
+        (if (and (not element)
+                 (not (null element-of-spec)))
+            (aset font-xlfd-array index element-of-spec))))
+    ;; フォントセット名をレジストリ要素として登録
+    (aset font-xlfd-array xlfd-regexp-registry-subnum fontset-name)
+    ;; 欠落情報とフォントセット名を補完した XLFD 文字列を生成
+    (x-compose-font-name font-xlfd-array)))
 
 ;;;###autoload
 (defmacro my-create-fontset-from-spec (name spec &rest options)
-  "Create a fontset from \"fontset-NAME\" and font object SPEC.
+  "Create a fontset from \"fontset-NAME\" and SPEC.
 
-NAME is fontset name (without \"fontset-\" prefix).
-SPEC is font object (ex. `font-spec' function's return value).
+NAME is fontset name without \"fontset-\" prefix.
+
+SPEC is font object (`font-spec' return value).
 
 OPTIONS are same arguments of `create-fontset-from-fontset-spec' after the 2nd.
 
