@@ -4,7 +4,7 @@ setlocal
 rem ===========================================================================
 rem GNU Emacs client `emacsclientw' wrapper
 rem Copyright (C) 2014-2023 Taku Watabe
-rem Time-stamp: <2023-12-06T22:19:05+09:00>
+rem Time-stamp: <2023-12-11T10:04:30+09:00>
 rem ===========================================================================
 rem This program is free software; you can redistribute it and/or modify
 rem it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ rem WARNING: In Windows environment, it is necessary to specify the server file
 rem          path to the environment variable EMACS_SERVER_FILE when executing
 rem          EMACS_CLIENT.
 rem          It is unclear why it is necessary.
-set EMACS_SERVER_FILE="%APPDATA%\.emacs.server\server"
+set EMACS_SERVER_FILE="%USERPROFILE%\.emacs.server\server"
 
 rem Execute
 "%EMACS_DIR%\%EMACS_CLIENT%" -n -a "%EMACS_DIR%\%EMACS_BIN%" %*
