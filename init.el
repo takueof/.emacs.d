@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-11T19:13:37+09:00>
+;; Time-stamp: <2023-12-12T13:01:46+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2875,7 +2875,7 @@
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
                                                                           "ヒラギノ角ゴシック"
-                                                                          "メイリオ"
+                                                                          "Meiryo"
                                                                           "Monospace")))
     ;; 日本語：JIS X 0213:2004
     (my-set-fontset-font-safe "fontset-programming"
@@ -2883,14 +2883,14 @@
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
                                                                           "ヒラギノ角ゴシック"
-                                                                          "メイリオ"
+                                                                          "Meiryo"
                                                                           "Monospace")))
     (my-set-fontset-font-safe "fontset-programming"
                               'japanese-jisx0213-2
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
                                                                           "ヒラギノ角ゴシック"
-                                                                          "メイリオ"
+                                                                          "Meiryo"
                                                                           "Monospace")))
     ;; 「〜」(U+301C: WAVE DASH) と「～」(U+FF5E: FULLWIDTH TILDE) の字形を変更
     ;;
@@ -2907,7 +2907,7 @@
                                          :family (my-fallback-font-family "Migu 1M"
                                                                           "VL Gothic"
                                                                           "ヒラギノ角ゴシック"
-                                                                          "メイリオ"
+                                                                          "MS Gothic"
                                                                           "Monospace")))
     (my-set-fontset-font-safe "fontset-programming"
                               ;; 「～」(U+FF5E: FULLWIDTH TILDE)
@@ -2916,7 +2916,7 @@
                                          :family (my-fallback-font-family "Migu 1M"
                                                                           "VL Gothic"
                                                                           "ヒラギノ角ゴシック"
-                                                                          "メイリオ"
+                                                                          "MS Gothic"
                                                                           "Monospace")))
     ;; ラテン文字：Code page 858 (`cp858')
     (my-set-fontset-font-safe "fontset-programming"
@@ -2935,7 +2935,7 @@
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "VL Gothic"
                                                                             "ヒラギノ角ゴシック"
-                                                                            "メイリオ"
+                                                                            "MS Gothic"
                                                                             "Monospace"))))
     ;; 一部グリフが次のフォントで半角になる状態を回避
     ;;
