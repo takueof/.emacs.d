@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-12T13:01:46+09:00>
+;; Time-stamp: <2023-12-12T14:24:39+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2809,15 +2809,6 @@
                                                                              "Menlo"
                                                                              "Consolas"
                                                                              "Monospace")))
-    ;; Emoji
-    (my-set-fontset-font-safe "fontset-programming"
-                              nil
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "Apple Color Emoji"
-                                                                          "Segoe UI Emoji"
-                                                                          "Segoe UI Symbol"
-                                                                          "Symbola"
-                                                                          "Monospace")))
     ;; 簡体字：GB 18030
     (my-set-fontset-font-safe "fontset-programming"
                               'gb18030
@@ -2983,7 +2974,16 @@
                                 (cons code code)
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "Courier New"
-                                                                            "Monospace")))))
+                                                                            "Monospace"))))
+    ;; Emoji
+    (my-set-fontset-font-safe "fontset-programming"
+                              'emoji
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "Apple Color Emoji"
+                                                                          "Segoe UI Emoji"
+                                                                          "Segoe UI Symbol"
+                                                                          "Symbola"
+                                                                          "Monospace"))))
 
 
   ;; --------------------------------------------------------------------------
