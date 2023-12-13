@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-12T18:39:47+09:00>
+;; Time-stamp: <2023-12-13T18:39:00+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2802,43 +2802,46 @@
   ;; --------------------------------------------------------------------------
   ;; フォントセット：プログラミング用
   ;; --------------------------------------------------------------------------
-  (let ((font-size 14.0)) ; デフォルトフォントサイズ (pt)
-    (my-create-fontset-from-spec "programming"
-                                 (font-spec :size font-size
-                                            :family (my-fallback-font-family "Inconsolata"
-                                                                             "Menlo"
-                                                                             "Consolas"
-                                                                             "Monospace")))
+  (let* ((font-size 14.0) ; デフォルトフォントサイズ (pt)
+         (fontset "programming")
+         (fontset-name (concat "fontset-" fontset)))
+    ;; フォントセット生成
+    (create-fontset-from-ascii-font (my-fallback-font-family "Inconsolata"
+                                                             "Menlo"
+                                                             "Consolas"
+                                                             "Monospace")
+                                    nil
+                                    fontset)
     ;; 簡体字：GB 18030
-    (my-set-fontset-font-safe "fontset-programming"
+    (my-set-fontset-font-safe fontset-name
                               'gb18030
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "PingFang SC"
                                                                           "Microsoft YaHei"
                                                                           "Monospace")))
     ;; 繁体字（香港・マカオ）：HKSCS-2016
-    (my-set-fontset-font-safe "fontset-programming"
+    (my-set-fontset-font-safe fontset-name
                               'big5-hkscs
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "PingFang HK"
                                                                           "MingLiU-ExtB"
                                                                           "Monospace")))
     ;; 繁体字：Big5
-    (my-set-fontset-font-safe "fontset-programming"
+    (my-set-fontset-font-safe fontset-name
                               'big5
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "PingFang TC"
                                                                           "Microsoft JhengHei"
                                                                           "Monospace")))
     ;; ハングル：KS C 5601-1987 (a.k.a. KS X 1001:1998)
-    (my-set-fontset-font-safe "fontset-programming"
+    (my-set-fontset-font-safe fontset-name
                               'korean-ksc5601
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Apple SD Gothic Neo"
                                                                           "Malgun Gothic"
                                                                           "Monospace")))
     ;; タイ文字：Thai Industrial Standard 620-2533 (TIS-620)
-    (my-set-fontset-font-safe "fontset-programming"
+    (my-set-fontset-font-safe fontset-name
                               'thai-tis620
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Ayuthaya"
@@ -2854,14 +2857,14 @@
                      (cons #x10E60 #x10E7F) ; U+10E60–U+10E7F (Rumi Numeral Symbols)
                      (cons #x1EC70 #x1ECBF) ; U+1EC70–U+1ECBF (Indic Siyaq Numbers)
                      (cons #x1EE00 #x1EEFF))) ; U+1EE00-U+1EEFF (Arabic Mathematical Alphabetic Symbols)
-      (my-set-fontset-font-safe "fontset-programming"
+      (my-set-fontset-font-safe fontset-name
                                 range
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "Baghdad"
                                                                             "Microsoft Sans Serif"
                                                                             "Monospace"))))
     ;; 日本語：Code page 932 (`cp932')
-    (my-set-fontset-font-safe "fontset-programming"
+    (my-set-fontset-font-safe fontset-name
                               'cp932
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
@@ -2869,14 +2872,14 @@
                                                                           "Meiryo"
                                                                           "Monospace")))
     ;; 日本語：JIS X 0213:2004
-    (my-set-fontset-font-safe "fontset-programming"
+    (my-set-fontset-font-safe fontset-name
                               'japanese-jisx0213.2004-1
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
                                                                           "ヒラギノ角ゴシック"
                                                                           "Meiryo"
                                                                           "Monospace")))
-    (my-set-fontset-font-safe "fontset-programming"
+    (my-set-fontset-font-safe fontset-name
                               'japanese-jisx0213-2
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
@@ -2891,7 +2894,7 @@
     ;;
     ;; 前述のフォントは「〜」と「～」で字形が異なるので、視覚的な区別が可能
     ;;
-    (my-set-fontset-font-safe "fontset-programming"
+    (my-set-fontset-font-safe fontset-name
                               ;; 「〜」(U+301C: WAVE DASH)
                               (cons (string-to-char "〜") (string-to-char "〜"))
                               (font-spec :size font-size
@@ -2900,7 +2903,7 @@
                                                                           "ヒラギノ角ゴシック"
                                                                           "MS Gothic"
                                                                           "Monospace")))
-    (my-set-fontset-font-safe "fontset-programming"
+    (my-set-fontset-font-safe fontset-name
                               ;; 「～」(U+FF5E: FULLWIDTH TILDE)
                               (cons (string-to-char "～") (string-to-char "～"))
                               (font-spec :size font-size
@@ -2910,7 +2913,7 @@
                                                                           "MS Gothic"
                                                                           "Monospace")))
     ;; ラテン文字：Code page 858 (`cp858')
-    (my-set-fontset-font-safe "fontset-programming"
+    (my-set-fontset-font-safe fontset-name
                               'cp858
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Inconsolata"
@@ -2921,7 +2924,7 @@
     ;; `cp858' に含まれているため半角になる状態を回避
     (dolist (code (mapcar 'string-to-char
                           (split-string "│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌∩≡■" "" t)))
-      (my-set-fontset-font-safe "fontset-programming"
+      (my-set-fontset-font-safe fontset-name
                                 (cons code code)
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "VL Gothic"
@@ -2937,7 +2940,7 @@
     ;; 前述のフォントは除外
     (dolist (code (mapcar 'string-to-char
                           (split-string "±×÷" "" t)))
-      (my-set-fontset-font-safe "fontset-programming"
+      (my-set-fontset-font-safe fontset-name
                                 (cons code code)
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "Migu 1M"
@@ -2953,7 +2956,7 @@
     ;; 前述のフォントは除外
     (dolist (code (mapcar 'string-to-char
                           (split-string "ı░▒▓" "" t)))
-      (my-set-fontset-font-safe "fontset-programming"
+      (my-set-fontset-font-safe fontset-name
                                 (cons code code)
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "Menlo"
@@ -2970,32 +2973,28 @@
     ;; 前述のフォントは除外
     (dolist (code (mapcar 'string-to-char
                           (split-string "⌐‗" "" t)))
-      (my-set-fontset-font-safe "fontset-programming"
+      (my-set-fontset-font-safe fontset-name
                                 (cons code code)
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "Courier New"
                                                                             "Monospace"))))
     ;; Emoji
-    (my-set-fontset-font-safe "fontset-programming"
+    (my-set-fontset-font-safe fontset-name
                               'emoji
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Apple Color Emoji"
                                                                           "Symbola"
                                                                           "Segoe UI Emoji"
                                                                           "Segoe UI Symbol"
-                                                                          "Monospace"))))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; フォントセット設定
-  ;; --------------------------------------------------------------------------
-  (let ((fontset "fontset-programming"))
-    (modify-all-frames-parameters `((font . ,fontset)))
-
+                                                                          "Monospace")))
+    ;; フォントセット適用
+    (modify-all-frames-parameters `((font . ,fontset-name)))
+    ;; 各種 UI にも適用
+    ;;
     ;; TODO: ダイアログの face も変えたい
     ;;       シンボル名不明
     ;;       `face-list' で一覧を出しても、それらしきものがなかった
-    (custom-set-faces `(tooltip ((t (:font ,fontset))))))
+    (custom-set-faces `(tooltip ((t (:font ,fontset-name))))))
   ) ; END of *font
 
 
