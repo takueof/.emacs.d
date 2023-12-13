@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-13T18:39:00+09:00>
+;; Time-stamp: <2023-12-13T19:13:34+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2808,8 +2808,10 @@
     ;; フォントセット生成
     (create-fontset-from-ascii-font (my-fallback-font-family "Inconsolata"
                                                              "Menlo"
+                                                             "Monaco"
                                                              "Consolas"
-                                                             "Monospace")
+                                                             "Courier New"
+                                                             "Courier")
                                     nil
                                     fontset)
     ;; 簡体字：GB 18030
@@ -2817,36 +2819,31 @@
                               'gb18030
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "PingFang SC"
-                                                                          "Microsoft YaHei"
-                                                                          "Monospace")))
+                                                                          "Microsoft YaHei")))
     ;; 繁体字（香港・マカオ）：HKSCS-2016
     (my-set-fontset-font-safe fontset-name
                               'big5-hkscs
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "PingFang HK"
-                                                                          "MingLiU-ExtB"
-                                                                          "Monospace")))
+                                                                          "MingLiU-ExtB")))
     ;; 繁体字：Big5
     (my-set-fontset-font-safe fontset-name
                               'big5
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "PingFang TC"
-                                                                          "Microsoft JhengHei"
-                                                                          "Monospace")))
+                                                                          "Microsoft JhengHei")))
     ;; ハングル：KS C 5601-1987 (a.k.a. KS X 1001:1998)
     (my-set-fontset-font-safe fontset-name
                               'korean-ksc5601
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Apple SD Gothic Neo"
-                                                                          "Malgun Gothic"
-                                                                          "Monospace")))
+                                                                          "Malgun Gothic")))
     ;; タイ文字：Thai Industrial Standard 620-2533 (TIS-620)
     (my-set-fontset-font-safe fontset-name
                               'thai-tis620
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Ayuthaya"
-                                                                          "Tahoma"
-                                                                          "Monospace")))
+                                                                          "Tahoma")))
     ;; アラビア文字：Unicode 直接指定
     ;;               `cp858' との重複を避けるため、`cp1256' による指定はしない
     (dolist (range '((cons #x00600 #x006FF) ; U+0600-U+06FF (Arabic)
@@ -2861,8 +2858,7 @@
                                 range
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "Baghdad"
-                                                                            "Microsoft Sans Serif"
-                                                                            "Monospace"))))
+                                                                            "Microsoft Sans Serif"))))
     ;; 日本語：Code page 932 (`cp932')
     (my-set-fontset-font-safe fontset-name
                               'cp932
@@ -2870,7 +2866,7 @@
                                          :family (my-fallback-font-family "VL Gothic"
                                                                           "ヒラギノ角ゴシック"
                                                                           "Meiryo"
-                                                                          "Monospace")))
+                                                                          "MS Gothic")))
     ;; 日本語：JIS X 0213:2004
     (my-set-fontset-font-safe fontset-name
                               'japanese-jisx0213.2004-1
@@ -2878,14 +2874,14 @@
                                          :family (my-fallback-font-family "VL Gothic"
                                                                           "ヒラギノ角ゴシック"
                                                                           "Meiryo"
-                                                                          "Monospace")))
+                                                                          "MS Gothic")))
     (my-set-fontset-font-safe fontset-name
                               'japanese-jisx0213-2
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
                                                                           "ヒラギノ角ゴシック"
                                                                           "Meiryo"
-                                                                          "Monospace")))
+                                                                          "MS Gothic")))
     ;; 「〜」(U+301C: WAVE DASH) と「～」(U+FF5E: FULLWIDTH TILDE) の字形を変更
     ;;
     ;; 対象：
@@ -2901,8 +2897,8 @@
                                          :family (my-fallback-font-family "Migu 1M"
                                                                           "VL Gothic"
                                                                           "ヒラギノ角ゴシック"
-                                                                          "MS Gothic"
-                                                                          "Monospace")))
+                                                                          "Meiryo"
+                                                                          "MS Gothic")))
     (my-set-fontset-font-safe fontset-name
                               ;; 「～」(U+FF5E: FULLWIDTH TILDE)
                               (cons (string-to-char "～") (string-to-char "～"))
@@ -2910,17 +2906,17 @@
                                          :family (my-fallback-font-family "Migu 1M"
                                                                           "VL Gothic"
                                                                           "ヒラギノ角ゴシック"
-                                                                          "MS Gothic"
-                                                                          "Monospace")))
+                                                                          "Meiryo"
+                                                                          "MS Gothic")))
     ;; ラテン文字：Code page 858 (`cp858')
     (my-set-fontset-font-safe fontset-name
                               'cp858
                               (font-spec :size font-size
-                                         :family (my-fallback-font-family "Inconsolata"
-                                                                          "Menlo"
+                                         :family (my-fallback-font-family "Menlo"
+                                                                          "Monaco"
                                                                           "Consolas"
                                                                           "Courier New"
-                                                                          "Monospace")))
+                                                                          "Courier")))
     ;; `cp858' に含まれているため半角になる状態を回避
     (dolist (code (mapcar 'string-to-char
                           (split-string "│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌∩≡■" "" t)))
@@ -2929,8 +2925,7 @@
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "VL Gothic"
                                                                             "ヒラギノ角ゴシック"
-                                                                            "MS Gothic"
-                                                                            "Monospace"))))
+                                                                            "MS Gothic"))))
     ;; 一部グリフが次のフォントで半角になる状態を回避
     ;;
     ;;   * "ヒラギノ角ゴシック"
@@ -2944,8 +2939,7 @@
                                 (cons code code)
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "Migu 1M"
-                                                                            "MS Gothic"
-                                                                            "Monospace"))))
+                                                                            "MS Gothic"))))
     ;; 未実装グリフのフォールバック
     ;;
     ;; 対象：
@@ -2960,15 +2954,17 @@
                                 (cons code code)
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "Menlo"
+                                                                            "Monaco"
                                                                             "Courier New"
-                                                                            "Monospace"))))
+                                                                            "Courier"))))
     ;; 未実装グリフのフォールバック
     ;;
     ;; 対象：
     ;;
     ;;   * "Inconsolata"
-    ;;   * "Consolas"
     ;;   * "Menlo"
+    ;;   * "Monaco"
+    ;;   * "Consolas"
     ;;
     ;; 前述のフォントは除外
     (dolist (code (mapcar 'string-to-char
@@ -2977,7 +2973,7 @@
                                 (cons code code)
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "Courier New"
-                                                                            "Monospace"))))
+                                                                            "Courier"))))
     ;; Emoji
     (my-set-fontset-font-safe fontset-name
                               'emoji
@@ -2985,8 +2981,7 @@
                                          :family (my-fallback-font-family "Apple Color Emoji"
                                                                           "Symbola"
                                                                           "Segoe UI Emoji"
-                                                                          "Segoe UI Symbol"
-                                                                          "Monospace")))
+                                                                          "Segoe UI Symbol")))
     ;; フォントセット適用
     (modify-all-frames-parameters `((font . ,fontset-name)))
     ;; 各種 UI にも適用
@@ -3005,7 +3000,8 @@
   :custom `(;; ガベージコレクション閾値を現実的な値に戻す
             (gc-cons-threshold . ,(* 128 1024 1024)) ; 128MB
             ;; 黙らせていた余分なメッセージ I/O を復活
-            (inhibit-message . nil)))
+            (inhibit-message . nil))
+  ) ; END of *early-init-el-restore
 
 
 ;; ============================================================================
