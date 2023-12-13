@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-13T19:13:34+09:00>
+;; Time-stamp: <2023-12-13T19:32:43+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2814,6 +2814,17 @@
                                                              "Courier")
                                     nil
                                     fontset)
+    ;; GNU Emacs の扱えるすべての文字
+    (my-set-fontset-font-safe fontset-name
+                              'emacs
+                              (font-spec :size font-size
+                                         ;; いったん基礎フォントを適用
+                                         :family (my-fallback-font-family "Inconsolata"
+                                                                          "Menlo"
+                                                                          "Monaco"
+                                                                          "Consolas"
+                                                                          "Courier New"
+                                                                          "Courier")))
     ;; 簡体字：GB 18030
     (my-set-fontset-font-safe fontset-name
                               'gb18030
@@ -2912,7 +2923,8 @@
     (my-set-fontset-font-safe fontset-name
                               'cp858
                               (font-spec :size font-size
-                                         :family (my-fallback-font-family "Menlo"
+                                         :family (my-fallback-font-family "Inconsolata"
+                                                                          "Menlo"
                                                                           "Monaco"
                                                                           "Consolas"
                                                                           "Courier New"
