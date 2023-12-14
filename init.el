@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-13T19:32:43+09:00>
+;; Time-stamp: <2023-12-14T23:38:59+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -287,6 +287,18 @@
  ;; YES/NO 選択を簡略化
  ;;
  '(use-short-answers t)
+ ;;
+ ;; Option キーを `meta' とみなす (macOS GUI ONLY)
+ ;;
+ `(mac-option-modifier ,(if (display-graphic-p)
+                           ''meta
+                          ''(:function alt :mouse alt)))
+ ;;
+ ;; Command キーは何もしない (macOS GUI ONLY)
+ ;;
+ `(mac-command-modifier ,(if (display-graphic-p)
+                             nil
+                           ''meta))
  ;;
  ;; 人為的に italic/bold フォントを選択 (Windows ONLY)
  ;;
