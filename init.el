@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-18T08:32:39+09:00>
+;; Time-stamp: <2023-12-18T08:34:19+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -449,7 +449,7 @@
 ;; `leaf' キーワード群
 ;; ============================================================================
 (leaf leaf-keywords
-  :package t
+  :ensure t
   :config
   (leaf-keywords-init))
 
@@ -462,7 +462,7 @@
 ;; ============================================================================
 (leaf tr-ime
   :when (member system-type '(ms-dos windows-nt))
-  :package t
+  :ensure t
   :custom '((w32-ime-buffer-switch-p . t)
             (w32-ime-mode-line-state-indicator . "[Aa]")
             (w32-ime-mode-line-state-indicator-list . '("[--]" "[あ]" "[Aa]")))
@@ -661,7 +661,7 @@
   ;; Node.js モジュールパス解決
   ;; --------------------------------------------------------------------------
   (leaf add-node-modules-path
-    :package t
+    :ensure t
     :hook ((prog-mode-hook . add-node-modules-path)))
 
 
@@ -678,7 +678,7 @@
   ;; 未コミット diff
   ;; --------------------------------------------------------------------------
   (leaf diff-hl
-    :package t
+    :ensure t
     :hook ((magit-pre-refresh-hook . diff-hl-magit-pre-refresh)
            (magit-post-refresh-hook . diff-hl-magit-post-refresh))
     :init
@@ -701,7 +701,7 @@
   ;; --------------------------------------------------------------------------
   (leaf exec-path-from-shell
     :unless (member system-type '(ms-dos windows-nt))
-    :package t
+    :ensure t
     :require t
     :config
     (exec-path-from-shell-initialize))
@@ -722,7 +722,7 @@
   ;; Git インターフェース
   ;; --------------------------------------------------------------------------
   (leaf magit
-    :package t
+    :ensure t
     :bind (("C-x g" . magit-status))
     :custom ((auto-revert-buffer-list-filter . #'magit-auto-revert-buffer-p)))
 
@@ -731,7 +731,7 @@
   ;; nvm 経由での Node.js 利用をサポート
   ;; --------------------------------------------------------------------------
   (leaf nvm
-    :package t
+    :ensure t
     :config
     ;; `~/.nvmrc' がなければ何もしない
     (ignore-errors (nvm-use-for)))
@@ -819,7 +819,7 @@
   ;; ターミナルエミュレータ
   ;; --------------------------------------------------------------------------
   (leaf vterm
-    :package t
+    :ensure t
     :custom ((vterm-shell . "bash")
              (vterm-max-scrollback . 100000)
              (vterm-clear-scrollback-when-clearing . t)
@@ -861,7 +861,7 @@
   ;; スペース区切りによる複数キーワードを使った絞り込み
   ;; --------------------------------------------------------------------------
   (leaf affe
-    :package t
+    :ensure t
     :after (consult orderless)
     :custom ((affe-regexp-function . #'orderless-pattern-compiler)
              (affe-highlight-function . #'orderless--highlight))
@@ -874,7 +874,7 @@
   ;; 各種検索・置換強化
   ;; --------------------------------------------------------------------------
   (leaf anzu
-    :package t
+    :ensure t
     :bind (("M-%" . anzu-query-replace)
            ("C-M-%" . anzu-query-replace-regexp))
     :custom ((anzu-minimum-input-length . 3)
@@ -892,7 +892,7 @@
   ;; 他ウインドウ弱調化
   ;; --------------------------------------------------------------------------
   (leaf auto-dim-other-buffers
-    :package t
+    :ensure t
     :hook ((after-init-hook . auto-dim-other-buffers-mode)))
 
 
@@ -927,7 +927,7 @@
   ;; プログラマ向けネーミング辞書
   ;; --------------------------------------------------------------------------
   (leaf codic
-    :package t
+    :ensure t
     :bind (("C-c C-d" . codic))
     :config
     ;; --------------------------------
@@ -984,7 +984,7 @@
   ;; 補完フレームワーク
   ;; --------------------------------------------------------------------------
   (leaf company
-    :package t
+    :ensure t
     :hook ((after-init-hook . global-company-mode))
     :custom (;; `company'
              (company-tooltip-limit . 20)
@@ -1024,7 +1024,7 @@
   ;; 補完フレームワーク (`company') 拡張（ポップアップ）
   ;; --------------------------------------------------------------------------
   (leaf company-box
-    :package t
+    :ensure t
     :hook ((company-mode-hook . company-box-mode)))
 
 
@@ -1033,7 +1033,7 @@
   ;; --------------------------------------------------------------------------
   (leaf company-statistics
     :after company
-    :package t
+    :ensure t
     :custom ((company-statistics-size . 500)
              ;; ローカル環境にのみ保存
              (company-statistics-file . "~/.emacs.company-statistics-cache.el"))
@@ -1102,7 +1102,7 @@
   ;; 補完
   ;; --------------------------------------------------------------------------
   (leaf consult
-    :package t
+    :ensure t
     :bind (;; 上書き
            ("C-s" . my-consult-line)
            ("C-x b" . consult-buffer)
@@ -1148,7 +1148,7 @@
   ;; 補完 - LSP (Language Server Protocol) サポート
   ;; --------------------------------------------------------------------------
   (leaf consult-lsp
-    :package t
+    :ensure t
     :bind (("C-c c ." . consult-lsp-diagnostics)))
 
 
@@ -1172,7 +1172,7 @@
   ;; Debug Adapter Protocol
   ;; --------------------------------------------------------------------------
   (leaf dap-mode
-    :package t
+    :ensure t
     :after dap-mode
     :config
     (dap-ui-mode +1))
@@ -1182,7 +1182,7 @@
   ;; モードラインからモードの表示を消す
   ;; --------------------------------------------------------------------------
   (leaf delight
-    :package t
+    :ensure t
     :config
     (delight '(;; 降順ソート
                (anzu-mode nil "anzu")
@@ -1275,7 +1275,7 @@
   ;; EditorConfig
   ;; --------------------------------------------------------------------------
   (leaf editorconfig
-    :package t
+    :ensure t
     :custom ((editorconfig-exclude-modes . '(lisp-mode
                                              lisp-data-mode
                                              emacs-lisp-mode
@@ -1301,7 +1301,7 @@
   ;; コンテキストメニュー
   ;; --------------------------------------------------------------------------
   (leaf embark
-    :package t
+    :ensure t
     :bind (("C-." . embark-act)
            ("C-;" . embark-dwim)
            ("C-x ? b" . embark-bindings))
@@ -1317,7 +1317,7 @@
   ;; Embark ⇔ Consult 連携
   ;; --------------------------------------------------------------------------
   (leaf embark-consult
-    :package t
+    :ensure t
     :after (embark consult)
     :hook ((embark-collect-mode . consult-preview-at-point-mode)))
 
@@ -1326,7 +1326,7 @@
   ;; カーソル下の数値を増減
   ;; --------------------------------------------------------------------------
   (leaf evil-numbers
-    :package t
+    :ensure t
     :custom ((evil-numbers-pad-default . t))
     :bind (("C-3" . evil-numbers/dec-at-pt)
            ("C-4" . evil-numbers/inc-at-pt)))
@@ -1358,7 +1358,7 @@
   ;; 自動静的解析
   ;; --------------------------------------------------------------------------
   (leaf flycheck
-    :package t
+    :ensure t
     :bind (("C-c f" . flycheck-mode))
     :hook ((after-init-hook . global-flycheck-mode))
     :custom ((flycheck-checker-error-threshold . nil)
@@ -1402,7 +1402,7 @@
   ;; --------------------------------------------------------------------------
   (leaf flycheck-color-mode-line
     :after flycheck
-    :package t
+    :ensure t
     :hook ((flycheck-mode-hook . flycheck-color-mode-line-mode)))
 
 
@@ -1502,7 +1502,7 @@
   ;; 特殊コメント強調
   ;; --------------------------------------------------------------------------
   (leaf hl-todo
-    :package t
+    :ensure t
     :custom ((hl-todo-keyword-faces . '(;; 既存
                                         ("HOLD" . "#99ff99")
                                         ("TODO" . "#99ff99")
@@ -1558,7 +1558,7 @@
   ;; --------------------------------------------------------------------------
   (leaf ibuffer-projectile
     :after (ibuffer projectile)
-    :package t
+    :ensure t
     :hook ((ibuffer-hook . ibuffer-projectile-set-filter-groups)))
 
 
@@ -1613,7 +1613,7 @@
   ;; --------------------------------------------------------------------------
   (leaf js2-refactor
     :after js2-mode
-    :package t
+    :ensure t
     :require t)
 
 
@@ -1624,7 +1624,7 @@
   ;;          念のため `lsp-mode' より前にインストール
   ;; --------------------------------------------------------------------------
   (leaf lsp-ui
-    :package t
+    :ensure t
     :custom ((lsp-ui-sideline-show-hover . t)
              (lsp-ui-sideline-show-code-actions . t)
              (lsp-ui-sideline-diagnostic-max-lines . 2)
@@ -1638,7 +1638,7 @@
   ;;          念のため `lsp-mode' より前にインストール
   ;; --------------------------------------------------------------------------
   (leaf lsp-java
-    :package t
+    :ensure t
     :custom (;; 旧バージョン（11.x 系）を利用するため旧い `jdtls' を指定
              (lsp-java-jdt-download-url . "https://download.eclipse.org/jdtls/milestones/1.12.0/jdt-language-server-1.12.0-202206011637.tar.gz"))
     :init
@@ -1666,7 +1666,7 @@
   ;;          念のため `lsp-mode' より前にインストール
   ;; --------------------------------------------------------------------------
   (leaf lsp-tailwindcss
-    :package t
+    :ensure t
     :custom ((lsp-tailwindcss-add-on-mode . t)
              (lsp-tailwindcss-server-version . "0.8.7")))
 
@@ -1679,7 +1679,7 @@
   ;; https://langserver.org/
   ;; --------------------------------------------------------------------------
   (leaf lsp-mode
-    :package t
+    :ensure t
     :hook (;; 有効化は必要最小限にとどめる
            (css-mode-hook . lsp)
            (java-mode-hook . lsp)
@@ -1724,7 +1724,7 @@
   ;; 補完候補一覧の側に項目情報を表示
   ;; --------------------------------------------------------------------------
   (leaf marginalia
-    :package t
+    :ensure t
     :custom ((marginalia-field-width . 200)
              (marginalia-max-relative-age . most-positive-fixnum))
     :global-minor-mode t)
@@ -1736,7 +1736,7 @@
   (leaf migemo
     :leaf-defer nil
     :after exec-path-from-shell
-    :package t
+    :ensure t
     :require t
     :custom `(;; C/Migemo 利用設定
               (migemo-command . ,(executable-find "cmigemo"))
@@ -1772,7 +1772,7 @@
   ;; 無順序スペース区切り補完
   ;; --------------------------------------------------------------------------
   (leaf orderless
-    :package t
+    :ensure t
     :require t
     :custom ((completion-styles . '(orderless)))
     :config
@@ -1797,7 +1797,7 @@
   ;; コードフォーマッタ
   ;; --------------------------------------------------------------------------
   (leaf prettier
-    :package t
+    :ensure t
     :custom ((prettier-lighter . nil))
     :hook ((after-init-hook . global-prettier-mode)))
 
@@ -1806,7 +1806,7 @@
   ;; 汎用プロジェクト管理
   ;; --------------------------------------------------------------------------
   (leaf projectile
-    :package t
+    :ensure t
     :require t
     :custom `((projectile-enable-caching . t)
               (projectile-completion-system . ',(cond ((featurep 'ido) 'ido)
@@ -1870,7 +1870,7 @@
   ;; 各種カッコ関連機能拡張
   ;; --------------------------------------------------------------------------
   (leaf smartparens
-    :package t
+    :ensure t
     :require t
     :custom ((sp-show-pair-from-inside . t)
              (sp-undo-pairs-separately . t))
@@ -1886,7 +1886,7 @@
   ;; 同時置換
   ;; --------------------------------------------------------------------------
   (leaf substitute
-    :package t
+    :ensure t
     :bind (("C-M-b" . substitute-target-in-buffer))
     :custom ((substitute-highlight . t)))
 
@@ -1904,7 +1904,7 @@
   ;; `redo' 追加
   ;; --------------------------------------------------------------------------
   (leaf undo-fu
-    :package t
+    :ensure t
     :require t
     :bind (("C-/" . undo-fu-only-undo)
            ("C-?" . undo-fu-only-redo)))
@@ -1914,7 +1914,7 @@
   ;; 垂直インタラクティブ補完
   ;; --------------------------------------------------------------------------
   (leaf vertico
-    :package t
+    :ensure t
     :custom ((vertico-count . 20)
              (vertico-cycle . t)
              (vertico-sort-function . #'vertico-sort-history-alpha))
@@ -1925,10 +1925,10 @@
   ;; 巨大ファイル表示
   ;; --------------------------------------------------------------------------
   (leaf vlf
-    :package t
+    :ensure t
     :require vlf-setup
     :bind ((:vlf-mode-map
-            :package vlf
+            :ensure vlf
             ("C-c C-v" . vlf-prefix-map)))
     :custom `((vlf-batch-size . ,(* 1 1024 1024)) ;; 1MB
               (vlf-application . 'dont-ask)))
@@ -2004,7 +2004,7 @@
   ;; スニペット挿入
   ;; --------------------------------------------------------------------------
   (leaf yasnippet
-    :package t
+    :ensure t
     :global-minor-mode yas-global-mode)
 
 
@@ -2012,7 +2012,7 @@
   ;; `yasnippet' 公式コレクション
   ;; --------------------------------------------------------------------------
   (leaf yasnippet-snippets
-    :package t
+    :ensure t
     :after yasnippet
     :require t)
   ) ; End of *minor-mode
@@ -2027,7 +2027,7 @@
   ;; Apache
   ;; --------------------------------------------------------------------------
   (leaf apache-mode
-    :package t
+    :ensure t
     :mode (("\\.conf\\'" . apache-mode))
     :config
     (setq-local apache-indent-level 4))
@@ -2057,7 +2057,7 @@
   ;; Docker's Dockerfile
   ;; --------------------------------------------------------------------------
   (leaf dockerfile-mode
-    :package t
+    :ensure t
     :hook ((dockerfile-mode-hook . my-dockerfile-mode-initialize))
     :init
     (defun my-dockerfile-mode-initialize ()
@@ -2077,7 +2077,7 @@
   ;; GraphQL
   ;; ----------------------------------------------------------------------------
   (leaf graphql-mode
-    :package t
+    :ensure t
     :hook ((graphql-mode-hook . my-haml-mode-initialize))
     :init
     (defun my-graphql-mode-initialize ()
@@ -2097,7 +2097,7 @@
   ;; Haml
   ;; ----------------------------------------------------------------------------
   (leaf haml-mode
-    :package t
+    :ensure t
     :hook ((haml-mode-hook . my-haml-mode-initialize))
     :init
     (defun my-haml-mode-initialize ()
@@ -2178,7 +2178,7 @@
   ;; JavaScript (Expert)
   ;; --------------------------------------------------------------------------
   (leaf js2-mode
-    :package t
+    :ensure t
     :mode (("\\.es[0-9]\\'" . js2-mode)
            ("\\.[cm]?jsx?\\'" . js2-mode)
            ("\\.pac\\'" . js2-mode))
@@ -2238,7 +2238,7 @@
   ;; JSON
   ;; --------------------------------------------------------------------------
   (leaf json-mode
-    :package t
+    :ensure t
     :mode (("\\.json\\'" . json-mode))
     :hook ((json-mode-hook . my-json-mode-initialize))
     :init
@@ -2270,7 +2270,7 @@
   ;; Markdown
   ;; --------------------------------------------------------------------------
   (leaf markdown-mode
-    :package t
+    :ensure t
     :hook ((markdown-mode-hook . my-markdown-mode-initialize))
     :custom `((markdown-command . ,(or (executable-find "github-markup")
                                        (executable-find "markdown")
@@ -2304,7 +2304,7 @@
   ;; https://mustache.github.io/
   ;; --------------------------------------------------------------------------
   (leaf mustache-mode
-    :package t
+    :ensure t
     :hook ((mustache-mode-hook . my-mustache-mode-initialize))
     :init
     (defun my-mustache-mode-initialize ()
@@ -2334,7 +2334,7 @@
   ;; PHP
   ;; --------------------------------------------------------------------------
   (leaf php-mode
-    :package t
+    :ensure t
     :hook ((php-mode-hook . my-php-mode-initialize))
     :init
     (defun my-php-mode-initialize ()
@@ -2354,7 +2354,7 @@
   ;; TypeScript
   ;; --------------------------------------------------------------------------
   (leaf typescript-mode
-    :package t
+    :ensure t
     :mode (("\\.tsx?\\'" . typescript-mode))
     :hook ((typescript-mode-hook . my-typescript-mode-initialize))
     :init
@@ -2375,7 +2375,7 @@
   ;; Sass (extension: ".scss")
   ;; --------------------------------------------------------------------------
   (leaf scss-mode
-    :package t
+    :ensure t
     :hook ((scss-mode-hook . my-scss-mode-initialize))
     :custom (;; コンパイルは常に手動（保存時は何もしない）
              ;; 各種ツール経由でコンパイルされうるため
@@ -2437,7 +2437,7 @@
   ;; Terraform
   ;; --------------------------------------------------------------------------
   (leaf terraform-mode
-    :package t
+    :ensure t
     :hook ((terraform-mode-hook . my-terraform-mode-initialize))
     :init
     (defun my-terraform-mode-initialize ()
@@ -2482,14 +2482,14 @@
   ;; http://tt2.org/
   ;; --------------------------------------------------------------------------
   (leaf tt-mode
-    :package t)
+    :ensure t)
 
 
   ;; --------------------------------------------------------------------------
   ;; Web
   ;; --------------------------------------------------------------------------
   (leaf web-mode
-    :package t
+    :ensure t
     :mode (("\\.[sx]?html?\\'" . web-mode)
            ("\\.njk\\'" . web-mode)
            ("\\.vue\\'" . web-mode))
@@ -2572,7 +2572,7 @@
   ;; YAML
   ;; --------------------------------------------------------------------------
   (leaf yaml-mode
-    :package t
+    :ensure t
     :hook ((yaml-mode-hook . my-yaml-mode-initialize))
     :custom ((yaml-indent-offset . 2))
     :init
