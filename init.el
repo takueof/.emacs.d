@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-18T11:55:44+09:00>
+;; Time-stamp: <2023-12-18T11:56:47+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -414,7 +414,9 @@
   ;; 確実に定義された後で追加
   (add-to-list 'package-archives '("MELPA" . "https://melpa.org/packages/"))
   ;; あらゆるパッケージロードに先んじて初期化は必須
-  (package-initialize))
+  (package-initialize)
+  ;; 最新版のリストを前もって取得
+  (package-refresh-contents))
 
 
 ;; ============================================================================
@@ -424,7 +426,6 @@
 ;;          `package' の初期化より後に設定しなければならない
 ;; ============================================================================
 (unless (package-installed-p 'leaf)
-  (package-refresh-contents)
   (package-install 'leaf))
 
 
