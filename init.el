@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-18T11:56:47+09:00>
+;; Time-stamp: <2023-12-18T12:22:12+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1921,7 +1921,6 @@
     :ensure t
     :require vlf-setup
     :bind ((:vlf-mode-map
-            :ensure vlf
             ("C-c C-v" . vlf-prefix-map)))
     :custom `((vlf-batch-size . ,(* 1 1024 1024)) ;; 1MB
               (vlf-application . 'dont-ask)))
