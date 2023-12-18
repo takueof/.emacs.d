@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-18T12:22:12+09:00>
+;; Time-stamp: <2023-12-18T12:25:05+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -648,1938 +648,1929 @@
 ;; ============================================================================
 ;; 未分類パッケージ（非メジャー／マイナーモード）
 ;; ============================================================================
-(leaf *packages
+;; --------------------------------------------------------------------------
+;; Node.js モジュールパス解決
+;; --------------------------------------------------------------------------
+(leaf add-node-modules-path
+  :ensure t
+  :hook ((prog-mode-hook . add-node-modules-path)))
+
+
+;; --------------------------------------------------------------------------
+;; ANSI エスケープシーケンス
+;; --------------------------------------------------------------------------
+(leaf ansi-color
   :config
-  ;; --------------------------------------------------------------------------
-  ;; Node.js モジュールパス解決
-  ;; --------------------------------------------------------------------------
-  (leaf add-node-modules-path
-    :ensure t
-    :hook ((prog-mode-hook . add-node-modules-path)))
+  ;; `comint-mode' および派生モードで、ANSI エスケープシーケンスの解釈を開始
+  (ansi-color-for-comint-mode-on))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; ANSI エスケープシーケンス
-  ;; --------------------------------------------------------------------------
-  (leaf ansi-color
-    :config
-    ;; `comint-mode' および派生モードで、ANSI エスケープシーケンスの解釈を開始
-    (ansi-color-for-comint-mode-on))
+;; --------------------------------------------------------------------------
+;; 未コミット diff
+;; --------------------------------------------------------------------------
+(leaf diff-hl
+  :ensure t
+  :hook ((magit-pre-refresh-hook . diff-hl-magit-pre-refresh)
+         (magit-post-refresh-hook . diff-hl-magit-post-refresh))
+  :init
+  (diff-hl-margin-mode +1)
+  (diff-hl-dired-mode +1)
+  :global-minor-mode global-diff-hl-mode)
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 未コミット diff
-  ;; --------------------------------------------------------------------------
-  (leaf diff-hl
-    :ensure t
-    :hook ((magit-pre-refresh-hook . diff-hl-magit-pre-refresh)
-           (magit-post-refresh-hook . diff-hl-magit-post-refresh))
-    :init
-    (diff-hl-margin-mode +1)
-    (diff-hl-dired-mode +1)
-    :global-minor-mode global-diff-hl-mode)
+;; --------------------------------------------------------------------------
+;; EWW (Emacs Web Wowser, Web Browser)
+;; --------------------------------------------------------------------------
+(leaf eww
+  :bind (("C-c C-e" . eww))
+  :custom ((eww-search-prefix . "https://www.google.co.jp/search?&q=")
+           (eww-history-limit . 100)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; EWW (Emacs Web Wowser, Web Browser)
-  ;; --------------------------------------------------------------------------
-  (leaf eww
-    :bind (("C-c C-e" . eww))
-    :custom ((eww-search-prefix . "https://www.google.co.jp/search?&q=")
-             (eww-history-limit . 100)))
+;; --------------------------------------------------------------------------
+;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得・設定
+;; --------------------------------------------------------------------------
+(leaf exec-path-from-shell
+  :unless (member system-type '(ms-dos windows-nt))
+  :ensure t
+  :require t
+  :config
+  (exec-path-from-shell-initialize))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得・設定
-  ;; --------------------------------------------------------------------------
-  (leaf exec-path-from-shell
-    :unless (member system-type '(ms-dos windows-nt))
-    :ensure t
-    :require t
-    :config
-    (exec-path-from-shell-initialize))
+;; --------------------------------------------------------------------------
+;; スペルチェッカ
+;; --------------------------------------------------------------------------
+(leaf ispell
+  :custom ((ispell-dictionary . "english")
+           (ispell-extra-args . '("--sug-mode=fast"
+                                  "--run-together"
+                                  "--run-together-limit=5"
+                                  "--run-together-min=2"))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; スペルチェッカ
-  ;; --------------------------------------------------------------------------
-  (leaf ispell
-    :custom ((ispell-dictionary . "english")
-             (ispell-extra-args . '("--sug-mode=fast"
-                                    "--run-together"
-                                    "--run-together-limit=5"
-                                    "--run-together-min=2"))))
+;; --------------------------------------------------------------------------
+;; Git インターフェース
+;; --------------------------------------------------------------------------
+(leaf magit
+  :ensure t
+  :bind (("C-x g" . magit-status))
+  :custom ((auto-revert-buffer-list-filter . #'magit-auto-revert-buffer-p)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; Git インターフェース
-  ;; --------------------------------------------------------------------------
-  (leaf magit
-    :ensure t
-    :bind (("C-x g" . magit-status))
-    :custom ((auto-revert-buffer-list-filter . #'magit-auto-revert-buffer-p)))
+;; --------------------------------------------------------------------------
+;; nvm 経由での Node.js 利用をサポート
+;; --------------------------------------------------------------------------
+(leaf nvm
+  :ensure t
+  :config
+  ;; `~/.nvmrc' がなければ何もしない
+  (ignore-errors (nvm-use-for)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; nvm 経由での Node.js 利用をサポート
-  ;; --------------------------------------------------------------------------
-  (leaf nvm
-    :ensure t
-    :config
-    ;; `~/.nvmrc' がなければ何もしない
-    (ignore-errors (nvm-use-for)))
+;; --------------------------------------------------------------------------
+;; タイムスタンプ記述
+;; --------------------------------------------------------------------------
+(leaf time-stamp
+  :hook ((before-save-hook . time-stamp))
+  :custom `(;; ISO 8601 (JIS X 0301) 形式にする
+            ;;
+            ;; See also:
+            ;; https://ja.wikipedia.org/wiki/ISO_8601
+            ;;
+            ;; WARNING: `time-stamp-time-zone' を "+09:00" にしても、
+            ;;          コロン以降が無視される
+            ;;
+            ;; タイムゾーンは別途指定、以下理由：
+            ;;
+            ;; `time-stamp-string' の "%Z" は
+            ;; (format-time-string "%Z") と同義
+            ;; この値をそのまま扱うため、
+            ;; 環境の差異が出やすくマトモに使えない
+            ;;
+            ;; `time-stamp-string' の "%z" は
+            ;; (format-time-string "%#Z") と同義
+            ;; (format-time-string "%z") ではない点に注意
+            ;; この値をそのまま扱うため、
+            ;; 環境の差異が出やすくマトモに使えない
+            ;; また `format-time-string' 側のバグにより、
+            ;; 環境次第で文字化けする
+            ;;
+            ;; Windows 環境（環境変数 %TZ% 未指定・+09:00 ゾーン）では
+            ;; 次の値が使用されてしまう
+            ;; （どちらもエンコーディングは `cp932-2-byte'）：
+            ;;
+            ;; "%Z" (≒ "%Z"):  #("東京 (標準時)" 0 8
+            ;; "%z" (≒ "%#Z"): #("東京 (婦準時)" 0 8
+            ;;
+            ;; 「標」→「婦」に文字化けしているのがわかる
+            ;; また、`propertize' されている
+            ;;
+            ;; FIXME: 現状、OS 側の動的なタイムゾーン変更に追従不能
+            ;;        都度評価にしたい
+            (time-stamp-format . ,(concat "%:y-%02m-%02dT%02H:%02M:%02S"
+                                          (replace-regexp-in-string
+                                           ;; コロンがない形式を返されるため、強制的にコロンを付与
+                                           ;; 厳密なチェックにより "±1259" 形式のみ対象にする
+                                           ;;   → 他は無視
+                                           "\\`\\([\\+\\-]\\(?:0[0-9]\\|1[0-2]\\)\\)\\([0-5][0-9]\\)\\'"
+                                           "\\1:\\2"
+                                           ;; タイムゾーンが UTC でも "Z" でなく "+0000" を返す
+                                           ;; 今のところ、あえて "Z" への変換はしないでおく
+                                           (format-time-string "%z"))))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; タイムスタンプ記述
-  ;; --------------------------------------------------------------------------
-  (leaf time-stamp
-    :hook ((before-save-hook . time-stamp))
-    :custom `(;; ISO 8601 (JIS X 0301) 形式にする
-              ;;
-              ;; See also:
-              ;; https://ja.wikipedia.org/wiki/ISO_8601
-              ;;
-              ;; WARNING: `time-stamp-time-zone' を "+09:00" にしても、
-              ;;          コロン以降が無視される
-              ;;
-              ;; タイムゾーンは別途指定、以下理由：
-              ;;
-              ;; `time-stamp-string' の "%Z" は
-              ;; (format-time-string "%Z") と同義
-              ;; この値をそのまま扱うため、
-              ;; 環境の差異が出やすくマトモに使えない
-              ;;
-              ;; `time-stamp-string' の "%z" は
-              ;; (format-time-string "%#Z") と同義
-              ;; (format-time-string "%z") ではない点に注意
-              ;; この値をそのまま扱うため、
-              ;; 環境の差異が出やすくマトモに使えない
-              ;; また `format-time-string' 側のバグにより、
-              ;; 環境次第で文字化けする
-              ;;
-              ;; Windows 環境（環境変数 %TZ% 未指定・+09:00 ゾーン）では
-              ;; 次の値が使用されてしまう
-              ;; （どちらもエンコーディングは `cp932-2-byte'）：
-              ;;
-              ;; "%Z" (≒ "%Z"):  #("東京 (標準時)" 0 8
-              ;; "%z" (≒ "%#Z"): #("東京 (婦準時)" 0 8
-              ;;
-              ;; 「標」→「婦」に文字化けしているのがわかる
-              ;; また、`propertize' されている
-              ;;
-              ;; FIXME: 現状、OS 側の動的なタイムゾーン変更に追従不能
-              ;;        都度評価にしたい
-              (time-stamp-format . ,(concat "%:y-%02m-%02dT%02H:%02M:%02S"
-                                            (replace-regexp-in-string
-                                             ;; コロンがない形式を返されるため、強制的にコロンを付与
-                                             ;; 厳密なチェックにより "±1259" 形式のみ対象にする
-                                             ;;   → 他は無視
-                                             "\\`\\([\\+\\-]\\(?:0[0-9]\\|1[0-2]\\)\\)\\([0-5][0-9]\\)\\'"
-                                             "\\1:\\2"
-                                             ;; タイムゾーンが UTC でも "Z" でなく "+0000" を返す
-                                             ;; 今のところ、あえて "Z" への変換はしないでおく
-                                             (format-time-string "%z"))))))
+;; --------------------------------------------------------------------------
+;; TRAMP (Transparent Remote Access, Multiple Protocols)
+;; --------------------------------------------------------------------------
+(leaf tramp
+  :require t
+  :custom (;; WARNING: `load' か `autoload' 後に実行しないと適用されない
+           ;; ローカル環境にのみ保存
+           (tramp-persistency-file-name . "~/.emacs.tramp")))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; TRAMP (Transparent Remote Access, Multiple Protocols)
-  ;; --------------------------------------------------------------------------
-  (leaf tramp
-    :require t
-    :custom (;; WARNING: `load' か `autoload' 後に実行しないと適用されない
-             ;; ローカル環境にのみ保存
-             (tramp-persistency-file-name . "~/.emacs.tramp")))
+;; --------------------------------------------------------------------------
+;; ファイル名を元に、より唯一性の高いバッファ名を生成
+;; --------------------------------------------------------------------------
+(leaf uniquify
+  :require t
+  :custom ((uniquify-buffer-name-style . 'forward)
+           (uniquify-ignore-buffers-re . "^*[^*]+*\\-")))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; ファイル名を元に、より唯一性の高いバッファ名を生成
-  ;; --------------------------------------------------------------------------
-  (leaf uniquify
-    :require t
-    :custom ((uniquify-buffer-name-style . 'forward)
-             (uniquify-ignore-buffers-re . "^*[^*]+*\\-")))
+;; --------------------------------------------------------------------------
+;; URL ツール
+;; --------------------------------------------------------------------------
+(leaf url
+  :custom ((url-using-proxy . t)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; URL ツール
-  ;; --------------------------------------------------------------------------
-  (leaf url
-    :custom ((url-using-proxy . t)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; ターミナルエミュレータ
-  ;; --------------------------------------------------------------------------
+;; --------------------------------------------------------------------------
+;; ターミナルエミュレータ
+;; --------------------------------------------------------------------------
+(leaf vterm
+  :ensure t
+  :custom ((vterm-shell . "bash")
+           (vterm-max-scrollback . 100000)
+           (vterm-clear-scrollback-when-clearing . t)
+           (vterm-enable-manipulate-selection-data-by-osc52 . t)
+           (vterm-copy-exclude-prompt . nil))
+  :init
   (leaf vterm
-    :ensure t
-    :custom ((vterm-shell . "bash")
-             (vterm-max-scrollback . 100000)
-             (vterm-clear-scrollback-when-clearing . t)
-             (vterm-enable-manipulate-selection-data-by-osc52 . t)
-             (vterm-copy-exclude-prompt . nil))
+    :after vterm
     :init
-    (leaf vterm
-      :after vterm
-      :init
-      ;; WARNING: 確実に `vterm-keymap-exceptions' が存在する状態で、
-      ;;          「定義」ではなく「追加」しないと
-      ;;          他のキーバインドに影響が出てしまう
-      (add-to-list 'vterm-keymap-exceptions "C-S-b") ; for `windmove'
-      (add-to-list 'vterm-keymap-exceptions "C-S-f") ; for `windmove'
-      (add-to-list 'vterm-keymap-exceptions "C-S-n") ; for `windmove'
-      (add-to-list 'vterm-keymap-exceptions "C-S-p"))) ; for `windmove'
+    ;; WARNING: 確実に `vterm-keymap-exceptions' が存在する状態で、
+    ;;          「定義」ではなく「追加」しないと
+    ;;          他のキーバインドに影響が出てしまう
+    (add-to-list 'vterm-keymap-exceptions "C-S-b") ; for `windmove'
+    (add-to-list 'vterm-keymap-exceptions "C-S-f") ; for `windmove'
+    (add-to-list 'vterm-keymap-exceptions "C-S-n") ; for `windmove'
+    (add-to-list 'vterm-keymap-exceptions "C-S-p"))) ; for `windmove'
 
 
-  ;; --------------------------------------------------------------------------
-  ;; ウインドウ移動キーを直感的にする
-  ;; --------------------------------------------------------------------------
-  (leaf windmove
-    :bind (("C-S-b" . windmove-left)
-           ("C-S-f" . windmove-right)
-           ("C-S-n" . windmove-down)
-           ("C-S-p" . windmove-up))
-    :custom (;; フレーム端のウインドウでは無限スクロールするようにふるまう
-             ;; 「マリオブラザーズ」左右画面端におけるループのような動き
-             (windmove-wrap-around . t)))
-  ) ; End of *packages
+;; --------------------------------------------------------------------------
+;; ウインドウ移動キーを直感的にする
+;; --------------------------------------------------------------------------
+(leaf windmove
+  :bind (("C-S-b" . windmove-left)
+         ("C-S-f" . windmove-right)
+         ("C-S-n" . windmove-down)
+         ("C-S-p" . windmove-up))
+  :custom (;; フレーム端のウインドウでは無限スクロールするようにふるまう
+           ;; 「マリオブラザーズ」左右画面端におけるループのような動き
+           (windmove-wrap-around . t)))
 
 
 ;; ============================================================================
 ;; マイナーモード
 ;; ============================================================================
-(leaf *minor-mode
+;; --------------------------------------------------------------------------
+;; スペース区切りによる複数キーワードを使った絞り込み
+;; --------------------------------------------------------------------------
+(leaf affe
+  :ensure t
+  :after (consult orderless)
+  :custom ((affe-regexp-function . #'orderless-pattern-compiler)
+           (affe-highlight-function . #'orderless--highlight))
   :config
-  ;; --------------------------------------------------------------------------
-  ;; スペース区切りによる複数キーワードを使った絞り込み
-  ;; --------------------------------------------------------------------------
-  (leaf affe
-    :ensure t
-    :after (consult orderless)
-    :custom ((affe-regexp-function . #'orderless-pattern-compiler)
-             (affe-highlight-function . #'orderless--highlight))
-    :config
-    (consult-customize affe-grep
-                       :preview-key (kbd "M-.")))
+  (consult-customize affe-grep
+                     :preview-key (kbd "M-.")))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 各種検索・置換強化
-  ;; --------------------------------------------------------------------------
+;; --------------------------------------------------------------------------
+;; 各種検索・置換強化
+;; --------------------------------------------------------------------------
+(leaf anzu
+  :ensure t
+  :bind (("M-%" . anzu-query-replace)
+         ("C-M-%" . anzu-query-replace-regexp))
+  :custom ((anzu-minimum-input-length . 3)
+           (anzu-search-threshold . 1000)
+           (anzu-replace-to-string-separator . " -> "))
+  :init
+  ;; `migemo' 利用可能時
   (leaf anzu
-    :ensure t
-    :bind (("M-%" . anzu-query-replace)
-           ("C-M-%" . anzu-query-replace-regexp))
-    :custom ((anzu-minimum-input-length . 3)
-             (anzu-search-threshold . 1000)
-             (anzu-replace-to-string-separator . " -> "))
-    :init
-    ;; `migemo' 利用可能時
-    (leaf anzu
-      :after migemo
-      :custom ((anzu-use-migemo . t)))
-    :global-minor-mode global-anzu-mode)
+    :after migemo
+    :custom ((anzu-use-migemo . t)))
+  :global-minor-mode global-anzu-mode)
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 他ウインドウ弱調化
-  ;; --------------------------------------------------------------------------
-  (leaf auto-dim-other-buffers
-    :ensure t
-    :hook ((after-init-hook . auto-dim-other-buffers-mode)))
+;; --------------------------------------------------------------------------
+;; 他ウインドウ弱調化
+;; --------------------------------------------------------------------------
+(leaf auto-dim-other-buffers
+  :ensure t
+  :hook ((after-init-hook . auto-dim-other-buffers-mode)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 自動バッファ再読込
-  ;; --------------------------------------------------------------------------
-  (leaf autorevert
-    :custom (;; ファイル監視（通知）関数を使わない
-             ;;
-             ;; GNU Emacs の仕様では 1024 - 50 = 974 個以上のファイル監視を
-             ;; 登録できない
-             ;; 少しでもファイル監視を減らすため無効化
-             ;;
-             ;; See also:
-             ;; https://www.reddit.com/r/emacs/comments/mq2znn/comment/gugo0n4/?context=3
-             (auto-revert-use-notify . nil)
-             (auto-revert-check-vc-info . t))
-    :global-minor-mode global-auto-revert-mode)
+;; --------------------------------------------------------------------------
+;; 自動バッファ再読込
+;; --------------------------------------------------------------------------
+(leaf autorevert
+  :custom (;; ファイル監視（通知）関数を使わない
+           ;;
+           ;; GNU Emacs の仕様では 1024 - 50 = 974 個以上のファイル監視を
+           ;; 登録できない
+           ;; 少しでもファイル監視を減らすため無効化
+           ;;
+           ;; See also:
+           ;; https://www.reddit.com/r/emacs/comments/mq2znn/comment/gugo0n4/?context=3
+           (auto-revert-use-notify . nil)
+           (auto-revert-check-vc-info . t))
+  :global-minor-mode global-auto-revert-mode)
 
 
-  ;; --------------------------------------------------------------------------
-  ;; ブックマーク
-  ;; --------------------------------------------------------------------------
-  (leaf bookmark
-    :require t
-    :custom ((bookmark-version-control . t)
-             ;; ローカル環境にのみ保存
-             (bookmark-default-file . "~/.emacs.bookmark.el")))
+;; --------------------------------------------------------------------------
+;; ブックマーク
+;; --------------------------------------------------------------------------
+(leaf bookmark
+  :require t
+  :custom ((bookmark-version-control . t)
+           ;; ローカル環境にのみ保存
+           (bookmark-default-file . "~/.emacs.bookmark.el")))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; プログラマ向けネーミング辞書
-  ;; --------------------------------------------------------------------------
-  (leaf codic
-    :ensure t
-    :bind (("C-c C-d" . codic))
-    :config
-    ;; --------------------------------
-    ;; HACK: 専用バッファをコマンドで `quit-window' させる
-    ;; --------------------------------
-    (unless (fboundp #'codic-view-kill)
-      ;; 専用ウインドウを `quit-window' する関数が
-      ;; 定義されていないなら追加
-      (defun my-codic-view-kill ()
-        "Quit `codic' window and bury its buffer."
-        (interactive)
-        (with-current-buffer (current-buffer)
-          (quit-window t)))
+;; --------------------------------------------------------------------------
+;; プログラマ向けネーミング辞書
+;; --------------------------------------------------------------------------
+(leaf codic
+  :ensure t
+  :bind (("C-c C-d" . codic))
+  :config
+  ;; --------------------------------
+  ;; HACK: 専用バッファをコマンドで `quit-window' させる
+  ;; --------------------------------
+  (unless (fboundp #'codic-view-kill)
+    ;; 専用ウインドウを `quit-window' する関数が
+    ;; 定義されていないなら追加
+    (defun my-codic-view-kill ()
+      "Quit `codic' window and bury its buffer."
+      (interactive)
+      (with-current-buffer (current-buffer)
+        (quit-window t)))
 
-      ;; 専用バッファでキーバインドを有効にするため、アドバイスを利用
-      ;; 専用 hook がないため
-      (defun my-codic-local-set-key (items)
-        "Set `local-set-key' for `codic' result buffer."
-        (with-current-buffer "*Codic Result*"
-          (local-set-key (kbd "q") #'my-codic-view-kill)))
+    ;; 専用バッファでキーバインドを有効にするため、アドバイスを利用
+    ;; 専用 hook がないため
+    (defun my-codic-local-set-key (items)
+      "Set `local-set-key' for `codic' result buffer."
+      (with-current-buffer "*Codic Result*"
+        (local-set-key (kbd "q") #'my-codic-view-kill)))
 
-      (advice-add #'codic--view
-                  :after
-                  #'my-codic-local-set-key)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 共通コマンドインタプリタ (Windows ONLY)
-  ;; --------------------------------------------------------------------------
-  (leaf comint
-    :when (member system-type '(ms-dos windows-nt))
-    :hook ((comint-mode-hook . my-comint-mode-initialize))
-    :custom ((comint-scroll-to-bottom-on-input . 'all)
-             (comint-move-point-for-output . 'all)
-             (comint-buffer-maximum-size . 5000)
-             (comint-process-echoes . t)
-             (comint-eol-on-send . t))
-    :init
-    (defun my-comint-mode-initialize ()
-      "Initialize `comint-mode'."
-      (setq-local comint-input-sender-no-newline t))
-
-    ;; --------------------------------
-    ;; プロセスごとのコーディングシステム変換表
-    ;;
-    ;; See also:
-    ;; https://www.emacswiki.org/emacs/ShellMode#toc1
-    ;; --------------------------------
-    (add-to-list 'process-coding-system-alist
-                 '("[bB][aA][sS][hH]" . (undecided-dos . undecided-unix))))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 補完フレームワーク
-  ;; --------------------------------------------------------------------------
-  (leaf company
-    :ensure t
-    :hook ((after-init-hook . global-company-mode))
-    :custom (;; `company'
-             (company-tooltip-limit . 20)
-             (company-tooltip-minimum . 10)
-             (company-tooltip-offset-display . 'lines)
-             (company-tooltip-align-annotations . t)
-             (company-tooltip-flip-when-above . t)
-             (company-transformers . '(company-sort-by-occurrence))
-             (company-minimum-prefix-length . 1)
-             (company-abort-manual-when-too-short . t)
-             (company-idle-delay . 0.25)
-             (company-selection-wrap-around . t)
-             ;; `company-dabbrev'
-             (company-dabbrev-other-buffers . t)
-             (company-dabbrev-downcase . nil)
-             ;; `company-dabbrev-code'
-             (company-dabbrev-code-modes . '(batch-file-mode
-                                             csharp-mode
-                                             css-mode
-                                             erlang-mode
-                                             haskell-mode
-                                             html-mode
-                                             jde-mode
-                                             js-mode
-                                             js2-mode
-                                             lua-mode
-                                             prog-mode
-                                             python-mode
-                                             scss-mode
-                                             typescript-mode))
-             (company-dabbrev-code-other-buffers . t)
-             (company-dabbrev-code-everywhere . t)
-             (company-dabbrev-code-ignore-case . t)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 補完フレームワーク (`company') 拡張（ポップアップ）
-  ;; --------------------------------------------------------------------------
-  (leaf company-box
-    :ensure t
-    :hook ((company-mode-hook . company-box-mode)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 補完フレームワーク (`company') 拡張（補完候補のソート）
-  ;; --------------------------------------------------------------------------
-  (leaf company-statistics
-    :after company
-    :ensure t
-    :custom ((company-statistics-size . 500)
-             ;; ローカル環境にのみ保存
-             (company-statistics-file . "~/.emacs.company-statistics-cache.el"))
-    :global-minor-mode t)
-
-
-  ;; --------------------------------------------------------------------------
-  ;; コンパイル
-  ;; --------------------------------------------------------------------------
-  (leaf compile
-    :after (nvm exec-path-from-shell)
-    :bind (("C-c x" . compile))
-    :hook ((compilation-filter-hook . ansi-color-compilation-filter))
-    :custom ((compilation-window-height . 15)
-             ;; ビルドツール・タスクランナーに依存させない
-             (compile-command . "")
-             (compilation-scroll-output . t)
-             (compilation-always-kill . t)
-             (compilation-context-lines . t))
-    :init
-    ;; --------------------------------
-    ;; HACK: コンパイル完了後、モードラインにも状態を簡易表示
-    ;; --------------------------------
-    (defun my-compilation-message (cur-buffer msg)
-      "Show status messages when compile done in `compilation-mode'."
-      (let ((msg-text (string-trim msg)) ; 改行文字が含まれうる問題を回避
-            (msg-title (buffer-name))
-            (msg-face 'compilation-mode-line-fail))
-        (message "%s: %s"
-                 msg-title
-                 (propertize msg-text
-                             'face
-                             (if (string-equal "finished" msg-text)
-                                 'compilation-mode-line-exit
-                               'compilation-mode-line-fail)))))
-
-    (add-to-list 'compilation-finish-functions 'my-compilation-message)
-    :config
-    ;; --------------------------------
-    ;; HACK: コンパイル完了後、正常に終了していれば自動でウインドウを閉じる
-    ;; --------------------------------
-    (defcustom my-compilation-auto-quit-window-enable-buffer-names '("*compilation*")
-      "Created buffer names by `compile' command."
-      :group 'compilation
-      :type '(list (repeat string)))
-
-    ;; `process-status' と `exit-status' の値も得たいので、アドバイスを利用
-    ;; `compilation-finish-functions' にフックした関数では `msg' しか
-    ;; 参照できないため
-    (defun my-compilation-auto-quit-window (process-status exit-status msg)
-      "Run `quit-window' when `compile' successed."
-      (if (and (member (buffer-name)
-                       my-compilation-auto-quit-window-enable-buffer-names)
-               (or (and (equal process-status 'exit)
-                        (zerop exit-status))
-                   ;; 改行文字が含まれうる問題を回避
-                   (string-equal "finished" (string-trim msg))))
-          (quit-window nil (get-buffer-window))))
-
-    (advice-add #'compilation-handle-exit
+    (advice-add #'codic--view
                 :after
-                #'my-compilation-auto-quit-window))
+                #'my-codic-local-set-key)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 補完
-  ;; --------------------------------------------------------------------------
-  (leaf consult
-    :ensure t
-    :bind (;; 上書き
-           ("C-s" . my-consult-line)
-           ("C-x b" . consult-buffer)
-           ("C-x 4 b" . consult-buffer-other-window)
-           ("C-x 5 b" . consult-buffer-other-frame)
-           ;; コマンド群
-           ;; `C-c c' プレフィクスを使用
-           ("C-c c h" . consult-history)
-           ("C-c c m" . consult-mode-command)
-           ("C-c c b" . consult-bookmark)
-           ("C-c c k" . consult-kmacro)
-           ("C-c c e" . consult-compile-error)
-           ("C-c c g" . consult-goto-line)
-           ([remap goto-line] . consult-goto-line)
-           ("C-c c o" . consult-outline)
-           ("C-c c m" . consult-mark)
-           ("C-c c M" . consult-global-mark)
-           ("C-c c i" . consult-imenu)
-           ("C-c c f" . consult-focus-lines)
-           ;; コマンド群（検索）
-           ;; "C-c c s" プレフィクスを使用
-           ("C-c c s f" . consult-find)
-           ("C-c c s L" . consult-locate)
-           ("C-c c s g" . consult-grep)
-           ("C-c c s G" . consult-git-grep)
-           ("C-c c s r" . consult-ripgrep)
-           ("C-c c s l" . consult-line))
-    :hook ((completion-list-mode . consult-preview-at-point-mode))
-    :custom ((register-preview-function . #'consult-register-format)
-             (xref-show-xrefs-function . #'consult-xref)
-             (xref-show-definitions-function . #'consult-xref))
-    :advice ((:override register-preview consult-register-window))
-    :config
-    (defun my-consult-line (&optional at-point)
-      "Consult-line uses things-at-point if set C-u prefix."
-      (interactive "P")
-      (if at-point
-          (consult-line (thing-at-point 'symbol))
-        (consult-line))))
+;; --------------------------------------------------------------------------
+;; 共通コマンドインタプリタ (Windows ONLY)
+;; --------------------------------------------------------------------------
+(leaf comint
+  :when (member system-type '(ms-dos windows-nt))
+  :hook ((comint-mode-hook . my-comint-mode-initialize))
+  :custom ((comint-scroll-to-bottom-on-input . 'all)
+           (comint-move-point-for-output . 'all)
+           (comint-buffer-maximum-size . 5000)
+           (comint-process-echoes . t)
+           (comint-eol-on-send . t))
+  :init
+  (defun my-comint-mode-initialize ()
+    "Initialize `comint-mode'."
+    (setq-local comint-input-sender-no-newline t))
 
-
-  ;; --------------------------------------------------------------------------
-  ;; 補完 - LSP (Language Server Protocol) サポート
-  ;; --------------------------------------------------------------------------
-  (leaf consult-lsp
-    :ensure t
-    :bind (("C-c c ." . consult-lsp-diagnostics)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 矩形選択
-  ;; --------------------------------------------------------------------------
-  (leaf cua-base
-    ;; 特殊キーバインド無効
-    :global-minor-mode cua-selection-mode)
-
-
-  ;; --------------------------------------------------------------------------
-  ;; バッファ内マッチ補完
-  ;; --------------------------------------------------------------------------
-  (leaf dabbrev
-    :custom (;; 補完時に大小文字を区別しない
-             (dabbrev-case-fold-search . t)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; Debug Adapter Protocol
-  ;; --------------------------------------------------------------------------
-  (leaf dap-mode
-    :ensure t
-    :after dap-mode
-    :config
-    (dap-ui-mode +1))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; モードラインからモードの表示を消す
-  ;; --------------------------------------------------------------------------
-  (leaf delight
-    :ensure t
-    :config
-    (delight '(;; 降順ソート
-               (anzu-mode nil "anzu")
-               (auto-dim-other-buffers-mode nil "auto-dim-other-buffers")
-               (company-mode nil "company")
-               (company-box-mode nil "company-box")
-               (editorconfig-mode nil "editorconfig")
-               (eldoc-mode nil "eldoc")
-               (flycheck-mode nil "flycheck")
-               (flymake-mode nil "flymake")
-               (flyspell-mode nil "flyspell")
-               (flyspell-prog-mode nil "flyspell")
-               (global-anzu-mode nil "anzu")
-               (global-company-mode nil "company")
-               (global-flycheck-mode nil "flycheck")
-               (global-whitespace-mode nil "whitespace")
-               (lsp-mode nil "lsp-mode")
-               (projectile-mode nil "projectile")
-               (show-smartparens-global-mode nil "smartparens")
-               (show-smartparens-mode nil "smartparens")
-               (smartparens-global-mode nil "smartparens")
-               (smartparens-mode nil "smartparens")
-               (text-scale-mode nil "face-remap")
-               (whitespace-mode nil "whitespace")
-               (yas-global-mode nil "yasnippet")
-               (yas-minor-mode nil "yasnippet"))))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; デスクトップ環境保存・復旧
-  ;; --------------------------------------------------------------------------
-  (leaf desktop
-    :bind (;; "C-c d" プレフィクスを使用
-           ("C-c d c" . desktop-clear)
-           ("C-c d C-s" . desktop-save)
-           ("C-c d s" . desktop-save-in-desktop-dir)
-           ("C-c d d" . desktop-remove)
-           ("C-c d f" . desktop-change-dir)
-           ("C-c d r" . desktop-revert))
-    :custom ((desktop-load-locked-desktop . t)
-             (desktop-globals-to-save . '(;; 保存は必要最小限
-                                          search-ring
-                                          register-alist
-                                          file-name-history))
-             (desktop-locals-to-save . '(;; 保存は必要最小限
-                                         ;;
-                                         ;; WARNING: ソート厳禁！
-                                         ;;          正常に動作しなくなるため
-                                         desktop-locals-to-save ; 先頭＆必須
-                                         truncate-lines
-                                         case-fold-search
-                                         case-replace))
-             (desktop-lazy-verbose . nil)
-             (desktop-lazy-idle-delay . 5))
-    :global-minor-mode desktop-save-mode)
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 行番号表示
-  ;; --------------------------------------------------------------------------
-  (leaf display-line-numbers
-    :bind (("C-c C-l" . display-line-numbers-mode)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; ディレクトリブラウジング
-  ;; --------------------------------------------------------------------------
-  (leaf dired
-    :hook ((dired-mode-hook . my-dired-mode-initialize))
-    :init
-    (defun my-dired-mode-initialize ()
-      "Initialize `dired-mode'."
-      ;; 常にすべての情報を表示（簡易モードにしない）
-      (dired-hide-details-mode -1)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; ディレクトリブラウジング (`dired') 拡張
-  ;; --------------------------------------------------------------------------
-  (leaf dired+
-    :vc (dired+
-         :url "https://github.com/emacsmirror/dired-plus.git")
-    :after dired
-    :require t
-    :custom ((diredp-hide-details-initially-flag . nil)
-             (diredp-hide-details-propagate-flag . nil)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; EditorConfig
-  ;; --------------------------------------------------------------------------
-  (leaf editorconfig
-    :ensure t
-    :custom ((editorconfig-exclude-modes . '(lisp-mode
-                                             lisp-data-mode
-                                             emacs-lisp-mode
-                                             lisp-interaction-mode
-                                             elisp-byte-code-mode)))
-    :global-minor-mode t)
-
-
-  ;; --------------------------------------------------------------------------
-  ;; GNU Emacs Lisp ドキュメント表示
-  ;; --------------------------------------------------------------------------
-  (leaf eldoc
-    :hook ((emacs-lisp-mode-hook . eldoc-mode)
-           (ielm-mode-hook . eldoc-mode)
-           (lisp-interaction-mode-hook . eldoc-mode)
-           (lisp-mode-hook . eldoc-mode))
-    :custom ((eldoc-minor-mode-string . nil)
-             (eldoc-idle-delay . 0.2)
-             (eldoc-echo-area-use-multiline-p . 'truncate-sym-name-if-fit)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; コンテキストメニュー
-  ;; --------------------------------------------------------------------------
-  (leaf embark
-    :ensure t
-    :bind (("C-." . embark-act)
-           ("C-;" . embark-dwim)
-           ("C-x ? b" . embark-bindings))
-    :custom ((prefix-help-command . #'embark-prefix-help-command))
-    :config
-    (add-to-list 'display-buffer-alist
-                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                   nil
-                   (window-parameters (mode-line-format . none)))))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; Embark ⇔ Consult 連携
-  ;; --------------------------------------------------------------------------
-  (leaf embark-consult
-    :ensure t
-    :after (embark consult)
-    :hook ((embark-collect-mode . consult-preview-at-point-mode)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; カーソル下の数値を増減
-  ;; --------------------------------------------------------------------------
-  (leaf evil-numbers
-    :ensure t
-    :custom ((evil-numbers-pad-default . t))
-    :bind (("C-3" . evil-numbers/dec-at-pt)
-           ("C-4" . evil-numbers/inc-at-pt)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; `dired' における `find' コマンド実行 (Windows ONLY)
+  ;; --------------------------------
+  ;; プロセスごとのコーディングシステム変換表
   ;;
   ;; See also:
-  ;; `dired'
-  ;; --------------------------------------------------------------------------
-  (leaf find-dired
-    :when (member system-type '(ms-dos windows-nt))
-    :after find-dired
-    :config
-    ;; --------------------------------
-    ;; HACK: `:custom' で設定すると `find-exec-terminator' の展開が
-    ;;       `find-dired' の `eval-after-load' より先になりエラーとなる
-    ;;       仕方なく `:config' で泥臭く設定しなければならない
-    ;; --------------------------------
-    (custom-set-variables
-     `(find-ls-option ,(cons (format "-exec %s -ld {} %s"
-                                     (executable-find "ls")
-                                     find-exec-terminator)
-                             "-ld"))))
+  ;; https://www.emacswiki.org/emacs/ShellMode#toc1
+  ;; --------------------------------
+  (add-to-list 'process-coding-system-alist
+               '("[bB][aA][sS][hH]" . (undecided-dos . undecided-unix))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 自動静的解析
-  ;; --------------------------------------------------------------------------
-  (leaf flycheck
-    :ensure t
-    :bind (("C-c f" . flycheck-mode))
-    :hook ((after-init-hook . global-flycheck-mode))
-    :custom ((flycheck-checker-error-threshold . nil)
-             (flycheck-display-errors-delay . 0.5)
-             (flycheck-idle-change-delay . 0.25)
-             (flycheck-disabled-checkers . '(javascript-jscs)))
-    :config
-    ;; --------------------------------
-    ;; HACK: `flycheck-checker-error-threshold' 以上の項目が出現すると
-    ;;       生成されうる警告バッファの出現を抑制
-    ;; --------------------------------
-    (with-eval-after-load 'warnings
-      (add-to-list 'warning-suppress-log-types '(flycheck syntax-checker)))
-
-    ;; --------------------------------
-    ;; PATCH: Sass（.scss/.sass 両形式）チェック時にキャッシュを使わせない
-    ;; --------------------------------
-    (dolist (checker '(scss sass))
-      (if (and (flycheck-registered-checker-p checker)
-               (not (member "-C" (flycheck-checker-arguments checker))))
-          ;; あえて破壊的に変更（元のリストに追加したい）
-          (nconc (get checker 'flycheck-command) '("-C"))))
-
-    ;; --------------------------------
-    ;; PATCH: temp ファイルのデフォルトコーディングシステムを、
-    ;;        強制的に UTF-8 (LF) とする
-    ;; --------------------------------
-    ;; オーバーライド
-    (defun flycheck-save-buffer-to-file (file-name)
-      "Save the contents of the current buffer to FILE-NAME."
-      ;; 他の部分は元定義と一致させる
-      (make-directory (file-name-directory file-name) t)
-      ;; FIXME: もっと柔軟に設定できるようにならないか？
-      (let ((coding-system-for-write 'utf-8-unix) ; ここだけ変更・決め打ち
-            (jka-compr-inhibit t))
-        (write-region nil nil file-name nil 0))))
+;; --------------------------------------------------------------------------
+;; 補完フレームワーク
+;; --------------------------------------------------------------------------
+(leaf company
+  :ensure t
+  :hook ((after-init-hook . global-company-mode))
+  :custom (;; `company'
+           (company-tooltip-limit . 20)
+           (company-tooltip-minimum . 10)
+           (company-tooltip-offset-display . 'lines)
+           (company-tooltip-align-annotations . t)
+           (company-tooltip-flip-when-above . t)
+           (company-transformers . '(company-sort-by-occurrence))
+           (company-minimum-prefix-length . 1)
+           (company-abort-manual-when-too-short . t)
+           (company-idle-delay . 0.25)
+           (company-selection-wrap-around . t)
+           ;; `company-dabbrev'
+           (company-dabbrev-other-buffers . t)
+           (company-dabbrev-downcase . nil)
+           ;; `company-dabbrev-code'
+           (company-dabbrev-code-modes . '(batch-file-mode
+                                           csharp-mode
+                                           css-mode
+                                           erlang-mode
+                                           haskell-mode
+                                           html-mode
+                                           jde-mode
+                                           js-mode
+                                           js2-mode
+                                           lua-mode
+                                           prog-mode
+                                           python-mode
+                                           scss-mode
+                                           typescript-mode))
+           (company-dabbrev-code-other-buffers . t)
+           (company-dabbrev-code-everywhere . t)
+           (company-dabbrev-code-ignore-case . t)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 自動静的解析拡張（モードライン変更）
-  ;; --------------------------------------------------------------------------
-  (leaf flycheck-color-mode-line
-    :after flycheck
-    :ensure t
-    :hook ((flycheck-mode-hook . flycheck-color-mode-line-mode)))
+;; --------------------------------------------------------------------------
+;; 補完フレームワーク (`company') 拡張（ポップアップ）
+;; --------------------------------------------------------------------------
+(leaf company-box
+  :ensure t
+  :hook ((company-mode-hook . company-box-mode)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 自動静的解析 (OLD)
-  ;; --------------------------------------------------------------------------
-  (leaf flymake
-    :custom ((flymake-run-in-place . nil)))
+;; --------------------------------------------------------------------------
+;; 補完フレームワーク (`company') 拡張（補完候補のソート）
+;; --------------------------------------------------------------------------
+(leaf company-statistics
+  :after company
+  :ensure t
+  :custom ((company-statistics-size . 500)
+           ;; ローカル環境にのみ保存
+           (company-statistics-file . "~/.emacs.company-statistics-cache.el"))
+  :global-minor-mode t)
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 自動スペルチェッカ
-  ;; --------------------------------------------------------------------------
-  (leaf flyspell
-    :hook (;; Full
-           (markdown-mode-hook . flyspell-mode)
-           (org-mode-hook . flyspell-mode)
-           (text-mode-hook . flyspell-mode)
-           ;; Comments ONLY
-           (css-mode-hook . flyspell-prog-mode)
-           (emacs-lisp-mode-hook . flyspell-prog-mode)
-           (html-mode-hook . flyspell-prog-mode)
-           (ielm-mode-hook . flyspell-prog-mode)
-           (java-mode-hook . flyspell-prog-mode)
-           (js-mode-hook . flyspell-prog-mode)
-           (js2-mode-hook . flyspell-prog-mode)
-           (lisp-interaction-mode-hook . flyspell-prog-mode)
-           (lisp-mode-hook . flyspell-prog-mode)
-           (php-mode-hook . flyspell-prog-mode)
-           (scss-mode-hook . flyspell-prog-mode)
-           (typescript-mode-hook . flyspell-prog-mode)
-           (web-mode-hook . flyspell-prog-mode))
-    :custom ((flyspell-delay . 1.0)))
+;; --------------------------------------------------------------------------
+;; コンパイル
+;; --------------------------------------------------------------------------
+(leaf compile
+  :after (nvm exec-path-from-shell)
+  :bind (("C-c x" . compile))
+  :hook ((compilation-filter-hook . ansi-color-compilation-filter))
+  :custom ((compilation-window-height . 15)
+           ;; ビルドツール・タスクランナーに依存させない
+           (compile-command . "")
+           (compilation-scroll-output . t)
+           (compilation-always-kill . t)
+           (compilation-context-lines . t))
+  :init
+  ;; --------------------------------
+  ;; HACK: コンパイル完了後、モードラインにも状態を簡易表示
+  ;; --------------------------------
+  (defun my-compilation-message (cur-buffer msg)
+    "Show status messages when compile done in `compilation-mode'."
+    (let ((msg-text (string-trim msg)) ; 改行文字が含まれうる問題を回避
+          (msg-title (buffer-name))
+          (msg-face 'compilation-mode-line-fail))
+      (message "%s: %s"
+               msg-title
+               (propertize msg-text
+                           'face
+                           (if (string-equal "finished" msg-text)
+                               'compilation-mode-line-exit
+                             'compilation-mode-line-fail)))))
+
+  (add-to-list 'compilation-finish-functions 'my-compilation-message)
+  :config
+  ;; --------------------------------
+  ;; HACK: コンパイル完了後、正常に終了していれば自動でウインドウを閉じる
+  ;; --------------------------------
+  (defcustom my-compilation-auto-quit-window-enable-buffer-names '("*compilation*")
+    "Created buffer names by `compile' command."
+    :group 'compilation
+    :type '(list (repeat string)))
+
+  ;; `process-status' と `exit-status' の値も得たいので、アドバイスを利用
+  ;; `compilation-finish-functions' にフックした関数では `msg' しか
+  ;; 参照できないため
+  (defun my-compilation-auto-quit-window (process-status exit-status msg)
+    "Run `quit-window' when `compile' successed."
+    (if (and (member (buffer-name)
+                     my-compilation-auto-quit-window-enable-buffer-names)
+             (or (and (equal process-status 'exit)
+                      (zerop exit-status))
+                 ;; 改行文字が含まれうる問題を回避
+                 (string-equal "finished" (string-trim msg))))
+        (quit-window nil (get-buffer-window))))
+
+  (advice-add #'compilation-handle-exit
+              :after
+              #'my-compilation-auto-quit-window))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; フレーム
-  ;; --------------------------------------------------------------------------
-  (leaf frame
-    :when window-system
-    :init
-    ;; 背景のみ半透明とし、前景（文字）は不透明のままとする (over v29.x)
-    ;; ただし、macOS & Windows では動作もしなけければエラーにもならない
-    ;;
-    ;; See also:
-    ;; https://www.emacswiki.org/emacs/TransparentEmacs
-    ;; (set-frame-parameter nil 'alpha-background 50)
-    ;;
-    ;; 半透明化（前景も含む）
-    (set-frame-parameter nil 'alpha '(90 . 80)))
+;; --------------------------------------------------------------------------
+;; 補完
+;; --------------------------------------------------------------------------
+(leaf consult
+  :ensure t
+  :bind (;; 上書き
+         ("C-s" . my-consult-line)
+         ("C-x b" . consult-buffer)
+         ("C-x 4 b" . consult-buffer-other-window)
+         ("C-x 5 b" . consult-buffer-other-frame)
+         ;; コマンド群
+         ;; `C-c c' プレフィクスを使用
+         ("C-c c h" . consult-history)
+         ("C-c c m" . consult-mode-command)
+         ("C-c c b" . consult-bookmark)
+         ("C-c c k" . consult-kmacro)
+         ("C-c c e" . consult-compile-error)
+         ("C-c c g" . consult-goto-line)
+         ([remap goto-line] . consult-goto-line)
+         ("C-c c o" . consult-outline)
+         ("C-c c m" . consult-mark)
+         ("C-c c M" . consult-global-mark)
+         ("C-c c i" . consult-imenu)
+         ("C-c c f" . consult-focus-lines)
+         ;; コマンド群（検索）
+         ;; "C-c c s" プレフィクスを使用
+         ("C-c c s f" . consult-find)
+         ("C-c c s L" . consult-locate)
+         ("C-c c s g" . consult-grep)
+         ("C-c c s G" . consult-git-grep)
+         ("C-c c s r" . consult-ripgrep)
+         ("C-c c s l" . consult-line))
+  :hook ((completion-list-mode . consult-preview-at-point-mode))
+  :custom ((register-preview-function . #'consult-register-format)
+           (xref-show-xrefs-function . #'consult-xref)
+           (xref-show-definitions-function . #'consult-xref))
+  :advice ((:override register-preview consult-register-window))
+  :config
+  (defun my-consult-line (&optional at-point)
+    "Consult-line uses things-at-point if set C-u prefix."
+    (interactive "P")
+    (if at-point
+        (consult-line (thing-at-point 'symbol))
+      (consult-line))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; `grep'
-  ;; --------------------------------------------------------------------------
+;; --------------------------------------------------------------------------
+;; 補完 - LSP (Language Server Protocol) サポート
+;; --------------------------------------------------------------------------
+(leaf consult-lsp
+  :ensure t
+  :bind (("C-c c ." . consult-lsp-diagnostics)))
+
+
+;; --------------------------------------------------------------------------
+;; 矩形選択
+;; --------------------------------------------------------------------------
+(leaf cua-base
+  ;; 特殊キーバインド無効
+  :global-minor-mode cua-selection-mode)
+
+
+;; --------------------------------------------------------------------------
+;; バッファ内マッチ補完
+;; --------------------------------------------------------------------------
+(leaf dabbrev
+  :custom (;; 補完時に大小文字を区別しない
+           (dabbrev-case-fold-search . t)))
+
+
+;; --------------------------------------------------------------------------
+;; Debug Adapter Protocol
+;; --------------------------------------------------------------------------
+(leaf dap-mode
+  :ensure t
+  :after dap-mode
+  :config
+  (dap-ui-mode +1))
+
+
+;; --------------------------------------------------------------------------
+;; モードラインからモードの表示を消す
+;; --------------------------------------------------------------------------
+(leaf delight
+  :ensure t
+  :config
+  (delight '(;; 降順ソート
+             (anzu-mode nil "anzu")
+             (auto-dim-other-buffers-mode nil "auto-dim-other-buffers")
+             (company-mode nil "company")
+             (company-box-mode nil "company-box")
+             (editorconfig-mode nil "editorconfig")
+             (eldoc-mode nil "eldoc")
+             (flycheck-mode nil "flycheck")
+             (flymake-mode nil "flymake")
+             (flyspell-mode nil "flyspell")
+             (flyspell-prog-mode nil "flyspell")
+             (global-anzu-mode nil "anzu")
+             (global-company-mode nil "company")
+             (global-flycheck-mode nil "flycheck")
+             (global-whitespace-mode nil "whitespace")
+             (lsp-mode nil "lsp-mode")
+             (projectile-mode nil "projectile")
+             (show-smartparens-global-mode nil "smartparens")
+             (show-smartparens-mode nil "smartparens")
+             (smartparens-global-mode nil "smartparens")
+             (smartparens-mode nil "smartparens")
+             (text-scale-mode nil "face-remap")
+             (whitespace-mode nil "whitespace")
+             (yas-global-mode nil "yasnippet")
+             (yas-minor-mode nil "yasnippet"))))
+
+
+;; --------------------------------------------------------------------------
+;; デスクトップ環境保存・復旧
+;; --------------------------------------------------------------------------
+(leaf desktop
+  :bind (;; "C-c d" プレフィクスを使用
+         ("C-c d c" . desktop-clear)
+         ("C-c d C-s" . desktop-save)
+         ("C-c d s" . desktop-save-in-desktop-dir)
+         ("C-c d d" . desktop-remove)
+         ("C-c d f" . desktop-change-dir)
+         ("C-c d r" . desktop-revert))
+  :custom ((desktop-load-locked-desktop . t)
+           (desktop-globals-to-save . '(;; 保存は必要最小限
+                                        search-ring
+                                        register-alist
+                                        file-name-history))
+           (desktop-locals-to-save . '(;; 保存は必要最小限
+                                       ;;
+                                       ;; WARNING: ソート厳禁！
+                                       ;;          正常に動作しなくなるため
+                                       desktop-locals-to-save ; 先頭＆必須
+                                       truncate-lines
+                                       case-fold-search
+                                       case-replace))
+           (desktop-lazy-verbose . nil)
+           (desktop-lazy-idle-delay . 5))
+  :global-minor-mode desktop-save-mode)
+
+
+;; --------------------------------------------------------------------------
+;; 行番号表示
+;; --------------------------------------------------------------------------
+(leaf display-line-numbers
+  :bind (("C-c C-l" . display-line-numbers-mode)))
+
+
+;; --------------------------------------------------------------------------
+;; ディレクトリブラウジング
+;; --------------------------------------------------------------------------
+(leaf dired
+  :hook ((dired-mode-hook . my-dired-mode-initialize))
+  :init
+  (defun my-dired-mode-initialize ()
+    "Initialize `dired-mode'."
+    ;; 常にすべての情報を表示（簡易モードにしない）
+    (dired-hide-details-mode -1)))
+
+
+;; --------------------------------------------------------------------------
+;; ディレクトリブラウジング (`dired') 拡張
+;; --------------------------------------------------------------------------
+(leaf dired+
+  :vc (dired+
+       :url "https://github.com/emacsmirror/dired-plus.git")
+  :after dired
+  :require t
+  :custom ((diredp-hide-details-initially-flag . nil)
+           (diredp-hide-details-propagate-flag . nil)))
+
+
+;; --------------------------------------------------------------------------
+;; EditorConfig
+;; --------------------------------------------------------------------------
+(leaf editorconfig
+  :ensure t
+  :custom ((editorconfig-exclude-modes . '(lisp-mode
+                                           lisp-data-mode
+                                           emacs-lisp-mode
+                                           lisp-interaction-mode
+                                           elisp-byte-code-mode)))
+  :global-minor-mode t)
+
+
+;; --------------------------------------------------------------------------
+;; GNU Emacs Lisp ドキュメント表示
+;; --------------------------------------------------------------------------
+(leaf eldoc
+  :hook ((emacs-lisp-mode-hook . eldoc-mode)
+         (ielm-mode-hook . eldoc-mode)
+         (lisp-interaction-mode-hook . eldoc-mode)
+         (lisp-mode-hook . eldoc-mode))
+  :custom ((eldoc-minor-mode-string . nil)
+           (eldoc-idle-delay . 0.2)
+           (eldoc-echo-area-use-multiline-p . 'truncate-sym-name-if-fit)))
+
+
+;; --------------------------------------------------------------------------
+;; コンテキストメニュー
+;; --------------------------------------------------------------------------
+(leaf embark
+  :ensure t
+  :bind (("C-." . embark-act)
+         ("C-;" . embark-dwim)
+         ("C-x ? b" . embark-bindings))
+  :custom ((prefix-help-command . #'embark-prefix-help-command))
+  :config
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+
+;; --------------------------------------------------------------------------
+;; Embark ⇔ Consult 連携
+;; --------------------------------------------------------------------------
+(leaf embark-consult
+  :ensure t
+  :after (embark consult)
+  :hook ((embark-collect-mode . consult-preview-at-point-mode)))
+
+
+;; --------------------------------------------------------------------------
+;; カーソル下の数値を増減
+;; --------------------------------------------------------------------------
+(leaf evil-numbers
+  :ensure t
+  :custom ((evil-numbers-pad-default . t))
+  :bind (("C-3" . evil-numbers/dec-at-pt)
+         ("C-4" . evil-numbers/inc-at-pt)))
+
+
+;; --------------------------------------------------------------------------
+;; `dired' における `find' コマンド実行 (Windows ONLY)
+;;
+;; See also:
+;; `dired'
+;; --------------------------------------------------------------------------
+(leaf find-dired
+  :when (member system-type '(ms-dos windows-nt))
+  :after find-dired
+  :config
+  ;; --------------------------------
+  ;; HACK: `:custom' で設定すると `find-exec-terminator' の展開が
+  ;;       `find-dired' の `eval-after-load' より先になりエラーとなる
+  ;;       仕方なく `:config' で泥臭く設定しなければならない
+  ;; --------------------------------
+  (custom-set-variables
+   `(find-ls-option ,(cons (format "-exec %s -ld {} %s"
+                                   (executable-find "ls")
+                                   find-exec-terminator)
+                           "-ld"))))
+
+
+;; --------------------------------------------------------------------------
+;; 自動静的解析
+;; --------------------------------------------------------------------------
+(leaf flycheck
+  :ensure t
+  :bind (("C-c f" . flycheck-mode))
+  :hook ((after-init-hook . global-flycheck-mode))
+  :custom ((flycheck-checker-error-threshold . nil)
+           (flycheck-display-errors-delay . 0.5)
+           (flycheck-idle-change-delay . 0.25)
+           (flycheck-disabled-checkers . '(javascript-jscs)))
+  :config
+  ;; --------------------------------
+  ;; HACK: `flycheck-checker-error-threshold' 以上の項目が出現すると
+  ;;       生成されうる警告バッファの出現を抑制
+  ;; --------------------------------
+  (with-eval-after-load 'warnings
+    (add-to-list 'warning-suppress-log-types '(flycheck syntax-checker)))
+
+  ;; --------------------------------
+  ;; PATCH: Sass（.scss/.sass 両形式）チェック時にキャッシュを使わせない
+  ;; --------------------------------
+  (dolist (checker '(scss sass))
+    (if (and (flycheck-registered-checker-p checker)
+             (not (member "-C" (flycheck-checker-arguments checker))))
+        ;; あえて破壊的に変更（元のリストに追加したい）
+        (nconc (get checker 'flycheck-command) '("-C"))))
+
+  ;; --------------------------------
+  ;; PATCH: temp ファイルのデフォルトコーディングシステムを、
+  ;;        強制的に UTF-8 (LF) とする
+  ;; --------------------------------
+  ;; オーバーライド
+  (defun flycheck-save-buffer-to-file (file-name)
+    "Save the contents of the current buffer to FILE-NAME."
+    ;; 他の部分は元定義と一致させる
+    (make-directory (file-name-directory file-name) t)
+    ;; FIXME: もっと柔軟に設定できるようにならないか？
+    (let ((coding-system-for-write 'utf-8-unix) ; ここだけ変更・決め打ち
+          (jka-compr-inhibit t))
+      (write-region nil nil file-name nil 0))))
+
+
+;; --------------------------------------------------------------------------
+;; 自動静的解析拡張（モードライン変更）
+;; --------------------------------------------------------------------------
+(leaf flycheck-color-mode-line
+  :after flycheck
+  :ensure t
+  :hook ((flycheck-mode-hook . flycheck-color-mode-line-mode)))
+
+
+;; --------------------------------------------------------------------------
+;; 自動静的解析 (OLD)
+;; --------------------------------------------------------------------------
+(leaf flymake
+  :custom ((flymake-run-in-place . nil)))
+
+
+;; --------------------------------------------------------------------------
+;; 自動スペルチェッカ
+;; --------------------------------------------------------------------------
+(leaf flyspell
+  :hook (;; Full
+         (markdown-mode-hook . flyspell-mode)
+         (org-mode-hook . flyspell-mode)
+         (text-mode-hook . flyspell-mode)
+         ;; Comments ONLY
+         (css-mode-hook . flyspell-prog-mode)
+         (emacs-lisp-mode-hook . flyspell-prog-mode)
+         (html-mode-hook . flyspell-prog-mode)
+         (ielm-mode-hook . flyspell-prog-mode)
+         (java-mode-hook . flyspell-prog-mode)
+         (js-mode-hook . flyspell-prog-mode)
+         (js2-mode-hook . flyspell-prog-mode)
+         (lisp-interaction-mode-hook . flyspell-prog-mode)
+         (lisp-mode-hook . flyspell-prog-mode)
+         (php-mode-hook . flyspell-prog-mode)
+         (scss-mode-hook . flyspell-prog-mode)
+         (typescript-mode-hook . flyspell-prog-mode)
+         (web-mode-hook . flyspell-prog-mode))
+  :custom ((flyspell-delay . 1.0)))
+
+
+;; --------------------------------------------------------------------------
+;; フレーム
+;; --------------------------------------------------------------------------
+(leaf frame
+  :when window-system
+  :init
+  ;; 背景のみ半透明とし、前景（文字）は不透明のままとする (over v29.x)
+  ;; ただし、macOS & Windows では動作もしなけければエラーにもならない
+  ;;
+  ;; See also:
+  ;; https://www.emacswiki.org/emacs/TransparentEmacs
+  ;; (set-frame-parameter nil 'alpha-background 50)
+  ;;
+  ;; 半透明化（前景も含む）
+  (set-frame-parameter nil 'alpha '(90 . 80)))
+
+
+;; --------------------------------------------------------------------------
+;; `grep'
+;; --------------------------------------------------------------------------
+(leaf grep
+  :bind (("C-M-g" . rgrep))
+  :init
+  ;; --------------------------------
+  ;; Windows ONLY
+  ;; --------------------------------
   (leaf grep
-    :bind (("C-M-g" . rgrep))
-    :init
-    ;; --------------------------------
-    ;; Windows ONLY
-    ;; --------------------------------
-    (leaf grep
-      :when (member system-type '(ms-dos windows-nt))
-      ;; ------------------------------
-      ;; HACK: `autoload' 未対応変数を変更する必要があるため、
-      ;;       明示的にロードさせる必要がある
-      ;; ------------------------------
-      :require t
-      :custom (;; 例外が出るため NUL デバイスは使わせない
-               (grep-use-null-device . nil))
-      :config
-      ;; PATH は通っていないが、`exec-path' は通っている場合を想定
-      ;;
-      ;; すべて `defvar' 定義なので、 `autoload' 前後での
-      ;; `custom-set-variables' による設定は不可能
-      ;; 明示的ロード後～関数実行前までに設定しなければならない
-      (setq grep-program
-            (purecopy (or (executable-find "grep")
-                          "grep")))
-      (setq find-program
-            (purecopy (or (executable-find "find")
-                          "find")))
-      (setq xargs-program
-            (purecopy (or (executable-find "xargs")
-                          "xargs")))))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; カレントカーソル行強調
-  ;; --------------------------------------------------------------------------
-  (leaf hl-line
-    :custom ((global-hl-line-sticky-flag . t))
-    :global-minor-mode global-hl-line-mode)
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 特殊コメント強調
-  ;; --------------------------------------------------------------------------
-  (leaf hl-todo
-    :ensure t
-    :custom ((hl-todo-keyword-faces . '(;; 既存
-                                        ("HOLD" . "#99ff99")
-                                        ("TODO" . "#99ff99")
-                                        ("NEXT" . "#99ff99")
-                                        ("THEM" . "#99ff99")
-                                        ("PROG" . "#99ffff")
-                                        ("OKAY" . "#99ffff")
-                                        ("DONT" . "#ffffcc")
-                                        ("FAIL" . "#ff0000")
-                                        ("DONE" . "#00ff00")
-                                        ("NOTE"   . "#ffcc99")
-                                        ("KLUDGE" . "#ffcc99")
-                                        ("HACK"   . "#ffcc99")
-                                        ("TEMP"   . "#ffcc99")
-                                        ("FIXME"  . "#ffcccc")
-                                        ("XXX"   . "#ffcccc")
-                                        ("CAUTION" . "#ffff00")
-                                        ("WARNING" . "#ff0000")
-                                        ;; 追加
-                                        ("PATCH" . "#ffcc00"))))
-    :global-minor-mode global-hl-todo-mode)
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 強化バッファ一覧
-  ;; --------------------------------------------------------------------------
-  (leaf ibuffer
-    :bind (("C-x C-b" . ibuffer))
-    :custom ((ibuffer-default-sorting-mode . 'filename/process)
-             (ibuffer-expert . t))
+    :when (member system-type '(ms-dos windows-nt))
+    ;; ------------------------------
+    ;; HACK: `autoload' 未対応変数を変更する必要があるため、
+    ;;       明示的にロードさせる必要がある
+    ;; ------------------------------
+    :require t
+    :custom (;; 例外が出るため NUL デバイスは使わせない
+             (grep-use-null-device . nil))
     :config
-    ;; --------------------------------
-    ;; 機能拡張
-    ;; --------------------------------
-    ;; バッファ名の表示を30文字に拡張
-    ;; カラム幅が揃わなくなるため、-1 にはできない
-    (let* (;; `customize-mark-to-save' の評価を t にするため、
-           ;; 明示的にコピー
-           (formats (copy-tree ibuffer-formats))
-           (settings (assoc 'name (assoc 'mark formats))))
-      ;; 該当する設定項目がなければ何もしない
-      ;; 将来的に項目が変更された場合でも、例外を出さないための対策
-      (when settings
-        (setcdr settings '(30 30 :left :elide))
-        ;; WARNING: この `custom-set-variables' は `:custom' に移動できない
-        ;;          変数 `settings' で加工を行った結果が入るため
-        (custom-set-variables
-         `(ibuffer-formats ',formats)))))
+    ;; PATH は通っていないが、`exec-path' は通っている場合を想定
+    ;;
+    ;; すべて `defvar' 定義なので、 `autoload' 前後での
+    ;; `custom-set-variables' による設定は不可能
+    ;; 明示的ロード後～関数実行前までに設定しなければならない
+    (setq grep-program
+          (purecopy (or (executable-find "grep")
+                        "grep")))
+    (setq find-program
+          (purecopy (or (executable-find "find")
+                        "find")))
+    (setq xargs-program
+          (purecopy (or (executable-find "xargs")
+                        "xargs")))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 強化バッファ一覧 (`ibuffer') 拡張（`projectile' サポート）
-  ;; --------------------------------------------------------------------------
-  (leaf ibuffer-projectile
-    :after (ibuffer projectile)
-    :ensure t
-    :hook ((ibuffer-hook . ibuffer-projectile-set-filter-groups)))
+;; --------------------------------------------------------------------------
+;; カレントカーソル行強調
+;; --------------------------------------------------------------------------
+(leaf hl-line
+  :custom ((global-hl-line-sticky-flag . t))
+  :global-minor-mode global-hl-line-mode)
 
 
-  ;; --------------------------------------------------------------------------
-  ;; ファイル操作の簡略化
-  ;; --------------------------------------------------------------------------
-  (leaf ido
-    :custom ((ido-enable-flex-matching . t)
-             (ido-create-new-buffer . 'always)
-             (ido-use-virtual-buffers . t)
-             (ido-max-file-prompt-width . 0)
-             (ido-use-filename-at-point . 'guess)
-             (ido-unc-hosts . t)
-             ;; ローカル環境にのみ保存
-             (ido-save-directory-list-file . "~/.emacs.ido-save-directory-list.el"))
-    :global-minor-mode t)
+;; --------------------------------------------------------------------------
+;; 特殊コメント強調
+;; --------------------------------------------------------------------------
+(leaf hl-todo
+  :ensure t
+  :custom ((hl-todo-keyword-faces . '(;; 既存
+                                      ("HOLD" . "#99ff99")
+                                      ("TODO" . "#99ff99")
+                                      ("NEXT" . "#99ff99")
+                                      ("THEM" . "#99ff99")
+                                      ("PROG" . "#99ffff")
+                                      ("OKAY" . "#99ffff")
+                                      ("DONT" . "#ffffcc")
+                                      ("FAIL" . "#ff0000")
+                                      ("DONE" . "#00ff00")
+                                      ("NOTE"   . "#ffcc99")
+                                      ("KLUDGE" . "#ffcc99")
+                                      ("HACK"   . "#ffcc99")
+                                      ("TEMP"   . "#ffcc99")
+                                      ("FIXME"  . "#ffcccc")
+                                      ("XXX"   . "#ffcccc")
+                                      ("CAUTION" . "#ffff00")
+                                      ("WARNING" . "#ff0000")
+                                      ;; 追加
+                                      ("PATCH" . "#ffcc00"))))
+  :global-minor-mode global-hl-todo-mode)
 
 
-  ;; --------------------------------------------------------------------------
-  ;; ファイル操作の簡略化（全環境に適用）
-  ;; --------------------------------------------------------------------------
-  (leaf ido-everywhere
-    :after ido
-    :config
-    (ido-everywhere +1))
+;; --------------------------------------------------------------------------
+;; 強化バッファ一覧
+;; --------------------------------------------------------------------------
+(leaf ibuffer
+  :bind (("C-x C-b" . ibuffer))
+  :custom ((ibuffer-default-sorting-mode . 'filename/process)
+           (ibuffer-expert . t))
+  :config
+  ;; --------------------------------
+  ;; 機能拡張
+  ;; --------------------------------
+  ;; バッファ名の表示を30文字に拡張
+  ;; カラム幅が揃わなくなるため、-1 にはできない
+  (let* (;; `customize-mark-to-save' の評価を t にするため、
+         ;; 明示的にコピー
+         (formats (copy-tree ibuffer-formats))
+         (settings (assoc 'name (assoc 'mark formats))))
+    ;; 該当する設定項目がなければ何もしない
+    ;; 将来的に項目が変更された場合でも、例外を出さないための対策
+    (when settings
+      (setcdr settings '(30 30 :left :elide))
+      ;; WARNING: この `custom-set-variables' は `:custom' に移動できない
+      ;;          変数 `settings' で加工を行った結果が入るため
+      (custom-set-variables
+       `(ibuffer-formats ',formats)))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 画像の直接表示
-  ;; --------------------------------------------------------------------------
-  (leaf image-file
-    :global-minor-mode auto-image-file-mode)
+;; --------------------------------------------------------------------------
+;; 強化バッファ一覧 (`ibuffer') 拡張（`projectile' サポート）
+;; --------------------------------------------------------------------------
+(leaf ibuffer-projectile
+  :after (ibuffer projectile)
+  :ensure t
+  :hook ((ibuffer-hook . ibuffer-projectile-set-filter-groups)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; インクリメンタル検索
-  ;; --------------------------------------------------------------------------
-  (leaf isearch
-    :custom ((isearch-case-fold-search . t)
-             (isearch-last-case-fold-search . t)))
+;; --------------------------------------------------------------------------
+;; ファイル操作の簡略化
+;; --------------------------------------------------------------------------
+(leaf ido
+  :custom ((ido-enable-flex-matching . t)
+           (ido-create-new-buffer . 'always)
+           (ido-use-virtual-buffers . t)
+           (ido-max-file-prompt-width . 0)
+           (ido-use-filename-at-point . 'guess)
+           (ido-unc-hosts . t)
+           ;; ローカル環境にのみ保存
+           (ido-save-directory-list-file . "~/.emacs.ido-save-directory-list.el"))
+  :global-minor-mode t)
 
 
-  ;; --------------------------------------------------------------------------
-  ;; アーカイブファイルを直接編集
-  ;; --------------------------------------------------------------------------
-  (leaf jka-cmpr-hook
-    :global-minor-mode auto-compression-mode)
+;; --------------------------------------------------------------------------
+;; ファイル操作の簡略化（全環境に適用）
+;; --------------------------------------------------------------------------
+(leaf ido-everywhere
+  :after ido
+  :config
+  (ido-everywhere +1))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; JavaScript リファクタリング補助
-  ;; --------------------------------------------------------------------------
-  (leaf js2-refactor
-    :after js2-mode
-    :ensure t
-    :require t)
+;; --------------------------------------------------------------------------
+;; 画像の直接表示
+;; --------------------------------------------------------------------------
+(leaf image-file
+  :global-minor-mode auto-image-file-mode)
 
 
-  ;; --------------------------------------------------------------------------
-  ;; LSP (Language Server Protocol) クライアント拡張 (UI)
-  ;; --------------------------------------------------------------------------
-  ;; WARNING: `lsp-mode' が自動ロードする
-  ;;          念のため `lsp-mode' より前にインストール
-  ;; --------------------------------------------------------------------------
-  (leaf lsp-ui
-    :ensure t
-    :custom ((lsp-ui-sideline-show-hover . t)
-             (lsp-ui-sideline-show-code-actions . t)
-             (lsp-ui-sideline-diagnostic-max-lines . 2)
-             (lsp-ui-sideline-diagnostic-max-line-length . 150)))
+;; --------------------------------------------------------------------------
+;; インクリメンタル検索
+;; --------------------------------------------------------------------------
+(leaf isearch
+  :custom ((isearch-case-fold-search . t)
+           (isearch-last-case-fold-search . t)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; LSP (Language Server Protocol) クライアント拡張 (Java)
-  ;; --------------------------------------------------------------------------
-  ;; WARNING: `lsp-mode' が自動ロードする
-  ;;          念のため `lsp-mode' より前にインストール
-  ;; --------------------------------------------------------------------------
+;; --------------------------------------------------------------------------
+;; アーカイブファイルを直接編集
+;; --------------------------------------------------------------------------
+(leaf jka-cmpr-hook
+  :global-minor-mode auto-compression-mode)
+
+
+;; --------------------------------------------------------------------------
+;; JavaScript リファクタリング補助
+;; --------------------------------------------------------------------------
+(leaf js2-refactor
+  :after js2-mode
+  :ensure t
+  :require t)
+
+
+;; --------------------------------------------------------------------------
+;; LSP (Language Server Protocol) クライアント拡張 (UI)
+;; --------------------------------------------------------------------------
+;; WARNING: `lsp-mode' が自動ロードする
+;;          念のため `lsp-mode' より前にインストール
+;; --------------------------------------------------------------------------
+(leaf lsp-ui
+  :ensure t
+  :custom ((lsp-ui-sideline-show-hover . t)
+           (lsp-ui-sideline-show-code-actions . t)
+           (lsp-ui-sideline-diagnostic-max-lines . 2)
+           (lsp-ui-sideline-diagnostic-max-line-length . 150)))
+
+
+;; --------------------------------------------------------------------------
+;; LSP (Language Server Protocol) クライアント拡張 (Java)
+;; --------------------------------------------------------------------------
+;; WARNING: `lsp-mode' が自動ロードする
+;;          念のため `lsp-mode' より前にインストール
+;; --------------------------------------------------------------------------
+(leaf lsp-java
+  :ensure t
+  :custom (;; 旧バージョン（11.x 系）を利用するため旧い `jdtls' を指定
+           (lsp-java-jdt-download-url . "https://download.eclipse.org/jdtls/milestones/1.12.0/jdt-language-server-1.12.0-202206011637.tar.gz"))
+  :init
   (leaf lsp-java
-    :ensure t
-    :custom (;; 旧バージョン（11.x 系）を利用するため旧い `jdtls' を指定
-             (lsp-java-jdt-download-url . "https://download.eclipse.org/jdtls/milestones/1.12.0/jdt-language-server-1.12.0-202206011637.tar.gz"))
+    :after lsp-java
     :init
-    (leaf lsp-java
-      :after lsp-java
-      :init
-      ;; For "DAP"
-      (leaf dap-java
-        :require t)
-      ;; WARNING: 確実に `defcustom' 定義済変数が存在する状態で、
-      ;;          「定義」ではなく「追加」
-      (add-to-list 'lsp-java-vmargs "-Djsse.enableSNIExtension=false")
-      (add-to-list 'lsp-java-9-args "-Djsse.enableSNIExtension=false"))
-    ;; For "SpringBoot"
-    (leaf lsp-java-boot
-      :require t
-      :hook ((lsp-mode-hook . lsp-lens-mode)
-             (java-mode-hook . lsp-java-boot-lens-mode))))
+    ;; For "DAP"
+    (leaf dap-java
+      :require t)
+    ;; WARNING: 確実に `defcustom' 定義済変数が存在する状態で、
+    ;;          「定義」ではなく「追加」
+    (add-to-list 'lsp-java-vmargs "-Djsse.enableSNIExtension=false")
+    (add-to-list 'lsp-java-9-args "-Djsse.enableSNIExtension=false"))
+  ;; For "SpringBoot"
+  (leaf lsp-java-boot
+    :require t
+    :hook ((lsp-mode-hook . lsp-lens-mode)
+           (java-mode-hook . lsp-java-boot-lens-mode))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; LSP (Language Server Protocol) クライアント拡張 (Tailwind CSS)
-  ;; --------------------------------------------------------------------------
-  ;; WARNING: `lsp-mode' が自動ロードする
-  ;;          念のため `lsp-mode' より前にインストール
-  ;; --------------------------------------------------------------------------
-  (leaf lsp-tailwindcss
-    :ensure t
-    :custom ((lsp-tailwindcss-add-on-mode . t)
-             (lsp-tailwindcss-server-version . "0.8.7")))
+;; --------------------------------------------------------------------------
+;; LSP (Language Server Protocol) クライアント拡張 (Tailwind CSS)
+;; --------------------------------------------------------------------------
+;; WARNING: `lsp-mode' が自動ロードする
+;;          念のため `lsp-mode' より前にインストール
+;; --------------------------------------------------------------------------
+(leaf lsp-tailwindcss
+  :ensure t
+  :custom ((lsp-tailwindcss-add-on-mode . t)
+           (lsp-tailwindcss-server-version . "0.8.7")))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; LSP (Language Server Protocol) クライアント
+;; --------------------------------------------------------------------------
+;; LSP (Language Server Protocol) クライアント
+;;
+;; See also:
+;; https://microsoft.github.io/language-server-protocol/
+;; https://langserver.org/
+;; --------------------------------------------------------------------------
+(leaf lsp-mode
+  :ensure t
+  :hook (;; 有効化は必要最小限にとどめる
+         (css-mode-hook . lsp)
+         (java-mode-hook . lsp)
+         (js-mode-hook . lsp)
+         (js2-mode-hook . lsp)
+         (json-mode-hook . lsp)
+         (markdown-mode-hook . lsp)
+         (php-mode-hook . lsp)
+         (scss-mode-hook . lsp)
+         (typescript-mode-hook . lsp)
+         (web-mode-hook . lsp)
+         (yaml-mode-hook . lsp))
+  :custom (;; ローカル環境にのみ保存
+           (lsp-session-file . "~/.emacs.lsp-session")
+           ;; LSP サーバからのファイル監視要求を無視
+           ;;
+           ;; GNU Emacs の仕様では 1024 - 50 = 974 個以上のファイル監視を
+           ;; 登録できない
+           ;; LSP サーバによっては大量のファイル監視要求を行うため、意図的に無視
+           ;;
+           ;; See also:
+           ;; https://www.reddit.com/r/emacs/comments/mq2znn/no_file_descriptors_left/
+           ;; https://apple.stackexchange.com/a/418699
+           ;; https://github.com/emacs-mirror/emacs/blob/0008003c3e466269074001d637cda872d6fee9be/src/kqueue.c#L387-L401
+           (lsp-enable-file-watchers . nil)
+           (lsp-eldoc-render-all . t)
+           (lsp-headerline-breadcrumb-enable . nil)
+           (lsp-signature-doc-lines . t)
+           (lsp-progress-function . 'ignore)
+           (lsp-warn-no-matched-clients . nil)
+           ;; For ESLint
+           ;;
+           ;; Enable ESLint flat config
+           ;;
+           ;; See also:
+           ;; https://discord.com/channels/789885435026604033/1167077517157470278/1174364060712714310
+           ;; https://github.com/microsoft/vscode-eslint/issues/1518#issuecomment-1319753092
+           (lsp-eslint-experimental . '((useFlatConfig . true)))))
+
+
+;; --------------------------------------------------------------------------
+;; 補完候補一覧の側に項目情報を表示
+;; --------------------------------------------------------------------------
+(leaf marginalia
+  :ensure t
+  :custom ((marginalia-field-width . 200)
+           (marginalia-max-relative-age . most-positive-fixnum))
+  :global-minor-mode t)
+
+
+;; --------------------------------------------------------------------------
+;; ローマ字入力から日本語をインクリメンタル検索
+;; --------------------------------------------------------------------------
+(leaf migemo
+  :leaf-defer nil
+  :after exec-path-from-shell
+  :ensure t
+  :require t
+  :custom `(;; C/Migemo 利用設定
+            (migemo-command . ,(executable-find "cmigemo"))
+            (migemo-options . '("-q" "--emacs"))
+            ;; 空白文字と認識させる対象を広げる
+            (migemo-white-space-regexp . "[[:space:]\s-]*")
+            ;; ユーザ別基礎ディレクトリは設定ディレクトリ内にまとめる
+            (migemo-directory . ,(convert-standard-filename "~"))
+            ;; `migemo' 側で定義されている `isearch' 関連キーバインドを使わせない
+            ;; ミニバッファ内で `yank' できない現象が発生する問題の対策
+            (migemo-use-default-isearch-keybinding . nil)
+            ;; 辞書ファイルはデフォルトのものを利用
+            (migemo-dictionary . ,(convert-standard-filename
+                                   (if (member system-type '(ms-dos windows-nt))
+                                       "C:/programs/cmigemo/share/migemo/utf-8/migemo-dict"
+                                     "/usr/local/share/migemo/utf-8/migemo-dict")))
+            (migemo-user-dictionary . nil)
+            (migemo-regex-dictionary . nil)
+            ;; 辞書エンコーディングを明示
+            (migemo-coding-system . 'utf-8-unix)
+            ;; キャッシュを使わせる
+            (migemo-use-pattern-alist . t)
+            (migemo-use-frequent-pattern-alist . t)
+            (migemo-pattern-alist-length . 1024)
+            ;; ローカル環境にのみ保存
+            (migemo-pattern-alist-file . "~/.emacs.migemo-pattern")
+            (migemo-frequent-pattern-alist-file . "~/.emacs.migemo-frequent"))
+  :config
+  (migemo-init))
+
+
+;; --------------------------------------------------------------------------
+;; 無順序スペース区切り補完
+;; --------------------------------------------------------------------------
+(leaf orderless
+  :ensure t
+  :require t
+  :custom ((completion-styles . '(orderless)))
+  :config
+  ;; `migemo' 利用可能時
   ;;
   ;; See also:
-  ;; https://microsoft.github.io/language-server-protocol/
-  ;; https://langserver.org/
-  ;; --------------------------------------------------------------------------
-  (leaf lsp-mode
-    :ensure t
-    :hook (;; 有効化は必要最小限にとどめる
-           (css-mode-hook . lsp)
-           (java-mode-hook . lsp)
-           (js-mode-hook . lsp)
-           (js2-mode-hook . lsp)
-           (json-mode-hook . lsp)
-           (markdown-mode-hook . lsp)
-           (php-mode-hook . lsp)
-           (scss-mode-hook . lsp)
-           (typescript-mode-hook . lsp)
-           (web-mode-hook . lsp)
-           (yaml-mode-hook . lsp))
-    :custom (;; ローカル環境にのみ保存
-             (lsp-session-file . "~/.emacs.lsp-session")
-             ;; LSP サーバからのファイル監視要求を無視
-             ;;
-             ;; GNU Emacs の仕様では 1024 - 50 = 974 個以上のファイル監視を
-             ;; 登録できない
-             ;; LSP サーバによっては大量のファイル監視要求を行うため、意図的に無視
-             ;;
-             ;; See also:
-             ;; https://www.reddit.com/r/emacs/comments/mq2znn/no_file_descriptors_left/
-             ;; https://apple.stackexchange.com/a/418699
-             ;; https://github.com/emacs-mirror/emacs/blob/0008003c3e466269074001d637cda872d6fee9be/src/kqueue.c#L387-L401
-             (lsp-enable-file-watchers . nil)
-             (lsp-eldoc-render-all . t)
-             (lsp-headerline-breadcrumb-enable . nil)
-             (lsp-signature-doc-lines . t)
-             (lsp-progress-function . 'ignore)
-             (lsp-warn-no-matched-clients . nil)
-             ;; For ESLint
-             ;;
-             ;; Enable ESLint flat config
-             ;;
-             ;; See also:
-             ;; https://discord.com/channels/789885435026604033/1167077517157470278/1174364060712714310
-             ;; https://github.com/microsoft/vscode-eslint/issues/1518#issuecomment-1319753092
-             (lsp-eslint-experimental . '((useFlatConfig . true)))))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 補完候補一覧の側に項目情報を表示
-  ;; --------------------------------------------------------------------------
-  (leaf marginalia
-    :ensure t
-    :custom ((marginalia-field-width . 200)
-             (marginalia-max-relative-age . most-positive-fixnum))
-    :global-minor-mode t)
-
-
-  ;; --------------------------------------------------------------------------
-  ;; ローマ字入力から日本語をインクリメンタル検索
-  ;; --------------------------------------------------------------------------
-  (leaf migemo
-    :leaf-defer nil
-    :after exec-path-from-shell
-    :ensure t
-    :require t
-    :custom `(;; C/Migemo 利用設定
-              (migemo-command . ,(executable-find "cmigemo"))
-              (migemo-options . '("-q" "--emacs"))
-              ;; 空白文字と認識させる対象を広げる
-              (migemo-white-space-regexp . "[[:space:]\s-]*")
-              ;; ユーザ別基礎ディレクトリは設定ディレクトリ内にまとめる
-              (migemo-directory . ,(convert-standard-filename "~"))
-              ;; `migemo' 側で定義されている `isearch' 関連キーバインドを使わせない
-              ;; ミニバッファ内で `yank' できない現象が発生する問題の対策
-              (migemo-use-default-isearch-keybinding . nil)
-              ;; 辞書ファイルはデフォルトのものを利用
-              (migemo-dictionary . ,(convert-standard-filename
-                                     (if (member system-type '(ms-dos windows-nt))
-                                         "C:/programs/cmigemo/share/migemo/utf-8/migemo-dict"
-                                       "/usr/local/share/migemo/utf-8/migemo-dict")))
-              (migemo-user-dictionary . nil)
-              (migemo-regex-dictionary . nil)
-              ;; 辞書エンコーディングを明示
-              (migemo-coding-system . 'utf-8-unix)
-              ;; キャッシュを使わせる
-              (migemo-use-pattern-alist . t)
-              (migemo-use-frequent-pattern-alist . t)
-              (migemo-pattern-alist-length . 1024)
-              ;; ローカル環境にのみ保存
-              (migemo-pattern-alist-file . "~/.emacs.migemo-pattern")
-              (migemo-frequent-pattern-alist-file . "~/.emacs.migemo-frequent"))
-    :config
-    (migemo-init))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 無順序スペース区切り補完
-  ;; --------------------------------------------------------------------------
+  ;; https://nyoho.jp/diary/?date=20210615
   (leaf orderless
-    :ensure t
-    :require t
-    :custom ((completion-styles . '(orderless)))
+    :after migemo
     :config
-    ;; `migemo' 利用可能時
-    ;;
-    ;; See also:
-    ;; https://nyoho.jp/diary/?date=20210615
-    (leaf orderless
-      :after migemo
-      :config
-      (defun my-orderless-migemo (component)
-        "Match COMPONENT as `migemo'."
-        (let ((pattern (migemo-get-pattern component)))
-          (condition-case nil
-              (progn (string-match-p pattern "") pattern)
-            (invalid-regexp nil))))
+    (defun my-orderless-migemo (component)
+      "Match COMPONENT as `migemo'."
+      (let ((pattern (migemo-get-pattern component)))
+        (condition-case nil
+            (progn (string-match-p pattern "") pattern)
+          (invalid-regexp nil))))
 
-      (add-to-list 'orderless-matching-styles #'my-orderless-migemo t)))
+    (add-to-list 'orderless-matching-styles #'my-orderless-migemo t)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; コードフォーマッタ
-  ;; --------------------------------------------------------------------------
-  (leaf prettier
-    :ensure t
-    :custom ((prettier-lighter . nil))
-    :hook ((after-init-hook . global-prettier-mode)))
+;; --------------------------------------------------------------------------
+;; コードフォーマッタ
+;; --------------------------------------------------------------------------
+(leaf prettier
+  :ensure t
+  :custom ((prettier-lighter . nil))
+  :hook ((after-init-hook . global-prettier-mode)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 汎用プロジェクト管理
-  ;; --------------------------------------------------------------------------
-  (leaf projectile
-    :ensure t
-    :require t
-    :custom `((projectile-enable-caching . t)
-              (projectile-completion-system . ',(cond ((featurep 'ido) 'ido)
-                                                      (t 'default)))
-              (projectile-keymap-prefix . ,(kbd "C-c C-p"))
-              ;; ローカル環境にのみ保存
-              (projectile-cache-file . "~/.emacs.projectile.cache")
-              (projectile-known-projects-file . "~/.emacs.projectile-bookmarks.eld"))
-    :global-minor-mode t)
+;; --------------------------------------------------------------------------
+;; 汎用プロジェクト管理
+;; --------------------------------------------------------------------------
+(leaf projectile
+  :ensure t
+  :require t
+  :custom `((projectile-enable-caching . t)
+            (projectile-completion-system . ',(cond ((featurep 'ido) 'ido)
+                                                    (t 'default)))
+            (projectile-keymap-prefix . ,(kbd "C-c C-p"))
+            ;; ローカル環境にのみ保存
+            (projectile-cache-file . "~/.emacs.projectile.cache")
+            (projectile-known-projects-file . "~/.emacs.projectile-bookmarks.eld"))
+  :global-minor-mode t)
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 自動カラー表示
-  ;; --------------------------------------------------------------------------
-  (leaf rainbow-mode
-    :after rainbow-mode
-    :config
-    (add-to-list 'rainbow-html-colors-major-mode-list 'scss-mode))
+;; --------------------------------------------------------------------------
+;; 自動カラー表示
+;; --------------------------------------------------------------------------
+(leaf rainbow-mode
+  :after rainbow-mode
+  :config
+  (add-to-list 'rainbow-html-colors-major-mode-list 'scss-mode))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; ファイル履歴保存
-  ;; --------------------------------------------------------------------------
-  (leaf recentf
-    :custom (;; 履歴保存数は絞る
-             (recentf-max-saved-items . 20)
-             ;; ローカル環境にのみ保存
-             (recentf-save-file . "~/.emacs.recentf.el")))
+;; --------------------------------------------------------------------------
+;; ファイル履歴保存
+;; --------------------------------------------------------------------------
+(leaf recentf
+  :custom (;; 履歴保存数は絞る
+           (recentf-max-saved-items . 20)
+           ;; ローカル環境にのみ保存
+           (recentf-save-file . "~/.emacs.recentf.el")))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; ミニバッファの履歴を残す
-  ;; --------------------------------------------------------------------------
-  (leaf savehist
-    :custom (;; 履歴保存数は絞る
-             (history-length . 100)
-             ;; ローカル環境にのみ保存
-             (savehist-file . "~/.emacs.savehist.el"))
-    :global-minor-mode t)
+;; --------------------------------------------------------------------------
+;; ミニバッファの履歴を残す
+;; --------------------------------------------------------------------------
+(leaf savehist
+  :custom (;; 履歴保存数は絞る
+           (history-length . 100)
+           ;; ローカル環境にのみ保存
+           (savehist-file . "~/.emacs.savehist.el"))
+  :global-minor-mode t)
 
 
-  ;; --------------------------------------------------------------------------
-  ;; ファイルごとにカーソル位置を保存
-  ;; --------------------------------------------------------------------------
-  (leaf saveplace
-    :require t
-    :custom (;; ローカル環境にのみ保存
-             (save-place-file . "~/.emacs.saveplace.el"))
-    :global-minor-mode save-place-mode)
+;; --------------------------------------------------------------------------
+;; ファイルごとにカーソル位置を保存
+;; --------------------------------------------------------------------------
+(leaf saveplace
+  :require t
+  :custom (;; ローカル環境にのみ保存
+           (save-place-file . "~/.emacs.saveplace.el"))
+  :global-minor-mode save-place-mode)
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 基礎編集コマンド集
-  ;; --------------------------------------------------------------------------
-  (leaf simple
-    ;; 暫定マークを使用
-    :global-minor-mode transient-mark-mode)
+;; --------------------------------------------------------------------------
+;; 基礎編集コマンド集
+;; --------------------------------------------------------------------------
+(leaf simple
+  ;; 暫定マークを使用
+  :global-minor-mode transient-mark-mode)
 
 
-  ;; --------------------------------------------------------------------------
-  ;; 各種カッコ関連機能拡張
-  ;; --------------------------------------------------------------------------
-  (leaf smartparens
-    :ensure t
-    :require t
-    :custom ((sp-show-pair-from-inside . t)
-             (sp-undo-pairs-separately . t))
-    :config
-    ;; 公式デフォルト設定
-    (leaf smartparens-config
-      :after smartparens
-      :require t)
-    :global-minor-mode (show-smartparens-global-mode smartparens-global-mode))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 同時置換
-  ;; --------------------------------------------------------------------------
-  (leaf substitute
-    :ensure t
-    :bind (("C-M-b" . substitute-target-in-buffer))
-    :custom ((substitute-highlight . t)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; ツールチップ
-  ;; --------------------------------------------------------------------------
-  (leaf tooltip
-    :config
-    ;; 非表示
-    (tooltip-mode -1))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; `redo' 追加
-  ;; --------------------------------------------------------------------------
-  (leaf undo-fu
-    :ensure t
-    :require t
-    :bind (("C-/" . undo-fu-only-undo)
-           ("C-?" . undo-fu-only-redo)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 垂直インタラクティブ補完
-  ;; --------------------------------------------------------------------------
-  (leaf vertico
-    :ensure t
-    :custom ((vertico-count . 20)
-             (vertico-cycle . t)
-             (vertico-sort-function . #'vertico-sort-history-alpha))
-    :global-minor-mode t)
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 巨大ファイル表示
-  ;; --------------------------------------------------------------------------
-  (leaf vlf
-    :ensure t
-    :require vlf-setup
-    :bind ((:vlf-mode-map
-            ("C-c C-v" . vlf-prefix-map)))
-    :custom `((vlf-batch-size . ,(* 1 1024 1024)) ;; 1MB
-              (vlf-application . 'dont-ask)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; 空白文字強調
-  ;; --------------------------------------------------------------------------
-  (leaf whitespace
-    :hook ((after-change-major-mode-hook . my-whitespace-mode-initialize))
-    :custom (;; 「不正」位置の空白文字のみ強調
-             (whitespace-style . '(empty
-                                   face
-                                   newline
-                                   newline-mark
-                                   space-after-tab
-                                   space-before-tab
-                                   space-mark ; HARD SPACE の ON/OFF も含む
-                                   spaces ; HARD SPACE の ON/OFF も含む
-                                   tab-mark
-                                   tabs
-                                   trailing))
-             ;; ----------------------
-             ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調表示
-             ;;
-             ;; 表示テスト:
-             ;;   U+0009: 「	」
-             ;;   U+00A0: 「 」
-             ;;   U+3000: 「　」
-             ;; ----------------------
-             (whitespace-hspace-regexp . "\\(\u00A0\\|\u08A0\\|\u0920\\|\u0E20\\|\u0F20\\|\u3000\\)+")
-             (whitespace-trailing-regexp . "\\([\t \u00A0\u3000]+\\)$")
-             ;; 行カラム最大値は `fill-column' を参照させる
-             (whitespace-line-column . nil)
-             ;; ----------------------
-             ;; HACK: 半角空白 (U+0020) を強調しないようにする
-             ;;
-             ;; 表示テスト:
-             ;;   U+0020: 「 」
-             ;; ----------------------
-             (whitespace-display-mappings . '(;; EOL -> DOLLAR SIGN
-                                              (newline-mark ?\n [?$ ?\n])
-                                              ;; TAB -> CURRENCY SIGN
-                                              (space-mark ?\u00A0 [?¤] [?_])
-                                              ;; IDEOGRAPHIC SPACE -> WHITE SQUARE
-                                              (space-mark ?\u3000 [?\u25a1] [?_ ?_])
-                                              ;; Tab -> RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
-                                              (tab-mark ?\t [?» ?\t] [?\\ ?\t]))))
-    :custom-face ((whitespace-space . '((t
-                                         (:background nil)))))
-    :init
-    (defun my-whitespace-mode-initialize ()
-      "Initialize `whitespace'."
-      ;; ------------------------------
-      ;; HACK: 一部メジャーモードでは無効化
-      ;; ------------------------------
-      (with-eval-after-load 'whitespace
-        (if (member major-mode '(;; 降順ソート
-                                 lisp-interaction-mode
-                                 ))
-            (whitespace-mode -1))))
-    :global-minor-mode global-whitespace-mode)
-
-
-  ;; --------------------------------------------------------------------------
-  ;; ウインドウの状態履歴を undo/redo
-  ;; --------------------------------------------------------------------------
-  (leaf winner
-    :global-minor-mode t)
-
-
-  ;; --------------------------------------------------------------------------
-  ;; スニペット挿入
-  ;; --------------------------------------------------------------------------
-  (leaf yasnippet
-    :ensure t
-    :global-minor-mode yas-global-mode)
-
-
-  ;; --------------------------------------------------------------------------
-  ;; `yasnippet' 公式コレクション
-  ;; --------------------------------------------------------------------------
-  (leaf yasnippet-snippets
-    :ensure t
-    :after yasnippet
+;; --------------------------------------------------------------------------
+;; 各種カッコ関連機能拡張
+;; --------------------------------------------------------------------------
+(leaf smartparens
+  :ensure t
+  :require t
+  :custom ((sp-show-pair-from-inside . t)
+           (sp-undo-pairs-separately . t))
+  :config
+  ;; 公式デフォルト設定
+  (leaf smartparens-config
+    :after smartparens
     :require t)
-  ) ; End of *minor-mode
+  :global-minor-mode (show-smartparens-global-mode smartparens-global-mode))
+
+
+;; --------------------------------------------------------------------------
+;; 同時置換
+;; --------------------------------------------------------------------------
+(leaf substitute
+  :ensure t
+  :bind (("C-M-b" . substitute-target-in-buffer))
+  :custom ((substitute-highlight . t)))
+
+
+;; --------------------------------------------------------------------------
+;; ツールチップ
+;; --------------------------------------------------------------------------
+(leaf tooltip
+  :config
+  ;; 非表示
+  (tooltip-mode -1))
+
+
+;; --------------------------------------------------------------------------
+;; `redo' 追加
+;; --------------------------------------------------------------------------
+(leaf undo-fu
+  :ensure t
+  :require t
+  :bind (("C-/" . undo-fu-only-undo)
+         ("C-?" . undo-fu-only-redo)))
+
+
+;; --------------------------------------------------------------------------
+;; 垂直インタラクティブ補完
+;; --------------------------------------------------------------------------
+(leaf vertico
+  :ensure t
+  :custom ((vertico-count . 20)
+           (vertico-cycle . t)
+           (vertico-sort-function . #'vertico-sort-history-alpha))
+  :global-minor-mode t)
+
+
+;; --------------------------------------------------------------------------
+;; 巨大ファイル表示
+;; --------------------------------------------------------------------------
+(leaf vlf
+  :ensure t
+  :require vlf-setup
+  :bind ((:vlf-mode-map
+          ("C-c C-v" . vlf-prefix-map)))
+  :custom `((vlf-batch-size . ,(* 1 1024 1024)) ;; 1MB
+            (vlf-application . 'dont-ask)))
+
+
+;; --------------------------------------------------------------------------
+;; 空白文字強調
+;; --------------------------------------------------------------------------
+(leaf whitespace
+  :hook ((after-change-major-mode-hook . my-whitespace-mode-initialize))
+  :custom (;; 「不正」位置の空白文字のみ強調
+           (whitespace-style . '(empty
+                                 face
+                                 newline
+                                 newline-mark
+                                 space-after-tab
+                                 space-before-tab
+                                 space-mark ; HARD SPACE の ON/OFF も含む
+                                 spaces ; HARD SPACE の ON/OFF も含む
+                                 tab-mark
+                                 tabs
+                                 trailing))
+           ;; ----------------------
+           ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調表示
+           ;;
+           ;; 表示テスト:
+           ;;   U+0009: 「	」
+           ;;   U+00A0: 「 」
+           ;;   U+3000: 「　」
+           ;; ----------------------
+           (whitespace-hspace-regexp . "\\(\u00A0\\|\u08A0\\|\u0920\\|\u0E20\\|\u0F20\\|\u3000\\)+")
+           (whitespace-trailing-regexp . "\\([\t \u00A0\u3000]+\\)$")
+           ;; 行カラム最大値は `fill-column' を参照させる
+           (whitespace-line-column . nil)
+           ;; ----------------------
+           ;; HACK: 半角空白 (U+0020) を強調しないようにする
+           ;;
+           ;; 表示テスト:
+           ;;   U+0020: 「 」
+           ;; ----------------------
+           (whitespace-display-mappings . '(;; EOL -> DOLLAR SIGN
+                                            (newline-mark ?\n [?$ ?\n])
+                                            ;; TAB -> CURRENCY SIGN
+                                            (space-mark ?\u00A0 [?¤] [?_])
+                                            ;; IDEOGRAPHIC SPACE -> WHITE SQUARE
+                                            (space-mark ?\u3000 [?\u25a1] [?_ ?_])
+                                            ;; Tab -> RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
+                                            (tab-mark ?\t [?» ?\t] [?\\ ?\t]))))
+  :custom-face ((whitespace-space . '((t
+                                       (:background nil)))))
+  :init
+  (defun my-whitespace-mode-initialize ()
+    "Initialize `whitespace'."
+    ;; ------------------------------
+    ;; HACK: 一部メジャーモードでは無効化
+    ;; ------------------------------
+    (with-eval-after-load 'whitespace
+      (if (member major-mode '(;; 降順ソート
+                               lisp-interaction-mode
+                               ))
+          (whitespace-mode -1))))
+  :global-minor-mode global-whitespace-mode)
+
+
+;; --------------------------------------------------------------------------
+;; ウインドウの状態履歴を undo/redo
+;; --------------------------------------------------------------------------
+(leaf winner
+  :global-minor-mode t)
+
+
+;; --------------------------------------------------------------------------
+;; スニペット挿入
+;; --------------------------------------------------------------------------
+(leaf yasnippet
+  :ensure t
+  :global-minor-mode yas-global-mode)
+
+
+;; --------------------------------------------------------------------------
+;; `yasnippet' 公式コレクション
+;; --------------------------------------------------------------------------
+(leaf yasnippet-snippets
+  :ensure t
+  :after yasnippet
+  :require t)
 
 
 ;; ============================================================================
 ;; メジャーモード
 ;; ============================================================================
-(leaf *major-mode
+;; --------------------------------------------------------------------------
+;; Apache
+;; --------------------------------------------------------------------------
+(leaf apache-mode
+  :ensure t
+  :mode (("\\.conf\\'" . apache-mode))
   :config
-  ;; --------------------------------------------------------------------------
-  ;; Apache
-  ;; --------------------------------------------------------------------------
-  (leaf apache-mode
-    :ensure t
-    :mode (("\\.conf\\'" . apache-mode))
-    :config
-    (setq-local apache-indent-level 4))
+  (setq-local apache-indent-level 4))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; CSS
-  ;; --------------------------------------------------------------------------
-  (leaf css-mode
-    :hook ((css-mode-hook . my-css-mode-initialize))
-    :custom ((css-indent-offset . 2))
-    :init
-    (defun my-css-mode-initialize ()
-      "Initialize `css-mode' before file load."
-      (setq-local indent-tabs-mode nil)
+;; --------------------------------------------------------------------------
+;; CSS
+;; --------------------------------------------------------------------------
+(leaf css-mode
+  :hook ((css-mode-hook . my-css-mode-initialize))
+  :custom ((css-indent-offset . 2))
+  :init
+  (defun my-css-mode-initialize ()
+    "Initialize `css-mode' before file load."
+    (setq-local indent-tabs-mode nil)
 
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; Docker's Dockerfile
-  ;; --------------------------------------------------------------------------
-  (leaf dockerfile-mode
-    :ensure t
-    :hook ((dockerfile-mode-hook . my-dockerfile-mode-initialize))
-    :init
-    (defun my-dockerfile-mode-initialize ()
-      "Initialize `dockerfile-mode' before file load."
-      (setq-local indent-tabs-mode nil)
-
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
 
 
-  ;; ----------------------------------------------------------------------------
-  ;; GraphQL
-  ;; ----------------------------------------------------------------------------
-  (leaf graphql-mode
-    :ensure t
-    :hook ((graphql-mode-hook . my-haml-mode-initialize))
-    :init
-    (defun my-graphql-mode-initialize ()
-      "Initialize `graphql-mode' before file load."
-      (setq-local indent-tabs-mode nil)
+;; --------------------------------------------------------------------------
+;; Docker's Dockerfile
+;; --------------------------------------------------------------------------
+(leaf dockerfile-mode
+  :ensure t
+  :hook ((dockerfile-mode-hook . my-dockerfile-mode-initialize))
+  :init
+  (defun my-dockerfile-mode-initialize ()
+    "Initialize `dockerfile-mode' before file load."
+    (setq-local indent-tabs-mode nil)
 
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
-
-
-  ;; ----------------------------------------------------------------------------
-  ;; Haml
-  ;; ----------------------------------------------------------------------------
-  (leaf haml-mode
-    :ensure t
-    :hook ((haml-mode-hook . my-haml-mode-initialize))
-    :init
-    (defun my-haml-mode-initialize ()
-      "Initialize `haml-mode' before file load."
-      (setq-local indent-tabs-mode nil)
-
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; Emacs Lisp インタラクション
-  ;; --------------------------------------------------------------------------
-  (leaf ielm
-    :hook ((ielm-mode-hook . my-ielm-mode-initialize))
-    :init
-    (defun my-ielm-mode-initialize ()
-      "Initialize `ielm' major mode before file load."
-      (setq-local indent-tabs-mode nil)
-      (setq-local tab-width 8)))
+;; ----------------------------------------------------------------------------
+;; GraphQL
+;; ----------------------------------------------------------------------------
+(leaf graphql-mode
+  :ensure t
+  :hook ((graphql-mode-hook . my-haml-mode-initialize))
+  :init
+  (defun my-graphql-mode-initialize ()
+    "Initialize `graphql-mode' before file load."
+    (setq-local indent-tabs-mode nil)
+
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; Java
-  ;; --------------------------------------------------------------------------
-  (leaf java-mode
-    :hook ((java-mode-hook . my-java-mode-initialize))
-    :init
-    (defun my-java-mode-initialize ()
-      "Initialize `java-mode' before file load."
-      (setq-local indent-tabs-mode nil)
+;; ----------------------------------------------------------------------------
+;; Haml
+;; ----------------------------------------------------------------------------
+(leaf haml-mode
+  :ensure t
+  :hook ((haml-mode-hook . my-haml-mode-initialize))
+  :init
+  (defun my-haml-mode-initialize ()
+    "Initialize `haml-mode' before file load."
+    (setq-local indent-tabs-mode nil)
 
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; JavaScript (Basic)
-  ;; --------------------------------------------------------------------------
-  (leaf js-mode
-    :hook ((js-mode-hook . my-js-mode-initialize))
-    :custom ((js-indent-level . 4)
-             (js-expr-indent-offset . 0)
-             (js-paren-indent-offset . 0)
-             (js-square-indent-offset . 0)
-             (js-curly-indent-offset . 0)
-             (js-switch-indent-offset . 0)
-             (js-flat-functions . nil)
-             (js-indent-align-list-continuation . t)
-             (js-js-switch-tabs . t)
-             (js-indent-first-init . 'dynamic)
-             (js-chain-indent . t))
-    :init
-    (defun my-js-mode-initialize ()
-      "Initialize `js-mode' before file load."
-      (setq-local indent-tabs-mode nil)
-
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; JavaScript (Expert)
-  ;; --------------------------------------------------------------------------
-  (leaf js2-mode
-    :ensure t
-    :mode (("\\.es[0-9]\\'" . js2-mode)
-           ("\\.[cm]?jsx?\\'" . js2-mode)
-           ("\\.pac\\'" . js2-mode))
-    :hook ((js2-mode-hook . my-js2-mode-initialize))
-    :custom ((js2-highlight-level . 3) ; すべての構文強調を有効化
-             (js2-bounce-indent-p . nil)
-             (js2-idle-timer-delay . 0.25)
-             (js2-dynamic-idle-timer-adjust . 0)
-             (js2-concat-multiline-strings . t)
-             ;; 文法チェック関連
-             ;;
-             ;; 他ツールに任せるため、すべて無効化
-             (js2-mode-show-parse-errors . nil)
-             (js2-mode-assume-strict . nil)
-             (js2-mode-show-strict-warnings . nil)
-             (js2-strict-trailing-comma-warning . nil)
-             (js2-strict-missing-semi-warning . nil)
-             (js2-missing-semi-one-line-override . nil)
-             (js2-strict-inconsistent-return-warning . nil)
-             (js2-strict-cond-assign-warning . nil)
-             (js2-strict-var-redeclaration-warning . nil)
-             (js2-strict-var-hides-function-arg-warning . nil)
-             ;; その他
-             (js2-skip-preprocessor-directives . t)
-             (js2-language-version . 200)
-             (js2-instanceof-has-side-effects . nil)
-             (js2-move-point-on-right-click . nil) ; 使わない
-             (js2-allow-rhino-new-expr-initializer . nil) ; 使わない
-             (js2-allow-member-expr-as-function-name . nil)
-             (js2-include-browser-externs . t)
-             (js2-include-rhino-externs . nil)
-             (js2-include-node-externs . nil)
-             (js2-mode-indent-inhibit-undo . nil)
-             (js2-mode-indent-ignore-first-tab . nil)
-             (js2-highlight-external-variables . t)
-             (js2-warn-about-unused-function-arguments . nil)
-             ;; JSLint
-             ;;
-             ;; 他ツールに任せるため、すべて無効化
-             (js2-include-jslint-globals . nil)
-             (js2-include-jslint-declaration-externs . nil))
-    :init
-    (defun my-js2-mode-initialize ()
-      "Initialize `js2-mode' before file load."
-      (setq-local indent-tabs-mode nil)
-
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
+;; --------------------------------------------------------------------------
+;; Emacs Lisp インタラクション
+;; --------------------------------------------------------------------------
+(leaf ielm
+  :hook ((ielm-mode-hook . my-ielm-mode-initialize))
+  :init
+  (defun my-ielm-mode-initialize ()
+    "Initialize `ielm' major mode before file load."
+    (setq-local indent-tabs-mode nil)
+    (setq-local tab-width 8)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; JSON
-  ;; --------------------------------------------------------------------------
-  (leaf json-mode
-    :ensure t
-    :mode (("\\.json\\'" . json-mode))
-    :hook ((json-mode-hook . my-json-mode-initialize))
-    :init
-    (defun my-json-mode-initialize ()
-      "Initialize `json-mode' before file load."
-      (setq-local indent-tabs-mode nil)
-      (setq-local tab-width 2)
-      (setq-local js-indent-level tab-width)
+;; --------------------------------------------------------------------------
+;; Java
+;; --------------------------------------------------------------------------
+(leaf java-mode
+  :hook ((java-mode-hook . my-java-mode-initialize))
+  :init
+  (defun my-java-mode-initialize ()
+    "Initialize `java-mode' before file load."
+    (setq-local indent-tabs-mode nil)
 
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab"))
-                   (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
-                   (tab-width-number (if (and tab-width-number-data
-                                              (stringp tab-width-number-data))
-                                         (string-to-number tab-width-number-data)
-                                       tab-width)))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style))
-              (if (not (equal tab-width tab-width-number))
-                  (setq-local tab-width tab-width-number))
-              (if (not (equal js-indent-level tab-width))
-                  (setq-local js-indent-level tab-width)))))))
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; Markdown
-  ;; --------------------------------------------------------------------------
-  (leaf markdown-mode
-    :ensure t
-    :hook ((markdown-mode-hook . my-markdown-mode-initialize))
-    :custom `((markdown-command . ,(or (executable-find "github-markup")
-                                       (executable-find "markdown")
-                                       "markdown"))
-              (markdown-command-needs-filename . ,(executable-find "github-markup"))
-              (markdown-coding-system . 'utf-8-unix)
-              ;; プレビュー用に生成した実 HTML ファイルの残存を防ぐ
-              (markdown-live-preview-delete-export . 'delete-on-export))
-    :init
-    (defun my-markdown-mode-initialize ()
-      "Initialize `markdown-mode' before file load."
-      (setq-local indent-tabs-mode nil)
+;; --------------------------------------------------------------------------
+;; JavaScript (Basic)
+;; --------------------------------------------------------------------------
+(leaf js-mode
+  :hook ((js-mode-hook . my-js-mode-initialize))
+  :custom ((js-indent-level . 4)
+           (js-expr-indent-offset . 0)
+           (js-paren-indent-offset . 0)
+           (js-square-indent-offset . 0)
+           (js-curly-indent-offset . 0)
+           (js-switch-indent-offset . 0)
+           (js-flat-functions . nil)
+           (js-indent-align-list-continuation . t)
+           (js-js-switch-tabs . t)
+           (js-indent-first-init . 'dynamic)
+           (js-chain-indent . t))
+  :init
+  (defun my-js-mode-initialize ()
+    "Initialize `js-mode' before file load."
+    (setq-local indent-tabs-mode nil)
 
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style))))))
-    :config
-    ;; プレーンテキストファイルは除外
-    (setq auto-mode-alist
-          (delete '("\\.text\\'" . markdown-mode) auto-mode-alist)))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; Mustache
-  ;;
-  ;; See also:
-  ;; https://mustache.github.io/
-  ;; --------------------------------------------------------------------------
-  (leaf mustache-mode
-    :ensure t
-    :hook ((mustache-mode-hook . my-mustache-mode-initialize))
-    :init
-    (defun my-mustache-mode-initialize ()
-      "Initialize `mustache-mode' before file load."
-      (setq-local indent-tabs-mode nil)
-
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; Org
-  ;; --------------------------------------------------------------------------
-  (leaf org
-    :bind (("C-c l" . org-store-link)
-           ("C-c a" . org-agenda)
-           ("C-c r" . org-capture))
-    :custom ((org-use-speed-commands . t)))
+;; --------------------------------------------------------------------------
+;; JavaScript (Expert)
+;; --------------------------------------------------------------------------
+(leaf js2-mode
+  :ensure t
+  :mode (("\\.es[0-9]\\'" . js2-mode)
+         ("\\.[cm]?jsx?\\'" . js2-mode)
+         ("\\.pac\\'" . js2-mode))
+  :hook ((js2-mode-hook . my-js2-mode-initialize))
+  :custom ((js2-highlight-level . 3) ; すべての構文強調を有効化
+           (js2-bounce-indent-p . nil)
+           (js2-idle-timer-delay . 0.25)
+           (js2-dynamic-idle-timer-adjust . 0)
+           (js2-concat-multiline-strings . t)
+           ;; 文法チェック関連
+           ;;
+           ;; 他ツールに任せるため、すべて無効化
+           (js2-mode-show-parse-errors . nil)
+           (js2-mode-assume-strict . nil)
+           (js2-mode-show-strict-warnings . nil)
+           (js2-strict-trailing-comma-warning . nil)
+           (js2-strict-missing-semi-warning . nil)
+           (js2-missing-semi-one-line-override . nil)
+           (js2-strict-inconsistent-return-warning . nil)
+           (js2-strict-cond-assign-warning . nil)
+           (js2-strict-var-redeclaration-warning . nil)
+           (js2-strict-var-hides-function-arg-warning . nil)
+           ;; その他
+           (js2-skip-preprocessor-directives . t)
+           (js2-language-version . 200)
+           (js2-instanceof-has-side-effects . nil)
+           (js2-move-point-on-right-click . nil) ; 使わない
+           (js2-allow-rhino-new-expr-initializer . nil) ; 使わない
+           (js2-allow-member-expr-as-function-name . nil)
+           (js2-include-browser-externs . t)
+           (js2-include-rhino-externs . nil)
+           (js2-include-node-externs . nil)
+           (js2-mode-indent-inhibit-undo . nil)
+           (js2-mode-indent-ignore-first-tab . nil)
+           (js2-highlight-external-variables . t)
+           (js2-warn-about-unused-function-arguments . nil)
+           ;; JSLint
+           ;;
+           ;; 他ツールに任せるため、すべて無効化
+           (js2-include-jslint-globals . nil)
+           (js2-include-jslint-declaration-externs . nil))
+  :init
+  (defun my-js2-mode-initialize ()
+    "Initialize `js2-mode' before file load."
+    (setq-local indent-tabs-mode nil)
+
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; PHP
-  ;; --------------------------------------------------------------------------
-  (leaf php-mode
-    :ensure t
-    :hook ((php-mode-hook . my-php-mode-initialize))
-    :init
-    (defun my-php-mode-initialize ()
-      "Initialize `php-mode' before file load."
-      (setq-local indent-tabs-mode nil)
+;; --------------------------------------------------------------------------
+;; JSON
+;; --------------------------------------------------------------------------
+(leaf json-mode
+  :ensure t
+  :mode (("\\.json\\'" . json-mode))
+  :hook ((json-mode-hook . my-json-mode-initialize))
+  :init
+  (defun my-json-mode-initialize ()
+    "Initialize `json-mode' before file load."
+    (setq-local indent-tabs-mode nil)
+    (setq-local tab-width 2)
+    (setq-local js-indent-level tab-width)
 
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; TypeScript
-  ;; --------------------------------------------------------------------------
-  (leaf typescript-mode
-    :ensure t
-    :mode (("\\.tsx?\\'" . typescript-mode))
-    :hook ((typescript-mode-hook . my-typescript-mode-initialize))
-    :init
-    (defun my-typescript-mode-initialize ()
-      "Initialize `typescript-mode' before file load."
-      (setq-local indent-tabs-mode nil)
-
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab"))
+                 (tab-width-number-data (gethash 'tab_width editorconfig-properties-hash))
+                 (tab-width-number (if (and tab-width-number-data
+                                            (stringp tab-width-number-data))
+                                       (string-to-number tab-width-number-data)
+                                     tab-width)))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style))
+            (if (not (equal tab-width tab-width-number))
+                (setq-local tab-width tab-width-number))
+            (if (not (equal js-indent-level tab-width))
+                (setq-local js-indent-level tab-width)))))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; Sass (extension: ".scss")
-  ;; --------------------------------------------------------------------------
-  (leaf scss-mode
-    :ensure t
-    :hook ((scss-mode-hook . my-scss-mode-initialize))
-    :custom (;; コンパイルは常に手動（保存時は何もしない）
-             ;; 各種ツール経由でコンパイルされうるため
-             (scss-compile-at-save . nil))
-    :init
-    (defun my-scss-mode-initialize ()
-      "Initialize `scss-mode' before file load."
-      (setq-local indent-tabs-mode nil)
+;; --------------------------------------------------------------------------
+;; Markdown
+;; --------------------------------------------------------------------------
+(leaf markdown-mode
+  :ensure t
+  :hook ((markdown-mode-hook . my-markdown-mode-initialize))
+  :custom `((markdown-command . ,(or (executable-find "github-markup")
+                                     (executable-find "markdown")
+                                     "markdown"))
+            (markdown-command-needs-filename . ,(executable-find "github-markup"))
+            (markdown-coding-system . 'utf-8-unix)
+            ;; プレビュー用に生成した実 HTML ファイルの残存を防ぐ
+            (markdown-live-preview-delete-export . 'delete-on-export))
+  :init
+  (defun my-markdown-mode-initialize ()
+    "Initialize `markdown-mode' before file load."
+    (setq-local indent-tabs-mode nil)
 
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style))))))
+  :config
+  ;; プレーンテキストファイルは除外
+  (setq auto-mode-alist
+        (delete '("\\.text\\'" . markdown-mode) auto-mode-alist)))
 
 
-  ;; --------------------------------------------------------------------------
+;; --------------------------------------------------------------------------
+;; Mustache
+;;
+;; See also:
+;; https://mustache.github.io/
+;; --------------------------------------------------------------------------
+(leaf mustache-mode
+  :ensure t
+  :hook ((mustache-mode-hook . my-mustache-mode-initialize))
+  :init
+  (defun my-mustache-mode-initialize ()
+    "Initialize `mustache-mode' before file load."
+    (setq-local indent-tabs-mode nil)
+
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
+
+
+;; --------------------------------------------------------------------------
+;; Org
+;; --------------------------------------------------------------------------
+(leaf org
+  :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
+         ("C-c r" . org-capture))
+  :custom ((org-use-speed-commands . t)))
+
+
+;; --------------------------------------------------------------------------
+;; PHP
+;; --------------------------------------------------------------------------
+(leaf php-mode
+  :ensure t
+  :hook ((php-mode-hook . my-php-mode-initialize))
+  :init
+  (defun my-php-mode-initialize ()
+    "Initialize `php-mode' before file load."
+    (setq-local indent-tabs-mode nil)
+
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
+
+
+;; --------------------------------------------------------------------------
+;; TypeScript
+;; --------------------------------------------------------------------------
+(leaf typescript-mode
+  :ensure t
+  :mode (("\\.tsx?\\'" . typescript-mode))
+  :hook ((typescript-mode-hook . my-typescript-mode-initialize))
+  :init
+  (defun my-typescript-mode-initialize ()
+    "Initialize `typescript-mode' before file load."
+    (setq-local indent-tabs-mode nil)
+
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
+
+
+;; --------------------------------------------------------------------------
+;; Sass (extension: ".scss")
+;; --------------------------------------------------------------------------
+(leaf scss-mode
+  :ensure t
+  :hook ((scss-mode-hook . my-scss-mode-initialize))
+  :custom (;; コンパイルは常に手動（保存時は何もしない）
+           ;; 各種ツール経由でコンパイルされうるため
+           (scss-compile-at-save . nil))
+  :init
+  (defun my-scss-mode-initialize ()
+    "Initialize `scss-mode' before file load."
+    (setq-local indent-tabs-mode nil)
+
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
+
+
+;; --------------------------------------------------------------------------
+;; SGML
+;; --------------------------------------------------------------------------
+(leaf sgml-mode
+  :mode (("\\.sgml\\'" . html-mode))
+  :hook ((html-mode-hook . my-html-mode-initialize)
+         (sgml-mode-hook . my-sgml-mode-initialize))
+  :init
   ;; SGML
-  ;; --------------------------------------------------------------------------
-  (leaf sgml-mode
-    :mode (("\\.sgml\\'" . html-mode))
-    :hook ((html-mode-hook . my-html-mode-initialize)
-           (sgml-mode-hook . my-sgml-mode-initialize))
-    :init
-    ;; SGML
-    (defun my-sgml-mode-initialize ()
-      "Initialize `sgml-mode' before file load."
-      (setq-local indent-tabs-mode nil)
+  (defun my-sgml-mode-initialize ()
+    "Initialize `sgml-mode' before file load."
+    (setq-local indent-tabs-mode nil)
 
-      (when (featurep 'sgml-electric-tag-pair-mode)
-        (declare-function sgml-electric-tag-pair-mode "sgml-mode")
-        (sgml-electric-tag-pair-mode +1))
+    (when (featurep 'sgml-electric-tag-pair-mode)
+      (declare-function sgml-electric-tag-pair-mode "sgml-mode")
+      (sgml-electric-tag-pair-mode +1))
 
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style))))))
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style))))))
 
-    ;; (X)HTML
-    (defun my-html-mode-initialize ()
-      "Initialize `html-mode' before file load."
-      (setq-local indent-tabs-mode nil)
+  ;; (X)HTML
+  (defun my-html-mode-initialize ()
+    "Initialize `html-mode' before file load."
+    (setq-local indent-tabs-mode nil)
 
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; Terraform
-  ;; --------------------------------------------------------------------------
-  (leaf terraform-mode
-    :ensure t
-    :hook ((terraform-mode-hook . my-terraform-mode-initialize))
-    :init
-    (defun my-terraform-mode-initialize ()
-      "Initialize `terraform-mode' before file load."
-      (setq-local indent-tabs-mode nil)
+;; --------------------------------------------------------------------------
+;; Terraform
+;; --------------------------------------------------------------------------
+(leaf terraform-mode
+  :ensure t
+  :hook ((terraform-mode-hook . my-terraform-mode-initialize))
+  :init
+  (defun my-terraform-mode-initialize ()
+    "Initialize `terraform-mode' before file load."
+    (setq-local indent-tabs-mode nil)
 
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
-
-
-  ;; --------------------------------------------------------------------------
-  ;; TeX
-  ;; --------------------------------------------------------------------------
-  (leaf tex-mode
-    :hook ((tex-mode-hook . my-tex-mode-initialize))
-    :init
-    (defun my-tex-mode-initialize ()
-      "Initialize `tex-mode' before file load."
-      (setq-local truncate-lines nil)))
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; Text
-  ;; --------------------------------------------------------------------------
-  (leaf text-mode
-    :hook ((text-mode-hook . my-text-mode-initialize))
-    :init
-    (defun my-text-mode-initialize ()
-      "Initialize `text-mode' before file load."
-      (setq-local truncate-lines nil)))
+;; --------------------------------------------------------------------------
+;; TeX
+;; --------------------------------------------------------------------------
+(leaf tex-mode
+  :hook ((tex-mode-hook . my-tex-mode-initialize))
+  :init
+  (defun my-tex-mode-initialize ()
+    "Initialize `tex-mode' before file load."
+    (setq-local truncate-lines nil)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; Template Toolkit (tt, written by Perl)
-  ;;
-  ;; See also:
-  ;; http://tt2.org/
-  ;; --------------------------------------------------------------------------
-  (leaf tt-mode
-    :ensure t)
+;; --------------------------------------------------------------------------
+;; Text
+;; --------------------------------------------------------------------------
+(leaf text-mode
+  :hook ((text-mode-hook . my-text-mode-initialize))
+  :init
+  (defun my-text-mode-initialize ()
+    "Initialize `text-mode' before file load."
+    (setq-local truncate-lines nil)))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; Web
-  ;; --------------------------------------------------------------------------
-  (leaf web-mode
-    :ensure t
-    :mode (("\\.[sx]?html?\\'" . web-mode)
-           ("\\.njk\\'" . web-mode)
-           ("\\.vue\\'" . web-mode))
-    :hook ((web-mode-hook . my-web-mode-initialize))
-    :custom ((web-mode-block-padding . nil)
-             (web-mode-part-padding . nil)
-             (web-mode-script-padding . nil)
-             (web-mode-style-padding . nil)
-             (web-mode-attr-indent-offset . nil)
-             (web-mode-attr-value-indent-offset . nil)
-             (web-mode-markup-indent-offset . 0)
-             (web-mode-markup-comment-indent-offset . 0)
-             (web-mode-sql-indent-offset . 0)
-             (web-mode-enable-auto-indentation . nil)
-             (web-mode-enable-auto-closing . t)
-             (web-mode-enable-auto-pairing . t)
-             (web-mode-enable-auto-opening . nil)
-             (web-mode-enable-auto-quoting . nil)
-             (web-mode-enable-auto-expanding . t)
-             (web-mode-enable-control-block-indentation . nil)
-             (web-mode-enable-current-element-highlight . t)
-             (web-mode-enable-current-column-highlight . t)
-             (web-mode-enable-html-entities-fontification . t)
-             (web-mode-enable-block-face . t)
-             (web-mode-enable-part-face . t)
-             (web-mode-enable-inlays . t)
-             (web-mode-enable-sql-detection . t)
-             (web-mode-enable-element-content-fontification . t)
-             (web-mode-enable-element-tag-fontification . t))
-    :init
-    (defun my-web-mode-initialize ()
-      "Initialize `web-mode' before file load."
-      (setq-local indent-tabs-mode nil)
-
-      ;; Prettier 対応
-      (if (boundp prettier-mode)
-          (prettier-mode +1))
-
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style))))))
-    :config
-    ;; 確実に定義された後で追加
-    (add-to-list 'web-mode-comment-formats '("php" . "//"))
-    (add-to-list 'web-mode-comment-formats '("javascript" . "//")))
+;; --------------------------------------------------------------------------
+;; Template Toolkit (tt, written by Perl)
+;;
+;; See also:
+;; http://tt2.org/
+;; --------------------------------------------------------------------------
+(leaf tt-mode
+  :ensure t)
 
 
-  ;; --------------------------------------------------------------------------
-  ;; XML
-  ;; --------------------------------------------------------------------------
-  (leaf nxml-mode
-    :mode (("\\.xml\\'" . nxml-mode)
-           ("\\.plist\\'" . nxml-mode))
-    :hook ((nxml-mode-hook . my-nxml-mode-initialize))
-    :custom ((nxml-child-indent . 2)
-             (nxml-attribute-indent . 0)
-             (nxml-slash-auto-complete-flag . t)
-             (nxml-bind-meta-tab-to-complete-flag . t)
-             (nxml-sexp-element-flag . t)
-             (nxml-char-ref-display-glyph-flag . t))
-    :init
-    (defun my-nxml-mode-initialize ()
-      "Initialize `nxml-mode' before file load."
-      (setq-local indent-tabs-mode nil)
+;; --------------------------------------------------------------------------
+;; Web
+;; --------------------------------------------------------------------------
+(leaf web-mode
+  :ensure t
+  :mode (("\\.[sx]?html?\\'" . web-mode)
+         ("\\.njk\\'" . web-mode)
+         ("\\.vue\\'" . web-mode))
+  :hook ((web-mode-hook . my-web-mode-initialize))
+  :custom ((web-mode-block-padding . nil)
+           (web-mode-part-padding . nil)
+           (web-mode-script-padding . nil)
+           (web-mode-style-padding . nil)
+           (web-mode-attr-indent-offset . nil)
+           (web-mode-attr-value-indent-offset . nil)
+           (web-mode-markup-indent-offset . 0)
+           (web-mode-markup-comment-indent-offset . 0)
+           (web-mode-sql-indent-offset . 0)
+           (web-mode-enable-auto-indentation . nil)
+           (web-mode-enable-auto-closing . t)
+           (web-mode-enable-auto-pairing . t)
+           (web-mode-enable-auto-opening . nil)
+           (web-mode-enable-auto-quoting . nil)
+           (web-mode-enable-auto-expanding . t)
+           (web-mode-enable-control-block-indentation . nil)
+           (web-mode-enable-current-element-highlight . t)
+           (web-mode-enable-current-column-highlight . t)
+           (web-mode-enable-html-entities-fontification . t)
+           (web-mode-enable-block-face . t)
+           (web-mode-enable-part-face . t)
+           (web-mode-enable-inlays . t)
+           (web-mode-enable-sql-detection . t)
+           (web-mode-enable-element-content-fontification . t)
+           (web-mode-enable-element-tag-fontification . t))
+  :init
+  (defun my-web-mode-initialize ()
+    "Initialize `web-mode' before file load."
+    (setq-local indent-tabs-mode nil)
 
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
+    ;; Prettier 対応
+    (if (boundp prettier-mode)
+        (prettier-mode +1))
+
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style))))))
+  :config
+  ;; 確実に定義された後で追加
+  (add-to-list 'web-mode-comment-formats '("php" . "//"))
+  (add-to-list 'web-mode-comment-formats '("javascript" . "//")))
 
 
-  ;; --------------------------------------------------------------------------
-  ;; YAML
-  ;; --------------------------------------------------------------------------
-  (leaf yaml-mode
-    :ensure t
-    :hook ((yaml-mode-hook . my-yaml-mode-initialize))
-    :custom ((yaml-indent-offset . 2))
-    :init
-    (defun my-yaml-mode-initialize ()
-      "Initialize `yaml-mode' before file load."
-      (setq-local indent-tabs-mode nil)
+;; --------------------------------------------------------------------------
+;; XML
+;; --------------------------------------------------------------------------
+(leaf nxml-mode
+  :mode (("\\.xml\\'" . nxml-mode)
+         ("\\.plist\\'" . nxml-mode))
+  :hook ((nxml-mode-hook . my-nxml-mode-initialize))
+  :custom ((nxml-child-indent . 2)
+           (nxml-attribute-indent . 0)
+           (nxml-slash-auto-complete-flag . t)
+           (nxml-bind-meta-tab-to-complete-flag . t)
+           (nxml-sexp-element-flag . t)
+           (nxml-char-ref-display-glyph-flag . t))
+  :init
+  (defun my-nxml-mode-initialize ()
+    "Initialize `nxml-mode' before file load."
+    (setq-local indent-tabs-mode nil)
 
-      ;; EditorConfig 対応
-      (with-eval-after-load 'editorconfig
-        (if (hash-table-p editorconfig-properties-hash)
-            (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
-                   (indent-style (equal indent-style-data "tab")))
-              (if (not (equal indent-tabs-mode indent-style))
-                  (setq-local indent-tabs-mode indent-style)))))))
-  ) ; End of *major-mode
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
+
+
+;; --------------------------------------------------------------------------
+;; YAML
+;; --------------------------------------------------------------------------
+(leaf yaml-mode
+  :ensure t
+  :hook ((yaml-mode-hook . my-yaml-mode-initialize))
+  :custom ((yaml-indent-offset . 2))
+  :init
+  (defun my-yaml-mode-initialize ()
+    "Initialize `yaml-mode' before file load."
+    (setq-local indent-tabs-mode nil)
+
+    ;; EditorConfig 対応
+    (with-eval-after-load 'editorconfig
+      (if (hash-table-p editorconfig-properties-hash)
+          (let* ((indent-style-data (gethash 'indent_style editorconfig-properties-hash))
+                 (indent-style (equal indent-style-data "tab")))
+            (if (not (equal indent-tabs-mode indent-style))
+                (setq-local indent-tabs-mode indent-style)))))))
 
 
 ;; ============================================================================
