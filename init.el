@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-18T12:30:40+09:00>
+;; Time-stamp: <2023-12-18T20:07:56+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1506,17 +1506,17 @@
                                       ("TODO" . "#99ff99")
                                       ("NEXT" . "#99ff99")
                                       ("THEM" . "#99ff99")
-                                      ("PROG" . "#99ffff")
-                                      ("OKAY" . "#99ffff")
+                                      ("PROG" . "#00ffff")
+                                      ("OKAY" . "#00ffff")
                                       ("DONT" . "#ffffcc")
                                       ("FAIL" . "#ff0000")
                                       ("DONE" . "#00ff00")
-                                      ("NOTE"   . "#ffcc99")
-                                      ("KLUDGE" . "#ffcc99")
-                                      ("HACK"   . "#ffcc99")
-                                      ("TEMP"   . "#ffcc99")
-                                      ("FIXME"  . "#ffcccc")
-                                      ("XXX"   . "#ffcccc")
+                                      ("NOTE"   . "#ffccff")
+                                      ("KLUDGE" . "#ffccff")
+                                      ("HACK"   . "#ffccff")
+                                      ("TEMP"   . "#ffccff")
+                                      ("FIXME"  . "#ff0000")
+                                      ("XXX"   . "#ffccff")
                                       ("CAUTION" . "#ffff00")
                                       ("WARNING" . "#ff0000")
                                       ;; 追加
