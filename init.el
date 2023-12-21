@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-21T23:23:42+09:00>
+;; Time-stamp: <2023-12-22T03:08:54+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1420,6 +1420,25 @@
   ;;
   ;; 半透明化（前景も含む）
   (set-frame-parameter nil 'alpha '(90 . 80)))
+
+
+;; ----------------------------------------------------------------------------
+;; Google 翻訳
+;; ----------------------------------------------------------------------------
+(leaf google-translate
+  :ensure t
+  :bind (("C-c t t" . google-translate-at-point)
+         ("C-c t RET" . google-translate-smooth-translate))
+  :custom ((google-translate-output-destination . 'echo-area)
+           (google-translate-display-translation-phonetic . nil)
+           (google-translate-translation-to-kill-ring . t)
+           (google-translate-default-source-language . "en")
+           (google-translate-default-target-language . "ja")
+           (google-translate-translation-directions-alist . '(("ja" . "en")
+                                                              ("en" . "ja")
+                                                              ("ko" . "ja")
+                                                              ("zh-TW" . "ja")
+                                                              ("zh-CN" . "ja")))))
 
 
 ;; ----------------------------------------------------------------------------
