@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-19T00:26:06+09:00>
+;; Time-stamp: <2023-12-21T23:15:36+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -919,37 +919,6 @@
        :url "https://github.com/emacsmirror/bookmark-plus")
   :after bookmark
   :require t)
-
-
-;; --------------------------------------------------------------------------
-;; プログラマ向けネーミング辞書
-;; --------------------------------------------------------------------------
-(leaf codic
-  :ensure t
-  :bind (("C-c C-d" . codic))
-  :config
-  ;; --------------------------------
-  ;; HACK: 専用バッファをコマンドで `quit-window' させる
-  ;; --------------------------------
-  (unless (fboundp #'codic-view-kill)
-    ;; 専用ウインドウを `quit-window' する関数が
-    ;; 定義されていないなら追加
-    (defun my-codic-view-kill ()
-      "Quit `codic' window and bury its buffer."
-      (interactive)
-      (with-current-buffer (current-buffer)
-        (quit-window t)))
-
-    ;; 専用バッファでキーバインドを有効にするため、アドバイスを利用
-    ;; 専用 hook がないため
-    (defun my-codic-local-set-key (items)
-      "Set `local-set-key' for `codic' result buffer."
-      (with-current-buffer "*Codic Result*"
-        (local-set-key (kbd "q") #'my-codic-view-kill)))
-
-    (advice-add #'codic--view
-                :after
-                #'my-codic-local-set-key)))
 
 
 ;; --------------------------------------------------------------------------
