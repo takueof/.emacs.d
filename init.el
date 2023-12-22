@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-22T03:08:54+09:00>
+;; Time-stamp: <2023-12-22T16:49:42+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1678,7 +1678,12 @@
          (typescript-mode-hook . lsp)
          (web-mode-hook . lsp)
          (yaml-mode-hook . lsp))
-  :custom (;; ローカル環境にのみ保存
+  :custom (;;
+           ;; `lsp-mode.el'
+           ;;
+           (lsp-semantic-tokens-enable . t)
+           (lsp-restart . 'ignore)
+           ;; ローカル環境にのみ保存
            (lsp-session-file . "~/.emacs.lsp-session")
            ;; LSP サーバからのファイル監視要求を無視
            ;;
@@ -1692,11 +1697,38 @@
            ;; https://github.com/emacs-mirror/emacs/blob/0008003c3e466269074001d637cda872d6fee9be/src/kqueue.c#L387-L401
            (lsp-enable-file-watchers . nil)
            (lsp-eldoc-render-all . t)
+           (lsp-enable-indentation . nil)
+           (lsp-before-save-edits . nil)
            (lsp-headerline-breadcrumb-enable . nil)
            (lsp-signature-doc-lines . t)
            (lsp-progress-function . 'ignore)
+           (lsp-inlay-hint-enable . t)
+           (lsp-trim-trailing-whitespace . nil) ; Use `whitespace'
+           (lsp-insert-final-newline . nil) ; Use `editorconfig'
+           (lsp-trim-final-newlines . nil) ; Use `editorconfig'
            (lsp-warn-no-matched-clients . nil)
-           ;; For ESLint
+           (lsp-rename-use-prepare . nil)
+           ;;
+           ;; `lsp-javascript.el'
+           ;;
+           (lsp-typescript-format-enable . nil)
+           (lsp-javascript-format-enable . nil)
+           (lsp-typescript-surveys-enabled . nil)
+           (lsp-javascript-display-enum-member-value-hints . t)
+           (lsp-javascript-display-return-type-hints . t)
+           (lsp-javascript-display-parameter-type-hints . t)
+           (lsp-javascript-display-parameter-name-hints . "all")
+           (lsp-javascript-display-parameter-name-hints-when-argument-matches-name . t)
+           (lsp-javascript-display-property-declaration-type-hints . t)
+           (lsp-javascript-display-variable-type-hints . t)
+           (lsp-javascript-completions-complete-function-calls . t)
+           ;;
+           ;; `lsp-html.el'
+           ;;
+           (lsp-html-format-enable . nil) ; Use `prettier-mode'
+           (lsp-html-auto-closing-tags . nil) ; Use `web-mode'
+           ;;
+           ;; `lsp-eslint.el'
            ;;
            ;; Enable ESLint flat config
            ;;
