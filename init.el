@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-22T16:49:42+09:00>
+;; Time-stamp: <2023-12-23T01:58:00+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -524,9 +524,7 @@
          ;; カーソル位置にファイルパスを挿入
          ("C-c i p" . my-insert-file-path)
          ;; 一括エンコーディング変換
-         ("C-c RET f" . my-change-files-coding-system)
-         ;; 一括ファイル通知ウォッチ削除
-         ("C-c q" . my-file-notify-rm-all-watches))
+         ("C-c RET f" . my-change-files-coding-system))
   :config
   ;; <Backspace> と <DEL> を 交換
   (keyboard-translate ?\C-h ?\C-?)
@@ -816,17 +814,14 @@
            (vterm-clear-scrollback-when-clearing . t)
            (vterm-enable-manipulate-selection-data-by-osc52 . t)
            (vterm-copy-exclude-prompt . nil))
-  :init
-  (leaf vterm
-    :after vterm
-    :init
-    ;; WARNING: 確実に `vterm-keymap-exceptions' が存在する状態で、
-    ;;          「定義」ではなく「追加」しないと
-    ;;          他のキーバインドに影響が出てしまう
-    (add-to-list 'vterm-keymap-exceptions "C-S-b") ; for `windmove'
-    (add-to-list 'vterm-keymap-exceptions "C-S-f") ; for `windmove'
-    (add-to-list 'vterm-keymap-exceptions "C-S-n") ; for `windmove'
-    (add-to-list 'vterm-keymap-exceptions "C-S-p"))) ; for `windmove'
+  :defer-config
+  ;; WARNING: 確実に `vterm-keymap-exceptions' が存在する状態で、
+  ;;          「定義」ではなく「追加」しないと
+  ;;          他のキーバインドに影響が出てしまう
+  (add-to-list 'vterm-keymap-exceptions "C-S-b") ; for `windmove'
+  (add-to-list 'vterm-keymap-exceptions "C-S-f") ; for `windmove'
+  (add-to-list 'vterm-keymap-exceptions "C-S-n") ; for `windmove'
+  (add-to-list 'vterm-keymap-exceptions "C-S-p")) ; for `windmove'
 
 
 ;; ----------------------------------------------------------------------------
@@ -936,13 +931,12 @@
   (defun my-comint-mode-initialize ()
     "Initialize `comint-mode'."
     (setq-local comint-input-sender-no-newline t))
-
-  ;; --------------------------------
+  ;; ----------------------------------
   ;; プロセスごとのコーディングシステム変換表
   ;;
   ;; See also:
   ;; https://www.emacswiki.org/emacs/ShellMode#toc1
-  ;; --------------------------------
+  ;; ----------------------------------
   (add-to-list 'process-coding-system-alist
                '("[bB][aA][sS][hH]" . (undecided-dos . undecided-unix))))
 
@@ -1036,7 +1030,6 @@
                            (if (string-equal "finished" msg-text)
                                'compilation-mode-line-exit
                              'compilation-mode-line-fail)))))
-
   (add-to-list 'compilation-finish-functions 'my-compilation-message)
   :config
   ;; --------------------------------
@@ -1046,7 +1039,6 @@
     "Created buffer names by `compile' command."
     :group 'compilation
     :type '(list (repeat string)))
-
   ;; `process-status' と `exit-status' の値も得たいので、アドバイスを利用
   ;; `compilation-finish-functions' にフックした関数では `msg' しか
   ;; 参照できないため
@@ -1059,7 +1051,6 @@
                  ;; 改行文字が含まれうる問題を回避
                  (string-equal "finished" (string-trim msg))))
         (quit-window nil (get-buffer-window))))
-
   (advice-add #'compilation-handle-exit
               :after
               #'my-compilation-auto-quit-window))
@@ -1281,7 +1272,7 @@
 
 
 ;; ----------------------------------------------------------------------------
-;; Embark ⇔ Consult 連携
+;; Embark <=> Consult 連携
 ;; ----------------------------------------------------------------------------
  (leaf embark-consult
   :ensure t
@@ -1333,26 +1324,26 @@
            (flycheck-idle-change-delay . 0.25)
            (flycheck-disabled-checkers . '(javascript-jscs)))
   :config
-  ;; --------------------------------
+  ;; ----------------------------------
   ;; HACK: `flycheck-checker-error-threshold' 以上の項目が出現すると
   ;;       生成されうる警告バッファの出現を抑制
-  ;; --------------------------------
+  ;; ----------------------------------
   (with-eval-after-load 'warnings
     (add-to-list 'warning-suppress-log-types '(flycheck syntax-checker)))
 
-  ;; --------------------------------
+  ;; ----------------------------------
   ;; PATCH: Sass（.scss/.sass 両形式）チェック時にキャッシュを使わせない
-  ;; --------------------------------
+  ;; ----------------------------------
   (dolist (checker '(scss sass))
     (if (and (flycheck-registered-checker-p checker)
              (not (member "-C" (flycheck-checker-arguments checker))))
         ;; あえて破壊的に変更（元のリストに追加したい）
         (nconc (get checker 'flycheck-command) '("-C"))))
 
-  ;; --------------------------------
+  ;; ----------------------------------
   ;; PATCH: temp ファイルのデフォルトコーディングシステムを、
   ;;        強制的に UTF-8 (LF) とする
-  ;; --------------------------------
+  ;; ----------------------------------
   ;; オーバーライド
   (defun flycheck-save-buffer-to-file (file-name)
     "Save the contents of the current buffer to FILE-NAME."
@@ -1447,15 +1438,15 @@
  (leaf grep
   :bind (("C-M-g" . rgrep))
   :init
-  ;; --------------------------------
+  ;; ----------------------------------
   ;; Windows ONLY
-  ;; --------------------------------
+  ;; ----------------------------------
   (leaf grep
     :when (member system-type '(ms-dos windows-nt))
-    ;; ------------------------------
+    ;; --------------------------------
     ;; HACK: `autoload' 未対応変数を変更する必要があるため、
     ;;       明示的にロードさせる必要がある
-    ;; ------------------------------
+    ;; --------------------------------
     :require t
     :custom (;; 例外が出るため NUL デバイスは使わせない
              (grep-use-null-device . nil))
@@ -1520,9 +1511,9 @@
   :custom ((ibuffer-default-sorting-mode . 'filename/process)
            (ibuffer-expert . t))
   :config
-  ;; --------------------------------
+  ;; ----------------------------------
   ;; 機能拡張
-  ;; --------------------------------
+  ;; ----------------------------------
   ;; バッファ名の表示を30文字に拡張
   ;; カラム幅が揃わなくなるため、-1 にはできない
   (let* (;; `customize-mark-to-save' の評価を t にするため、
@@ -1679,7 +1670,7 @@
          (web-mode-hook . lsp)
          (yaml-mode-hook . lsp))
   :custom (;;
-           ;; `lsp-mode.el'
+           ;; `lsp-mode'
            ;;
            (lsp-semantic-tokens-enable . t)
            (lsp-restart . 'ignore)
@@ -1687,9 +1678,8 @@
            (lsp-session-file . "~/.emacs.lsp-session")
            ;; LSP サーバからのファイル監視要求を無視
            ;;
-           ;; GNU Emacs の仕様では 1024 - 50 = 974 個以上のファイル監視を
-           ;; 登録できない
-           ;; LSP サーバによっては大量のファイル監視要求を行うため、意図的に無視
+           ;; GNU Emacs の仕様で 1024 - 50 = 974 個以上のファイル監視が登録不可
+           ;; LSP サーバによっては大量のファイル監視要求を行う → 意図的に無視
            ;;
            ;; See also:
            ;; https://www.reddit.com/r/emacs/comments/mq2znn/no_file_descriptors_left/
@@ -1697,7 +1687,7 @@
            ;; https://github.com/emacs-mirror/emacs/blob/0008003c3e466269074001d637cda872d6fee9be/src/kqueue.c#L387-L401
            (lsp-enable-file-watchers . nil)
            (lsp-eldoc-render-all . t)
-           (lsp-enable-indentation . nil)
+           (lsp-enable-indentation . nil) ; Use `prettier-mode' and each major-mode
            (lsp-before-save-edits . nil)
            (lsp-headerline-breadcrumb-enable . nil)
            (lsp-signature-doc-lines . t)
@@ -1709,10 +1699,10 @@
            (lsp-warn-no-matched-clients . nil)
            (lsp-rename-use-prepare . nil)
            ;;
-           ;; `lsp-javascript.el'
+           ;; `lsp-javascript'
            ;;
-           (lsp-typescript-format-enable . nil)
-           (lsp-javascript-format-enable . nil)
+           (lsp-typescript-format-enable . nil) ; Use `prettier-mode'
+           (lsp-javascript-format-enable . nil) ; Use `prettier-mode'
            (lsp-typescript-surveys-enabled . nil)
            (lsp-javascript-display-enum-member-value-hints . t)
            (lsp-javascript-display-return-type-hints . t)
@@ -1723,19 +1713,19 @@
            (lsp-javascript-display-variable-type-hints . t)
            (lsp-javascript-completions-complete-function-calls . t)
            ;;
-           ;; `lsp-html.el'
+           ;; `lsp-html'
            ;;
            (lsp-html-format-enable . nil) ; Use `prettier-mode'
-           (lsp-html-auto-closing-tags . nil) ; Use `web-mode'
+           (lsp-html-auto-closing-tags . nil) ; Use `smartparens' and `web-mode'
            ;;
-           ;; `lsp-eslint.el'
+           ;; `lsp-eslint'
            ;;
-           ;; Enable ESLint flat config
-           ;;
-           ;; See also:
-           ;; https://discord.com/channels/789885435026604033/1167077517157470278/1174364060712714310
-           ;; https://github.com/microsoft/vscode-eslint/issues/1518#issuecomment-1319753092
-           (lsp-eslint-experimental . '((useFlatConfig . true)))))
+           (lsp-eslint-experimental . '(;; Enable ESLint flat config
+                                        ;;
+                                        ;; See also:
+                                        ;; https://discord.com/channels/789885435026604033/1167077517157470278/1174364060712714310
+                                        ;; https://github.com/microsoft/vscode-eslint/issues/1518#issuecomment-1319753092
+                                        (useFlatConfig . true)))))
 
 
 ;; ----------------------------------------------------------------------------
@@ -1759,23 +1749,23 @@
   :custom `(;; C/Migemo 利用設定
             (migemo-command . ,(executable-find "cmigemo"))
             (migemo-options . '("-q" "--emacs"))
-            ;; 空白文字と認識させる対象を広げる
+            ;; 空白文字と認識させる対象を拡大
             (migemo-white-space-regexp . "[[:space:]\s-]*")
             ;; ユーザ別基礎ディレクトリは設定ディレクトリ内にまとめる
             (migemo-directory . ,(convert-standard-filename "~"))
-            ;; `migemo' 側で定義されている `isearch' 関連キーバインドを使わせない
+            ;; `migemo' 側で定義済の `isearch' 関連キーバインドを使わせない
             ;; ミニバッファ内で `yank' できない現象が発生する問題の対策
             (migemo-use-default-isearch-keybinding . nil)
-            ;; 辞書ファイルはデフォルトのものを利用
+            ;; 辞書ファイルはデフォルトを利用
             (migemo-dictionary . ,(convert-standard-filename
                                    (if (member system-type '(ms-dos windows-nt))
                                        "C:/programs/cmigemo/share/migemo/utf-8/migemo-dict"
                                      "/usr/local/share/migemo/utf-8/migemo-dict")))
             (migemo-user-dictionary . nil)
             (migemo-regex-dictionary . nil)
-            ;; 辞書エンコーディングを明示
+            ;; 辞書エンコーディング明示
             (migemo-coding-system . 'utf-8-unix)
-            ;; キャッシュを使わせる
+            ;; キャッシュ利用
             (migemo-use-pattern-alist . t)
             (migemo-use-frequent-pattern-alist . t)
             (migemo-pattern-alist-length . 1024)
@@ -1807,7 +1797,6 @@
         (condition-case nil
             (progn (string-match-p pattern "") pattern)
           (invalid-regexp nil))))
-
     (add-to-list 'orderless-matching-styles #'my-orderless-migemo t)))
 
 
@@ -1968,24 +1957,24 @@
                                  tab-mark
                                  tabs
                                  trailing))
-           ;; ----------------------
+           ;; -------------------------
            ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調表示
            ;;
            ;; 表示テスト:
            ;;   U+0009: 「	」
            ;;   U+00A0: 「 」
            ;;   U+3000: 「　」
-           ;; ----------------------
+           ;; -------------------------
            (whitespace-hspace-regexp . "\\(\u00A0\\|\u08A0\\|\u0920\\|\u0E20\\|\u0F20\\|\u3000\\)+")
            (whitespace-trailing-regexp . "\\([\t \u00A0\u3000]+\\)$")
            ;; 行カラム最大値は `fill-column' を参照させる
            (whitespace-line-column . nil)
-           ;; ----------------------
+           ;; -------------------------
            ;; HACK: 半角空白 (U+0020) を強調しないようにする
            ;;
            ;; 表示テスト:
            ;;   U+0020: 「 」
-           ;; ----------------------
+           ;; -------------------------
            (whitespace-display-mappings . '(;; EOL -> DOLLAR SIGN
                                             (newline-mark ?\n [?$ ?\n])
                                             ;; TAB -> CURRENCY SIGN
@@ -1999,9 +1988,9 @@
   :init
   (defun my-whitespace-mode-initialize ()
     "Initialize `whitespace'."
-    ;; ------------------------------
+    ;; --------------------------------
     ;; HACK: 一部メジャーモードでは無効化
-    ;; ------------------------------
+    ;; --------------------------------
     (with-eval-after-load 'whitespace
       (if (member major-mode '(;; 降順ソート
                                lisp-interaction-mode
