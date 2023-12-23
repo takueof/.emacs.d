@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-24T06:25:42+09:00>
+;; Time-stamp: <2023-12-24T06:29:02+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1863,18 +1863,6 @@
            (vertico-cycle . t)
            (vertico-sort-function . #'vertico-sort-history-alpha))
   :global-minor-mode t)
-
-
-;; ------------------------------------
-;; 巨大ファイル表示
-;; ------------------------------------
-(leaf vlf
-  :ensure t
-  :require vlf-setup
-  :bind ((:vlf-mode-map
-          ("C-c C-v" . vlf-prefix-map)))
-  :custom `((vlf-batch-size . ,(* 1 1024 1024)) ;; 1MB
-            (vlf-application . 'dont-ask)))
 
 
 ;; ------------------------------------
