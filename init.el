@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-23T20:10:40+09:00>
+;; Time-stamp: <2023-12-24T06:05:37+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -871,7 +871,6 @@
 ;; ブックマーク
 ;; ------------------------------------
 (leaf bookmark
-  :require t
   :custom ((bookmark-version-control . t)
            ;; ローカル環境にのみ保存
            (bookmark-default-file . "~/.emacs.bookmark.el")))
