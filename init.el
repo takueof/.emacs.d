@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-24T06:05:37+09:00>
+;; Time-stamp: <2023-12-24T06:13:55+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1575,12 +1575,13 @@
   ;; WARNING: 確実に `defcustom' 定義済変数が存在する状態で、
   ;;          「定義」ではなく「追加」
   (add-to-list 'lsp-java-vmargs "-Djsse.enableSNIExtension=false")
-  (add-to-list 'lsp-java-9-args "-Djsse.enableSNIExtension=false")
-  ;; For "SpringBoot"
-  (leaf lsp-java-boot
-    :require t
-    :hook ((lsp-mode-hook . lsp-lens-mode)
-           (java-mode-hook . lsp-java-boot-lens-mode))))
+  (add-to-list 'lsp-java-9-args "-Djsse.enableSNIExtension=false"))
+;; For "SpringBoot"
+(leaf lsp-java-boot
+  :after lsp-java
+  :require t
+  :hook ((lsp-mode-hook . lsp-lens-mode)
+         (java-mode-hook . lsp-java-boot-lens-mode)))
 
 
 ;; ------------------------------------
