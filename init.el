@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-24T06:13:55+09:00>
+;; Time-stamp: <2023-12-24T06:25:42+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1729,14 +1729,13 @@
 ;; ------------------------------------
 (leaf orderless
   :ensure t
-  :require t
   :custom ((completion-styles . '(orderless)))
   :config
   ;; `migemo' 利用可能時
   ;;
   ;; See also:
   ;; https://nyoho.jp/diary/?date=20210615
-  (leaf orderless
+  (leaf orderless-migemo
     :after migemo
     :config
     (defun my-orderless-migemo (component)
@@ -1762,7 +1761,6 @@
 ;; ------------------------------------
 (leaf projectile
   :ensure t
-  :require t
   :custom `((projectile-enable-caching . t)
             (projectile-completion-system . ',(cond ((featurep 'ido) 'ido)
                                                     (t 'default)))
@@ -1807,7 +1805,6 @@
 ;; ファイルごとにカーソル位置を保存
 ;; ------------------------------------
 (leaf saveplace
-  :require t
   :custom (;; ローカル環境にのみ保存
            (save-place-file . "~/.emacs.saveplace.el"))
   :global-minor-mode save-place-mode)
@@ -1826,7 +1823,6 @@
 ;; ------------------------------------
 (leaf smartparens
   :ensure t
-  :require t
   :custom ((sp-show-pair-from-inside . t)
            (sp-undo-pairs-separately . t))
   :global-minor-mode (show-smartparens-global-mode smartparens-global-mode))
@@ -1850,20 +1846,10 @@
 
 
 ;; ------------------------------------
-;; ツールチップ
-;; ------------------------------------
-(leaf tooltip
-  :config
-  ;; 非表示
-  (tooltip-mode -1))
-
-
-;; ------------------------------------
 ;; `redo' 追加
 ;; ------------------------------------
 (leaf undo-fu
   :ensure t
-  :require t
   :bind (("C-/" . undo-fu-only-undo)
          ("C-?" . undo-fu-only-redo)))
 

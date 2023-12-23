@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize config file -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2023 Taku Watabe
-;; Time-stamp: <2023-12-10T18:56:26+09:00>
+;; Time-stamp: <2023-12-24T06:25:03+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -90,6 +90,7 @@
 (scroll-bar-mode -1)
 (tab-bar-mode -1)
 (tool-bar-mode -1)
+(tooltip-mode -1)
 ;;
 ;; For `frame'
 ;;
