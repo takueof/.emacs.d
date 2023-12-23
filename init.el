@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-24T06:29:02+09:00>
+;; Time-stamp: <2023-12-24T06:37:33+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -662,7 +662,6 @@
 (leaf exec-path-from-shell
   :unless (member system-type '(ms-dos windows-nt))
   :ensure t
-  :require t
   :config
   (exec-path-from-shell-initialize))
 
@@ -766,13 +765,6 @@
   :require t
   :custom ((uniquify-buffer-name-style . 'forward)
            (uniquify-ignore-buffers-re . "^*[^*]+*\\-")))
-
-
-;; ============================================================================
-;; URL ツール
-;; ============================================================================
-(leaf url
-  :custom ((url-using-proxy . t)))
 
 
 ;; ============================================================================
@@ -1908,8 +1900,7 @@
                                             (space-mark ?\u3000 [?\u25a1] [?_ ?_])
                                             ;; Tab -> RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
                                             (tab-mark ?\t [?» ?\t] [?\\ ?\t]))))
-  :custom-face ((whitespace-space . '((t
-                                       (:background nil)))))
+  :custom-face ((whitespace-space . '((t (:background nil)))))
   :init
   (defun my-whitespace-mode-initialize ()
     "Initialize `whitespace'."
