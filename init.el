@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-23T12:10:29+09:00>
+;; Time-stamp: <2023-12-23T20:10:40+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -304,16 +304,6 @@
  ;;
  '(w32-enable-synthesized-fonts t)
  ;;
- ;; インプットメソッドを明示 (Windows ONLY)
- ;;
- ;; 識別名 "W32-IME"' は、IME パッチが適用されていなければ使えない
- ;; 他環境ではデフォルトのままとする
- ;;
- `(default-input-method ,(cond ((member system-type '(ms-dos windows-nt))
-                                "W32-IME")
-                               (t
-                                default-input-method)))
- ;;
  ;; 右 <Alt> + 左 <Ctrl> で <AltGr> が発送されないようにする (Windows ONLY)
  ;; <AltGr> は独自のキーコードであり、<C-M-> であるとみなされない
  ;;
@@ -368,25 +358,6 @@
 ;; ユーティリティロード
 ;; ============================================================================
 (require 'my-utils nil :noerror)
-
-
-;; ============================================================================
-;; 環境変数 (Windows ONLY)
-;; ============================================================================
-(when (member system-type '(ms-dos windows-nt))
-  ;; 環境変数 %PATH% では不足している分の追加
-  (let* ((program-files-dir-x86 (or (getenv "PROGRAMFILES\(X86\)")
-                                    (getenv "PROGRAMFILES")
-                                    "C:/programs"))
-         (paths `(,(concat program-files-dir-x86 "/Aspell/bin")
-                  "C:/programs/cmigemo/bin"
-                  "C:/programs/Ghostgum/gsview"
-                  "C:/programs/cygwin/bin")))
-    (dolist (path paths)
-      (setq path (convert-standard-filename path))
-      (if (and (file-exists-p path)
-               (file-directory-p path))
-          (add-to-list 'exec-path path)))))
 
 
 ;; ============================================================================
@@ -456,7 +427,10 @@
 (leaf tr-ime
   :when (member system-type '(ms-dos windows-nt))
   :ensure t
-  :custom '((w32-ime-buffer-switch-p . t)
+  :custom '(;; インプットメソッド (IM) 識別名 "W32-IME" は
+            ;; `tr-ime' 未適用だと使えない
+            (default-input-method . "W32-IME")
+            (w32-ime-buffer-switch-p . t)
             (w32-ime-mode-line-state-indicator . "[Aa]")
             (w32-ime-mode-line-state-indicator-list . '("[--]" "[あ]" "[Aa]")))
   :config
@@ -904,7 +878,7 @@
 
 
 ;; ------------------------------------
-;; ブックマーク (`bookmark') 拡張
+;; ブックマーク：拡張
 ;; ------------------------------------
 (leaf bookmark+
   :vc (bookmark+
@@ -928,12 +902,10 @@
   (defun my-comint-mode-initialize ()
     "Initialize `comint-mode'."
     (setq-local comint-input-sender-no-newline t))
-  ;; ----------------------------------
   ;; プロセスごとのコーディングシステム変換表
   ;;
   ;; See also:
   ;; https://www.emacswiki.org/emacs/ShellMode#toc1
-  ;; ----------------------------------
   (add-to-list 'process-coding-system-alist
                '("[bB][aA][sS][hH]" . (undecided-dos . undecided-unix))))
 
@@ -979,7 +951,7 @@
 
 
 ;; ------------------------------------
-;; 補完フレームワーク (`company') 拡張（ポップアップ）
+;; 補完フレームワーク：拡張（ポップアップ）
 ;; ------------------------------------
 (leaf company-box
   :ensure t
@@ -987,7 +959,7 @@
 
 
 ;; ------------------------------------
-;; 補完フレームワーク (`company') 拡張（補完候補のソート）
+;; 補完フレームワーク：拡張（補完候補のソート）
 ;; ------------------------------------
 (leaf company-statistics
   :after company
@@ -1215,7 +1187,7 @@
 
 
 ;; ------------------------------------
-;; ディレクトリブラウジング (`dired') 拡張
+;; ディレクトリブラウジング：拡張
 ;; ------------------------------------
 (leaf dired+
   :vc (dired+
@@ -1352,7 +1324,7 @@
 
 
 ;; ------------------------------------
-;; 自動静的解析（拡張：モードライン変更）
+;; 自動静的解析：拡張（モードライン変更）
 ;; ------------------------------------
 (leaf flycheck-color-mode-line
   :after flycheck
@@ -1432,35 +1404,32 @@
 ;; `grep'
 ;; ------------------------------------
 (leaf grep
-  :bind (("C-M-g" . rgrep))
-  :init
-  ;; ----------------------------------
-  ;; Windows ONLY
-  ;; ----------------------------------
-  (leaf grep
-    :when (member system-type '(ms-dos windows-nt))
-    ;; --------------------------------
-    ;; HACK: `autoload' 未対応変数を変更する必要があるため、
-    ;;       明示的にロードさせる必要がある
-    ;; --------------------------------
-    :require t
-    :custom (;; 例外が出るため NUL デバイスは使わせない
-             (grep-use-null-device . nil))
-    :config
-    ;; PATH は通っていないが、`exec-path' は通っている場合を想定
-    ;;
-    ;; すべて `defvar' 定義なので、 `autoload' 前後での
-    ;; `custom-set-variables' による設定は不可能
-    ;; 明示的ロード後～関数実行前までに設定しなければならない
-    (setq grep-program
-          (purecopy (or (executable-find "grep")
-                        "grep")))
-    (setq find-program
-          (purecopy (or (executable-find "find")
-                        "find")))
-    (setq xargs-program
-          (purecopy (or (executable-find "xargs")
-                        "xargs")))))
+  :bind (("C-M-g" . rgrep)))
+;; Windows ONLY
+(leaf grep
+  :when (member system-type '(ms-dos windows-nt))
+  ;; --------------------------------
+  ;; HACK: `autoload' 未対応変数を変更する必要があるため、
+  ;;       明示的にロードさせる必要がある
+  ;; --------------------------------
+  :require t
+  :custom (;; 例外が出るため NUL デバイスは使わせない
+           (grep-use-null-device . nil))
+  :config
+  ;; PATH は通っていないが、`exec-path' は通っている場合を想定
+  ;;
+  ;; すべて `defvar' 定義なので、 `autoload' 前後での
+  ;; `custom-set-variables' による設定は不可能
+  ;; 明示的ロード後～関数実行前までに設定しなければならない
+  (setq grep-program
+        (purecopy (or (executable-find "grep")
+                      "grep")))
+  (setq find-program
+        (purecopy (or (executable-find "find")
+                      "find")))
+  (setq xargs-program
+        (purecopy (or (executable-find "xargs")
+                      "xargs"))))
 
 
 ;; ------------------------------------
@@ -1507,13 +1476,9 @@
   :custom ((ibuffer-default-sorting-mode . 'filename/process)
            (ibuffer-expert . t))
   :config
-  ;; ----------------------------------
-  ;; 機能拡張
-  ;; ----------------------------------
-  ;; バッファ名の表示を30文字に拡張
-  ;; カラム幅が揃わなくなるため、-1 にはできない
-  (let* (;; `customize-mark-to-save' の評価を t にするため、
-         ;; 明示的にコピー
+  ;; バッファ名の表示を30文字に変更
+  ;;   -> カラム幅が揃わなくなるため -1 は不可
+  (let* (;; `customize-mark-to-save' の評価を t にするため明示的にコピー
          (formats (copy-tree ibuffer-formats))
          (settings (assoc 'name (assoc 'mark formats))))
     ;; 該当する設定項目がなければ何もしない
@@ -1527,7 +1492,7 @@
 
 
 ;; ------------------------------------
-;; 強化バッファ一覧 (`ibuffer') 拡張（`projectile' サポート）
+;; 強化バッファ一覧：拡張（`projectile' サポート）
 ;; ------------------------------------
 (leaf ibuffer-projectile
   :after (ibuffer projectile)
@@ -1582,7 +1547,7 @@
 
 
 ;; ------------------------------------
-;; LSP (Language Server Protocol) クライアント拡張 (UI)
+;; LSP (Language Server Protocol) クライアント：拡張 (UI)
 ;; ------------------------------------
 ;; WARNING: `lsp-mode' が自動ロードする
 ;;          念のため `lsp-mode' より前にインストール
@@ -1596,7 +1561,7 @@
 
 
 ;; ------------------------------------
-;; LSP (Language Server Protocol) クライアント拡張 (Java)
+;; LSP (Language Server Protocol) クライアント：拡張 (Java)
 ;; ------------------------------------
 ;; WARNING: `lsp-mode' が自動ロードする
 ;;          念のため `lsp-mode' より前にインストール
@@ -1620,7 +1585,7 @@
 
 
 ;; ------------------------------------
-;; LSP (Language Server Protocol) クライアント拡張 (Tailwind CSS)
+;; LSP (Language Server Protocol) クライアント：拡張 (Tailwind CSS)
 ;; ------------------------------------
 ;; WARNING: `lsp-mode' が自動ロードする
 ;;          念のため `lsp-mode' より前にインストール
@@ -1857,7 +1822,7 @@
 
 
 ;; ------------------------------------
-;; カッコ関連機能拡張
+;; カッコ関連
 ;; ------------------------------------
 (leaf smartparens
   :ensure t
@@ -1868,7 +1833,7 @@
 
 
 ;; ------------------------------------
-;; カッコ関連機能拡張（デフォルト設定）
+;; カッコ関連：拡張（デフォルト設定）
 ;; ------------------------------------
 (leaf smartparens-config
   :after smartparens
@@ -2531,7 +2496,7 @@
                               'cp932
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
-                                                                          "ヒラギノ角ゴシック"
+                                                                          "Hiragino Sans"
                                                                           "Meiryo"
                                                                           "MS Gothic")))
     ;; 日本語：JIS X 0213:2004
@@ -2539,14 +2504,14 @@
                               'japanese-jisx0213.2004-1
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
-                                                                          "ヒラギノ角ゴシック"
+                                                                          "Hiragino Sans"
                                                                           "Meiryo"
                                                                           "MS Gothic")))
     (my-set-fontset-font-safe fontset-name
                               'japanese-jisx0213-2
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
-                                                                          "ヒラギノ角ゴシック"
+                                                                          "Hiragino Sans"
                                                                           "Meiryo"
                                                                           "MS Gothic")))
     ;; 「〜」(U+301C: WAVE DASH) と「～」(U+FF5E: FULLWIDTH TILDE) の字形を変更
@@ -2563,7 +2528,7 @@
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Migu 1M"
                                                                           "VL Gothic"
-                                                                          "ヒラギノ角ゴシック"
+                                                                          "Hiragino Sans"
                                                                           "Meiryo"
                                                                           "MS Gothic")))
     (my-set-fontset-font-safe fontset-name
@@ -2572,7 +2537,7 @@
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Migu 1M"
                                                                           "VL Gothic"
-                                                                          "ヒラギノ角ゴシック"
+                                                                          "Hiragino Sans"
                                                                           "Meiryo"
                                                                           "MS Gothic")))
     ;; ラテン文字：Code page 858 (`cp858')
@@ -2592,13 +2557,13 @@
                                 (cons code code)
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "VL Gothic"
-                                                                            "ヒラギノ角ゴシック"
+                                                                            "Hiragino Sans"
                                                                             "MS Gothic"))))
     ;; 一部グリフが次のフォントで半角になる状態を回避
     ;;
-    ;;   * "ヒラギノ角ゴシック"
     ;;   * "VL Gothic"
-    ;;   * "メイリオ"
+    ;;   * "Hiragino Sans"
+    ;;   * "Meiryo"
     ;;
     ;; 前述のフォントは除外
     (dolist (code (mapcar 'string-to-char
@@ -2658,7 +2623,7 @@
     ;;
     ;; TODO: ダイアログの face も変えたい
     ;;       シンボル名不明
-    ;;       `face-list' で一覧を出しても、それらしきものがなかった
+    ;;       関数 `face-list' で一覧を出しても、それらしきものがなかった
     (custom-set-faces `(tooltip ((t (:font ,fontset-name))))))
   ) ; END of *font
 
