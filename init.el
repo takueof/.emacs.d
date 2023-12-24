@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-24T11:53:59+09:00>
+;; Time-stamp: <2023-12-24T11:54:34+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1695,10 +1695,14 @@
             ;; ミニバッファ内で `yank' できない現象が発生する問題の対策
             (migemo-use-default-isearch-keybinding . nil)
             ;; 辞書ファイルはデフォルトを利用
-            (migemo-dictionary . ,(convert-standard-filename
-                                   (if (member system-type '(ms-dos windows-nt))
-                                       "C:/programs/cmigemo/share/migemo/utf-8/migemo-dict"
-                                     "/usr/local/share/migemo/utf-8/migemo-dict")))
+            (migemo-dictionary . ,(catch 'founded
+                                    (dolist (path '("/usr/local/share/migemo/utf-8/migemo-dict"
+                                                    "C:/programs/cmigemo/share/migemo/utf-8/migemo-dict"
+                                                    migemo-dictionary))
+                                      (let ((file (convert-standard-filename path)))
+                                        (if (and (file-exists-p file)
+                                                 (file-readable-p file))
+                                            (throw 'founded file))))))
             (migemo-user-dictionary . nil)
             (migemo-regex-dictionary . nil)
             ;; 辞書エンコーディング明示
