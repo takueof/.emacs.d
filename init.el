@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-24T10:32:40+09:00>
+;; Time-stamp: <2023-12-24T11:53:59+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1220,7 +1220,6 @@
 (leaf embark
   :ensure t
   :bind (("C-." . embark-act)
-
          ("C-;" . embark-dwim)
          ("C-x ? b" . embark-bindings))
   :custom ((prefix-help-command . #'embark-prefix-help-command))
@@ -1262,8 +1261,8 @@
   :config
   ;; --------------------------------
   ;; HACK: `:custom' で設定すると `find-exec-terminator' の展開が
-  ;;       `find-dired' の `eval-after-load' より先になりエラーとなる
-  ;;       仕方なく `:config' で泥臭く設定しなければならない
+  ;;       `find-dired' の `eval-after-load' より先になりエラー
+  ;;       仕方なく `:config' で泥臭く設定
   ;; --------------------------------
   (custom-set-variables
    `(find-ls-option ,(cons (format "-exec %s -ld {} %s"
@@ -1540,7 +1539,7 @@
 ;; LSP (Language Server Protocol) クライアント：拡張 (UI)
 ;; ------------------------------------
 ;; WARNING: `lsp-mode' が自動ロードする
-;;          念のため `lsp-mode' より前にインストール
+;;          念のため `lsp-mode' より前に設定
 ;; ------------------------------------
 (leaf lsp-ui
   :ensure t
@@ -1554,7 +1553,7 @@
 ;; LSP (Language Server Protocol) クライアント：拡張 (Java)
 ;; ------------------------------------
 ;; WARNING: `lsp-mode' が自動ロードする
-;;          念のため `lsp-mode' より前にインストール
+;;          念のため `lsp-mode' より前に設定
 ;; ------------------------------------
 (leaf lsp-java
   :ensure t
@@ -1579,7 +1578,7 @@
 ;; LSP (Language Server Protocol) クライアント：拡張 (Tailwind CSS)
 ;; ------------------------------------
 ;; WARNING: `lsp-mode' が自動ロードする
-;;          念のため `lsp-mode' より前にインストール
+;;          念のため `lsp-mode' より前に設定
 ;; ------------------------------------
 (leaf lsp-tailwindcss
   :ensure t
