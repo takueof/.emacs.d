@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-24T11:56:57+09:00>
+;; Time-stamp: <2023-12-24T12:00:10+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -42,7 +42,6 @@
 ;; See also:
 ;; http://gifnksm.hatenablog.jp/entry/20100131/1264956220
 ;; ============================================================================
-;;;###autoload
 (defmacro my-visual-line-beginning-position (&optional n)
   "Get cursor point of visual line beginning position.
 
@@ -51,7 +50,6 @@ N is same meaning of `beginning-of-visual-line' argument."
      (beginning-of-visual-line ,n)
      (point)))
 
-;;;###autoload
 (defun my-beginning-of-smart-indented-line ()
   "Move curosr to beginning of indent.
 
@@ -82,7 +80,6 @@ Move to the beginning of the line if the cursor is at the beginning or middle of
 ;; ============================================================================
 ;; ウインドウ移動
 ;; ============================================================================
-;;;###autoload
 (defun my-other-window-reverse (count &optional all-frames)
   "Move before window, reverse behavior of `other-window'.
 
@@ -94,7 +91,6 @@ COUNT and ALL-FRAMES are same arguments of `other-window'."
 ;; ============================================================================
 ;; フレーム移動
 ;; ============================================================================
-;;;###autoload
 (defun my-other-frame-reverse (arg)
   "Move before frame, reverse behavior of `other-frame'.
 
@@ -106,7 +102,6 @@ ARG is same argument of `other-frame'."
 ;; ============================================================================
 ;; 折り返し表示
 ;; ============================================================================
-;;;###autoload
 (defun my-toggle-truncate-lines-force (&optional arg)
   "Force switch the current buffer's display wrapping.
 
@@ -136,13 +131,11 @@ It doesn't depend on `truncate-partial-width-windows' of `toggle-truncate-lines'
 ;; ============================================================================
 ;; 挿入
 ;; ============================================================================
-;;;###autoload
 (defun my-insert-yen-sign ()
   "Insert YEN SIGN (U+00A5) character to cursor position."
   (interactive)
   (insert "¥"))
 
-;;;###autoload
 (defun my-insert-file-name (&optional name)
   "Insert current buffer's file name to cursor position.
 
@@ -161,7 +154,6 @@ Return string of file name."
                                          name
                                        (current-buffer)))))))))
 
-;;;###autoload
 (defun my-insert-file-path (&optional name)
   "Insert current buffer's file path (full path) to cursor position.
 
@@ -183,7 +175,6 @@ Return string of file path."
 ;; ============================================================================
 ;; コーディングシステム表記
 ;; ============================================================================
-;;;###autoload
 (defun my-coding-system-name-mnemonic (coding-system)
   "Specify for CODING-SYSTEM explicitly."
   (let* ((base (coding-system-base coding-system))
@@ -196,7 +187,6 @@ Return string of file path."
           ((string-match "japanese-iso-8bit" name) "EUC-JP")
           (t "???"))))
 
-;;;###autoload
 (defun my-coding-system-bom-mnemonic (coding-system)
   "Indicate the presence or absence of BOM for CODING-SYSTEM."
   (let ((name (symbol-name coding-system)))
@@ -206,7 +196,6 @@ Return string of file path."
           ((string-match "-with-signature" name) "[BOM]")
           (t ""))))
 
-;;;###autoload
 (defun my-buffer-coding-system-mnemonic ()
   "Return a mnemonic for `buffer-file-coding-system'."
   (let* ((code buffer-file-coding-system)
@@ -218,7 +207,6 @@ Return string of file path."
 ;; ============================================================================
 ;; Input Method (IM)
 ;; ============================================================================
-;;;###autoload
 (defun my-change-cursor-faces-by-current-input-method ()
   "Change cursor color with `current-input-method'."
   (let* ((current-input-method (if (fboundp #'mac-input-source)
@@ -236,7 +224,6 @@ Return string of file path."
 ;; ============================================================================
 ;; ディスプレイ
 ;; ============================================================================
-;;;###autoload
 (defmacro my-real-display-pixels-per-inch (&optional display)
   "Calculate real pixels per inch (ppi) by real DISPLAY.
 
@@ -256,7 +243,6 @@ Return cons of (WIDTH-DPI . HEIGHT-DPI).
 ;; ============================================================================
 ;; フォントセット
 ;; ============================================================================
-;;;###autoload
 (defmacro my-fallback-font-family (&rest families)
   "Return a first matched avaliable font-family in FAMILIES.
 
@@ -270,7 +256,6 @@ Return nil to all FAMILIES are unavaliabled."
          (if (find-font (font-spec :family ,family))
              (throw ',founded ,family))))))
 
-;;;###autoload
 (defmacro my-set-fontset-font-safe (&rest args)
   "Return the result of `set-fontset-font' if don't cause error, or else nil.
 
@@ -286,7 +271,6 @@ This feature seems to `car-safe' and `cdr-safe'."
 ;; ============================================================================
 ;; 一括エンコーディング変換
 ;; ============================================================================
-;;;###autoload
 (defun my-change-files-coding-system (dir regexp coding-system recursive)
   "Convert CODING-SYSTEM for all files matched REGEXP in DIR.
 
