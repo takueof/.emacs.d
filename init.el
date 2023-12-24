@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-24T09:48:25+09:00>
+;; Time-stamp: <2023-12-24T10:30:40+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1133,11 +1133,11 @@
 ;; ------------------------------------
 (leaf desktop
   :bind (;; "C-c d" プレフィクスを使用
-         ("C-c d c" . desktop-clear)
-         ("C-c d C-s" . desktop-save)
+         ("C-c d C" . desktop-clear)
+         ("C-c d S" . desktop-save)
          ("C-c d s" . desktop-save-in-desktop-dir)
-         ("C-c d d" . desktop-remove)
-         ("C-c d f" . desktop-change-dir)
+         ("C-c d D" . desktop-remove)
+         ("C-c d F" . desktop-change-dir)
          ("C-c d r" . desktop-revert))
   :custom ((desktop-load-locked-desktop . t)
            (desktop-globals-to-save . '(;; 保存は必要最小限
