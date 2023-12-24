@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-24T15:45:13+09:00>
+;; Time-stamp: <2023-12-25T04:09:36+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2146,7 +2146,7 @@
            (web-mode-enable-sql-detection . t)
            (web-mode-enable-element-content-fontification . t)
            (web-mode-enable-element-tag-fontification . t))
-  :config
+  :defer-config
   ;; 確実に定義された後で追加
   (add-to-list 'web-mode-comment-formats '("php" . "//"))
   (add-to-list 'web-mode-comment-formats '("javascript" . "//")))
