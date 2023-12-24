@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-24T11:54:34+09:00>
+;; Time-stamp: <2023-12-24T12:02:43+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1724,7 +1724,7 @@
 (leaf orderless
   :ensure t
   :custom ((completion-styles . '(orderless)))
-  :config
+  :defer-config
   ;; `migemo' 利用可能時
   ;;
   ;; See also:
