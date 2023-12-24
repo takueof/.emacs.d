@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-24T10:30:40+09:00>
+;; Time-stamp: <2023-12-24T10:32:40+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1193,11 +1193,11 @@
 ;; ------------------------------------
 (leaf editorconfig
   :ensure t
-  :custom ((editorconfig-exclude-modes . '(lisp-mode
-                                           lisp-data-mode
+  :custom ((editorconfig-exclude-modes . '(elisp-byte-code-mode
                                            emacs-lisp-mode
+                                           lisp-data-mode
                                            lisp-interaction-mode
-                                           elisp-byte-code-mode)))
+                                           lisp-mode)))
   :global-minor-mode t)
 
 
