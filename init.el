@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-24T09:16:09+09:00>
+;; Time-stamp: <2023-12-24T09:48:25+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -545,7 +545,6 @@
 ;; モードライン
 ;; ============================================================================
 (leaf *modeline
-  :after my-utils
   :custom (;; ニーモニックを改行コードにちなんだ表現にする
            (eol-mnemonic-dos . "[CRLF]")
            (eol-mnemonic-mac . "[CR]")
@@ -737,13 +736,14 @@
             ;;        都度評価にしたい
             (time-stamp-format . ,(concat "%:y-%02m-%02dT%02H:%02M:%02S"
                                           (replace-regexp-in-string
-                                           ;; コロンがない形式を返されるため、強制的にコロンを付与
-                                           ;; 厳密なチェックにより "±1259" 形式のみ対象にする
+                                           ;; 強制的にコロン付与
+                                           ;; コロンなし形式を返されるため
+                                           ;; 厳密チェックで "±1259" のみ利用
                                            ;;   → 他は無視
                                            "\\`\\([\\+\\-]\\(?:0[0-9]\\|1[0-2]\\)\\)\\([0-5][0-9]\\)\\'"
                                            "\\1:\\2"
-                                           ;; タイムゾーンが UTC でも "Z" でなく "+0000" を返す
-                                           ;; 今のところ、あえて "Z" への変換はしないでおく
+                                           ;; タイムゾーンが "+0000" を返す
+                                           ;; あえて "Z" への変換はしない
                                            (format-time-string "%z"))))))
 
 
@@ -751,10 +751,11 @@
 ;; TRAMP (Transparent Remote Access, Multiple Protocols)
 ;; ============================================================================
 (leaf tramp
-  :require t
-  :custom (;; WARNING: `load' か `autoload' 後に実行しないと適用されない
-           ;; ローカル環境にのみ保存
-           (tramp-persistency-file-name . "~/.emacs.tramp")))
+  :defer-config
+  (leaf tramp-cache
+    :custom (;; WARNING: `tramp' ロード後に実行しないと適用されない
+             ;; ローカル環境にのみ保存
+             (tramp-persistency-file-name . "~/.emacs.tramp"))))
 
 
 ;; ============================================================================
@@ -777,9 +778,8 @@
            (vterm-enable-manipulate-selection-data-by-osc52 . t)
            (vterm-copy-exclude-prompt . nil))
   :defer-config
-  ;; WARNING: 確実に `vterm-keymap-exceptions' が存在する状態で、
-  ;;          「定義」ではなく「追加」しないと
-  ;;          他のキーバインドに影響が出てしまう
+  ;; WARNING: 確実に `vterm-keymap-exceptions' が存在する状態で「追加」しないと
+  ;;          他のキーバインドに影響が出る
   (add-to-list 'vterm-keymap-exceptions "C-S-b") ; for `windmove'
   (add-to-list 'vterm-keymap-exceptions "C-S-f") ; for `windmove'
   (add-to-list 'vterm-keymap-exceptions "C-S-n") ; for `windmove'
