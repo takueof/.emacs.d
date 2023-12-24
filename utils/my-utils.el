@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-13T18:36:01+09:00>
+;; Time-stamp: <2023-12-24T11:56:57+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -321,19 +321,6 @@ Return converted file numbers."
           (set-buffer before-buffer)))
     (message "%d files converted to `%S'" target-files-length coding-system)
     target-files-length))
-
-
-;; ============================================================================
-;; 一括ファイル通知ウォッチ削除
-;; ============================================================================
-;;;###autoload
-(defun my-file-notify-rm-all-watches ()
-  "Remove all existing file notification watches."
-  (interactive)
-  (maphash (lambda (key _value)
-             (file-notify-rm-watch key))
-           file-notify-descriptors)
-  (message "Remove all existing file notification watches"))
 
 
 (provide 'my-utils)
