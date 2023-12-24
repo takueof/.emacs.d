@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-24T12:00:10+09:00>
+;; Time-stamp: <2023-12-24T15:47:51+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -173,40 +173,9 @@ Return string of file path."
 
 
 ;; ============================================================================
-;; コーディングシステム表記
-;; ============================================================================
-(defun my-coding-system-name-mnemonic (coding-system)
-  "Specify for CODING-SYSTEM explicitly."
-  (let* ((base (coding-system-base coding-system))
-         (name (symbol-name base)))
-    (cond ((string-prefix-p "utf-8" name) "UTF-8")
-          ((string-prefix-p "utf-16" name) "UTF-16")
-          ((string-prefix-p "utf-7" name) "UTF-7")
-          ((string-prefix-p "japanese-shift-jis" name) "Shift_JIS")
-          ((string-match "cp\\([0-9]+\\)" name) (match-string 1 name))
-          ((string-match "japanese-iso-8bit" name) "EUC-JP")
-          (t "???"))))
-
-(defun my-coding-system-bom-mnemonic (coding-system)
-  "Indicate the presence or absence of BOM for CODING-SYSTEM."
-  (let ((name (symbol-name coding-system)))
-    (cond ((string-match "be-" name) "[BE]")
-          ((string-match "le-" name) "[LE]")
-          ((string-match "-bom-" name) "[BOM]")
-          ((string-match "-with-signature" name) "[BOM]")
-          (t ""))))
-
-(defun my-buffer-coding-system-mnemonic ()
-  "Return a mnemonic for `buffer-file-coding-system'."
-  (let* ((code buffer-file-coding-system)
-         (name (my-coding-system-name-mnemonic code))
-         (bom (my-coding-system-bom-mnemonic code)))
-    (format "%s%s" name bom)))
-
-
-;; ============================================================================
 ;; Input Method (IM)
 ;; ============================================================================
+;;;###autoload
 (defun my-change-cursor-faces-by-current-input-method ()
   "Change cursor color with `current-input-method'."
   (let* ((current-input-method (if (fboundp #'mac-input-source)
@@ -219,25 +188,6 @@ Return string of file path."
                           'my-cursor-input-method-activated
                         'my-cursor-default)))
     (set-cursor-color (face-attribute cursor-face :background))))
-
-
-;; ============================================================================
-;; ディスプレイ
-;; ============================================================================
-(defmacro my-real-display-pixels-per-inch (&optional display)
-  "Calculate real pixels per inch (ppi) by real DISPLAY.
-
-Return cons of (WIDTH-DPI . HEIGHT-DPI).
-
-`display-pixels-per-inch' has invalid value in high resolution display."
-  (declare (indent 0)
-           (debug t))
-  (let ((mm-to-inch-multiple 25.4))
-    ;; PPI = px / (mm / 25.4)
-    `(cons (/ (display-pixel-width ,display)
-              (/ (display-mm-width ,display) ,mm-to-inch-multiple))
-           (/ (display-pixel-height ,display)
-              (/ (display-mm-height ,display) ,mm-to-inch-multiple)))))
 
 
 ;; ============================================================================
