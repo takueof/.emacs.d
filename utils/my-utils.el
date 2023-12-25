@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-25T02:25:38+09:00>
+;; Time-stamp: <2023-12-26T05:26:26+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -195,7 +195,7 @@ Return string of file path."
 (defmacro my-fallback-font-family (&rest families)
   "Return a first matched avaliable font-family in FAMILIES.
 
-Return nil to all FAMILIES are unavaliabled."
+Return nil to all FAMILIES are unavailable."
   (declare (indent 0)
            (debug t))
   (let ((founded (make-symbol "founded"))
