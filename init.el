@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-25T04:09:36+09:00>
+;; Time-stamp: <2023-12-25T09:24:48+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1177,7 +1177,7 @@
 ;; ------------------------------------
 (leaf dired+
   :vc (dired+
-       :url "https://github.com/emacsmirror/dired-plus.git")
+       :url "https://github.com/emacsmirror/dired-plus")
   :after dired
   :require t
   :custom ((diredp-hide-details-initially-flag . nil)
@@ -2117,25 +2117,19 @@
 ;; Web
 ;; ------------------------------------
 (leaf web-mode
-  :ensure t
+  ;; FIXME: 2023-12-24 時点で最新 master が壊れている
+  ;;        v17.3.13 を用いる
+  ;;        <df57cd0beea9c6bdc64259bd11bde0c076a64cc9> 後の commit で
+  ;;        壊れたと考えられる
+  ;; :ensure t
+  :vc (web-mode
+       :url "https://github.com/fxbois/web-mode"
+       :branch "v17.3.13")
   :mode (("\\.[sx]?html?\\'" . web-mode)
          ("\\.njk\\'" . web-mode)
          ("\\.vue\\'" . web-mode))
-  :custom ((web-mode-block-padding . nil)
-           (web-mode-part-padding . nil)
-           (web-mode-script-padding . nil)
-           (web-mode-style-padding . nil)
-           (web-mode-attr-indent-offset . nil)
-           (web-mode-attr-value-indent-offset . nil)
-           (web-mode-markup-indent-offset . 0)
-           (web-mode-markup-comment-indent-offset . 0)
-           (web-mode-sql-indent-offset . 0)
-           (web-mode-enable-auto-indentation . nil)
-           (web-mode-enable-auto-closing . t)
-           (web-mode-enable-auto-pairing . t)
-           (web-mode-enable-auto-opening . nil)
-           (web-mode-enable-auto-quoting . nil)
-           (web-mode-enable-auto-expanding . t)
+  :hook ((web-mode-hook . my-web-mode-initialize))
+  :custom ((web-mode-enable-auto-expanding . t)
            (web-mode-enable-control-block-indentation . nil)
            (web-mode-enable-current-element-highlight . t)
            (web-mode-enable-current-column-highlight . t)
@@ -2146,6 +2140,11 @@
            (web-mode-enable-sql-detection . t)
            (web-mode-enable-element-content-fontification . t)
            (web-mode-enable-element-tag-fontification . t))
+  :init
+  (defun my-web-mode-initialize ()
+    "Initialize `web-mode' before file load."
+    (setq-local sp-autoinsert-pair nil)
+    (prettier-mode +1))
   :defer-config
   ;; 確実に定義された後で追加
   (add-to-list 'web-mode-comment-formats '("php" . "//"))
