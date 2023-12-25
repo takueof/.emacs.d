@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-26T06:01:21+09:00>
+;; Time-stamp: <2023-12-26T06:03:49+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2164,6 +2164,27 @@
 (leaf yaml-mode
   :ensure t
   :custom ((yaml-indent-offset . 2)))
+
+
+;; ============================================================================
+;; アイコン (GUI ONLY)
+;; ============================================================================
+(leaf all-the-icons
+  :when (display-graphic-p)
+  :ensure t
+  :after my-utils
+  ;; :custom ((all-the-icons-color-icons . t)
+  ;;          (all-the-icons-scale-factor . 1.2)
+  ;;          (all-the-icons-default-adjust . -0.2)
+  ;;          (all-the-icons-fonts-subdirectory . nil))
+  :config
+  (unless (my-fallback-font-family "Weather Icons"
+                                   "FontAwesome"
+                                   "github-octicons"
+                                   "Material Icons"
+                                   "file-icons"
+                                   "all-the-icons")
+    (all-the-icons-install-fonts t)))
 
 
 ;; ============================================================================
