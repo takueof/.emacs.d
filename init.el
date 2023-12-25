@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-25T09:24:48+09:00>
+;; Time-stamp: <2023-12-26T02:48:01+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2117,14 +2117,7 @@
 ;; Web
 ;; ------------------------------------
 (leaf web-mode
-  ;; FIXME: 2023-12-24 時点で最新 master が壊れている
-  ;;        v17.3.13 を用いる
-  ;;        <df57cd0beea9c6bdc64259bd11bde0c076a64cc9> 後の commit で
-  ;;        壊れたと考えられる
-  ;; :ensure t
-  :vc (web-mode
-       :url "https://github.com/fxbois/web-mode"
-       :branch "v17.3.13")
+  :ensure t
   :mode (("\\.[sx]?html?\\'" . web-mode)
          ("\\.njk\\'" . web-mode)
          ("\\.vue\\'" . web-mode))
