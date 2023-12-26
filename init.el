@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-26T06:03:49+09:00>
+;; Time-stamp: <2023-12-26T17:16:53+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1638,14 +1638,6 @@
            (lsp-typescript-format-enable . nil) ; Use `prettier-mode'
            (lsp-javascript-format-enable . nil) ; Use `prettier-mode'
            (lsp-typescript-surveys-enabled . nil)
-           (lsp-javascript-display-enum-member-value-hints . t)
-           (lsp-javascript-display-return-type-hints . t)
-           (lsp-javascript-display-parameter-type-hints . t)
-           (lsp-javascript-display-parameter-name-hints . "all")
-           (lsp-javascript-display-parameter-name-hints-when-argument-matches-name . t)
-           (lsp-javascript-display-property-declaration-type-hints . t)
-           (lsp-javascript-display-variable-type-hints . t)
-           (lsp-javascript-completions-complete-function-calls . t)
            ;;
            ;; `lsp-html'
            ;;
