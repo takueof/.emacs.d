@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-26T17:16:53+09:00>
+;; Time-stamp: <2023-12-27T20:39:31+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1642,7 +1642,7 @@
            ;; `lsp-html'
            ;;
            (lsp-html-format-enable . nil) ; Use `prettier-mode'
-           (lsp-html-auto-closing-tags . nil) ; Use `smartparens' and `web-mode'
+           (lsp-html-auto-closing-tags . nil) ; Use `web-mode'
            ;;
            ;; `lsp-eslint'
            ;;
@@ -2114,8 +2114,9 @@
          ("\\.njk\\'" . web-mode)
          ("\\.vue\\'" . web-mode))
   :hook ((web-mode-hook . my-web-mode-initialize))
-  :custom ((web-mode-enable-auto-expanding . t)
-           (web-mode-enable-control-block-indentation . nil)
+  :custom ((web-mode-enable-comment-interpolation . t)
+           (web-mode-enable-auto-expanding . t)
+           (web-mode-enable-curly-brace-indentation . t)
            (web-mode-enable-current-element-highlight . t)
            (web-mode-enable-current-column-highlight . t)
            (web-mode-enable-html-entities-fontification . t)
