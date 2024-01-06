@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2024-01-06T23:43:39+09:00>
+;; Time-stamp: <2024-01-06T23:52:42+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2465,26 +2465,23 @@
     ;; 対象：
     ;;
     ;;   * "Migu 1M"
+    ;;   * "MS Gothic"
     ;;
-    ;; 前述のフォントは「〜」と「～」で字形が異なるので、視覚的な区別が可能
+    ;; 前述のフォントは U+301C と U+FF5E で字形が異なるので、視覚的な区別が可能
     ;;
     (my-set-fontset-font-safe fontset-name
                               ;; 「〜」(U+301C: WAVE DASH)
                               (cons (string-to-char "〜") (string-to-char "〜"))
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Migu 1M"
-                                                                          "VL Gothic"
                                                                           "Hiragino Sans"
-                                                                          "Meiryo"
                                                                           "MS Gothic")))
     (my-set-fontset-font-safe fontset-name
                               ;; 「～」(U+FF5E: FULLWIDTH TILDE)
                               (cons (string-to-char "～") (string-to-char "～"))
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Migu 1M"
-                                                                          "VL Gothic"
                                                                           "Hiragino Sans"
-                                                                          "Meiryo"
                                                                           "MS Gothic")))
     ;; ラテン文字：Code page 858 (`cp858')
     (my-set-fontset-font-safe fontset-name
