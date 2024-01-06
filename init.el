@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2024-01-06T23:13:09+09:00>
+;; Time-stamp: <2024-01-06T23:21:54+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2323,7 +2323,7 @@
   ;; (add-to-list 'face-font-rescale-alist `(,(encode-coding-string "-フォント名-" 'emacs-mule) . 倍率))
   ;; --------------------------------------------------------------------------
   (cond
-   (;; macOS & Windows
+   (;; Custom font usage:
     (and (my-fallback-font-family "Inconsolata")
          (my-fallback-font-family "VL Gothic"))
     (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.850))
@@ -2342,7 +2342,7 @@
     (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.785))
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.800))
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.100)))
-   (;; macOS pre-install fonts ONLY
+   (;; "macOS" pre-install fonts ONLY:
     (and (equal window-system 'mac)
          (my-fallback-font-family "Menlo"))
     (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.300))
@@ -2353,7 +2353,7 @@
     (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.300))
     (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.950)))
-   (;; Windows pre-install fonts ONLY
+   (;; "Windows" pre-install fonts ONLY:
     (and (equal window-system 'w32)
          (my-fallback-font-family "Consolas"))
     (add-to-list 'face-font-rescale-alist '("-Meiryo-" . 1.000))
