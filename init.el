@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2024-01-06T23:21:54+09:00>
+;; Time-stamp: <2024-01-06T23:43:39+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2496,9 +2496,21 @@
                                                                           "Consolas"
                                                                           "Courier New"
                                                                           "Courier")))
+    ;; `cp858' に含まれているが別フォントになる問題を回避 (Windows ONLY)
+    (dolist (code (mapcar 'string-to-char
+                          (split-string "αßΓπΣσµτΦΘΩδφε" "" t)))
+      (my-set-fontset-font-safe fontset-name
+                                (cons code code)
+                                (font-spec :size font-size
+                                           :family (my-fallback-font-family "Inconsolata"
+                                                                            "Menlo"
+                                                                            "Monaco"
+                                                                            "Consolas"
+                                                                            "Courier New"
+                                                                            "Courier"))))
     ;; `cp858' に含まれているため半角になる状態を回避
     (dolist (code (mapcar 'string-to-char
-                          (split-string "│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌∩≡■" "" t)))
+                          (split-string "│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌∞∩≡■" "" t)))
       (my-set-fontset-font-safe fontset-name
                                 (cons code code)
                                 (font-spec :size font-size
@@ -2547,7 +2559,7 @@
     ;;
     ;; 前述のフォントは除外
     (dolist (code (mapcar 'string-to-char
-                          (split-string "⌐‗" "" t)))
+                          (split-string "₧⌐‗" "" t)))
       (my-set-fontset-font-safe fontset-name
                                 (cons code code)
                                 (font-spec :size font-size
