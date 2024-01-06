@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2024-01-07T00:04:30+09:00>
+;; Time-stamp: <2024-01-07T00:54:19+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2437,14 +2437,6 @@
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "Baghdad"
                                                                             "Microsoft Sans Serif"))))
-    ;; 日本語：Code page 932 (`cp932')
-    (my-set-fontset-font-safe fontset-name
-                              'cp932
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "VL Gothic"
-                                                                          "Hiragino Sans"
-                                                                          "Meiryo"
-                                                                          "MS Gothic")))
     ;; 日本語：JIS X 0213:2004
     (my-set-fontset-font-safe fontset-name
                               'japanese-jisx0213.2004-1
@@ -2455,6 +2447,14 @@
                                                                           "MS Gothic")))
     (my-set-fontset-font-safe fontset-name
                               'japanese-jisx0213-2
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "VL Gothic"
+                                                                          "Hiragino Sans"
+                                                                          "Meiryo"
+                                                                          "MS Gothic")))
+    ;; 日本語：Code page 932 (`cp932')
+    (my-set-fontset-font-safe fontset-name
+                              'cp932
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
                                                                           "Hiragino Sans"
@@ -2493,18 +2493,6 @@
                                                                           "Consolas"
                                                                           "Courier New"
                                                                           "Courier")))
-    ;; `cp858' に含まれているが別フォントになる問題を回避 (Windows ONLY)
-    (dolist (code (mapcar 'string-to-char
-                          (split-string "╡╢╖╕╣║╗╝╜╛╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪▌αßΓπΣσµτΦΘΩδφε≥≤≈∙√ⁿ" "" t)))
-      (my-set-fontset-font-safe fontset-name
-                                (cons code code)
-                                (font-spec :size font-size
-                                           :family (my-fallback-font-family "Inconsolata"
-                                                                            "Menlo"
-                                                                            "Monaco"
-                                                                            "Consolas"
-                                                                            "Courier New"
-                                                                            "Courier"))))
     ;; `cp858' に含まれているため半角になる状態を回避
     (dolist (code (mapcar 'string-to-char
                           (split-string "│┤┐└┴┬├─┼┘┌∞∩≡■" "" t)))
@@ -2533,18 +2521,33 @@
     ;; 対象：
     ;;
     ;;   * "Inconsolata"
-    ;;   * "Consolas"
     ;;
     ;; 前述のフォントは除外
     (dolist (code (mapcar 'string-to-char
-                          (split-string "ı░▒▓" "" t)))
+                          (split-string "ı░▒▓╡╢╖╕╜╛╞╟╧╨╤╥╙╘╒╓╫╪▌αßΓπΣσµτΦΘΩδφε≥≤ⁿ≈∙√" "" t)))
       (my-set-fontset-font-safe fontset-name
                                 (cons code code)
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "Menlo"
                                                                             "Monaco"
+                                                                            "Consolas"
                                                                             "Courier New"
                                                                             "Courier"))))
+    ;; 未実装グリフのフォールバック
+    ;;
+    ;; 対象：
+    ;;
+    ;;   * "Consolas"
+    ;;
+    ;; 前述のフォントは除外
+    (my-set-fontset-font-safe fontset-name
+                              (cons "₧" "₧")
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "Inconsolata"
+                                                                          "Menlo"
+                                                                          "Monaco"
+                                                                          "Courier New"
+                                                                          "Courier")))
     ;; 未実装グリフのフォールバック
     ;;
     ;; 対象：
@@ -2556,7 +2559,7 @@
     ;;
     ;; 前述のフォントは除外
     (dolist (code (mapcar 'string-to-char
-                          (split-string "₧⌐‗" "" t)))
+                          (split-string "⌐‗" "" t)))
       (my-set-fontset-font-safe fontset-name
                                 (cons code code)
                                 (font-spec :size font-size
