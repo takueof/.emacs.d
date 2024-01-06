@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize config file -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2023 Taku Watabe
-;; Time-stamp: <2023-12-24T06:25:03+09:00>
+;; Time-stamp: <2024-01-06T22:41:10+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -43,6 +43,13 @@
 ;;          `custom.el' will not be generated.
 ;;
 (setq custom-file (locate-user-emacs-file "custom.el"))
+;;
+;; Don't use "Native Compile".
+;;
+;; Because, I have problems with slower execution than "Byte Compile" on both
+;; my macOS and Windows environments.
+;;
+(setq no-native-compile t)
 ;;
 ;; Don't show `*Warnings*' buffer when asynchronous native compiling.
 ;;
