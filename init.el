@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2024-01-06T23:52:42+09:00>
+;; Time-stamp: <2024-01-07T00:04:30+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2238,7 +2238,7 @@
 ;;   ₧ƒ⌐¬░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡≥≤⌠⌡≈∙√ⁿ■
 ;;
 ;; 全角フォントで表示されてほしいもの
-;;   │┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌∩≡■
+;;   │┤┐└┴┬├─┼┘┌∞∩≡■
 ;;
 ;; See also:
 ;; https://en.wikipedia.org/wiki/Code_page_437
@@ -2495,7 +2495,7 @@
                                                                           "Courier")))
     ;; `cp858' に含まれているが別フォントになる問題を回避 (Windows ONLY)
     (dolist (code (mapcar 'string-to-char
-                          (split-string "αßΓπΣσµτΦΘΩδφε" "" t)))
+                          (split-string "╡╢╖╕╣║╗╝╜╛╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪▌αßΓπΣσµτΦΘΩδφε≥≤≈∙√ⁿ" "" t)))
       (my-set-fontset-font-safe fontset-name
                                 (cons code code)
                                 (font-spec :size font-size
@@ -2507,7 +2507,7 @@
                                                                             "Courier"))))
     ;; `cp858' に含まれているため半角になる状態を回避
     (dolist (code (mapcar 'string-to-char
-                          (split-string "│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌∞∩≡■" "" t)))
+                          (split-string "│┤┐└┴┬├─┼┘┌∞∩≡■" "" t)))
       (my-set-fontset-font-safe fontset-name
                                 (cons code code)
                                 (font-spec :size font-size
