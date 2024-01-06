@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2024-01-07T00:57:24+09:00>
+;; Time-stamp: <2024-01-07T01:17:23+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2167,8 +2167,10 @@
 ;; ============================================================================
 ;; 文字幅調整テスト
 ;;
-;;   aa| アルファベット
-;;   ıı| ラテン文字
+;;   az| アルファベット
+;;   ¡©| ラテン文字 (`iso-8859-1')
+;;   αß| ラテン文字 (`cp437')
+;;   €ı| ラテン文字 (`cp858')
 ;;   あ| ひらがな（日本語）
 ;;   简| 簡体字
 ;;   粵| 繁体字
@@ -2559,6 +2561,19 @@
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "Courier New"
                                                                             "Courier"))))
+    ;; 未実装グリフのフォールバック
+    ;;
+    ;; 対象：
+    ;;
+    ;;   * "VL Gothic"
+    ;;   * "Migu 1M"
+    ;;
+    ;; 前述のフォントは除外
+    (my-set-fontset-font-safe fontset-name
+                              (cons "￤" "￤")
+                              (font-spec :size font-size
+                                         :family (my-fallback-font-family "Hiragino Sans"
+                                                                          "MS Gothic")))
     ;; Emoji
     (my-set-fontset-font-safe fontset-name
                               'emoji
