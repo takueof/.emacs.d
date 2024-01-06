@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2024-01-07T00:54:19+09:00>
+;; Time-stamp: <2024-01-07T00:57:24+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2375,7 +2375,6 @@
     ;; フォントセット生成
     (create-fontset-from-ascii-font (my-fallback-font-family "Inconsolata"
                                                              "Menlo"
-                                                             "Monaco"
                                                              "Consolas"
                                                              "Courier New"
                                                              "Courier")
@@ -2388,7 +2387,6 @@
                                          ;; いったん基礎フォントを適用
                                          :family (my-fallback-font-family "Inconsolata"
                                                                           "Menlo"
-                                                                          "Monaco"
                                                                           "Consolas"
                                                                           "Courier New"
                                                                           "Courier")))
@@ -2489,7 +2487,6 @@
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Inconsolata"
                                                                           "Menlo"
-                                                                          "Monaco"
                                                                           "Consolas"
                                                                           "Courier New"
                                                                           "Courier")))
@@ -2529,7 +2526,6 @@
                                 (cons code code)
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "Menlo"
-                                                                            "Monaco"
                                                                             "Consolas"
                                                                             "Courier New"
                                                                             "Courier"))))
@@ -2545,7 +2541,6 @@
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Inconsolata"
                                                                           "Menlo"
-                                                                          "Monaco"
                                                                           "Courier New"
                                                                           "Courier")))
     ;; 未実装グリフのフォールバック
@@ -2554,7 +2549,6 @@
     ;;
     ;;   * "Inconsolata"
     ;;   * "Menlo"
-    ;;   * "Monaco"
     ;;   * "Consolas"
     ;;
     ;; 前述のフォントは除外
