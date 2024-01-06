@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2024-01-03T18:29:07+09:00>
+;; Time-stamp: <2024-01-06T23:13:09+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1668,6 +1668,7 @@
 ;; ローマ字入力から日本語をインクリメンタル検索
 ;; ------------------------------------
 (leaf migemo
+  :when (executable-find "cmigemo")
   :leaf-defer nil
   :after exec-path-from-shell
   :ensure t
@@ -1685,12 +1686,9 @@
             ;; 辞書ファイルはデフォルトを利用
             (migemo-dictionary . ,(catch 'founded
                                     (dolist (path '("/usr/local/share/migemo/utf-8/migemo-dict"
-                                                    "C:/programs/cmigemo/share/migemo/utf-8/migemo-dict"
-                                                    migemo-dictionary))
-                                      (let ((file (convert-standard-filename path)))
-                                        (if (and (file-exists-p file)
-                                                 (file-readable-p file))
-                                            (throw 'founded file))))))
+                                                    "C:/programs/cmigemo/dict/utf-8/migemo-dic"))
+                                      (if (file-readable-p path)
+                                          (throw 'founded path)))))
             (migemo-user-dictionary . nil)
             (migemo-regex-dictionary . nil)
             ;; 辞書エンコーディング明示
