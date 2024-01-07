@@ -1,6 +1,6 @@
 <!--
-Copyright (C) 2013-2023 Taku Watabe
-Time-stamp: <2023-11-29T13:45:31+09:00>
+Copyright (C) 2013-2024 Taku Watabe
+Time-stamp: <2024-01-08T08:13:29+09:00>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

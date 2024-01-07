@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2024-01-08T08:09:35+09:00>
+;; Copyright (C) 2013-2024 Taku Watabe
+;; Time-stamp: <2024-01-08T08:13:03+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 

@@ -3,8 +3,8 @@ rem -*- mode: Bat; coding: utf-8-unix; -*-
 setlocal
 rem ===========================================================================
 rem GNU Emacs client `emacsclientw' wrapper
-rem Copyright (C) 2014-2023 Taku Watabe
-rem Time-stamp: <2023-12-11T10:04:30+09:00>
+rem Copyright (C) 2014-2024 Taku Watabe
+rem Time-stamp: <2024-01-08T08:13:43+09:00>
 rem ===========================================================================
 rem This program is free software; you can redistribute it and/or modify
 rem it under the terms of the GNU General Public License as published by

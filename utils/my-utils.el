@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2023-12-26T05:26:26+09:00>
+;; Copyright (C) 2013-2024 Taku Watabe
+;; Time-stamp: <2024-01-08T08:13:18+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
