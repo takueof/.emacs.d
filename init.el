@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2024-01-08T00:29:41+09:00>
+;; Time-stamp: <2024-01-08T08:09:35+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1362,31 +1362,6 @@
 ;; ------------------------------------
 (leaf grep
   :bind (("C-M-g" . rgrep)))
-;; Windows ONLY
-(leaf grep
-  :when (member system-type '(ms-dos windows-nt))
-  ;; --------------------------------
-  ;; HACK: `autoload' 未対応変数を変更する必要があるため、
-  ;;       明示的にロードさせる必要がある
-  ;; --------------------------------
-  :require t
-  :custom (;; 例外が出るため NUL デバイスは使わせない
-           (grep-use-null-device . nil))
-  :config
-  ;; PATH は通っていないが、`exec-path' は通っている場合を想定
-  ;;
-  ;; すべて `defvar' 定義なので、 `autoload' 前後での
-  ;; `custom-set-variables' による設定は不可能
-  ;; 明示的ロード後～関数実行前までに設定しなければならない
-  (setq grep-program
-        (purecopy (or (executable-find "grep")
-                      "grep")))
-  (setq find-program
-        (purecopy (or (executable-find "find")
-                      "find")))
-  (setq xargs-program
-        (purecopy (or (executable-find "xargs")
-                      "xargs"))))
 
 
 ;; ------------------------------------
