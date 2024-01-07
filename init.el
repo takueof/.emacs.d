@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2024-01-07T23:48:13+09:00>
+;; Time-stamp: <2024-01-08T00:29:41+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -540,25 +540,7 @@
   :config
   (line-number-mode +1)
   (column-number-mode +1)
-  (size-indication-mode +1)
-
-  ;; --------------------------------------------------------------------------
-  ;; モードライン表示領域をスリムにする
-  ;; --------------------------------------------------------------------------
-  (let ((fmt (copy-sequence mode-line-format))
-        (item)
-        (result '()))
-    (while (setq item (car-safe fmt))
-      (setq fmt (cdr-safe fmt))
-      (push
-       ;; 3以上の空白文字のみで構成された項目は、すべて U+0020 2文字に置換
-       (if (and (stringp item)
-                (numberp (string-match "\\`\\s-\\{3,\\}\\'" item)))
-           "  "
-         item)
-       result))
-    (setq mode-line-format (reverse result)))
-  ) ; End of *modeline
+  (size-indication-mode +1))
 
 
 ;; ============================================================================
