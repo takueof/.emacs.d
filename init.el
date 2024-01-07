@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2024-01-07T16:46:59+09:00>
+;; Time-stamp: <2024-01-07T23:48:13+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -756,6 +756,7 @@
 ;; ターミナルエミュレータ
 ;; ============================================================================
 (leaf vterm
+  :unless (member system-type '(ms-dos windows-nt))
   :ensure t
   :custom ((vterm-shell . "bash")
            (vterm-max-scrollback . 100000)
