@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2024-01-07T01:17:23+09:00>
+;; Time-stamp: <2024-01-07T15:37:05+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2539,7 +2539,7 @@
     ;;
     ;; 前述のフォントは除外
     (my-set-fontset-font-safe fontset-name
-                              (cons "₧" "₧")
+                              (cons (string-to-char "₧") (string-to-char "₧"))
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Inconsolata"
                                                                           "Menlo"
@@ -2570,7 +2570,7 @@
     ;;
     ;; 前述のフォントは除外
     (my-set-fontset-font-safe fontset-name
-                              (cons "￤" "￤")
+                              (cons (string-to-char "￤") (string-to-char "￤"))
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Hiragino Sans"
                                                                           "MS Gothic")))
