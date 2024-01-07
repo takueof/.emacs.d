@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2023 Taku Watabe
-;; Time-stamp: <2024-01-07T15:37:05+09:00>
+;; Time-stamp: <2024-01-07T16:46:59+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -454,6 +454,21 @@
 
 
 ;; ============================================================================
+;; カラーテーマ (Use "Modus" theme, latest MELPA version)
+;; ============================================================================
+(leaf modus-themes
+  :ensure t
+  :require t
+  :custom ((modus-themes-bold-constructs . t)
+           (modus-themes-common-palette-overrides . '((comment yellow-faint)
+                                                      (string green-faint)
+                                                      (border-mode-line-active green)
+                                                      (bg-mode-line-active bg-green-subtle))))
+  :config
+  (load-theme 'modus-vivendi :no-confirm))
+
+
+;; ============================================================================
 ;; 自作ユーティリティ
 ;; ============================================================================
 (leaf my-utils
@@ -509,32 +524,6 @@
     (global-unset-key [S-magnify-up])
     (global-unset-key [S-magnify-down]))
   ) ; End of *global-keybind
-
-
-;; ============================================================================
-;; カラーテーマ
-;; ============================================================================
-(leaf *themes
-  :custom (;; For "Modus"
-           (modus-themes-bold-constructs . t)
-           (modus-themes-syntax . '(faint alt-syntax green-strings yellow-comments))
-           (modus-themes-mode-line . '(moody accented borderless))
-           (modus-themes-paren-match . '(bold intense))
-           (modus-themes-region . '(accented bg-only no-extend)))
-  :config
-  ;; 利用可能なカラーテーマを設定
-  (let ((required-themes '(;; 利用したいカラーテーマの一覧
-                           ;; 優先度が高い順に降順ソートしておくこと
-                           modus-vivendi
-                           wheatgrass))
-        (availabled-themes (custom-available-themes)))
-    ;; 利用したいカラーテーマが見つからなければ何もしない
-    (catch 'required-theme-found
-      (dolist (theme required-themes)
-        (when (member theme availabled-themes)
-          (load-theme theme t)
-          (throw 'required-theme-found theme)))))
-  ) ; End of *themes
 
 
 ;; ============================================================================
