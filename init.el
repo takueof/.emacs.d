@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-01-08T11:45:50+09:00>
+;; Time-stamp: <2024-01-08T12:40:08+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2118,12 +2118,13 @@
 ;;   ¡©| ラテン文字 (`iso-8859-1')
 ;;   αß| ラテン文字 (`cp437')
 ;;   €ı| ラテン文字 (`cp858')
+;;   ⌐░| 半角記号
+;;   ×| 全角記号
 ;;   あ| ひらがな（日本語）
 ;;   简| 簡体字
 ;;   粵| 繁体字
 ;;   한| ハングル
 ;;   ไไ| タイ文字
-;;   ░▓| 記号
 ;;   😊| 絵文字
 ;; ============================================================================
 ;; 波ダッシュ字形テスト
@@ -2274,23 +2275,24 @@
   (cond
    (;; Custom font usage:
     (and (my-fallback-font-family "Inconsolata")
-         (my-fallback-font-family "VL Gothic"))
+         (my-fallback-font-family "VL Gothic")
+         (my-fallback-font-family "Migu 1M"))
     (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.850))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.850))
     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.850))
     (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.200))
     (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-MingLiU-ExtB-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.200))
     (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.200))
-    (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.200))
     (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 0.850))
     (add-to-list 'face-font-rescale-alist '("-Tahoma-" . 1.100))
     (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.785))
-    (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.800))
-    (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.100)))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.900))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.200)))
    (;; "macOS" pre-install fonts ONLY:
     (and (equal window-system 'mac)
          (my-fallback-font-family "Menlo"))
@@ -2305,20 +2307,20 @@
    (;; "Windows" pre-install fonts ONLY:
     (and (equal window-system 'w32)
          (my-fallback-font-family "Consolas"))
-    (add-to-list 'face-font-rescale-alist '("-Meiryo-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-MS Gothic-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.900))
-    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.910))
-    (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.100))
-    (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.100))
-    (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-メイリオ-" . 1.200))
+    (add-to-list 'face-font-rescale-alist '("-ＭＳ ゴシック-" . 1.200))
+    (add-to-list 'face-font-rescale-alist '("-Courier-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 1.000))
+    (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.200))
+    (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.200))
+    (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.200))
     (add-to-list 'face-font-rescale-alist '("-Tahoma-" . 1.100))
-    (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.800))
-    (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.100))))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.900))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.200))))
   ;; -------------------------------------------------------------------------
   ;; フォントセット：プログラミング用
   ;; -------------------------------------------------------------------------
-  (let* ((font-size 14.0) ; デフォルトフォントサイズ (pt)
+  (let* ((font-size 14) ; デフォルトフォントサイズ (px)
          (fontset "programming")
          (fontset-name (concat "fontset-" fontset)))
     ;; フォントセット生成
@@ -2390,29 +2392,29 @@
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
                                                                           "Hiragino Sans"
-                                                                          "Meiryo"
-                                                                          "MS Gothic")))
+                                                                          "メイリオ"
+                                                                          "ＭＳ ゴシック")))
     (my-set-fontset-font-safe fontset-name
                               'japanese-jisx0213-2
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
                                                                           "Hiragino Sans"
-                                                                          "Meiryo"
-                                                                          "MS Gothic")))
+                                                                          "メイリオ"
+                                                                          "ＭＳ ゴシック")))
     ;; 日本語：Code page 932 (`cp932')
     (my-set-fontset-font-safe fontset-name
                               'cp932
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "VL Gothic"
                                                                           "Hiragino Sans"
-                                                                          "Meiryo"
-                                                                          "MS Gothic")))
+                                                                          "メイリオ"
+                                                                          "ＭＳ ゴシック")))
     ;; 「〜」(U+301C: WAVE DASH) と「～」(U+FF5E: FULLWIDTH TILDE) の字形を変更
     ;;
     ;; 対象：
     ;;
     ;;   * "Migu 1M"
-    ;;   * "MS Gothic"
+    ;;   * "ＭＳ ゴシック"
     ;;
     ;; 前述のフォントは U+301C と U+FF5E で字形が異なるので、視覚的な区別が可能
     ;;
@@ -2422,14 +2424,14 @@
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Migu 1M"
                                                                           "Hiragino Sans"
-                                                                          "MS Gothic")))
+                                                                          "ＭＳ ゴシック")))
     (my-set-fontset-font-safe fontset-name
                               ;; 「～」(U+FF5E: FULLWIDTH TILDE)
                               (cons (string-to-char "～") (string-to-char "～"))
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Migu 1M"
                                                                           "Hiragino Sans"
-                                                                          "MS Gothic")))
+                                                                          "ＭＳ ゴシック")))
     ;; ラテン文字：Code page 858 (`cp858')
     (my-set-fontset-font-safe fontset-name
                               'cp858
@@ -2447,12 +2449,12 @@
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "VL Gothic"
                                                                             "Hiragino Sans"
-                                                                            "MS Gothic"))))
+                                                                            "ＭＳ ゴシック"))))
     ;; 一部グリフが次のフォントで半角になる状態を回避
     ;;
     ;;   * "VL Gothic"
     ;;   * "Hiragino Sans"
-    ;;   * "Meiryo"
+    ;;   * "メイリオ"
     ;;
     ;; 前述のフォントは除外
     (dolist (code (mapcar 'string-to-char
@@ -2461,7 +2463,7 @@
                                 (cons code code)
                                 (font-spec :size font-size
                                            :family (my-fallback-font-family "Migu 1M"
-                                                                            "MS Gothic"))))
+                                                                            "ＭＳ ゴシック"))))
     ;; 未実装グリフのフォールバック
     ;;
     ;; 対象：
@@ -2520,7 +2522,7 @@
                               (cons (string-to-char "￤") (string-to-char "￤"))
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "Hiragino Sans"
-                                                                          "MS Gothic")))
+                                                                          "ＭＳ ゴシック")))
     ;; Emoji
     (my-set-fontset-font-safe fontset-name
                               'emoji
