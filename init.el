@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-01-08T08:20:27+09:00>
+;; Time-stamp: <2024-01-08T11:45:50+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2259,7 +2259,7 @@
 ;; ============================================================================
 (leaf *font
   ;; GUI 上でのみ設定（設定する意味がないため、ターミナル上では何もしない）
-  :when (display-graphic-p)
+  :when window-system
   :after my-utils
   :custom (;; シンボルや句読点などを表示するフォントを、設定に応じて選択
            ;;   → GNU Emacs 25 より前のふるまいに戻す
