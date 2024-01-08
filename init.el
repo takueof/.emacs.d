@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-01-08T12:51:08+09:00>
+;; Time-stamp: <2024-01-08T14:19:48+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2278,21 +2278,22 @@
          (my-fallback-font-family "VL Gothic")
          (my-fallback-font-family "Migu 1M"))
     (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.850))
+    (add-to-list 'face-font-rescale-alist '("-Consolas-" . 0.950))
     (add-to-list 'face-font-rescale-alist '("-Courier-" . 0.850))
     (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.850))
     (add-to-list 'face-font-rescale-alist '("-PingFang SC-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.200))
+    (add-to-list 'face-font-rescale-alist '("-Microsoft YaHei-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-PingFang HK-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-MingLiU-ExtB-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-PingFang TC-" . 1.000))
-    (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.200))
+    (add-to-list 'face-font-rescale-alist '("-Microsoft JhengHei-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Apple SD Gothic Neo-" . 1.200))
-    (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.200))
+    (add-to-list 'face-font-rescale-alist '("-Malgun Gothic-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Ayuthaya-" . 0.850))
-    (add-to-list 'face-font-rescale-alist '("-Tahoma-" . 1.100))
+    (add-to-list 'face-font-rescale-alist '("-Tahoma-" . 1.000))
     (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.785))
-    (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.900))
-    (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.200)))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.785))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.000)))
    (;; "macOS" pre-install fonts ONLY:
     (and (equal window-system 'mac)
          (my-fallback-font-family "Menlo"))
