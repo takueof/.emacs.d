@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-01-08T12:40:08+09:00>
+;; Time-stamp: <2024-01-08T12:51:08+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2472,7 +2472,7 @@
     ;;
     ;; 前述のフォントは除外
     (dolist (code (mapcar 'string-to-char
-                          (split-string "ı░▒▓╡╢╖╕╜╛╞╟╧╨╤╥╙╘╒╓╫╪▌αßΓπΣσµτΦΘΩδφε≥≤ⁿ≈∙√" "" t)))
+                          (split-string "ı░▒▓╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪▌αßΓπΣσµτΦΘΩδφε≥≤ⁿ≈∙√" "" t)))
       (my-set-fontset-font-safe fontset-name
                                 (cons code code)
                                 (font-spec :size font-size
