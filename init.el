@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-01-08T14:19:48+09:00>
+;; Time-stamp: <2024-01-09T22:56:07+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1486,7 +1486,11 @@
 ;; ------------------------------------
 (leaf lsp-ui
   :ensure t
-  :custom ((lsp-ui-sideline-show-hover . t)
+  :bind ((:lsp-ui-mode-map
+          ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+          ([remap xref-find-references] . lsp-ui-peek-find-references)))
+  :custom ((lsp-ui-doc-show-with-mouse . nil)
+           (lsp-ui-sideline-show-hover . t)
            (lsp-ui-sideline-show-code-actions . t)
            (lsp-ui-sideline-diagnostic-max-lines . 2)
            (lsp-ui-sideline-diagnostic-max-line-length . 150)))
@@ -1540,6 +1544,7 @@
   :ensure t
   :hook (;; 有効化は必要最小限にとどめる
          (css-mode-hook . lsp)
+         (dockerfile-mode-hook . lsp)
          (java-mode-hook . lsp)
          (js-mode-hook . lsp)
          (js2-mode-hook . lsp)
@@ -1547,6 +1552,7 @@
          (markdown-mode-hook . lsp)
          (php-mode-hook . lsp)
          (scss-mode-hook . lsp)
+         (sh-mode-hook . lsp)
          (typescript-mode-hook . lsp)
          (web-mode-hook . lsp)
          (yaml-mode-hook . lsp))
