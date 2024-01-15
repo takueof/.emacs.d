@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-01-09T22:56:07+09:00>
+;; Time-stamp: <2024-01-16T08:22:40+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -740,18 +740,32 @@
 (leaf vterm
   :unless (member system-type '(ms-dos windows-nt))
   :ensure t
+  :bind (("C-`" . vterm-toggle)
+         (:vterm-mode-map
+          ("C-y" . vterm-yank) ; なぜかデフォルトで割当済なのに機能していない
+          ("C-RET" . vterm-toggle-insert-cd)))
   :custom ((vterm-shell . "bash")
            (vterm-max-scrollback . 100000)
-           (vterm-clear-scrollback-when-clearing . t)
            (vterm-enable-manipulate-selection-data-by-osc52 . t)
-           (vterm-copy-exclude-prompt . nil))
+           (vterm-buffer-name-string . "vterm - %s"))
   :defer-config
   ;; WARNING: 確実に `vterm-keymap-exceptions' が存在する状態で「追加」しないと
   ;;          他のキーバインドに影響が出る
-  (add-to-list 'vterm-keymap-exceptions "C-S-b") ; for `windmove'
-  (add-to-list 'vterm-keymap-exceptions "C-S-f") ; for `windmove'
-  (add-to-list 'vterm-keymap-exceptions "C-S-n") ; for `windmove'
-  (add-to-list 'vterm-keymap-exceptions "C-S-p")) ; for `windmove'
+  ;;
+  ;; For `windmove'
+  (add-to-list 'vterm-keymap-exceptions "C-S-b" t)
+  (add-to-list 'vterm-keymap-exceptions "C-S-f" t)
+  (add-to-list 'vterm-keymap-exceptions "C-S-n" t)
+  (add-to-list 'vterm-keymap-exceptions "C-S-p" t))
+
+
+;; ============================================================================
+;; ターミナルエミュレータ (`vterm') 切替
+;; ============================================================================
+(leaf vterm-toggle
+  :ensure t
+  :after vterm
+  :custom ((vterm-toggle-scope . 'project)))
 
 
 ;; ============================================================================
@@ -1694,6 +1708,9 @@
 ;; ------------------------------------
 (leaf projectile
   :ensure t
+  :bind (:projectile-mode-map
+         ("C-." . projectile-next-project-buffer)
+         ("C-," . projectile-previous-project-buffer))
   :custom `((projectile-enable-caching . t)
             (projectile-completion-system . ',(cond ((featurep 'ido) 'ido)
                                                     (t 'default)))
@@ -1701,7 +1718,9 @@
             ;; ローカル環境にのみ保存
             (projectile-cache-file . "~/.emacs.projectile.cache")
             (projectile-known-projects-file . "~/.emacs.projectile-bookmarks.eld"))
-  :global-minor-mode t)
+  :global-minor-mode t
+  :defer-config
+  (add-to-list 'projectile-globally-ignored-modes "vterm-mode"))
 
 
 ;; ------------------------------------
@@ -2065,7 +2084,7 @@
          ("\\.njk\\'" . web-mode)
          ("\\.vue\\'" . web-mode))
   :hook ((web-mode-hook . my-web-mode-initialize))
-  :custom ((web-mode-enable-comment-interpolation . t)
+  :custom ((web-mode-enable-auto-quoting . nil)
            (web-mode-enable-auto-expanding . t)
            (web-mode-enable-curly-brace-indentation . t)
            (web-mode-enable-current-element-highlight . t)
