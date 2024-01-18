@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-01-18T21:51:45+09:00>
+;; Time-stamp: <2024-01-18T22:04:00+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2090,6 +2090,7 @@
   :mode (("\\.[sx]?html?\\'" . web-mode)
          ("\\.njk\\'" . web-mode)
          ("\\.vue\\'" . web-mode))
+  :hook ((web-mode-hook . my-web-mode-initialize))
   :custom ((web-mode-enable-css-colorization . t)
            (web-mode-enable-auto-indentation . nil)
            (web-mode-enable-auto-closing . t)
@@ -2107,6 +2108,11 @@
            (web-mode-enable-sql-detection . t)
            (web-mode-enable-element-content-fontification . t)
            (web-mode-enable-element-tag-fontification . t))
+  :init
+  (defun my-web-mode-initialize ()
+    "Initialize `web-mode' before file load."
+    ;; HACK: なぜか `global-prettier-mode' が機能していない問題を回避
+    (prettier-mode +1))
   :defer-config
   ;; 確実に定義された後で追加
   (add-to-list 'web-mode-comment-formats '("php" . "//"))
