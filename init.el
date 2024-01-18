@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-01-16T08:22:40+09:00>
+;; Time-stamp: <2024-01-18T20:42:09+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1777,6 +1777,13 @@
   :ensure t
   :custom ((sp-show-pair-from-inside . t)
            (sp-undo-pairs-separately . t))
+  :init
+  (defun my-sp-web-mode-is-code-context (id action context)
+    (and (eq action 'insert)
+         (not (or (get-text-property (point) 'part-side)
+                  (get-text-property (point) 'block-side)))))
+  :defer-config
+  (sp-local-pair 'web-mode "<" nil :when '(my-sp-web-mode-is-code-context))
   :global-minor-mode (show-smartparens-global-mode smartparens-global-mode))
 
 
@@ -2083,8 +2090,12 @@
   :mode (("\\.[sx]?html?\\'" . web-mode)
          ("\\.njk\\'" . web-mode)
          ("\\.vue\\'" . web-mode))
-  :hook ((web-mode-hook . my-web-mode-initialize))
-  :custom ((web-mode-enable-auto-quoting . nil)
+  :custom ((web-mode-enable-css-colorization . t)
+           (web-mode-enable-auto-indentation . t)
+           (web-mode-enable-auto-closing . t)
+           (web-mode-enable-auto-pairing . nil) ; Use `smartparens'
+           (web-mode-enable-auto-opening . t)
+           (web-mode-enable-auto-quoting . nil) ; Use `smartparens'
            (web-mode-enable-auto-expanding . t)
            (web-mode-enable-curly-brace-indentation . t)
            (web-mode-enable-current-element-highlight . t)
@@ -2096,11 +2107,6 @@
            (web-mode-enable-sql-detection . t)
            (web-mode-enable-element-content-fontification . t)
            (web-mode-enable-element-tag-fontification . t))
-  :init
-  (defun my-web-mode-initialize ()
-    "Initialize `web-mode' before file load."
-    (setq-local sp-autoinsert-pair nil)
-    (prettier-mode +1))
   :defer-config
   ;; 確実に定義された後で追加
   (add-to-list 'web-mode-comment-formats '("php" . "//"))
