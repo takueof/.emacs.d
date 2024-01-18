@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-01-18T20:42:09+09:00>
+;; Time-stamp: <2024-01-18T21:51:45+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2091,7 +2091,7 @@
          ("\\.njk\\'" . web-mode)
          ("\\.vue\\'" . web-mode))
   :custom ((web-mode-enable-css-colorization . t)
-           (web-mode-enable-auto-indentation . t)
+           (web-mode-enable-auto-indentation . nil)
            (web-mode-enable-auto-closing . t)
            (web-mode-enable-auto-pairing . nil) ; Use `smartparens'
            (web-mode-enable-auto-opening . t)
