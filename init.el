@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-01-18T22:04:00+09:00>
+;; Time-stamp: <2024-01-30T19:42:10+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1518,8 +1518,11 @@
 ;; ------------------------------------
 (leaf lsp-java
   :ensure t
-  :custom (;; 旧バージョン（11.x 系）を利用するため旧い `jdtls' を指定
-           (lsp-java-jdt-download-url . "https://download.eclipse.org/jdtls/milestones/1.12.0/jdt-language-server-1.12.0-202206011637.tar.gz"))
+  :config
+  ;; For "SpringBoot"
+  (leaf lsp-java-boot
+    :after lsp-java
+    :hook ((java-mode-hook . lsp-java-boot-lens-mode)))
   :defer-config
   ;; For "DAP"
   ;;
@@ -1527,12 +1530,6 @@
   ;;          「定義」ではなく「追加」
   (add-to-list 'lsp-java-vmargs "-Djsse.enableSNIExtension=false")
   (add-to-list 'lsp-java-9-args "-Djsse.enableSNIExtension=false"))
-;; For "SpringBoot"
-(leaf lsp-java-boot
-  :after lsp-java
-  :require t
-  :hook ((lsp-mode-hook . lsp-lens-mode)
-         (java-mode-hook . lsp-java-boot-lens-mode)))
 
 
 ;; ------------------------------------
@@ -1569,7 +1566,9 @@
          (sh-mode-hook . lsp)
          (typescript-mode-hook . lsp)
          (web-mode-hook . lsp)
-         (yaml-mode-hook . lsp))
+         (yaml-mode-hook . lsp)
+         ;; `lsp-lens-mode'
+         (lsp-mode-hook . lsp-lens-mode))
   :custom (;;
            ;; `lsp-mode'
            ;;
