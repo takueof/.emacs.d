@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-01-30T19:42:10+09:00>
+;; Time-stamp: <2024-02-16T01:04:46+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -492,7 +492,7 @@
          ;; 1つ前のエラーを表示
          ("C-x \\" . previous-error)
          ;; `revert-buffer-quick' ショートカット
-         ("C-c C-r" . revert-buffer-quick)
+         ("C-c r" . revert-buffer-quick)
          ;; 行頭移動は物理行
          ("C-a" . my-beginning-of-smart-indented-line)
          ;; 前のウインドウに移動
@@ -785,6 +785,21 @@
 ;; Minor modes
 ;; ============================================================================
 ;; ------------------------------------
+;; アクティビティ管理
+;; ------------------------------------
+(leaf activities
+  :ensure t
+  :bind (("C-c a n" . activities-new)
+         ("C-c a a" . activities-resume)
+         ("C-c a s" . activities-suspend)
+         ("C-c a k" . activities-kill)
+         ("C-c a RET" . activities-switch)
+         ("C-c a g" . activities-revert)
+         ("C-c a l" . activities-list))
+  :global-minor-mode activities-mode)
+
+
+;; ------------------------------------
 ;; 絞り込み：スペース区切りによる複数キーワード
 ;; ------------------------------------
 (leaf affe
@@ -847,16 +862,6 @@
   :custom ((bookmark-version-control . t)
            ;; ローカル環境にのみ保存
            (bookmark-default-file . "~/.emacs.bookmark.el")))
-
-
-;; ------------------------------------
-;; ブックマーク：拡張
-;; ------------------------------------
-(leaf bookmark+
-  :vc (bookmark+
-       :url "https://github.com/emacsmirror/bookmark-plus")
-  :after bookmark
-  :require t)
 
 
 ;; ------------------------------------
@@ -1003,12 +1008,11 @@
 (leaf consult
   :ensure t
   :bind (;; 上書き
-         ("C-s" . my-consult-line)
+         ("C-s" . consult-line)
          ("C-x b" . consult-buffer)
          ("C-x 4 b" . consult-buffer-other-window)
          ("C-x 5 b" . consult-buffer-other-frame)
          ;; コマンド群
-         ;; `C-c c' プレフィクスを使用
          ("C-c c h" . consult-history)
          ("C-c c m" . consult-mode-command)
          ("C-c c b" . consult-bookmark)
@@ -1022,7 +1026,6 @@
          ("C-c c i" . consult-imenu)
          ("C-c c f" . consult-focus-lines)
          ;; コマンド群（検索）
-         ;; "C-c c s" プレフィクスを使用
          ("C-c c s f" . consult-find)
          ("C-c c s L" . consult-locate)
          ("C-c c s g" . consult-grep)
@@ -1033,14 +1036,7 @@
   :custom ((register-preview-function . #'consult-register-format)
            (xref-show-xrefs-function . #'consult-xref)
            (xref-show-definitions-function . #'consult-xref))
-  :advice ((:override register-preview consult-register-window))
-  :config
-  (defun my-consult-line (&optional at-point)
-    "Consult-line uses things-at-point if set C-u prefix."
-    (interactive "P")
-    (if at-point
-        (consult-line (thing-at-point 'symbol))
-      (consult-line))))
+  :advice ((:override register-preview consult-register-window)))
 
 
 ;; ------------------------------------
@@ -1114,8 +1110,7 @@
 ;; デスクトップ環境保存・復旧
 ;; ------------------------------------
 (leaf desktop
-  :bind (;; "C-c d" プレフィクスを使用
-         ("C-c d C" . desktop-clear)
+  :bind (("C-c d C" . desktop-clear)
          ("C-c d S" . desktop-save)
          ("C-c d s" . desktop-save-in-desktop-dir)
          ("C-c d D" . desktop-remove)
@@ -1143,7 +1138,7 @@
 ;; 行番号表示
 ;; ------------------------------------
 (leaf display-line-numbers
-  :bind (("C-c v" . display-line-numbers-mode)))
+  :bind (("C-c l" . display-line-numbers-mode)))
 
 
 ;; ------------------------------------
@@ -2021,9 +2016,9 @@
 ;; Org
 ;; ------------------------------------
 (leaf org
-  :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda)
-         ("C-c r" . org-capture))
+  :bind (("C-c o l" . org-store-link)
+         ("C-c o a" . org-agenda)
+         ("C-c o r" . org-capture))
   :custom ((org-use-speed-commands . t)))
 
 
