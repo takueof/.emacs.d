@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-02-22T19:06:45+09:00>
+;; Time-stamp: <2024-02-23T19:23:34+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -46,22 +46,31 @@
 ;; `prefer-coding-system' は絶対に使わないこと！
 ;; 例：(prefer-coding-system 'utf-8-unix)
 ;; システムごとに最適化された、自動設定のデフォルト定義を破壊するため
-(set-coding-system-priority 'utf-8)
-(setq-default buffer-file-coding-system 'utf-8-unix)
-
+;; ----------------------------------------------------------------------------
 ;; macOS ONLY
+;; ----------------------------------------------------------------------------
 (when (member system-type '(darwin))
   (set-keyboard-coding-system 'utf-8-unix)
   (set-selection-coding-system 'utf-8)
   (set-terminal-coding-system 'utf-8)
   (setq-default default-process-coding-system '(utf-8 . utf-8)))
 
+
+;; ----------------------------------------------------------------------------
+;; Windows ONLY
+;; ----------------------------------------------------------------------------
+(when (member system-type '(ms-dos windows-nt))
+  (setq-default default-process-coding-system '(utf-8-unix . japanese-cp932-dos)))
+
+
+;; ----------------------------------------------------------------------------
 ;; 「UTF-8（BOM 有）」のエイリアスを作成
-;;
+;; ----------------------------------------------------------------------------
 ;; デフォルト名は長いため
-;;
+;; ----------------------------------------------------------------------------
 ;; See also:
 ;; `mule-conf.el'
+;; ----------------------------------------------------------------------------
 (define-coding-system-alias 'utf-8-bom 'utf-8-with-signature)
 
 ;; `japanese-cp932' を `shift_jis' として強制認識
@@ -71,8 +80,10 @@
 (coding-system-put 'japanese-cp932
                    :mime-charset 'shift_jis)
 
+
+;; ----------------------------------------------------------------------------
 ;; `japanese-shift-jis' を Microsoft Code Page 932 (`japanese-cp932') に変更
-;;
+;; ----------------------------------------------------------------------------
 ;; GNU Emacs における Shift_JIS 定義 `japanese-shift-jis' は、
 ;; 「JIS X 0208 附属書1」を厳格に実装したもの
 ;; ゆえに、一部文字（例：「～」(U+FF5E)）が未定義であるなどし、
@@ -81,18 +92,25 @@
 ;; そこで、タイムスタンプ時点で最も普及している Microsoft の Shift_JIS 実装
 ;; Microsoft Code Page 932 (`japanese-cp932') を、
 ;; デフォルトの Shift_JIS 実装として認識させる
-;;
+;; ----------------------------------------------------------------------------
 ;; See also:
 ;; `japanese.el'
+;; ----------------------------------------------------------------------------
 (define-coding-system-alias 'japanese-shift-jis 'japanese-cp932)
 (define-coding-system-alias 'shift_jis 'japanese-cp932)
 (define-coding-system-alias 'sjis 'japanese-cp932)
 
+
+;; ----------------------------------------------------------------------------
 ;; 「〜」(U+301C) → 「～」(U+FF5E) 自動変換
+;; ----------------------------------------------------------------------------
 (coding-system-put 'japanese-cp932 ; Shift_JIS
                    :encode-translation-table (get 'japanese-ucs-jis-to-cp932-map 'translation-table))
 
+
+;; ----------------------------------------------------------------------------
 ;; 「～」(U+FF5E) → 「〜」(U+301C) 自動変換
+;; ----------------------------------------------------------------------------
 (coding-system-put 'japanese-iso-8bit ; EUC-JP
                    :encode-translation-table (get 'japanese-ucs-cp932-to-jis-map 'translation-table))
 (coding-system-put 'iso-2022-jp ; JIS
@@ -1224,28 +1242,6 @@
   :custom ((evil-numbers-pad-default . t))
   :bind (("C-3" . evil-numbers/dec-at-pt)
          ("C-4" . evil-numbers/inc-at-pt)))
-
-
-;; ------------------------------------
-;; `dired' における `find' コマンド実行 (Windows ONLY)
-;;
-;; See also:
-;; `dired'
-;; ------------------------------------
-(leaf find-dired
-  :when (member system-type '(ms-dos windows-nt))
-  :after find-dired
-  :config
-  ;; --------------------------------
-  ;; HACK: `:custom' で設定すると `find-exec-terminator' の展開が
-  ;;       `find-dired' の `eval-after-load' より先になりエラー
-  ;;       仕方なく `:config' で泥臭く設定
-  ;; --------------------------------
-  (custom-set-variables
-   `(find-ls-option ,(cons (format "-exec %s -ld {} %s"
-                                   (executable-find "ls")
-                                   find-exec-terminator)
-                           "-ld"))))
 
 
 ;; ------------------------------------
