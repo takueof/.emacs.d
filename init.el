@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-02-24T04:11:23+09:00>
+;; Time-stamp: <2024-02-25T17:04:05+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -42,23 +42,19 @@
 ;; コーディングシステム
 ;; ============================================================================
 ;; いくつかのデフォルトだけ決める（他は変えない）
-;; ----------------------------------------------------------------------------
+;; ============================================================================
 ;; WARNING: `prefer-coding-system' は絶対に使わないこと！
 ;;          例：(prefer-coding-system 'utf-8-unix)
 ;;          システムごとに最適化された、自動設定のデフォルト定義を破壊するため
-;; ----------------------------------------------------------------------------
+;; ============================================================================
 ;; macOS ONLY
-;; ----------------------------------------------------------------------------
 (when (member system-type '(darwin))
   (set-keyboard-coding-system 'utf-8-unix)
   (set-selection-coding-system 'utf-8)
   (set-terminal-coding-system 'utf-8)
   (setq-default default-process-coding-system '(utf-8 . utf-8)))
 
-
-;; ----------------------------------------------------------------------------
 ;; Windows ONLY
-;; ----------------------------------------------------------------------------
 (when (member system-type '(ms-dos windows-nt))
   (setq-default default-process-coding-system '(utf-8-unix . japanese-cp932-dos)))
 
@@ -483,7 +479,8 @@
   :custom ((modus-themes-bold-constructs . t)
            (modus-themes-common-palette-overrides . '((comment yellow-faint)
                                                       (string green-faint)
-                                                      (border-mode-line-active green)
+                                                      (border-mode-line-active unspecified)
+                                                      (border-mode-line-inactive unspecified)
                                                       (bg-mode-line-active bg-green-subtle))))
   :config
   (load-theme 'modus-vivendi :no-confirm))
