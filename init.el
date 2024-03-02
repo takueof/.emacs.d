@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-03-03T01:05:39+09:00>
+;; Time-stamp: <2024-03-03T01:09:14+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1259,16 +1259,6 @@
          ("C-c e s" . emoji-search)
          ("C-c e l" . emoji-list)
          ("C-c e d" . emoji-describe)))
-
-
-;; ------------------------------------
-;; カーソル下の数値を増減
-;; ------------------------------------
-(leaf evil-numbers
-  :ensure t
-  :custom ((evil-numbers-pad-default . t))
-  :bind (("C-3" . evil-numbers/dec-at-pt)
-         ("C-4" . evil-numbers/inc-at-pt)))
 
 
 ;; ------------------------------------
