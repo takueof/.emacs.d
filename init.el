@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-03-02T09:58:26+09:00>
+;; Time-stamp: <2024-03-02T10:07:37+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -816,6 +816,7 @@
          ("C-c a b" . activities-switch-buffer)
          ("C-c a g" . activities-revert)
          ("C-c a l" . activities-list))
+  :custom ((activities-set-frame-name . nil))
   :global-minor-mode activities-mode)
 
 
