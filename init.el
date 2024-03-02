@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-03-03T00:50:04+09:00>
+;; Time-stamp: <2024-03-03T01:05:39+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1251,20 +1251,14 @@
 
 
 ;; ------------------------------------
-;; Text → Emoji😊 サポート
+;; Emoji😊 挿入
 ;; ------------------------------------
-(leaf emojify
-  :ensure t
-  :bind (("C-c i e" . emojify-insert-emoji))
-  :custom ((emojify-composed-text-p . nil)
-           (emojify-display-style . 'unicode)
-           (emojify-composed-text-p . nil)
-           (emojify-company-tooltips-p . nil)
-           (emojify-point-entered-behaviour . 'uncover)
-           (emojify-show-help . nil)
-           (emojify-download-emojis-p . nil))
-  :config
-  (emojify-set-emoji-styles '(unicode)))
+(leaf emoji
+  :bind (("C-c e i" . emoji-insert)
+         ("C-c e r" . emoji-recent)
+         ("C-c e s" . emoji-search)
+         ("C-c e l" . emoji-list)
+         ("C-c e d" . emoji-describe)))
 
 
 ;; ------------------------------------
