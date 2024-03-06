@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-03-03T19:08:45+09:00>
+;; Time-stamp: <2024-03-05T17:39:48+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1074,9 +1074,9 @@
 (leaf copilot
   :vc (copilot
        :url "https://github.com/copilot-emacs/copilot.el")
-  :bind ((:copilot-completion-map
+  :bind (("C-c c c" . copilot-mode)
+         (:copilot-completion-map
           ("TAB" . copilot-accept-completion)))
-  :hook ((prog-mode-hook . copilot-mode))
   :custom ((copilot-max-char . -1) ; No limit
            (copilot-indent-offset-warning-disable . t))
   :config
