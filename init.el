@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-03-30T18:05:43+09:00>
+;; Time-stamp: <2024-03-30T18:33:37+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -856,7 +856,7 @@
 ;; ------------------------------------
 (leaf auto-dim-other-buffers
   :ensure t
-  :hook ((after-init-hook . auto-dim-other-buffers-mode)))
+  :hook ((window-setup-hook . auto-dim-other-buffers-mode)))
 
 
 ;; ------------------------------------
