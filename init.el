@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-03-18T13:24:18+09:00>
+;; Time-stamp: <2024-03-30T18:04:44+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -806,8 +806,7 @@
 ;; アクティビティ管理
 ;; ------------------------------------
 (leaf activities
-  :vc (activities
-       :url "https://github.com/alphapapa/activities.el")
+  :ensure t
   :bind (("C-c a n" . activities-new)
          ("C-c a d" . activities-define)
          ("C-c a a" . activities-resume)
