@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-03-30T18:04:44+09:00>
+;; Time-stamp: <2024-03-30T18:05:43+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1076,6 +1076,7 @@
        :url "https://github.com/copilot-emacs/copilot.el")
   :bind (("C-c c c" . copilot-mode)
          ("C-TAB" . copilot-complete)
+         ("C-<tab>" . copilot-complete)
          (:copilot-completion-map
           ("TAB" . copilot-accept-completion)
           ("<tab>" . copilot-accept-completion)))
