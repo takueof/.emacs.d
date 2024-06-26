@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-06-23T08:57:51+09:00>
+;; Time-stamp: <2024-06-26T17:36:03+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1556,8 +1556,7 @@
 ;; ------------------------------------
 (leaf lsp-tailwindcss
   :ensure t
-  :custom ((lsp-tailwindcss-add-on-mode . t)
-           (lsp-tailwindcss-server-version . "0.8.7")))
+  :custom ((lsp-tailwindcss-add-on-mode . t)))
 
 
 ;; ------------------------------------
