@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-06-26T17:36:03+09:00>
+;; Time-stamp: <2024-06-27T11:53:27+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1581,14 +1581,12 @@
          (sh-mode-hook . lsp)
          (typescript-mode-hook . lsp)
          (web-mode-hook . lsp)
-         (yaml-mode-hook . lsp)
-         ;; `lsp-lens-mode'
-         (lsp-mode-hook . lsp-lens-mode))
+         (yaml-mode-hook . lsp))
   :custom (;;
            ;; `lsp-mode'
            ;;
            (lsp-semantic-tokens-enable . t)
-           (lsp-restart . 'ignore)
+           (lsp-restart . 'auto-restart)
            ;; ローカル環境にのみ保存
            (lsp-session-file . "~/.emacs.lsp-session")
            ;; LSP サーバからのファイル監視要求を無視
@@ -1613,6 +1611,10 @@
            (lsp-trim-final-newlines . nil) ; Use `editorconfig'
            (lsp-warn-no-matched-clients . nil)
            (lsp-rename-use-prepare . nil)
+           ;;
+           ;; `lsp-lens'
+           ;;
+           (lsp-lens-enable . nil)
            ;;
            ;; `lsp-javascript'
            ;;
