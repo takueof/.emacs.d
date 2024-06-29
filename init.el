@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-06-29T20:59:33+09:00>
+;; Time-stamp: <2024-06-29T21:27:36+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1105,16 +1105,6 @@
 
 
 ;; ------------------------------------
-;; Debug Adapter Protocol
-;; ------------------------------------
-(leaf dap-mode
-  :ensure t
-  :after dap-mode
-  :config
-  (dap-ui-mode +1))
-
-
-;; ------------------------------------
 ;; モードラインからモードの表示を消す
 ;; ------------------------------------
 (leaf delight
@@ -1610,10 +1600,6 @@
            (lsp-trim-final-newlines . nil) ; Use `editorconfig'
            (lsp-warn-no-matched-clients . nil)
            (lsp-rename-use-prepare . nil)
-           ;;
-           ;; `lsp-lens'
-           ;;
-           (lsp-lens-enable . nil)
            ;;
            ;; `lsp-javascript'
            ;;
