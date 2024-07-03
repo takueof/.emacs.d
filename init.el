@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-06-29T21:27:36+09:00>
+;; Time-stamp: <2024-07-04T07:39:19+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -535,12 +535,6 @@
   ;; `ido-undo-merge-work-directory' 実行のため <C-z> を押しすぎた場合、
   ;; `suspend-frame' が起動しないよう配慮
   (global-unset-key (kbd "C-z"))
-  ;; タッチパッドによる各種操作を無効化 (macOS ONLY)
-  (when (member system-type '(darwin))
-    (global-unset-key [magnify-up])
-    (global-unset-key [magnify-down])
-    (global-unset-key [S-magnify-up])
-    (global-unset-key [S-magnify-down]))
   ) ; End of *global-keybind
 
 
@@ -1163,6 +1157,14 @@
            (desktop-lazy-verbose . nil)
            (desktop-lazy-idle-delay . 5))
   :global-minor-mode desktop-save-mode)
+
+
+;; ------------------------------------
+;; 各種マウス操作無効化
+;; ------------------------------------
+(leaf disable-mouse
+  :ensure t
+  :global-minor-mode global-disable-mouse-mode)
 
 
 ;; ------------------------------------
