@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-07-09T09:54:30+09:00>
+;; Time-stamp: <2024-07-09T14:17:15+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1164,6 +1164,8 @@
 ;; ------------------------------------
 (leaf disable-mouse
   :ensure t
+  :custom ((disable-mouse-mode-lighter . "")
+           (disable-mouse-mode-global-lighter . ""))
   :global-minor-mode global-disable-mouse-mode)
 
 
@@ -1685,7 +1687,7 @@
 ;; ------------------------------------
 (leaf prettier
   :ensure t
-  :custom ((prettier-lighter . nil))
+  :custom ((prettier-lighter . ""))
   :hook ((after-init-hook . global-prettier-mode)
          (text-mode-hook . prettier-mode)
          (prog-mode-hook . prettier-mode)))
