@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-07-04T07:39:19+09:00>
+;; Time-stamp: <2024-07-09T09:54:30+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1340,23 +1340,6 @@
          (typescript-mode-hook . flyspell-prog-mode)
          (web-mode-hook . flyspell-prog-mode))
   :custom ((flyspell-delay . 1.0)))
-
-
-;; ------------------------------------
-;; フレーム
-;; ------------------------------------
-(leaf frame
-  :when window-system
-  :config
-  ;; 背景のみ半透明とし、前景（文字）は不透明のままとする (over v29.x)
-  ;; ただし、macOS & Windows では動作もしなけければエラーにもならない
-  ;;
-  ;; See also:
-  ;; https://www.emacswiki.org/emacs/TransparentEmacs
-  ;; (set-frame-parameter nil 'alpha-background 50)
-  ;;
-  ;; 半透明化（前景も含む）
-  (set-frame-parameter nil 'alpha '(90 . 80)))
 
 
 ;; ------------------------------------
