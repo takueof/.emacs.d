@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-07-09T14:17:15+09:00>
+;; Time-stamp: <2024-07-22T07:00:39+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -937,7 +937,9 @@
                                            prog-mode
                                            python-mode
                                            scss-mode
-                                           typescript-mode))
+                                           tsx-ts-mode
+                                           typescript-mode
+                                           typescript-ts-mode))
            (company-dabbrev-code-other-buffers . t)
            (company-dabbrev-code-everywhere . t)
            (company-dabbrev-code-ignore-case . t)))
@@ -1339,7 +1341,9 @@
          (lisp-mode-hook . flyspell-prog-mode)
          (php-mode-hook . flyspell-prog-mode)
          (scss-mode-hook . flyspell-prog-mode)
+         (tsx-ts-mode-hook . flyspell-prog-mode)
          (typescript-mode-hook . flyspell-prog-mode)
+         (typescript-ts-mode-hook . flyspell-prog-mode)
          (web-mode-hook . flyspell-prog-mode))
   :custom ((flyspell-delay . 1.0)))
 
@@ -1555,7 +1559,9 @@
          (php-mode-hook . lsp)
          (scss-mode-hook . lsp)
          (sh-mode-hook . lsp)
+         (tsx-ts-mode-hook . lsp)
          (typescript-mode-hook . lsp)
+         (typescript-ts-mode-hook . lsp)
          (web-mode-hook . lsp)
          (yaml-mode-hook . lsp))
   :custom (;;
@@ -1883,6 +1889,17 @@
 ;; Major modes
 ;; ============================================================================
 ;; ------------------------------------
+;; Auto "tree-sitter" (`treesit') configuration
+;; ------------------------------------
+(leaf treesit-auto
+  :ensure t
+  :custom ((treesit-auto-install . 'prompt))
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  :global-minor-mode global-treesit-auto-mode)
+
+
+;; ------------------------------------
 ;; Apache
 ;; ------------------------------------
 (leaf apache-mode
@@ -2029,8 +2046,7 @@
 ;; TypeScript
 ;; ------------------------------------
 (leaf typescript-mode
-  :ensure t
-  :mode (("\\.tsx?\\'" . typescript-mode)))
+  :ensure t)
 
 
 ;; ------------------------------------
