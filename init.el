@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-07-24T10:36:34+09:00>
+;; Time-stamp: <2024-07-24T19:03:42+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1619,8 +1619,8 @@
 ;; ------------------------------------
 (leaf marginalia
   :ensure t
-  :custom ((marginalia-field-width . 200)
-           (marginalia-max-relative-age . most-positive-fixnum))
+  :custom `((marginalia-field-width . 200)
+            (marginalia-max-relative-age . ,(* 512 1024 1024))) ; 512MB
   :global-minor-mode t)
 
 
@@ -1888,14 +1888,25 @@
 ;; Major modes
 ;; ============================================================================
 ;; ------------------------------------
-;; Auto "tree-sitter" (`treesit') configuration
+;; "tree-sitter" (`treesit')
 ;; ------------------------------------
-(leaf treesit-auto
-  :ensure t
-  :custom ((treesit-auto-install . 'prompt))
-  :config
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  :global-minor-mode global-treesit-auto-mode)
+;; FIXME: `revert-buffer' すると fontification が外れる
+;; ------------------------------------
+;; (leaf treesit
+;;   :custom ((treesit-font-lock-level . 4)))
+
+
+;; ------------------------------------
+;; Auto "tree-sitter" (`treesit')
+;; ------------------------------------
+;; TODO: `treesit' の問題が解決するまでおあずけ
+;; ------------------------------------
+;; (leaf treesit-auto
+;;   :ensure t
+;;   :custom ((treesit-auto-install . 'prompt))
+;;   :config
+;;   (treesit-auto-add-to-auto-mode-alist 'all)
+;;   :global-minor-mode global-treesit-auto-mode)
 
 
 ;; ------------------------------------
@@ -2585,10 +2596,10 @@
 ;; `early-init.el' で設定した項目の変更
 ;; ============================================================================
 (leaf *early-init-el-restore
-  :custom `(;; ガベージコレクション閾値を現実的な値に戻す
-            (gc-cons-threshold . ,(* 128 1024 1024)) ; 128MB
-            ;; 黙らせていた余分なメッセージ I/O を復活
-            (inhibit-message . nil))
+  :custom (;; ガベージコレクション閾値を既定値に戻す
+           (gc-cons-threshold . 800000)
+           ;; 黙らせていた余分なメッセージ I/O を復活
+           (inhibit-message . nil))
   ) ; END of *early-init-el-restore
 
 
