@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-07-22T07:00:39+09:00>
+;; Time-stamp: <2024-07-24T10:36:34+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -329,15 +329,6 @@
  ;;
  '(w32-recognize-altgr nil)
  ;;
- ;; Web ブラウザ
- ;;
- `(browse-url-browser-function ',(cond ((equal window-system 'w32)
-                                        'browse-url-default-windows-browser)
-                                       ((equal window-system 'mac)
-                                        'browse-url-default-macosx-browser)
-                                       (t
-                                        'browse-url-default-browser)))
- ;;
  ;; 証明書
  ;;
  `(gnutls-trustfiles ',(mapcar 'convert-standard-filename
@@ -612,6 +603,13 @@
 
 
 ;; ============================================================================
+;; URL → Web browser パススルー
+;; ============================================================================
+(leaf browse-url
+  :custom ((browse-url-browser-function . 'eww-browse-url)))
+
+
+;; ============================================================================
 ;; 未コミット diff
 ;; ============================================================================
 (leaf diff-hl
@@ -630,7 +628,8 @@
 (leaf eww
   :bind (("C-c C-e" . eww))
   :custom ((eww-search-prefix . "https://www.google.co.jp/search?&q=")
-           (eww-history-limit . 100)))
+           (eww-history-limit . nil)
+           (eww-auto-rename-buffer . 'title)))
 
 
 ;; ============================================================================
@@ -2011,13 +2010,13 @@
 ;; ------------------------------------
 (leaf markdown-mode
   :ensure t
-  :custom `((markdown-command . ,(or (executable-find "github-markup")
-                                     (executable-find "markdown")
+  :custom `((markdown-command . ,(or (executable-find "pandoc")
                                      "markdown"))
-            (markdown-command-needs-filename . ,(executable-find "github-markup"))
+            (markdown-enable-highlighting-syntax . t)
             (markdown-coding-system . 'utf-8-unix)
-            ;; プレビュー用に生成した実 HTML ファイルの残存を防ぐ
-            (markdown-live-preview-delete-export . 'delete-on-export))
+            (markdown-split-window-direction . 'right)
+            (markdown-fontify-whole-heading-line . t)
+            (markdown-fontify-code-blocks-natively . t))
   :config
   ;; プレーンテキストファイルは除外
   (setq auto-mode-alist
