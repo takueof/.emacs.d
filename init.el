@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-07-24T19:03:42+09:00>
+;; Time-stamp: <2024-07-25T11:04:55+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2056,7 +2056,19 @@
 ;; TypeScript
 ;; ------------------------------------
 (leaf typescript-mode
-  :ensure t)
+  :ensure t
+  :config
+  ;; ----------------------------------
+  ;; HACK: `revert-buffer' すると fontification が無効化される問題を強制回避
+  ;; ----------------------------------
+  (defun my-typescript-mode-auto-rerun-after-revert-buffer (&optional ignore-auto noconfirm preserve-modes)
+    "Rerun `typescript-mode' when `revert-buffer' run in `typescript-mode'."
+    (interactive (list (not current-prefix-arg)))
+    (if (equal major-mode 'typescript-mode)
+        (typescript-mode)))
+  (advice-add #'revert-buffer
+              :after
+              #'my-typescript-mode-auto-rerun-after-revert-buffer))
 
 
 ;; ------------------------------------
