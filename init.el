@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-07-25T16:30:08+09:00>
+;; Time-stamp: <2024-07-26T18:51:27+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1187,7 +1187,12 @@
   (defun my-dired-mode-initialize ()
     "Initialize `dired-mode'."
     ;; 常にすべての情報を表示（簡易モードにしない）
-    (dired-hide-details-mode -1)))
+    (dired-hide-details-mode -1)
+    ;; `'windmove を機能させる
+    (keymap-local-unset "C-S-f" t)
+    (keymap-local-unset "C-S-b" t)
+    (keymap-local-unset "C-S-n" t)
+    (keymap-local-unset "C-S-p" t)))
 
 
 ;; ------------------------------------
