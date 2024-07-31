@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-07-26T18:51:27+09:00>
+;; Time-stamp: <2024-07-31T09:03:34+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1698,10 +1698,9 @@
 ;; ------------------------------------
 (leaf prettier
   :ensure t
+  :when (executable-find "prettier")
   :custom ((prettier-lighter . ""))
-  :hook ((after-init-hook . global-prettier-mode)
-         (text-mode-hook . prettier-mode)
-         (prog-mode-hook . prettier-mode)))
+  :hook ((after-init-hook . global-prettier-mode)))
 
 
 ;; ------------------------------------
@@ -1896,16 +1895,27 @@
 ;; ------------------------------------
 ;; "tree-sitter" (`treesit')
 ;; ------------------------------------
-;; FIXME: `revert-buffer' すると fontification が外れる
-;; ------------------------------------
-;; (leaf treesit
-;;   :custom ((treesit-font-lock-level . 4)))
+(leaf treesit
+  :custom ((treesit-font-lock-level . 4))
+  :config
+  ;; ----------------------------------
+  ;; hack: `revert-buffer' すると fontification が無効化される問題を強制回避
+  ;; ----------------------------------
+  (defun my-treesit-auto-rerun-after-revert-buffer (&optional ignore-auto noconfirm preserve-modes)
+    "Rerun `major-mode' using `treesit' when `revert-buffer'."
+    (interactive (list (not current-prefix-arg)))
+    (if (and (boundp major-mode))
+        (major-mode)))
+  (advice-add #'revert-buffer
+              :after
+              #'my-treesit-auto-rerun-after-revert-buffer))
 
 
 ;; ------------------------------------
 ;; Auto "tree-sitter" (`treesit')
 ;; ------------------------------------
-;; TODO: `treesit' の問題が解決するまでおあずけ
+;; TODO: `treesit' を利用したメジャーモードでウインドウ外にあるフォントの
+;;       fontification が消える問題が解決するまでおあずけ
 ;; ------------------------------------
 ;; (leaf treesit-auto
 ;;   :ensure t
@@ -2068,7 +2078,7 @@
   ;; hack: `revert-buffer' すると fontification が無効化される問題を強制回避
   ;; ----------------------------------
   (defun my-typescript-mode-auto-rerun-after-revert-buffer (&optional ignore-auto noconfirm preserve-modes)
-    "rerun `typescript-mode' when `revert-buffer' run in `typescript-mode'."
+    "Rerun `typescript-mode' when `revert-buffer' run in `typescript-mode'."
     (interactive (list (not current-prefix-arg)))
     (if (equal major-mode 'typescript-mode)
         (typescript-mode)))
