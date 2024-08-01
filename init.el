@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-08-02T04:08:55+09:00>
+;; Time-stamp: <2024-08-02T04:11:54+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1901,9 +1901,9 @@
 ;; ------------------------------------
 (leaf treesit
   :custom ((treesit-font-lock-level . 4))
-  :config
+  :init
   ;; ----------------------------------
-  ;; hack: `revert-buffer' すると fontification が無効化される問題を強制回避
+  ;; HACK: `revert-buffer' すると fontification が無効化される問題を強制回避
   ;; ----------------------------------
   (defun my-treesit-auto-rerun-after-revert-buffer (&optional ignore-auto noconfirm preserve-modes)
     "Rerun `major-mode' using `treesit' when `revert-buffer'."
