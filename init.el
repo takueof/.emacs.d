@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-07-31T09:03:34+09:00>
+;; Time-stamp: <2024-08-02T04:05:25+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1183,6 +1183,7 @@
 ;; ------------------------------------
 (leaf dired
   :hook ((dired-mode-hook . my-dired-mode-initialize))
+  :custom ((dired-kill-when-opening-new-dired-buffer . t))
   :init
   (defun my-dired-mode-initialize ()
     "Initialize `dired-mode'."
@@ -1204,7 +1205,9 @@
   :after dired
   :require t
   :custom ((diredp-hide-details-initially-flag . nil)
-           (diredp-hide-details-propagate-flag . nil)))
+           (diredp-hide-details-propagate-flag . nil))
+  :config
+  (diredp-toggle-find-file-reuse-dir 1))
 
 
 ;; ------------------------------------
