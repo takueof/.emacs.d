@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-08-02T04:05:25+09:00>
+;; Time-stamp: <2024-08-02T04:08:55+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1700,10 +1700,11 @@
 ;; コードフォーマッタ
 ;; ------------------------------------
 (leaf prettier
+  :when (executable-find "prettier")
   :ensure t
   :when (executable-find "prettier")
   :custom ((prettier-lighter . ""))
-  :hook ((after-init-hook . global-prettier-mode)))
+  :global-minor-mode global-prettier-mode)
 
 
 ;; ------------------------------------
@@ -1917,15 +1918,15 @@
 ;; ------------------------------------
 ;; Auto "tree-sitter" (`treesit')
 ;; ------------------------------------
-;; TODO: `treesit' を利用したメジャーモードでウインドウ外にあるフォントの
-;;       fontification が消える問題が解決するまでおあずけ
-;; ------------------------------------
-;; (leaf treesit-auto
-;;   :ensure t
-;;   :custom ((treesit-auto-install . 'prompt))
-;;   :config
-;;   (treesit-auto-add-to-auto-mode-alist 'all)
-;;   :global-minor-mode global-treesit-auto-mode)
+(leaf treesit-auto
+  ;; FIXME: `treesit' を利用したメジャーモードで可視範囲外にあるフォントの
+  ;;        fontification が消える問題を解決せねばならない
+  :disabled t
+  :ensure t
+  :custom ((treesit-auto-install . 'prompt))
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  :global-minor-mode global-treesit-auto-mode)
 
 
 ;; ------------------------------------
@@ -2078,7 +2079,7 @@
   :ensure t
   :config
   ;; ----------------------------------
-  ;; hack: `revert-buffer' すると fontification が無効化される問題を強制回避
+  ;; HACK: `revert-buffer' すると fontification が無効化される問題を強制回避
   ;; ----------------------------------
   (defun my-typescript-mode-auto-rerun-after-revert-buffer (&optional ignore-auto noconfirm preserve-modes)
     "Rerun `typescript-mode' when `revert-buffer' run in `typescript-mode'."
