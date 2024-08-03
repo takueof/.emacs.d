@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-08-02T04:11:54+09:00>
+;; Time-stamp: <2024-08-03T22:05:00+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -937,7 +937,6 @@
                                            python-mode
                                            scss-mode
                                            tsx-ts-mode
-                                           typescript-mode
                                            typescript-ts-mode))
            (company-dabbrev-code-other-buffers . t)
            (company-dabbrev-code-everywhere . t)
@@ -1121,6 +1120,7 @@
              (global-company-mode nil "company")
              (global-flycheck-mode nil "flycheck")
              (global-whitespace-mode nil "whitespace")
+             (js2-minor-mode nil "js2-mode")
              (lsp-mode nil "lsp-mode")
              (projectile-mode nil "projectile")
              (show-smartparens-global-mode nil "smartparens")
@@ -1232,7 +1232,7 @@
          (lisp-interaction-mode-hook . eldoc-mode)
          (lisp-mode-hook . eldoc-mode))
   :custom ((eldoc-minor-mode-string . nil)
-           (eldoc-idle-delay . 0.2)
+           (eldoc-idle-delay . 0.25)
            (eldoc-echo-area-use-multiline-p . 'truncate-sym-name-if-fit)))
 
 
@@ -1350,7 +1350,6 @@
          (php-mode-hook . flyspell-prog-mode)
          (scss-mode-hook . flyspell-prog-mode)
          (tsx-ts-mode-hook . flyspell-prog-mode)
-         (typescript-mode-hook . flyspell-prog-mode)
          (typescript-ts-mode-hook . flyspell-prog-mode)
          (web-mode-hook . flyspell-prog-mode))
   :custom ((flyspell-delay . 1.0)))
@@ -1508,10 +1507,24 @@
           ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
           ([remap xref-find-references] . lsp-ui-peek-find-references)))
   :custom ((lsp-ui-doc-show-with-mouse . nil)
+           (lsp-ui-doc-show-with-cursor . t)
+           (lsp-ui-doc-header . t)
+           (lsp-ui-doc-include-signature . t)
+           (lsp-ui-doc-position . 'at-point)
+           (lsp-ui-doc-alignment . 'window)
+           (lsp-ui-doc-max-width . 200)
+           (lsp-ui-doc-max-height . 50)
+           (lsp-ui-doc-delay . 0.25)
+           (lsp-ui-imenu-auto-refresh . t)
+           (lsp-ui-imenu-auto-refresh-delay . 0.25)
+           ;; TODO: `lsp-ui-doc' を有効にしているのでこちらは不要
+           ;;       設定だけ残しておく
+           (lsp-ui-sideline-enable . nil)
            (lsp-ui-sideline-show-hover . t)
            (lsp-ui-sideline-show-code-actions . t)
            (lsp-ui-sideline-diagnostic-max-lines . 2)
-           (lsp-ui-sideline-diagnostic-max-line-length . 150)))
+           (lsp-ui-sideline-diagnostic-max-line-length . 200)
+           (lsp-ui-sideline-actions-icon . t)))
 
 
 ;; ------------------------------------
@@ -1561,14 +1574,12 @@
          (dockerfile-mode-hook . lsp)
          (java-mode-hook . lsp)
          (js-mode-hook . lsp)
-         (js2-mode-hook . lsp)
          (json-mode-hook . lsp)
          (markdown-mode-hook . lsp)
          (php-mode-hook . lsp)
          (scss-mode-hook . lsp)
          (sh-mode-hook . lsp)
          (tsx-ts-mode-hook . lsp)
-         (typescript-mode-hook . lsp)
          (typescript-ts-mode-hook . lsp)
          (web-mode-hook . lsp)
          (yaml-mode-hook . lsp))
@@ -1965,10 +1976,17 @@
 
 
 ;; ------------------------------------
-;; JavaScript (Basic)
+;; JavaScript (Base)
+;; ------------------------------------
+;; HACK: 後ほど `js2-minor-mode' で拡張する
 ;; ------------------------------------
 (leaf js-mode
-  :custom ((js-indent-level . 4)
+  :mode (("\\.pac\\'" . js-mode)
+         ("\\.[cm]?js\\'" . js-mode)
+         ("\\.es[0-9]\\'" . js-mode)
+         ("\\.[jt]s\\'" . js-mode)
+         ("\\.[jt]sx\\'" . js-jsx-mode))
+  :custom ((js-indent-level . 2)
            (js-expr-indent-offset . 0)
            (js-paren-indent-offset . 0)
            (js-square-indent-offset . 0)
@@ -1986,11 +2004,12 @@
 ;; ------------------------------------
 (leaf js2-mode
   :ensure t
-  :mode (("\\.es[0-9]\\'" . js2-mode)
-         ("\\.[cm]?jsx?\\'" . js2-mode)
-         ("\\.pac\\'" . js2-mode))
+  ;; HACK: `js2-minor-mode' で `js-mode' を拡張
+  ;;       `js2-mode' は直接用いない
+  :hook ((js-mode-hook . js2-minor-mode)
+         (js-jsx-mode-hook . js2-minor-mode))
   :custom ((js2-highlight-level . 3) ; すべての構文強調を有効化
-           (js2-bounce-indent-p . nil)
+           (js2-bounce-indent-p . t)
            (js2-idle-timer-delay . 0.25)
            (js2-dynamic-idle-timer-adjust . 0)
            (js2-concat-multiline-strings . t)
@@ -2008,19 +2027,9 @@
            (js2-strict-var-redeclaration-warning . nil)
            (js2-strict-var-hides-function-arg-warning . nil)
            ;; その他
-           (js2-skip-preprocessor-directives . t)
-           (js2-language-version . 200)
-           (js2-instanceof-has-side-effects . nil)
-           (js2-move-point-on-right-click . nil) ; 使わない
-           (js2-allow-rhino-new-expr-initializer . nil) ; 使わない
-           (js2-allow-member-expr-as-function-name . nil)
-           (js2-include-browser-externs . t)
-           (js2-include-rhino-externs . nil)
-           (js2-include-node-externs . nil)
-           (js2-mode-indent-inhibit-undo . nil)
-           (js2-mode-indent-ignore-first-tab . nil)
-           (js2-highlight-external-variables . t)
-           (js2-warn-about-unused-function-arguments . nil)
+           (js2-move-point-on-right-click . nil)
+           (js2-allow-rhino-new-expr-initializer . nil)
+           (js2-include-node-externs . t)
            ;; JSLint
            ;;
            ;; 他ツールに任せるため、すべて無効化
@@ -2070,25 +2079,6 @@
 ;; ------------------------------------
 (leaf php-mode
   :ensure t)
-
-
-;; ------------------------------------
-;; TypeScript
-;; ------------------------------------
-(leaf typescript-mode
-  :ensure t
-  :config
-  ;; ----------------------------------
-  ;; HACK: `revert-buffer' すると fontification が無効化される問題を強制回避
-  ;; ----------------------------------
-  (defun my-typescript-mode-auto-rerun-after-revert-buffer (&optional ignore-auto noconfirm preserve-modes)
-    "Rerun `typescript-mode' when `revert-buffer' run in `typescript-mode'."
-    (interactive (list (not current-prefix-arg)))
-    (if (equal major-mode 'typescript-mode)
-        (typescript-mode)))
-  (advice-add #'revert-buffer
-              :after
-              #'my-typescript-mode-auto-rerun-after-revert-buffer))
 
 
 ;; ------------------------------------
