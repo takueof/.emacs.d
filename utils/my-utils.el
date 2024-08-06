@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-01-08T08:13:18+09:00>
+;; Time-stamp: <2024-08-07T07:21:14+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -255,6 +255,20 @@ Return converted file numbers."
     (message "%d files converted to `%S'" target-files-length coding-system)
     target-files-length))
 
+
+;; ============================================================================
+;; フレーム
+;; ============================================================================
+(defun my-toggle-frame-transparency ()
+  "Switch frame background transparency between translucent and opaque."
+  (interactive)
+  (set-frame-parameter nil
+                       'alpha
+                       (let ((alpha (frame-parameter nil 'alpha)))
+                         (if (or (null alpha)
+                                 (equal alpha '(100 . 100)))
+                             '(80 . 100)
+                           '(100 . 100)))))
 
 (provide 'my-utils)
 

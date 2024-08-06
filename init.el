@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-08-03T22:05:00+09:00>
+;; Time-stamp: <2024-08-07T06:51:38+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -517,7 +517,9 @@
          ;; カーソル位置にファイルパスを挿入
          ("C-c i p" . my-insert-file-path)
          ;; 一括エンコーディング変換
-         ("C-c RET f" . my-change-files-coding-system))
+         ("C-c RET f" . my-change-files-coding-system)
+         ;; フレーム背景透明度切替
+         ("C-c C-t" . my-toggle-frame-transparency))
   :config
   ;; <Backspace> と <DEL> を 交換
   (keyboard-translate ?\C-h ?\C-?)
