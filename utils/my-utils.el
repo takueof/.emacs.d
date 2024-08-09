@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-08-07T07:21:14+09:00>
+;; Time-stamp: <2024-08-10T05:42:13+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -267,7 +267,7 @@ Return converted file numbers."
                        (let ((alpha (frame-parameter nil 'alpha)))
                          (if (or (null alpha)
                                  (equal alpha '(100 . 100)))
-                             '(80 . 100)
+                             '(80 . 50)
                            '(100 . 100)))))
 
 (provide 'my-utils)
