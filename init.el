@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-08-09T12:40:51+09:00>
+;; Time-stamp: <2024-08-11T05:07:24+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1715,7 +1715,6 @@
 (leaf prettier
   :when (executable-find "prettier")
   :ensure t
-  :when (executable-find "prettier")
   :custom ((prettier-lighter . ""))
   :global-minor-mode global-prettier-mode)
 
@@ -1967,14 +1966,28 @@
 
 
 ;; ------------------------------------
+;; Emacs Lisp
+;; ------------------------------------
+(leaf emacs-lisp-mode
+  :hook ((emacs-lisp-mode-hook . my-emacs-lisp-mode-initialize))
+  :init
+  (defun my-emacs-lisp-mode-initialize ()
+    "Initialize `emacs-lisp-mode' before load."
+    (if (fboundp 'prettier-mode)
+        (prettier-mode -1))))
+
+
+;; ------------------------------------
 ;; Emacs Lisp インタラクション
 ;; ------------------------------------
 (leaf ielm
   :hook ((ielm-mode-hook . my-ielm-mode-initialize))
   :init
   (defun my-ielm-mode-initialize ()
-    "Initialize `ielm' major mode before file load."
-    (setq-local tab-width 8)))
+    "Initialize `ielm' major mode before load."
+    (setq-local tab-width 8)
+    (if (fboundp 'prettier-mode)
+        (prettier-mode -1))))
 
 
 ;; ------------------------------------
@@ -2048,6 +2061,30 @@
 
 
 ;; ------------------------------------
+;; Lisp
+;; ------------------------------------
+(leaf lisp-interaction-mode
+  :hook ((lisp-interaction-mode . my-lisp-interaction-mode-initialize))
+  :init
+  (defun my-lisp-interaction-mode-initialize ()
+    "Initialize `lisp-interaction-mode' before load."
+    (if (fboundp 'prettier-mode)
+        (prettier-mode -1))))
+
+
+;; ------------------------------------
+;; Lisp
+;; ------------------------------------
+(leaf lisp-mode
+  :hook ((lisp-mode-hook . my-lisp-mode-initialize))
+  :init
+  (defun my-lisp-mode-initialize ()
+    "Initialize `lisp-mode' before load."
+    (if (fboundp 'prettier-mode)
+        (prettier-mode -1))))
+
+
+;; ------------------------------------
 ;; Markdown
 ;; ------------------------------------
 (leaf markdown-mode
@@ -2107,7 +2144,7 @@
   :hook ((tex-mode-hook . my-tex-mode-initialize))
   :init
   (defun my-tex-mode-initialize ()
-    "Initialize `tex-mode' before file load."
+    "Initialize `tex-mode' before load."
     (setq-local truncate-lines nil)))
 
 
@@ -2118,7 +2155,7 @@
   :hook ((text-mode-hook . my-text-mode-initialize))
   :init
   (defun my-text-mode-initialize ()
-    "Initialize `text-mode' before file load."
+    "Initialize `text-mode' before load."
     (setq-local truncate-lines nil)))
 
 
