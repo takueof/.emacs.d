@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-08-11T05:07:24+09:00>
+;; Time-stamp: <2024-08-15T11:02:52+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1209,7 +1209,7 @@
   :custom ((diredp-hide-details-initially-flag . nil)
            (diredp-hide-details-propagate-flag . nil))
   :config
-  (diredp-toggle-find-file-reuse-dir 1))
+  (diredp-toggle-find-file-reuse-dir +1))
 
 
 ;; ------------------------------------
