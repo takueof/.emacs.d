@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-08-15T11:02:52+09:00>
+;; Time-stamp: <2024-08-22T07:16:30+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -500,8 +500,8 @@
          ("C-c s" . sort-lines)
          ;; 1つ前のエラーを表示
          ("C-x \\" . previous-error)
-         ;; `revert-buffer-quick' ショートカット
-         ("C-c r" . revert-buffer-quick)
+         ;; メジャーモードを再適用後に `revert-buffer-quick' 実行
+         ("C-c r" . my-revert-buffer-quick-with-normal-mode)
          ;; 行頭移動は物理行
          ("C-a" . my-beginning-of-smart-indented-line)
          ;; 前のウインドウに移動

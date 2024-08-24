@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-08-10T05:42:13+09:00>
+;; Time-stamp: <2024-08-22T07:15:15+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -126,6 +126,21 @@ It doesn't depend on `truncate-partial-width-windows' of `toggle-truncate-lines'
     (setq-local truncate-partial-width-windows after)
     ;; 残りは任せる
     (toggle-truncate-lines after)))
+
+
+;; ============================================================================
+;; バッファ
+;; ============================================================================
+(defun my-revert-buffer-quick-with-normal-mode (&optional auto-save)
+  "Run `normal-mode' after `revert-buffer-quick'.
+
+This function is force avoid the problem that `font-lock' could become invalid
+ after running `revert-buffer-quick'.
+
+AUTO-SAVE is same as 1st argument of `revert-buffer-quick'"
+  (interactive "P")
+  (revert-buffer-quick auto-save)
+  (normal-mode))
 
 
 ;; ============================================================================
