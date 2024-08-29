@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-08-22T07:16:30+09:00>
+;; Time-stamp: <2024-08-29T11:44:15+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -806,11 +806,12 @@
   :bind (("C-c a n" . activities-new)
          ("C-c a d" . activities-define)
          ("C-c a a" . activities-resume)
-         ("C-c a s" . activities-suspend)
+         ("C-c a s" . activities-save-all)
+         ("C-c a S" . activities-suspend)
          ("C-c a k" . activities-kill)
          ("C-c a RET" . activities-switch)
          ("C-c a b" . activities-switch-buffer)
-         ("C-c a g" . activities-revert)
+         ("C-c a r" . activities-revert)
          ("C-c a l" . activities-list))
   :custom ((activities-set-frame-name . nil))
   :global-minor-mode activities-mode)
@@ -2089,6 +2090,7 @@
 ;; ------------------------------------
 (leaf markdown-mode
   :ensure t
+  :mode (("\\.mdx\\'" . markdown-mode))
   :custom `((markdown-command . ,(or (executable-find "pandoc")
                                      "markdown"))
             (markdown-enable-highlighting-syntax . t)
