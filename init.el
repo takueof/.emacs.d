@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-08-29T11:44:15+09:00>
+;; Time-stamp: <2024-09-12T09:27:24+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -669,6 +669,11 @@
 ;; ============================================================================
 (leaf nvm
   :ensure t
+  :hook ((change-major-mode-after-body-hook . my-nvm-use-for-buffer))
+  :init
+  (defun my-nvm-use-for-buffer ()
+    "Run `nvm-use-for-buffer', but crush the error."
+    (ignore-errors (nvm-use-for-buffer)))
   :config
   ;; `~/.nvmrc' がなければ何もしない
   (ignore-errors (nvm-use-for)))
@@ -1336,6 +1341,13 @@
 ;; 自動スペルチェッカ
 ;; ------------------------------------
 (leaf flyspell
+  :bind (;; HACK: `flyspell' がキーバインドを横取りする問題を回避
+         :flyspell-mode-map
+         ("M-TAB" . nil)
+         ("C-;" . nil)
+         ("C-," . nil)
+         ("C-." . nil)
+         ("C-c $" . nil))
   :hook (;; Full
          (markdown-mode-hook . flyspell-mode)
          (org-mode-hook . flyspell-mode)
