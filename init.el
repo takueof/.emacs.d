@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-09-12T09:27:24+09:00>
+;; Time-stamp: <2024-09-14T00:58:40+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -139,7 +139,7 @@
  ;;
  '(initial-scratch-message nil)
  ;;
- ;; ベルは視覚のみ・音なし
+ ;; ベルは視覚のみ、音なし
  ;;
  '(visible-bell t)
  '(ring-bell-function 'ignore)
@@ -152,7 +152,7 @@
  ;;
  '(indicate-empty-lines t)
  ;;
- ;; ファイル先頭・末尾の状態表示をフリンジに表示
+ ;; ファイル先頭＆末尾の状態表示をフリンジに表示
  ;;
  '(indicate-buffer-boundaries 'right)
  ;;
@@ -244,13 +244,13 @@
  ;;
  '(tab-width 4)
  ;;
- ;; 大文字・小文字は区別しない
+ ;; 大文字／小文字を区別しない
  ;;
  '(case-fold-search t)
  '(read-buffer-completion-ignore-case t)
  '(read-file-name-completion-ignore-case t)
  ;;
- ;; 新規ファイル・バッファ作成時の確認は省略
+ ;; 新規ファイル／バッファ作成時の確認は省略
  ;;
  '(confirm-nonexistent-file-or-buffer nil)
  ;;
@@ -342,7 +342,7 @@
 
 
 ;; ============================================================================
-;; リージョンの大文字・小文字変換で、実行の是非を問わせない
+;; リージョンの大文字／小文字変換で、実行の是非を問わせない
 ;; ============================================================================
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
@@ -635,7 +635,7 @@
 
 
 ;; ============================================================================
-;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得・設定
+;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得＆設定
 ;; ============================================================================
 (leaf exec-path-from-shell
   :unless (member system-type '(ms-dos windows-nt))
@@ -707,7 +707,7 @@
             ;; また `format-time-string' 側のバグにより、
             ;; 環境次第で文字化けする
             ;;
-            ;; Windows 環境（環境変数 %TZ% 未指定・+09:00 ゾーン）では
+            ;; Windows 環境（環境変数 %TZ% 未指定かつ +09:00 ゾーン）では
             ;; 次の値が使用されてしまう
             ;; （どちらもエンコーディングは `cp932-2-byte'）：
             ;;
@@ -836,7 +836,7 @@
 
 
 ;; ------------------------------------
-;; 各種検索・置換強化
+;; 各種検索／置換強化
 ;; ------------------------------------
 (leaf anzu
   :ensure t
@@ -876,6 +876,16 @@
            (auto-revert-use-notify . nil)
            (auto-revert-check-vc-info . t))
   :global-minor-mode global-auto-revert-mode)
+
+
+;; ------------------------------------
+;; フィルタ → 選択 → アクション
+;; ------------------------------------
+(leaf avy
+  :ensure t
+  :bind (("M-j" . avy-goto-char-timer)
+         (:isearch-mode-map
+          ("M-j" . avy-isearch))))
 
 
 ;; ------------------------------------
@@ -979,7 +989,7 @@
   :bind (("C-c x" . compile))
   :hook ((compilation-filter-hook . ansi-color-compilation-filter))
   :custom ((compilation-window-height . 15)
-           ;; ビルドツール・タスクランナーに依存させない
+           ;; ビルドツール／タスクランナーに依存させない
            (compile-command . "")
            (compilation-scroll-output . t)
            (compilation-always-kill . t)
@@ -1142,7 +1152,7 @@
 
 
 ;; ------------------------------------
-;; デスクトップ環境保存・復旧
+;; デスクトップ環境保存＆復旧
 ;; ------------------------------------
 (leaf desktop
   :bind (("C-c d C" . desktop-clear)
@@ -1316,7 +1326,7 @@
     ;; 他の部分は元定義と一致させる
     (make-directory (file-name-directory file-name) t)
     ;; FIXME: もっと柔軟に設定できるようにならないか？
-    (let ((coding-system-for-write 'utf-8-unix) ; ここだけ変更・決め打ち
+    (let ((coding-system-for-write 'utf-8-unix) ; ここだけ変更（決め打ち）
           (jka-compr-inhibit t))
       (write-region nil nil file-name nil 0))))
 
@@ -1342,12 +1352,12 @@
 ;; ------------------------------------
 (leaf flyspell
   :bind (;; HACK: `flyspell' がキーバインドを横取りする問題を回避
-         :flyspell-mode-map
-         ("M-TAB" . nil)
-         ("C-;" . nil)
-         ("C-," . nil)
-         ("C-." . nil)
-         ("C-c $" . nil))
+         (:flyspell-mode-map
+          ("M-TAB" . nil)
+          ("C-;" . nil)
+          ("C-," . nil)
+          ("C-." . nil)
+          ("C-c $" . nil)))
   :hook (;; Full
          (markdown-mode-hook . flyspell-mode)
          (org-mode-hook . flyspell-mode)
@@ -1737,9 +1747,9 @@
 ;; ------------------------------------
 (leaf projectile
   :ensure t
-  :bind (:projectile-mode-map
-         ("C-." . projectile-next-project-buffer)
-         ("C-," . projectile-previous-project-buffer))
+  :bind ((:projectile-mode-map
+          ("C-." . projectile-next-project-buffer)
+          ("C-," . projectile-previous-project-buffer)))
   :custom `((projectile-enable-caching . t)
             (projectile-completion-system . ',(cond ((featurep 'ido) 'ido)
                                                     (t 'default)))
@@ -2256,7 +2266,7 @@
 ;; ============================================================================
 ;; 関連コマンド一覧
 ;;
-;; 文字拡大・縮小モード：
+;; 文字拡大／縮小モード：
 ;;   C-x C-0
 ;; カーソルがポイントしている文字の「簡易」情報を表示：
 ;;   C-x =
@@ -2279,9 +2289,9 @@
 ;; ============================================================================
 ;; 関連 GNU Emacs Lisp
 ;;
-;; `my-utils.el': 独自サポート関数・マクロ定義
+;; `my-utils.el': 独自サポート関数＆マクロ定義
 ;; `mule-conf.el': 文字セット定義（`set-fontset-font' 第2引数の定義一覧）
-;; `mule-diag.el': 文字セット・コーディングシステム用ツール定義
+;; `mule-diag.el': 文字セット／コーディングシステム用ツール定義
 ;; ============================================================================
 ;; ISO/IEC 8859-1 (`iso-8859-1')
 ;;
@@ -2336,14 +2346,14 @@
 ;;   稗逼謬豹廟瀕斧蔽瞥蔑篇娩鞭庖蓬鱒迄儲餅籾爺鑓愈猷漣煉簾榔屢冤叟咬嘲囀徘扁棘
 ;;   橙狡甕甦疼祟竈筵篝腱艘芒虔蜃蠅訝靄靱騙鴉
 ;;
-;; 平仮名・片仮名・記号など：
+;; 平仮名、片仮名、記号など：
 ;;   ゔヿヷヸヹヺㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽ
 ;;
-;; 第3水準（追加・1面）：
+;; 第3水準（追加、1面）：
 ;;   旧：倶剥叱呑嘘妍屏并痩繋
 ;;   新：俱剝𠮟吞噓姸屛幷瘦繫
 ;;
-;; 第4水準（一部・2面）：
+;; 第4水準（一部、2面）：
 ;;   𠂉𪚲
 ;; ============================================================================
 ;; Microsoft Code page 932 (`cp932')
@@ -2470,7 +2480,7 @@
                               (font-spec :size font-size
                                          :family (my-fallback-font-family "PingFang SC"
                                                                           "Microsoft YaHei")))
-    ;; 繁体字（香港・マカオ）：HKSCS-2016
+    ;; 繁体字（香港／マカオ）：HKSCS-2016
     (my-set-fontset-font-safe fontset-name
                               'big5-hkscs
                               (font-spec :size font-size
