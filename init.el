@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-09-14T00:58:40+09:00>
+;; Time-stamp: <2024-09-16T09:35:33+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1475,7 +1475,7 @@
 
 
 ;; ------------------------------------
-;; ファイル操作の簡略化
+;; ファイル操作の簡略化（デフォルト OFF だが他機能から切替可にしておく）
 ;; ------------------------------------
 (leaf ido
   :custom ((ido-enable-flex-matching . t)
@@ -1485,17 +1485,7 @@
            (ido-use-filename-at-point . 'guess)
            (ido-unc-hosts . t)
            ;; ローカル環境にのみ保存
-           (ido-save-directory-list-file . "~/.emacs.ido-save-directory-list.el"))
-  :global-minor-mode t)
-
-
-;; ------------------------------------
-;; ファイル操作の簡略化（全環境に適用）
-;; ------------------------------------
-(leaf ido-everywhere
-  :after ido
-  :config
-  (ido-everywhere +1))
+           (ido-save-directory-list-file . "~/.emacs.ido-save-directory-list.el")))
 
 
 ;; ------------------------------------
@@ -1660,12 +1650,12 @@
 
 
 ;; ------------------------------------
-;; 補完候補一覧の側に項目情報を表示
+;; 補完候補一覧の横に項目情報を表示
 ;; ------------------------------------
 (leaf marginalia
   :ensure t
-  :custom `((marginalia-field-width . 200)
-            (marginalia-max-relative-age . ,(* 512 1024 1024))) ; 512MB
+  :custom ((marginalia-field-width . 200)
+           (marginalia-max-relative-age . 0))
   :global-minor-mode t)
 
 
@@ -1857,8 +1847,15 @@
 ;; ------------------------------------
 (leaf vertico
   :ensure t
+  :bind ((:vertico-map
+          ("<escape>" . minibuffer-keyboard-quit)
+          ("<backspace>" . vertico-directory-delete-char)
+          ("RET" . vertico-directory-enter)
+          ("M-." . vertico-repeat)))
+  :hook ((minibuffer-setup . vertico-repeat-save))
   :custom ((vertico-count . 20)
            (vertico-cycle . t)
+           (vertico-resize . t)
            (vertico-sort-function . #'vertico-sort-history-alpha))
   :global-minor-mode t)
 
