@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-09-16T09:35:33+09:00>
+;; Time-stamp: <2024-10-13T18:53:05+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -379,7 +379,8 @@
 ;; あえて明示的にロード
 (when (require 'package nil :noerror)
   ;; 確実に定義された後で追加
-  (add-to-list 'package-archives '("MELPA" . "https://melpa.org/packages/"))
+  (add-to-list 'package-archives '("MELPA-STABLE" . "https://stable.melpa.org/packages/") t)
+  (add-to-list 'package-archives '("MELPA" . "https://melpa.org/packages/") t)
   ;; あらゆるパッケージロードに先んじて初期化は必須
   (package-initialize))
 
@@ -669,11 +670,11 @@
 ;; ============================================================================
 (leaf nvm
   :ensure t
-  :hook ((change-major-mode-after-body-hook . my-nvm-use-for-buffer))
-  :init
-  (defun my-nvm-use-for-buffer ()
-    "Run `nvm-use-for-buffer', but crush the error."
-    (ignore-errors (nvm-use-for-buffer)))
+  ;; :hook ((change-major-mode-after-body-hook . my-nvm-use-for-buffer))
+  ;; :init
+  ;; (defun my-nvm-use-for-buffer ()
+  ;;   "Run `nvm-use-for-buffer', but crush the error."
+  ;;   (ignore-errors (nvm-use-for-buffer)))
   :config
   ;; `~/.nvmrc' がなければ何もしない
   (ignore-errors (nvm-use-for)))
@@ -953,9 +954,7 @@
                                            lua-mode
                                            prog-mode
                                            python-mode
-                                           scss-mode
-                                           tsx-ts-mode
-                                           typescript-ts-mode))
+                                           scss-mode))
            (company-dabbrev-code-other-buffers . t)
            (company-dabbrev-code-everywhere . t)
            (company-dabbrev-code-ignore-case . t)))
@@ -1374,8 +1373,6 @@
          (lisp-mode-hook . flyspell-prog-mode)
          (php-mode-hook . flyspell-prog-mode)
          (scss-mode-hook . flyspell-prog-mode)
-         (tsx-ts-mode-hook . flyspell-prog-mode)
-         (typescript-ts-mode-hook . flyspell-prog-mode)
          (web-mode-hook . flyspell-prog-mode))
   :custom ((flyspell-delay . 1.0)))
 
@@ -1530,38 +1527,8 @@
            (lsp-ui-doc-max-width . 200)
            (lsp-ui-doc-max-height . 50)
            (lsp-ui-doc-delay . 0.25)
-           (lsp-ui-imenu-auto-refresh . t)
-           (lsp-ui-imenu-auto-refresh-delay . 0.25)
-           ;; TODO: `lsp-ui-doc' を有効にしているのでこちらは不要
-           ;;       設定だけ残しておく
-           (lsp-ui-sideline-enable . nil)
-           (lsp-ui-sideline-show-hover . t)
-           (lsp-ui-sideline-show-code-actions . t)
-           (lsp-ui-sideline-diagnostic-max-lines . 2)
-           (lsp-ui-sideline-diagnostic-max-line-length . 200)
-           (lsp-ui-sideline-actions-icon . t)))
-
-
-;; ------------------------------------
-;; LSP (Language Server Protocol) クライアント：拡張 (Java)
-;; ------------------------------------
-;; WARNING: `lsp-mode' が自動ロードする
-;;          念のため `lsp-mode' より前に設定
-;; ------------------------------------
-(leaf lsp-java
-  :ensure t
-  :config
-  ;; For "SpringBoot"
-  (leaf lsp-java-boot
-    :after lsp-java
-    :hook ((java-mode-hook . lsp-java-boot-lens-mode)))
-  :defer-config
-  ;; For "DAP"
-  ;;
-  ;; WARNING: 確実に `defcustom' 定義済変数が存在する状態で、
-  ;;          「定義」ではなく「追加」
-  (add-to-list 'lsp-java-vmargs "-Djsse.enableSNIExtension=false")
-  (add-to-list 'lsp-java-9-args "-Djsse.enableSNIExtension=false"))
+           ;; `lsp-ui-doc' を有効にしているので他は不要
+           (lsp-ui-sideline-enable . nil)))
 
 
 ;; ------------------------------------
@@ -1591,11 +1558,8 @@
          (js-mode-hook . lsp)
          (json-mode-hook . lsp)
          (markdown-mode-hook . lsp)
-         (php-mode-hook . lsp)
          (scss-mode-hook . lsp)
          (sh-mode-hook . lsp)
-         (tsx-ts-mode-hook . lsp)
-         (typescript-ts-mode-hook . lsp)
          (web-mode-hook . lsp)
          (yaml-mode-hook . lsp))
   :custom (;;
@@ -1615,9 +1579,11 @@
            ;; https://apple.stackexchange.com/a/418699
            ;; https://github.com/emacs-mirror/emacs/blob/0008003c3e466269074001d637cda872d6fee9be/src/kqueue.c#L387-L401
            (lsp-enable-file-watchers . nil)
-           (lsp-eldoc-render-all . t)
+           (lsp-eldoc-enable-hover . nil)
            (lsp-enable-indentation . nil) ; Use `prettier-mode' and each major-mode
-           (lsp-before-save-edits . nil)
+           (lsp-enable-text-document-color . nil) ; Use major-mode
+           (lsp-before-save-edits . nil) ; Use `prettier-mode' and each major-mode
+           (lsp-modeline-diagnostics-enable . nil)
            (lsp-headerline-breadcrumb-enable . nil)
            (lsp-signature-doc-lines . t)
            (lsp-progress-function . 'ignore)
@@ -1625,13 +1591,25 @@
            (lsp-trim-trailing-whitespace . nil) ; Use `whitespace'
            (lsp-insert-final-newline . nil) ; Use `editorconfig'
            (lsp-trim-final-newlines . nil) ; Use `editorconfig'
-           (lsp-warn-no-matched-clients . nil)
            (lsp-rename-use-prepare . nil)
            ;;
-           ;; `lsp-javascript'
+           ;; `lsp-javascript' (with TypeScript)
            ;;
-           (lsp-typescript-format-enable . nil) ; Use `prettier-mode'
            (lsp-javascript-format-enable . nil) ; Use `prettier-mode'
+           (lsp-javascript-suggest-complete-function-calls . t)
+           (lsp-javascript-implicit-project-config-check-js . t)
+           (lsp-javascript-implicit-project-config-experimental-decorators . t)
+           (lsp-javascript-display-enum-member-value-hints . t)
+           (lsp-javascript-display-return-type-hints . t)
+           (lsp-javascript-display-parameter-type-hints . t)
+           (lsp-javascript-display-parameter-name-hints . "all")
+           (lsp-javascript-display-parameter-name-hints-when-argument-matches-name . t)
+           (lsp-javascript-display-property-declaration-type-hints . t)
+           (lsp-javascript-display-variable-type-hints . t)
+           (lsp-typescript-format-enable . nil) ; Use `prettier-mode'
+           (lsp-typescript-references-code-lens-enabled . t)
+           (lsp-typescript-implementations-code-lens-enabled . t)
+           (lsp-typescript-suggest-complete-function-calls . t)
            (lsp-typescript-surveys-enabled . nil)
            ;;
            ;; `lsp-html'
@@ -1680,7 +1658,7 @@
             (migemo-use-default-isearch-keybinding . nil)
             ;; 辞書ファイルはデフォルトを利用
             (migemo-dictionary . ,(catch 'founded
-                                    (dolist (path '("/usr/local/share/migemo/utf-8/migemo-dict"
+                                    (dolist (path '("/opt/homebrew/share/migemo/utf-8/migemo-dict"
                                                     "C:/programs/cmigemo/dict/utf-8/migemo-dic"))
                                       (if (file-readable-p path)
                                           (throw 'founded path)))))
