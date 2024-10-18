@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-10-13T18:53:05+09:00>
+;; Time-stamp: <2024-10-21T13:32:17+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1596,20 +1596,7 @@
            ;; `lsp-javascript' (with TypeScript)
            ;;
            (lsp-javascript-format-enable . nil) ; Use `prettier-mode'
-           (lsp-javascript-suggest-complete-function-calls . t)
-           (lsp-javascript-implicit-project-config-check-js . t)
-           (lsp-javascript-implicit-project-config-experimental-decorators . t)
-           (lsp-javascript-display-enum-member-value-hints . t)
-           (lsp-javascript-display-return-type-hints . t)
-           (lsp-javascript-display-parameter-type-hints . t)
-           (lsp-javascript-display-parameter-name-hints . "all")
-           (lsp-javascript-display-parameter-name-hints-when-argument-matches-name . t)
-           (lsp-javascript-display-property-declaration-type-hints . t)
-           (lsp-javascript-display-variable-type-hints . t)
            (lsp-typescript-format-enable . nil) ; Use `prettier-mode'
-           (lsp-typescript-references-code-lens-enabled . t)
-           (lsp-typescript-implementations-code-lens-enabled . t)
-           (lsp-typescript-suggest-complete-function-calls . t)
            (lsp-typescript-surveys-enabled . nil)
            ;;
            ;; `lsp-html'
