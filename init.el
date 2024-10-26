@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-10-26T11:21:01+09:00>
+;; Time-stamp: <2024-10-26T18:14:14+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -670,11 +670,11 @@
 ;; ============================================================================
 (leaf nvm
   :ensure t
-  ;; :hook ((change-major-mode-after-body-hook . my-nvm-use-for-buffer))
-  ;; :init
-  ;; (defun my-nvm-use-for-buffer ()
-  ;;   "Run `nvm-use-for-buffer', but crush the error."
-  ;;   (ignore-errors (nvm-use-for-buffer)))
+  :hook ((change-major-mode-after-body-hook . my-nvm-use-for-buffer))
+  :init
+  (defun my-nvm-use-for-buffer ()
+    "Run `nvm-use-for-buffer', but crush the error."
+    (ignore-errors (nvm-use-for-buffer)))
   :config
   ;; `~/.nvmrc' がなければ何もしない
   (ignore-errors (nvm-use-for)))
