@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-10-25T00:19:24+09:00>
+;; Time-stamp: <2024-10-26T11:21:01+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1579,13 +1579,12 @@
            ;; https://apple.stackexchange.com/a/418699
            ;; https://github.com/emacs-mirror/emacs/blob/0008003c3e466269074001d637cda872d6fee9be/src/kqueue.c#L387-L401
            (lsp-enable-file-watchers . nil)
-           (lsp-eldoc-enable-hover . nil)
+           (lsp-eldoc-enable-hover . nil) ; Use `lsp-ui'
            (lsp-enable-indentation . nil) ; Use `prettier-mode' and each major-mode
            (lsp-enable-text-document-color . nil) ; Use major-mode
            (lsp-before-save-edits . nil) ; Use `prettier-mode' and each major-mode
            (lsp-modeline-diagnostics-enable . nil)
            (lsp-headerline-breadcrumb-enable . nil)
-           (lsp-signature-doc-lines . t)
            (lsp-progress-function . 'ignore)
            (lsp-inlay-hint-enable . t)
            (lsp-trim-trailing-whitespace . nil) ; Use `whitespace'
