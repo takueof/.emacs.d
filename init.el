@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-10-26T18:14:14+09:00>
+;; Time-stamp: <2024-10-28T22:48:39+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -316,10 +316,6 @@
  `(mac-command-modifier ,(if (display-graphic-p)
                              nil
                            ''meta))
- ;;
- ;; 人為的に italic/bold フォントを選択 (Windows ONLY)
- ;;
- '(w32-enable-synthesized-fonts t)
  ;;
  ;; 右 <Alt> + 左 <Ctrl> で <AltGr> が発送されないようにする (Windows ONLY)
  ;; <AltGr> は独自のキーコードであり、<C-M-> であるとみなされない
@@ -2356,7 +2352,9 @@
   :after my-utils
   :custom (;; シンボルや句読点などを表示するフォントを、設定に応じて選択
            ;;   → GNU Emacs 25 より前のふるまいに戻す
-           (use-default-font-for-symbols . nil))
+           (use-default-font-for-symbols . nil)
+           ;; 人為的に italic/bold フォントを選択 (Windows ONLY)
+           (w32-enable-synthesized-fonts . t))
   :config
   ;; --------------------------------------------------------------------------
   ;; スケール変換
