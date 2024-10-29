@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-10-29T09:31:40+09:00>
+;; Time-stamp: <2024-10-29T09:37:18+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1800,8 +1800,9 @@
 (leaf vertico
   :ensure t
   :bind ((:vertico-map
-          ("<escape>" . minibuffer-keyboard-quit)
           ("<backspace>" . vertico-directory-delete-char)
+          ("<DEL>" . vertico-directory-delete-char)
+          ("<escape>" . minibuffer-keyboard-quit)
           ("RET" . vertico-directory-enter)
           ("M-." . vertico-repeat)))
   :hook ((minibuffer-setup . vertico-repeat-save))
