@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-10-29T09:56:31+09:00>
+;; Time-stamp: <2024-10-29T10:01:24+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -579,7 +579,8 @@
 ;; ============================================================================
 (leaf add-node-modules-path
   :ensure t
-  :hook ((prog-mode-hook . add-node-modules-path)))
+  :hook ((prog-mode-hook . add-node-modules-path)
+         (text-mode-hook . add-node-modules-path)))
 
 
 ;; ============================================================================
