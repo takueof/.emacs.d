@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-10-29T09:37:18+09:00>
+;; Time-stamp: <2024-10-29T09:47:30+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1496,41 +1496,6 @@
 
 
 ;; ------------------------------------
-;; LSP (Language Server Protocol) クライアント：拡張 (UI)
-;; ------------------------------------
-;; WARNING: `lsp-mode' が自動ロードする
-;;          念のため `lsp-mode' より前に設定
-;; ------------------------------------
-(leaf lsp-ui
-  :ensure t
-  :bind ((:lsp-ui-mode-map
-          ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
-          ([remap xref-find-references] . lsp-ui-peek-find-references)))
-  :custom ((lsp-ui-doc-show-with-mouse . nil)
-           (lsp-ui-doc-show-with-cursor . t)
-           (lsp-ui-doc-header . t)
-           (lsp-ui-doc-include-signature . t)
-           (lsp-ui-doc-position . 'at-point)
-           (lsp-ui-doc-alignment . 'window)
-           (lsp-ui-doc-max-width . 200)
-           (lsp-ui-doc-max-height . 50)
-           (lsp-ui-doc-delay . 0.25)
-           ;; `lsp-ui-doc' を有効にしているので他は不要
-           (lsp-ui-sideline-enable . nil)))
-
-
-;; ------------------------------------
-;; LSP (Language Server Protocol) クライアント：拡張 (Tailwind CSS)
-;; ------------------------------------
-;; WARNING: `lsp-mode' が自動ロードする
-;;          念のため `lsp-mode' より前に設定
-;; ------------------------------------
-(leaf lsp-tailwindcss
-  :ensure t
-  :custom ((lsp-tailwindcss-add-on-mode . t)))
-
-
-;; ------------------------------------
 ;; LSP (Language Server Protocol) クライアント
 ;;
 ;; See also:
@@ -1599,6 +1564,39 @@
                                         ;; https://discord.com/channels/789885435026604033/1167077517157470278/1174364060712714310
                                         ;; https://github.com/microsoft/vscode-eslint/issues/1518#issuecomment-1319753092
                                         (useFlatConfig . true)))))
+
+
+;; ------------------------------------
+;; LSP (Language Server Protocol) クライアント：拡張 (UI)
+;; ------------------------------------
+;; `lsp-mode' が自動ロードする
+;; ------------------------------------
+(leaf lsp-ui
+  :ensure t
+  :bind ((:lsp-ui-mode-map
+          ([remap xref-find-definitions] . lsp-ui-peek-find-definitions)
+          ([remap xref-find-references] . lsp-ui-peek-find-references)))
+  :custom ((lsp-ui-doc-show-with-mouse . nil)
+           (lsp-ui-doc-show-with-cursor . t)
+           (lsp-ui-doc-header . t)
+           (lsp-ui-doc-include-signature . t)
+           (lsp-ui-doc-position . 'at-point)
+           (lsp-ui-doc-alignment . 'window)
+           (lsp-ui-doc-max-width . 200)
+           (lsp-ui-doc-max-height . 50)
+           (lsp-ui-doc-delay . 0.25)
+           ;; `lsp-ui-doc' を有効にしているので他は不要
+           (lsp-ui-sideline-enable . nil)))
+
+
+;; ------------------------------------
+;; LSP (Language Server Protocol) クライアント：拡張 (Tailwind CSS)
+;; ------------------------------------
+;; `lsp-mode' が自動ロードする
+;; ------------------------------------
+(leaf lsp-tailwindcss
+  :ensure t
+  :custom ((lsp-tailwindcss-add-on-mode . t)))
 
 
 ;; ------------------------------------
