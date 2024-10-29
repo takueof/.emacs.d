@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-10-29T09:52:30+09:00>
+;; Time-stamp: <2024-10-29T09:56:31+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -571,17 +571,7 @@
          (input-method-deactivate-hook . my-change-cursor-faces-by-current-input-method)
          ;; macOS ONLY
          (mac-selected-keyboard-input-source-change-hook . my-change-cursor-faces-by-current-input-method)
-         (mac-enabled-keyboard-input-sources-change-hook . my-change-cursor-faces-by-current-input-method))
-  :init
-  (defface my-cursor-default nil
-    "`cursor' face for `current-input-method' is nil."
-    :group 'customize)
-  (copy-face 'cursor 'my-cursor-default)
-
-  (defface my-cursor-input-method-activated '((t
-                                               :background "gold"))
-    "`cursor' face for `current-input-method' is non-nil."
-    :group 'customize))
+         (mac-enabled-keyboard-input-sources-change-hook . my-change-cursor-faces-by-current-input-method)))
 
 
 ;; ============================================================================
