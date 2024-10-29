@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-10-29T09:50:57+09:00>
+;; Time-stamp: <2024-10-29T09:52:30+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1876,39 +1876,6 @@
 ;; ============================================================================
 ;; Major modes
 ;; ============================================================================
-;; ------------------------------------
-;; "tree-sitter" (`treesit')
-;; ------------------------------------
-(leaf treesit
-  :custom ((treesit-font-lock-level . 4))
-  :init
-  ;; ----------------------------------
-  ;; HACK: `revert-buffer' すると fontification が無効化される問題を強制回避
-  ;; ----------------------------------
-  (defun my-treesit-auto-rerun-after-revert-buffer (&optional ignore-auto noconfirm preserve-modes)
-    "Rerun `major-mode' using `treesit' when `revert-buffer'."
-    (interactive (list (not current-prefix-arg)))
-    (if (and (boundp major-mode))
-        (major-mode)))
-  (advice-add #'revert-buffer
-              :after
-              #'my-treesit-auto-rerun-after-revert-buffer))
-
-
-;; ------------------------------------
-;; Auto "tree-sitter" (`treesit')
-;; ------------------------------------
-(leaf treesit-auto
-  ;; FIXME: `treesit' を利用したメジャーモードで可視範囲外にあるフォントの
-  ;;        fontification が消える問題を解決せねばならない
-  :disabled t
-  :ensure t
-  :custom ((treesit-auto-install . 'prompt))
-  :config
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  :global-minor-mode global-treesit-auto-mode)
-
-
 ;; ------------------------------------
 ;; Apache
 ;; ------------------------------------
