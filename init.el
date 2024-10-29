@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-10-28T22:48:39+09:00>
+;; Time-stamp: <2024-10-29T09:31:40+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1067,14 +1067,6 @@
            (xref-show-xrefs-function . #'consult-xref)
            (xref-show-definitions-function . #'consult-xref))
   :advice ((:override register-preview consult-register-window)))
-
-
-;; ------------------------------------
-;; 補完 - LSP (Language Server Protocol) サポート
-;; ------------------------------------
-(leaf consult-lsp
-  :ensure t
-  :bind (("C-c c ." . consult-lsp-diagnostics)))
 
 
 ;; ------------------------------------
