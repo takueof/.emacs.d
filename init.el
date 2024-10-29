@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-10-29T09:47:30+09:00>
+;; Time-stamp: <2024-10-29T09:50:57+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1354,7 +1354,6 @@
          (emacs-lisp-mode-hook . flyspell-prog-mode)
          (html-mode-hook . flyspell-prog-mode)
          (ielm-mode-hook . flyspell-prog-mode)
-         (java-mode-hook . flyspell-prog-mode)
          (js-mode-hook . flyspell-prog-mode)
          (js2-mode-hook . flyspell-prog-mode)
          (lisp-interaction-mode-hook . flyspell-prog-mode)
@@ -1507,7 +1506,6 @@
   :hook (;; 有効化は必要最小限にとどめる
          (css-mode-hook . lsp)
          (dockerfile-mode-hook . lsp)
-         (java-mode-hook . lsp)
          (js-mode-hook . lsp)
          (json-mode-hook . lsp)
          (markdown-mode-hook . lsp)
