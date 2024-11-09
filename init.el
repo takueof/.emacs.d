@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-10-29T10:01:24+09:00>
+;; Time-stamp: <2024-11-10T06:24:04+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -393,15 +393,6 @@
 
 
 ;; ============================================================================
-;; 詳細設定
-;;
-;; See also:
-;; https://github.com/conao3/leaf.el
-;; https://qiita.com/conao3/items/dc88bdadb0523ef95878
-;; ============================================================================
-;; WARNING: `leaf' が必ず使える状況を前提とする
-;;          `leaf' のインストールより後に設定しなければならない
-;; ============================================================================
 ;; `leaf' キーワード群
 ;; ============================================================================
 (leaf leaf-keywords
@@ -411,23 +402,11 @@
 
 
 ;; ============================================================================
-;; IME patch (Windows ONLY)
+;; 自作ユーティリティ
 ;; ============================================================================
-;; WARNING: 全ての IM に影響するため、
-;;          なるべく早いタイミングでインストール
-;; ============================================================================
-(leaf tr-ime
-  :when (member system-type '(ms-dos windows-nt))
-  :ensure t
-  :custom '(;; インプットメソッド (IM) 識別名 "W32-IME" は
-            ;; `tr-ime' 未適用だと使えない
-            (default-input-method . "W32-IME")
-            (w32-ime-buffer-switch-p . t)
-            (w32-ime-mode-line-state-indicator . "[Aa]")
-            (w32-ime-mode-line-state-indicator-list . '("[--]" "[あ]" "[Aa]")))
-  :config
-  (tr-ime-advanced-install t)
-  (w32-ime-initialize))
+(leaf my-utils
+  :load-path* "utils"
+  :require t)
 
 
 ;; ============================================================================
@@ -436,50 +415,11 @@
 ;; WARNING: 起動を前提としたパッケージが存在するため、
 ;;          なるべく早いタイミングで開始
 ;; ============================================================================
-;; Windows 環境では `server-auth-dir' の「所有者」が：
-;;   * Administrator (RID=500)
-;;   * Administrators (RID=544)
-;; である場合、`server-ensure-safe-dir' の評価が `nil' になる
-;;
-;; `server-auth-dir' で指定したフォルダの
-;; 「プロパティ」→「セキュリティ」→「詳細設定」→「所有者」→「編集」
-;; から、所有者をログオンユーザ自身に変更すること
-;; ============================================================================
-;; Windows 環境は emacsclientw.exe 実行時に環境変数 %EMACS_SERVER_FILE% へ
-;; サーバファイルのパスを明示する必要がある
-;; なぜ必要かは不明
-;;
-;; この欠点をある程度回避した wemacs.cmd を使用すること
-;; ============================================================================
 (leaf server
   :custom (;; ローカル環境にのみ保存
            (server-auth-dir . "~/.emacs.server"))
   :config
   (server-start t))
-
-
-;; ============================================================================
-;; カラーテーマ (Use "Modus" theme, latest MELPA version)
-;; ============================================================================
-(leaf modus-themes
-  :ensure t
-  :require t
-  :custom ((modus-themes-bold-constructs . t)
-           (modus-themes-common-palette-overrides . '((comment yellow-faint)
-                                                      (string green-faint)
-                                                      (border-mode-line-active unspecified)
-                                                      (border-mode-line-inactive unspecified)
-                                                      (bg-mode-line-active bg-green-subtle))))
-  :config
-  (modus-themes-load-theme 'modus-vivendi))
-
-
-;; ============================================================================
-;; 自作ユーティリティ
-;; ============================================================================
-(leaf my-utils
-  :load-path* "utils"
-  :require t)
 
 
 ;; ============================================================================
@@ -546,128 +486,6 @@
 
 
 ;; ============================================================================
-;; Input Method (IM)
-;; ============================================================================
-(leaf *input-method
-  ;; WARNING: `window-system' 外の環境（例：ターミナル）では例外発生
-  :when window-system
-  :after my-utils
-  :hook (;; -------------------------------------------------------------------
-         ;; ウインドウ選択後、IM の状態に応じてフェイス `cursor' を変更
-         ;;
-         ;; `cursor' はフレーム単位
-         ;; しかし、`current-input-method' はバッファローカル変数
-         ;; よって、バッファ間で `current-input-method' 値が異なれば、
-         ;; `cursor' が意図せぬ状態になる
-         ;;
-         ;; ゆえに、ウインドウ切替のタイミングでの `cursor' 明示変更が必要
-         ;;
-         ;; バッファ切替時は、特に何もしない
-         ;; -------------------------------------------------------------------
-         ;; `select-window' 実行後に起動するフックを利用
-         (buffer-list-update-hook . my-change-cursor-faces-by-current-input-method)
-         ;; IM の activate/deactivate と連動させる
-         (input-method-activate-hook . my-change-cursor-faces-by-current-input-method)
-         (input-method-deactivate-hook . my-change-cursor-faces-by-current-input-method)
-         ;; macOS ONLY
-         (mac-selected-keyboard-input-source-change-hook . my-change-cursor-faces-by-current-input-method)
-         (mac-enabled-keyboard-input-sources-change-hook . my-change-cursor-faces-by-current-input-method)))
-
-
-;; ============================================================================
-;; Node.js モジュールパス解決
-;; ============================================================================
-(leaf add-node-modules-path
-  :ensure t
-  :hook ((prog-mode-hook . add-node-modules-path)
-         (text-mode-hook . add-node-modules-path)))
-
-
-;; ============================================================================
-;; ANSI エスケープシーケンス
-;; ============================================================================
-(leaf ansi-color
-  :config
-  ;; `comint-mode' および派生モードで、ANSI エスケープシーケンスの解釈を開始
-  (ansi-color-for-comint-mode-on))
-
-
-;; ============================================================================
-;; URL → Web browser パススルー
-;; ============================================================================
-(leaf browse-url
-  :custom ((browse-url-browser-function . 'eww-browse-url)))
-
-
-;; ============================================================================
-;; 未コミット diff
-;; ============================================================================
-(leaf diff-hl
-  :ensure t
-  :hook ((magit-pre-refresh-hook . diff-hl-magit-pre-refresh)
-         (magit-post-refresh-hook . diff-hl-magit-post-refresh))
-  :init
-  (diff-hl-margin-mode +1)
-  (diff-hl-dired-mode +1)
-  :global-minor-mode global-diff-hl-mode)
-
-
-;; ============================================================================
-;; EWW (Emacs Web Wowser, Web Browser)
-;; ============================================================================
-(leaf eww
-  :bind (("C-c C-e" . eww))
-  :custom ((eww-search-prefix . "https://www.google.co.jp/search?&q=")
-           (eww-history-limit . nil)
-           (eww-auto-rename-buffer . 'title)))
-
-
-;; ============================================================================
-;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得＆設定
-;; ============================================================================
-(leaf exec-path-from-shell
-  :unless (member system-type '(ms-dos windows-nt))
-  :ensure t
-  :config
-  (exec-path-from-shell-initialize))
-
-
-;; ============================================================================
-;; スペルチェッカ
-;; ============================================================================
-(leaf ispell
-  :custom ((ispell-dictionary . "english")
-           (ispell-extra-args . '("--sug-mode=fast"
-                                  "--run-together"
-                                  "--run-together-limit=5"
-                                  "--run-together-min=2"))))
-
-
-;; ============================================================================
-;; Git インターフェース
-;; ============================================================================
-(leaf magit
-  :ensure t
-  :bind (("C-x g" . magit-status))
-  :custom ((auto-revert-buffer-list-filter . #'magit-auto-revert-buffer-p)))
-
-
-;; ============================================================================
-;; nvm 経由での Node.js 利用をサポート
-;; ============================================================================
-(leaf nvm
-  :ensure t
-  :hook ((change-major-mode-after-body-hook . my-nvm-use-for-buffer))
-  :init
-  (defun my-nvm-use-for-buffer ()
-    "Run `nvm-use-for-buffer', but crush the error."
-    (ignore-errors (nvm-use-for-buffer)))
-  :config
-  ;; `~/.nvmrc' がなければ何もしない
-  (ignore-errors (nvm-use-for)))
-
-
-;; ============================================================================
 ;; タイムスタンプ記述
 ;; ============================================================================
 (leaf time-stamp
@@ -718,6 +536,164 @@
                                            ;; タイムゾーンが "+0000" を返す
                                            ;; あえて "Z" への変換はしない
                                            (format-time-string "%z"))))))
+
+
+;; ============================================================================
+;; IME patch (Windows ONLY)
+;; ============================================================================
+;; WARNING: 全ての IM に影響するため、
+;;          なるべく早いタイミングでインストール
+;; ============================================================================
+(leaf tr-ime
+  :when (member system-type '(ms-dos windows-nt))
+  :ensure t
+  :custom '(;; インプットメソッド (IM) 識別名 "W32-IME" は
+            ;; `tr-ime' 未適用だと使えない
+            (default-input-method . "W32-IME")
+            (w32-ime-buffer-switch-p . t)
+            (w32-ime-mode-line-state-indicator . "[Aa]")
+            (w32-ime-mode-line-state-indicator-list . '("[--]" "[あ]" "[Aa]")))
+  :config
+  (tr-ime-advanced-install t)
+  (w32-ime-initialize))
+
+
+;; ============================================================================
+;; Input Method (IM)
+;; ============================================================================
+(leaf *input-method
+  ;; WARNING: `window-system' 外の環境（例：ターミナル）では例外発生
+  :when window-system
+  :after my-utils
+  :hook (;; -------------------------------------------------------------------
+         ;; ウインドウ選択後、IM の状態に応じてフェイス `cursor' を変更
+         ;;
+         ;; `cursor' はフレーム単位
+         ;; しかし、`current-input-method' はバッファローカル変数
+         ;; よって、バッファ間で `current-input-method' 値が異なれば、
+         ;; `cursor' が意図せぬ状態になる
+         ;;
+         ;; ゆえに、ウインドウ切替のタイミングでの `cursor' 明示変更が必要
+         ;;
+         ;; バッファ切替時は、特に何もしない
+         ;; -------------------------------------------------------------------
+         ;; `select-window' 実行後に起動するフックを利用
+         (buffer-list-update-hook . my-change-cursor-faces-by-current-input-method)
+         ;; IM の activate/deactivate と連動させる
+         (input-method-activate-hook . my-change-cursor-faces-by-current-input-method)
+         (input-method-deactivate-hook . my-change-cursor-faces-by-current-input-method)
+         ;; macOS ONLY
+         (mac-selected-keyboard-input-source-change-hook . my-change-cursor-faces-by-current-input-method)
+         (mac-enabled-keyboard-input-sources-change-hook . my-change-cursor-faces-by-current-input-method)))
+
+
+;; ============================================================================
+;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得＆設定
+;; ============================================================================
+(leaf exec-path-from-shell
+  :unless (member system-type '(ms-dos windows-nt))
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize))
+
+
+;; ============================================================================
+;; nvm 経由での Node.js 利用をサポート
+;; ============================================================================
+(leaf nvm
+  :ensure t
+  :hook ((change-major-mode-after-body-hook . my-nvm-use-for-buffer))
+  :init
+  (defun my-nvm-use-for-buffer ()
+    "Run `nvm-use-for-buffer', but crush the error."
+    (ignore-errors (nvm-use-for-buffer)))
+  :config
+  ;; `~/.nvmrc' がなければ何もしない
+  (ignore-errors (nvm-use-for)))
+
+
+;; ============================================================================
+;; Node.js モジュールパス解決
+;; ============================================================================
+(leaf add-node-modules-path
+  :ensure t
+  :hook ((prog-mode-hook . add-node-modules-path)
+         (text-mode-hook . add-node-modules-path)))
+
+
+;; ============================================================================
+;; カラーテーマ (Use "Modus" theme, latest MELPA version)
+;; ============================================================================
+(leaf modus-themes
+  :ensure t
+  :require t ; MELPA 版を利用
+  :custom ((modus-themes-bold-constructs . t)
+           (modus-themes-common-palette-overrides . '((comment yellow-faint)
+                                                      (string green-faint)
+                                                      (border-mode-line-active unspecified)
+                                                      (border-mode-line-inactive unspecified)
+                                                      (bg-mode-line-active bg-green-subtle))))
+  :config
+  (modus-themes-load-theme 'modus-vivendi))
+
+
+;; ============================================================================
+;; ANSI エスケープシーケンス
+;; ============================================================================
+(leaf ansi-color
+  :config
+  ;; `comint-mode' および派生モードで、ANSI エスケープシーケンスの解釈を開始
+  (ansi-color-for-comint-mode-on))
+
+
+;; ============================================================================
+;; URL → Web browser パススルー
+;; ============================================================================
+(leaf browse-url
+  :custom ((browse-url-browser-function . 'eww-browse-url)))
+
+
+;; ============================================================================
+;; EWW (Emacs Web Wowser, Web Browser)
+;; ============================================================================
+(leaf eww
+  :bind (("C-c C-e" . eww))
+  :custom ((eww-search-prefix . "https://www.google.co.jp/search?&q=")
+           (eww-history-limit . nil)
+           (eww-auto-rename-buffer . 'title)))
+
+
+;; ============================================================================
+;; 未コミット diff
+;; ============================================================================
+(leaf diff-hl
+  :ensure t
+  :hook ((magit-pre-refresh-hook . diff-hl-magit-pre-refresh)
+         (magit-post-refresh-hook . diff-hl-magit-post-refresh))
+  :init
+  (diff-hl-margin-mode +1)
+  (diff-hl-dired-mode +1)
+  :global-minor-mode global-diff-hl-mode)
+
+
+;; ============================================================================
+;; スペルチェッカ
+;; ============================================================================
+(leaf ispell
+  :custom ((ispell-dictionary . "english")
+           (ispell-extra-args . '("--sug-mode=fast"
+                                  "--run-together"
+                                  "--run-together-limit=5"
+                                  "--run-together-min=2"))))
+
+
+;; ============================================================================
+;; Git インターフェース
+;; ============================================================================
+(leaf magit
+  :ensure t
+  :bind (("C-x g" . magit-status))
+  :custom ((auto-revert-buffer-list-filter . #'magit-auto-revert-buffer-p)))
 
 
 ;; ============================================================================
