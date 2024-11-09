@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-11-10T06:24:04+09:00>
+;; Time-stamp: <2024-11-10T06:28:43+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -601,6 +601,7 @@
 ;; nvm 経由での Node.js 利用をサポート
 ;; ============================================================================
 (leaf nvm
+  :unless (member system-type '(ms-dos windows-nt))
   :ensure t
   :hook ((change-major-mode-after-body-hook . my-nvm-use-for-buffer))
   :init
