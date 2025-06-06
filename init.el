@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2024 Taku Watabe
-;; Time-stamp: <2024-12-27T06:16:21+09:00>
+;; Copyright (C) 2013-2025 Taku WATABE
+;; Time-stamp: <2025-06-07T07:41:05+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -659,7 +659,7 @@
 ;; ============================================================================
 (leaf eww
   :bind (("C-c C-e" . eww))
-  :custom ((eww-search-prefix . "https://www.google.co.jp/search?&q=")
+  :custom ((eww-search-prefix . "https://www.google.com/search?&q=")
            (eww-history-limit . nil)
            (eww-auto-rename-buffer . 'title)))
 
@@ -2564,9 +2564,7 @@
 (leaf *early-init-el-restore
   :custom (;; ガベージコレクション閾値を既定値に戻す
            (gc-cons-threshold . 800000)
-           ;; 黙らせていた余分なメッセージ I/O を復活
-           (inhibit-message . nil))
-  ) ; END of *early-init-el-restore
+  )) ; END of *early-init-el-restore
 
 
 ;; ============================================================================

@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2021-2024 Taku Watabe
-;; Time-stamp: <2024-07-24T18:45:17+09:00>
+;; Copyright (C) 2021-2025 Taku WATABE
+;; Time-stamp: <2025-06-07T07:40:46+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -60,12 +60,6 @@
 ;; WARNING: Must set the values really need at the end of `init.el'.
 ;;
 (setq gc-cons-threshold most-positive-fixnum)
-;;
-;; Silence extra message I/O.
-;;
-;; WARNING: Must set the values really need at the end of `init.el'.
-;;
-(setq inhibit-message t)
 ;;
 ;; Faster font display.
 ;;
