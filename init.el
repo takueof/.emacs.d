@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-06-13T00:51:54+09:00>
+;; Time-stamp: <2025-06-13T01:23:52+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2332,7 +2332,8 @@
   ;; -------------------------------------------------------------------------
   ;; フォントセット：プログラミング用
   ;; -------------------------------------------------------------------------
-  (let* ((font-size 14) ; デフォルトフォントサイズ (px)
+  (let* (;; デフォルトフォントサイズ (pt)
+         (font-size (if (equal window-system 'w32) 12.0 14.0))
          (fontset "programming")
          (fontset-name (concat "fontset-" fontset)))
     ;; フォントセット生成
