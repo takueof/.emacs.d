@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-06-13T00:42:20+09:00>
+;; Time-stamp: <2025-06-13T00:51:54+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -331,9 +331,7 @@
                                (if (member system-type '(ms-dos windows-nt))
                                    '("C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"
                                      "C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.crt")
-                                 '("/usr/local/etc/openssl/cert.pem"
-                                   "/usr/local/etc/libressl/cert.pem"
-                                   "/private/etc/ssl/cert.pem"
+                                 '("/private/etc/ssl/cert.pem"
                                    "/etc/ssl/cert.pem")))))
 
 
