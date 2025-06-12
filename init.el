@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-06-13T07:00:28+09:00>
+;; Time-stamp: <2025-06-13T07:01:51+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1639,7 +1639,6 @@
 ;; コードフォーマッタ
 ;; ------------------------------------
 (leaf prettier
-  :when (executable-find "prettier")
   :ensure t
   :custom ((prettier-lighter . ""))
   :global-minor-mode global-prettier-mode)
