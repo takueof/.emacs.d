@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-06-13T01:23:52+09:00>
+;; Time-stamp: <2025-06-13T02:53:41+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2333,56 +2333,41 @@
   ;; フォントセット：プログラミング用
   ;; -------------------------------------------------------------------------
   (let* (;; デフォルトフォントサイズ (pt)
-         (font-size (if (equal window-system 'w32) 12.0 14.0))
+         (font-size 14.0)
+         ;; フォントセット ID
          (fontset "programming")
-         (fontset-name (concat "fontset-" fontset)))
-    ;; フォントセット生成
-    (create-fontset-from-ascii-font (my-fallback-font-family "Inconsolata"
-                                                             "Menlo"
-                                                             "Consolas"
-                                                             "Courier New"
-                                                             "Courier")
-                                    nil
-                                    fontset)
-    ;; GNU Emacs の扱えるすべての文字
-    (my-set-fontset-font-safe fontset-name
-                              'emacs
-                              (font-spec :size font-size
-                                         ;; いったん基礎フォントを適用
-                                         :family (my-fallback-font-family "Inconsolata"
-                                                                          "Menlo"
-                                                                          "Consolas"
-                                                                          "Courier New"
-                                                                          "Courier")))
+         ;; 基礎フォント
+         (base-font-family (my-fallback-font-family "Inconsolata"
+                                                    "Menlo"
+                                                    "Consolas"
+                                                    "Courier New"
+                                                    "Courier"))
+         ;; フォントセット生成
+         (fontset-name (create-fontset-from-ascii-font base-font-family)))
     ;; 簡体字：GB 18030
     (my-set-fontset-font-safe fontset-name
                               'gb18030
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "PingFang SC"
+                              (font-spec :family (my-fallback-font-family "PingFang SC"
                                                                           "Microsoft YaHei")))
     ;; 繁体字（香港／マカオ）：HKSCS-2016
     (my-set-fontset-font-safe fontset-name
                               'big5-hkscs
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "PingFang HK"
+                              (font-spec :family (my-fallback-font-family "PingFang HK"
                                                                           "MingLiU-ExtB")))
     ;; 繁体字：Big5
     (my-set-fontset-font-safe fontset-name
                               'big5
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "PingFang TC"
+                              (font-spec :family (my-fallback-font-family "PingFang TC"
                                                                           "Microsoft JhengHei")))
     ;; ハングル：KS C 5601-1987 (a.k.a. KS X 1001:1998)
     (my-set-fontset-font-safe fontset-name
                               'korean-ksc5601
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "Apple SD Gothic Neo"
+                              (font-spec :family (my-fallback-font-family "Apple SD Gothic Neo"
                                                                           "Malgun Gothic")))
     ;; タイ文字：Thai Industrial Standard 620-2533 (TIS-620)
     (my-set-fontset-font-safe fontset-name
                               'thai-tis620
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "Ayuthaya"
+                              (font-spec :family (my-fallback-font-family "Ayuthaya"
                                                                           "Tahoma")))
     ;; アラビア文字：Unicode 直接指定
     ;;               `cp858' との重複を避けるため、`cp1256' による指定はしない
@@ -2396,29 +2381,25 @@
                      (cons #x1EE00 #x1EEFF))) ; U+1EE00-U+1EEFF (Arabic Mathematical Alphabetic Symbols)
       (my-set-fontset-font-safe fontset-name
                                 range
-                                (font-spec :size font-size
-                                           :family (my-fallback-font-family "Baghdad"
+                                (font-spec :family (my-fallback-font-family "Baghdad"
                                                                             "Microsoft Sans Serif"))))
     ;; 日本語：JIS X 0213:2004
     (my-set-fontset-font-safe fontset-name
                               'japanese-jisx0213.2004-1
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "VL Gothic"
+                              (font-spec :family (my-fallback-font-family "VL Gothic"
                                                                           "Hiragino Sans"
                                                                           "メイリオ"
                                                                           "ＭＳ ゴシック")))
     (my-set-fontset-font-safe fontset-name
                               'japanese-jisx0213-2
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "VL Gothic"
+                              (font-spec :family (my-fallback-font-family "VL Gothic"
                                                                           "Hiragino Sans"
                                                                           "メイリオ"
                                                                           "ＭＳ ゴシック")))
     ;; 日本語：Code page 932 (`cp932')
     (my-set-fontset-font-safe fontset-name
                               'cp932
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "VL Gothic"
+                              (font-spec :family (my-fallback-font-family "VL Gothic"
                                                                           "Hiragino Sans"
                                                                           "メイリオ"
                                                                           "ＭＳ ゴシック")))
@@ -2434,22 +2415,19 @@
     (my-set-fontset-font-safe fontset-name
                               ;; 「〜」(U+301C: WAVE DASH)
                               (cons (string-to-char "〜") (string-to-char "〜"))
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "Migu 1M"
+                              (font-spec :family (my-fallback-font-family "Migu 1M"
                                                                           "Hiragino Sans"
                                                                           "ＭＳ ゴシック")))
     (my-set-fontset-font-safe fontset-name
                               ;; 「～」(U+FF5E: FULLWIDTH TILDE)
                               (cons (string-to-char "～") (string-to-char "～"))
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "Migu 1M"
+                              (font-spec :family (my-fallback-font-family "Migu 1M"
                                                                           "Hiragino Sans"
                                                                           "ＭＳ ゴシック")))
     ;; ラテン文字：Code page 858 (`cp858')
     (my-set-fontset-font-safe fontset-name
                               'cp858
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "Inconsolata"
+                              (font-spec :family (my-fallback-font-family "Inconsolata"
                                                                           "Menlo"
                                                                           "Consolas"
                                                                           "Courier New"
@@ -2459,8 +2437,7 @@
                           (split-string "│┤┐└┴┬├─┼┘┌∞∩≡■" "" t)))
       (my-set-fontset-font-safe fontset-name
                                 (cons code code)
-                                (font-spec :size font-size
-                                           :family (my-fallback-font-family "VL Gothic"
+                                (font-spec :family (my-fallback-font-family "VL Gothic"
                                                                             "Hiragino Sans"
                                                                             "ＭＳ ゴシック"))))
     ;; 一部グリフが次のフォントで半角になる状態を回避
@@ -2474,8 +2451,7 @@
                           (split-string "±×÷" "" t)))
       (my-set-fontset-font-safe fontset-name
                                 (cons code code)
-                                (font-spec :size font-size
-                                           :family (my-fallback-font-family "Migu 1M"
+                                (font-spec :family (my-fallback-font-family "Migu 1M"
                                                                             "ＭＳ ゴシック"))))
     ;; 未実装グリフのフォールバック
     ;;
@@ -2488,8 +2464,7 @@
                           (split-string "ı░▒▓╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪▌αßΓπΣσµτΦΘΩδφε≥≤ⁿ≈∙√" "" t)))
       (my-set-fontset-font-safe fontset-name
                                 (cons code code)
-                                (font-spec :size font-size
-                                           :family (my-fallback-font-family "Menlo"
+                                (font-spec :family (my-fallback-font-family "Menlo"
                                                                             "Consolas"
                                                                             "Courier New"
                                                                             "Courier"))))
@@ -2502,8 +2477,7 @@
     ;; 前述のフォントは除外
     (my-set-fontset-font-safe fontset-name
                               (cons (string-to-char "₧") (string-to-char "₧"))
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "Inconsolata"
+                              (font-spec :family (my-fallback-font-family "Inconsolata"
                                                                           "Menlo"
                                                                           "Courier New"
                                                                           "Courier")))
@@ -2520,8 +2494,7 @@
                           (split-string "⌐‗" "" t)))
       (my-set-fontset-font-safe fontset-name
                                 (cons code code)
-                                (font-spec :size font-size
-                                           :family (my-fallback-font-family "Courier New"
+                                (font-spec :family (my-fallback-font-family "Courier New"
                                                                             "Courier"))))
     ;; 未実装グリフのフォールバック
     ;;
@@ -2533,17 +2506,22 @@
     ;; 前述のフォントは除外
     (my-set-fontset-font-safe fontset-name
                               (cons (string-to-char "￤") (string-to-char "￤"))
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "Hiragino Sans"
+                              (font-spec :family (my-fallback-font-family "Hiragino Sans"
                                                                           "ＭＳ ゴシック")))
     ;; Emoji
     (my-set-fontset-font-safe fontset-name
                               'emoji
-                              (font-spec :size font-size
-                                         :family (my-fallback-font-family "Apple Color Emoji"
+                              (font-spec :family (my-fallback-font-family "Apple Color Emoji"
                                                                           "Symbola"
                                                                           "Segoe UI Emoji"
                                                                           "Segoe UI Symbol")))
+    ;; WARNING: フォントサイズ変更「専用」の設定
+    ;;          他の `my-set-fontset-font-safe' で `:size' は設定しないこと！
+    ;;          `C-x C-0' によるズームが効かなくなるため
+    (my-set-fontset-font-safe fontset-name
+                              'ascii
+                              (font-spec :size font-size
+                                         :family base-font-family))
     ;; ------------------------------------------------------------------------
     ;; フォントセット適用
     ;; ------------------------------------------------------------------------
