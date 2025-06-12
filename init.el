@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-06-13T02:59:02+09:00>
+;; Time-stamp: <2025-06-13T07:00:28+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1956,8 +1956,7 @@
 ;; JSON
 ;; ------------------------------------
 (leaf json-mode
-  :ensure t
-  :setq-default ((tab-width . 2)))
+  :ensure t)
 
 
 ;; ------------------------------------
