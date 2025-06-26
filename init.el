@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-06-13T07:01:51+09:00>
+;; Time-stamp: <2025-06-26T21:50:33+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -2195,7 +2195,7 @@
 ;;   ₧ƒ⌐¬░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡≥≤⌠⌡≈∙√ⁿ■
 ;;
 ;; 全角フォントで表示されてほしいもの
-;;   │┤┐└┴┬├─┼┘┌∞∩≡■
+;;   ∞∩≡■
 ;;
 ;; See also:
 ;; https://en.wikipedia.org/wiki/Code_page_437
@@ -2430,27 +2430,6 @@
                                                                           "Consolas"
                                                                           "Courier New"
                                                                           "Courier")))
-    ;; `cp858' に含まれているため半角になる状態を回避
-    (dolist (code (mapcar 'string-to-char
-                          (split-string "│┤┐└┴┬├─┼┘┌∞∩≡■" "" t)))
-      (my-set-fontset-font-safe fontset-name
-                                (cons code code)
-                                (font-spec :family (my-fallback-font-family "VL Gothic"
-                                                                            "Hiragino Sans"
-                                                                            "ＭＳ ゴシック"))))
-    ;; 一部グリフが次のフォントで半角になる状態を回避
-    ;;
-    ;;   * "VL Gothic"
-    ;;   * "Hiragino Sans"
-    ;;   * "メイリオ"
-    ;;
-    ;; 前述のフォントは除外
-    (dolist (code (mapcar 'string-to-char
-                          (split-string "±×÷" "" t)))
-      (my-set-fontset-font-safe fontset-name
-                                (cons code code)
-                                (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                            "ＭＳ ゴシック"))))
     ;; 未実装グリフのフォールバック
     ;;
     ;; 対象：
@@ -2506,6 +2485,27 @@
                               (cons (string-to-char "￤") (string-to-char "￤"))
                               (font-spec :family (my-fallback-font-family "Hiragino Sans"
                                                                           "ＭＳ ゴシック")))
+    ;; 一部グリフが `cp858' に含まれているため半角になる状態を回避
+    (dolist (code (mapcar 'string-to-char
+                          (split-string "∞∩≡■" "" t)))
+      (my-set-fontset-font-safe fontset-name
+                                (cons code code)
+                                (font-spec :family (my-fallback-font-family "VL Gothic"
+                                                                            "Hiragino Sans"
+                                                                            "ＭＳ ゴシック"))))
+    ;; 一部グリフが次のフォントで半角になる状態を回避
+    ;;
+    ;;   * "VL Gothic"
+    ;;   * "Hiragino Sans"
+    ;;   * "メイリオ"
+    ;;
+    ;; 前述のフォントは除外
+    (dolist (code (mapcar 'string-to-char
+                          (split-string "±×÷" "" t)))
+      (my-set-fontset-font-safe fontset-name
+                                (cons code code)
+                                (font-spec :family (my-fallback-font-family "Migu 1M"
+                                                                            "ＭＳ ゴシック"))))
     ;; Emoji
     (my-set-fontset-font-safe fontset-name
                               'emoji
