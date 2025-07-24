@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-07-24T15:02:22+09:00>
+;; Time-stamp: <2025-07-24T15:02:51+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1163,8 +1163,7 @@
 ;; ディレクトリブラウジング：拡張
 ;; ------------------------------------
 (leaf dired+
-  :vc (dired+
-       :url "https://github.com/emacsmirror/dired-plus")
+  :vc (:url "https://github.com/emacsmirror/dired-plus")
   :after dired
   :require t
   :custom ((diredp-hide-details-initially-flag . nil)
