@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-06-26T21:50:33+09:00>
+;; Time-stamp: <2025-07-24T15:02:22+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -643,13 +643,6 @@
   :config
   ;; `comint-mode' および派生モードで、ANSI エスケープシーケンスの解釈を開始
   (ansi-color-for-comint-mode-on))
-
-
-;; ============================================================================
-;; URL → Web browser パススルー
-;; ============================================================================
-(leaf browse-url
-  :custom ((browse-url-browser-function . 'eww-browse-url)))
 
 
 ;; ============================================================================
