@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-08-12T21:06:44+09:00>
+;; Time-stamp: <2025-08-12T21:06:59+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1594,6 +1594,37 @@
   :custom ((marginalia-field-width . 200)
            (marginalia-max-relative-age . 0))
   :global-minor-mode t)
+
+
+;; ------------------------------------
+;; MCP クライアント
+;; ------------------------------------
+(leaf mcp
+  :when (and (getenv "MCP_REGISTRY")
+             (getenv "MCP_PACKAGE_NAMESPACE")
+             (getenv "MCP_PACKAGE_VERSION"))
+  :ensure t
+  :after gptel
+  :hook ((gptel-mode-hook . mcp-hub-start-all-server)
+         (gptel-mode-hook . gptel-mcp-connect))
+  :custom ((mcp-hub-servers . `(("filesystem" . (:command "npx"
+                                                 :args ("--registry"
+                                                        ,(getenv "MCP_REGISTRY")
+                                                        ,(concat (getenv "MCP_PACKAGE_NAMESPACE") "/ark-code-assist-platform-mcp" (getenv "MCP_PACKAGE_VERSION")))))
+                                ("filesystem" . (:command "npx"
+                                                 :args ("--registry"
+                                                        ,(getenv "MCP_REGISTRY")
+                                                        ,(concat (getenv "MCP_PACKAGE_NAMESPACE") "/ark-code-assist-service-mcp" (getenv "MCP_PACKAGE_VERSION")))
+                                                 :env (:TOOL_DESCRIPTION "Based on the content of the entered prompt, return the source code used in the mail-frontend service (YMail Frontend Web UI, YMail Frontend Web UI, YMail Frontend Web UI, YMail Frontend Web UI, YMail Frontend Web UI)."
+                                                       :GROUP_ID "ymail-frontend"
+                                                       :DOCUMENT_IDS "ymail-web-ui-latest, ymail-web-ui-x-wing, ymail-web-ui-promo, ymail-web-ui-purchase, ymail-web-ui-login")))
+                                ("filesystem" . (:command "npx"
+                                                 :args ("--registry"
+                                                        ,(getenv "MCP_REGISTRY")
+                                                        ,(concat (getenv "MCP_PACKAGE_NAMESPACE") "/ark-code-assist-techportal-mcp" (getenv "MCP_PACKAGE_VERSION"))))))))
+  :init
+  (require 'mcp-hub nil :noerror)
+  (require 'gptel-transient nil :noerror))
 
 
 ;; ------------------------------------
