@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-08-12T21:06:59+09:00>
+;; Time-stamp: <2025-08-18T18:43:46+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1346,14 +1346,11 @@
 (leaf gptel
   :ensure t
   :bind (("C-c g RET" . gptel)
+         ("C-c g g" . gptel-mode)
          ("C-c g m" . gptel-menu)
          ("C-c g r" . gptel-rewrite)
          ("C-c g s" . gptel-send)
          ("C-c g t" . gptel-tools))
-  :hook (;; 有効化は必要最小限にとどめる
-         (markdown-mode-hook . gptel-mode)
-         (org-mode-hook . gptel-mode)
-         (text-mode-hook . gptel-mode))
   :custom ((gptel-directives . '((default . "あなたは GNU Emacs 上で動作するアシスタントです。日本語で簡潔に応答してください。")
                                  (programming . "あなたは GNU Emacs 上で動作する慎重なプログラマーです。コードのみを出力し、追加のテキスト、プロンプト、説明は一切行わないでください。コードブロックは必要ありません。")
                                  (writing . "あなたは GNU Emacs 上で動作する日本語文書校正家です。与えられたテキストを読みやすく、誤りのない文章に校正してください。必要に応じて適切に改行を入れてください。")
