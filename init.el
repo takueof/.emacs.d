@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-08-18T18:43:46+09:00>
+;; Time-stamp: <2025-09-05T11:33:21+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1341,35 +1341,6 @@
 
 
 ;; ------------------------------------
-;; LLM クライアント
-;; ------------------------------------
-(leaf gptel
-  :ensure t
-  :bind (("C-c g RET" . gptel)
-         ("C-c g g" . gptel-mode)
-         ("C-c g m" . gptel-menu)
-         ("C-c g r" . gptel-rewrite)
-         ("C-c g s" . gptel-send)
-         ("C-c g t" . gptel-tools))
-  :custom ((gptel-directives . '((default . "あなたは GNU Emacs 上で動作するアシスタントです。日本語で簡潔に応答してください。")
-                                 (programming . "あなたは GNU Emacs 上で動作する慎重なプログラマーです。コードのみを出力し、追加のテキスト、プロンプト、説明は一切行わないでください。コードブロックは必要ありません。")
-                                 (writing . "あなたは GNU Emacs 上で動作する日本語文書校正家です。与えられたテキストを読みやすく、誤りのない文章に校正してください。必要に応じて適切に改行を入れてください。")
-                                 (chat . "あなたは GNU Emacs 上で動作するチャット相手です。日本語で簡潔に応答してください。"))))
-  :init
-  ;; カスタムプロキシ利用時
-  (leaf gptel
-    :when (getenv "OPENAI_PROXY_URL")
-    :custom `((gptel-model . 'gpt-4o)
-              (gptel-backend . ,(gptel-make-openai "ChatAI"
-                                                   :protocol "https"
-                                                   :host (getenv "OPENAI_PROXY_URL")
-                                                   :key #'gptel-api-key-from-auth-source
-                                                   :models '(gpt-4o)))))
-  :config
-  (require 'gptel-integrations nil :noerror))
-
-
-;; ------------------------------------
 ;; `grep'
 ;; ------------------------------------
 (leaf grep
@@ -1591,37 +1562,6 @@
   :custom ((marginalia-field-width . 200)
            (marginalia-max-relative-age . 0))
   :global-minor-mode t)
-
-
-;; ------------------------------------
-;; MCP クライアント
-;; ------------------------------------
-(leaf mcp
-  :when (and (getenv "MCP_REGISTRY")
-             (getenv "MCP_PACKAGE_NAMESPACE")
-             (getenv "MCP_PACKAGE_VERSION"))
-  :ensure t
-  :after gptel
-  :hook ((gptel-mode-hook . mcp-hub-start-all-server)
-         (gptel-mode-hook . gptel-mcp-connect))
-  :custom ((mcp-hub-servers . `(("filesystem" . (:command "npx"
-                                                 :args ("--registry"
-                                                        ,(getenv "MCP_REGISTRY")
-                                                        ,(concat (getenv "MCP_PACKAGE_NAMESPACE") "/ark-code-assist-platform-mcp" (getenv "MCP_PACKAGE_VERSION")))))
-                                ("filesystem" . (:command "npx"
-                                                 :args ("--registry"
-                                                        ,(getenv "MCP_REGISTRY")
-                                                        ,(concat (getenv "MCP_PACKAGE_NAMESPACE") "/ark-code-assist-service-mcp" (getenv "MCP_PACKAGE_VERSION")))
-                                                 :env (:TOOL_DESCRIPTION "Based on the content of the entered prompt, return the source code used in the mail-frontend service (YMail Frontend Web UI, YMail Frontend Web UI, YMail Frontend Web UI, YMail Frontend Web UI, YMail Frontend Web UI)."
-                                                       :GROUP_ID "ymail-frontend"
-                                                       :DOCUMENT_IDS "ymail-web-ui-latest, ymail-web-ui-x-wing, ymail-web-ui-promo, ymail-web-ui-purchase, ymail-web-ui-login")))
-                                ("filesystem" . (:command "npx"
-                                                 :args ("--registry"
-                                                        ,(getenv "MCP_REGISTRY")
-                                                        ,(concat (getenv "MCP_PACKAGE_NAMESPACE") "/ark-code-assist-techportal-mcp" (getenv "MCP_PACKAGE_VERSION"))))))))
-  :init
-  (require 'mcp-hub nil :noerror)
-  (require 'gptel-transient nil :noerror))
 
 
 ;; ------------------------------------
