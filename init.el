@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-09-05T11:33:21+09:00>
+;; Time-stamp: <2025-09-14T10:55:48+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -851,6 +851,15 @@
   :custom ((bookmark-version-control . t)
            ;; ローカル環境にのみ保存
            (bookmark-default-file . "~/.emacs.bookmark.el")))
+
+
+;; ------------------------------------
+;; Claude Code
+;; ------------------------------------
+(leaf claude-code
+  :unless (member system-type '(ms-dos windows-nt))
+  :ensure t
+  :bind (("C-c c t" . claude-code-transient)))
 
 
 ;; ------------------------------------
