@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-09-14T10:55:48+09:00>
+;; Time-stamp: <2025-10-06T14:36:34+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -854,7 +854,7 @@
 
 
 ;; ------------------------------------
-;; Claude Code
+;; Claude Code (AI)
 ;; ------------------------------------
 (leaf claude-code
   :unless (member system-type '(ms-dos windows-nt))
@@ -1038,7 +1038,7 @@
 
 
 ;; ------------------------------------
-;; GitHub Copilot
+;; GitHub Copilot (AI)
 ;; ------------------------------------
 (leaf copilot
   :ensure t
@@ -1348,6 +1348,33 @@
                                                               ("zh-TW" . "ja")
                                                               ("zh-CN" . "ja")))))
 
+;; ------------------------------------
+;; LLM クライアント (AI)
+;; ------------------------------------
+(leaf gptel
+  :ensure t
+  :bind (("C-c g RET" . gptel)
+         ("C-c g g" . gptel-mode)
+         ("C-c g m" . gptel-menu)
+         ("C-c g r" . gptel-rewrite)
+         ("C-c g s" . gptel-send)
+         ("C-c g t" . gptel-tools))
+  :custom ((gptel-directives . '((default . "あなたは GNU Emacs 上で動作するアシスタントです。日本語で簡潔に応答してください。")
+                                 (programming . "あなたは GNU Emacs 上で動作する慎重なプログラマーです。コードのみを出力し、追加のテキスト、プロンプト、説明は一切行わないでください。コードブロックは必要ありません。")
+                                 (writing . "あなたは GNU Emacs 上で動作する日本語文書校正家です。与えられたテキストを読みやすく、誤りのない文章に校正してください。必要に応じて適切に改行を入れてください。")
+                                 (chat . "あなたは GNU Emacs 上で動作するチャット相手です。日本語で簡潔に応答してください。"))))
+  :config
+  ;; カスタムプロキシ利用時
+  (leaf gptel-proxy
+    :when (getenv "OPENAI_PROXY_URL")
+    :custom `((gptel-model . 'gpt-4o)
+              (gptel-backend . ,(gptel-make-openai "ChatAI"
+                                                   :protocol "https"
+                                                   :host (getenv "OPENAI_PROXY_URL")
+                                                   :key #'gptel-api-key-from-auth-source
+                                                   :models '(gpt-4o)))))
+  (require 'gptel-integrations nil :noerror))
+
 
 ;; ------------------------------------
 ;; `grep'
@@ -1476,7 +1503,6 @@
          (json-mode-hook . lsp)
          (markdown-mode-hook . lsp)
          (scss-mode-hook . lsp)
-         (sh-mode-hook . lsp)
          (web-mode-hook . lsp)
          (yaml-mode-hook . lsp))
   :custom (;;
@@ -1571,6 +1597,57 @@
   :custom ((marginalia-field-width . 200)
            (marginalia-max-relative-age . 0))
   :global-minor-mode t)
+
+
+;; ------------------------------------
+;; MCP クライアント
+;; ------------------------------------
+(leaf mcp
+  :when (and (getenv "MCP_REGISTRY")
+             (getenv "MCP_PACKAGE_NAMESPACE")
+             (getenv "MCP_PACKAGE_VERSION")
+             (getenv "MCP_PACKAGE_CONTAINER_WIKI_BTS")
+             (getenv "MCP_PACKAGE_NAME_WIKI")
+             (getenv "MCP_PACKAGE_NAME_BTS")
+             (getenv "MCP_PACKAGE_PRODUCT_WIKI")
+             (getenv "MCP_PACKAGE_PRODUCT_BTS")
+             (getenv "MCP_PACKAGE_PORT_WIKI")
+             (getenv "MCP_PACKAGE_PORT_BTS"))
+  :ensure t
+  :after gptel
+  :hook ((gptel-mode-hook . mcp-hub-start-all-server)
+         (gptel-mode-hook . gptel-mcp-connect))
+  :custom ((mcp-hub-servers . `(("platform" . (:command "npx"
+                                               :args ("--registry"
+                                                      ,(getenv "MCP_REGISTRY")
+                                                      ,(concat (getenv "MCP_PACKAGE_NAMESPACE") "/ark-code-assist-platform-mcp" (getenv "MCP_PACKAGE_VERSION")))))
+                                ("service" . (:command "npx"
+                                              :args ("--registry"
+                                                     ,(getenv "MCP_REGISTRY")
+                                                     ,(concat (getenv "MCP_PACKAGE_NAMESPACE") "/ark-code-assist-service-mcp" (getenv "MCP_PACKAGE_VERSION")))
+                                              :env (:TOOL_DESCRIPTION "Based on the content of the entered prompt, return the source code used in the mail-frontend service (YMail Frontend Web UI, YMail Frontend Web UI, YMail Frontend Web UI, YMail Frontend Web UI, YMail Frontend Web UI)."
+                                                    :GROUP_ID "ymail-frontend"
+                                                    :DOCUMENT_IDS "ymail-web-ui-latest, ymail-web-ui-x-wing, ymail-web-ui-promo, ymail-web-ui-purchase, ymail-web-ui-login")))
+                                ("techportal" . (:command "npx"
+                                                 :args ("--registry"
+                                                        ,(getenv "MCP_REGISTRY")
+                                                        ,(concat (getenv "MCP_PACKAGE_NAMESPACE") "/ark-code-assist-techportal-mcp" (getenv "MCP_PACKAGE_VERSION")))))
+                                ("wiki" . (:command "bash"
+                                           :args ("-c"
+                                                  "docker stop -t 10" ,(getenv "MCP_PACKAGE_NAME_WIKI") "2>/dev/null || true;"
+                                                  "docker wait" ,(getenv "MCP_PACKAGE_NAME_WIKI") "2>/dev/null || true;"
+                                                  "docker rm -f" ,(getenv "MCP_PACKAGE_NAME_WIKI") "2>/dev/null || true;"
+                                                  "docker run -i --name" ,(getenv "MCP_PACKAGE_NAME_WIKI") "--rm -p" ,(concat "127.0.0.1:" (getenv "MCP_PACKAGE_PORT_WIKI") ":" (getenv "MCP_PACKAGE_PORT_WIKI")) "-v" ,(concat (getenv "MCP_PACKAGE_NAME_WIKI") ":/app/credentials") ,(getenv "MCP_PACKAGE_CONTAINER_WIKI_BTS") "proxy" ,(getenv "MCP_PACKAGE_PRODUCT_WIKI"))))
+                                ("bts" . (:command "bash"
+                                          :args ("-c"
+                                                 "docker stop -t 10" ,(getenv "MCP_PACKAGE_NAME_BTS") "2>/dev/null || true;"
+                                                 "docker wait" ,(getenv "MCP_PACKAGE_NAME_BTS") "2>/dev/null || true;"
+                                                 "docker rm -f" ,(getenv "MCP_PACKAGE_NAME_BTS") "2>/dev/null || true;"
+                                                 "docker run -i --name" ,(getenv "MCP_PACKAGE_NAME_BTS") "--rm -p" ,(concat "127.0.0.1:" (getenv "MCP_PACKAGE_PORT_BTS") ":" (getenv "MCP_PACKAGE_PORT_BTS")) "-v" ,(concat (getenv "MCP_PACKAGE_NAME_BTS") ":/app/credentials") ,(getenv "MCP_PACKAGE_CONTAINER_WIKI_BTS") "proxy" ,(getenv "MCP_PACKAGE_PRODUCT_BTS"))))
+                                 )))
+  :init
+  (require 'mcp-hub nil :noerror)
+  (require 'gptel-transient nil :noerror))
 
 
 ;; ------------------------------------
