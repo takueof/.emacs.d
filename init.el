@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-10-06T14:36:34+09:00>
+;; Time-stamp: <2025-10-07T07:26:05+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1179,6 +1179,15 @@
            (diredp-hide-details-propagate-flag . nil))
   :config
   (diredp-toggle-find-file-reuse-dir +1))
+
+
+;; ------------------------------------
+;; コードナビゲーション
+;; ------------------------------------
+(leaf dumber-jump
+  :when (executable-find "rg")
+  :ensure t
+  :hook (xref-backend-functions . dumber-jump-xref-activate))
 
 
 ;; ------------------------------------
