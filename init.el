@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-10-07T07:26:05+09:00>
+;; Time-stamp: <2025-10-07T07:59:18+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1095,10 +1095,6 @@
              (js2-minor-mode nil "js2-mode")
              (lsp-mode nil "lsp-mode")
              (projectile-mode nil "projectile")
-             (show-smartparens-global-mode nil "smartparens")
-             (show-smartparens-mode nil "smartparens")
-             (smartparens-global-mode nil "smartparens")
-             (smartparens-mode nil "smartparens")
              (text-scale-mode nil "face-remap")
              (whitespace-mode nil "whitespace")
              (yas-global-mode nil "yasnippet")
@@ -1214,6 +1210,17 @@
   :custom ((eldoc-minor-mode-string . nil)
            (eldoc-idle-delay . 0.25)
            (eldoc-echo-area-use-multiline-p . 'truncate-sym-name-if-fit)))
+
+
+;; ------------------------------------
+;; 区切り自動挿入
+;; ------------------------------------
+(leaf elec-pair
+  :custom ((electric-pair-preserve-balance . t)
+           (electric-pair-delete-adjacent-pairs . t)
+           (electric-pair-open-newline-between-pairs . t)
+           (electric-pair-skip-whitespace . t))
+  :global-minor-mode electric-pair-mode)
 
 
 ;; ------------------------------------
@@ -1799,31 +1806,6 @@
 
 
 ;; ------------------------------------
-;; カッコ関連
-;; ------------------------------------
-(leaf smartparens
-  :ensure t
-  :custom ((sp-show-pair-from-inside . t)
-           (sp-undo-pairs-separately . t))
-  :init
-  (defun my-sp-web-mode-is-code-context (id action context)
-    (and (eq action 'insert)
-         (not (or (get-text-property (point) 'part-side)
-                  (get-text-property (point) 'block-side)))))
-  :defer-config
-  (sp-local-pair 'web-mode "<" nil :when '(my-sp-web-mode-is-code-context))
-  :global-minor-mode (show-smartparens-global-mode smartparens-global-mode))
-
-
-;; ------------------------------------
-;; カッコ関連：拡張（デフォルト設定）
-;; ------------------------------------
-(leaf smartparens-config
-  :after smartparens
-  :require t)
-
-
-;; ------------------------------------
 ;; 同時置換
 ;; ------------------------------------
 (leaf substitute
@@ -2156,9 +2138,9 @@
   :custom ((web-mode-enable-css-colorization . t)
            (web-mode-enable-auto-indentation . nil)
            (web-mode-enable-auto-closing . t)
-           (web-mode-enable-auto-pairing . nil) ; Use `smartparens'
+           (web-mode-enable-auto-pairing . nil) ; Use `electric-pair-mode'
            (web-mode-enable-auto-opening . t)
-           (web-mode-enable-auto-quoting . nil) ; Use `smartparens'
+           (web-mode-enable-auto-quoting . nil) ; Use `electric-pair-mode'
            (web-mode-enable-auto-expanding . t)
            (web-mode-enable-curly-brace-indentation . t)
            (web-mode-enable-current-element-highlight . t)
