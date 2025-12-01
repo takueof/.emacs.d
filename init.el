@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-10-07T07:59:18+09:00>
+;; Time-stamp: <2025-12-01T11:53:51+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -763,6 +763,7 @@
 ;; アクティビティ管理
 ;; ------------------------------------
 (leaf activities
+  :disabled t
   :ensure t
   :bind (("C-c a n" . activities-new)
          ("C-c a d" . activities-define)
@@ -1622,13 +1623,10 @@
   :when (and (getenv "MCP_REGISTRY")
              (getenv "MCP_PACKAGE_NAMESPACE")
              (getenv "MCP_PACKAGE_VERSION")
-             (getenv "MCP_PACKAGE_CONTAINER_WIKI_BTS")
-             (getenv "MCP_PACKAGE_NAME_WIKI")
-             (getenv "MCP_PACKAGE_NAME_BTS")
-             (getenv "MCP_PACKAGE_PRODUCT_WIKI")
-             (getenv "MCP_PACKAGE_PRODUCT_BTS")
-             (getenv "MCP_PACKAGE_PORT_WIKI")
-             (getenv "MCP_PACKAGE_PORT_BTS"))
+             (getenv "MCP_REGISTRY_FLAVA")
+             (getenv "MCP_PACKAGE_FLAVA")
+             (getenv "MCP_URL_FLAVA_WIKI")
+             (getenv "MCP_URL_FLAVA_BTS"))
   :ensure t
   :after gptel
   :hook ((gptel-mode-hook . mcp-hub-start-all-server)
@@ -1648,18 +1646,16 @@
                                                  :args ("--registry"
                                                         ,(getenv "MCP_REGISTRY")
                                                         ,(concat (getenv "MCP_PACKAGE_NAMESPACE") "/ark-code-assist-techportal-mcp" (getenv "MCP_PACKAGE_VERSION")))))
-                                ("wiki" . (:command "bash"
-                                           :args ("-c"
-                                                  "docker stop -t 10" ,(getenv "MCP_PACKAGE_NAME_WIKI") "2>/dev/null || true;"
-                                                  "docker wait" ,(getenv "MCP_PACKAGE_NAME_WIKI") "2>/dev/null || true;"
-                                                  "docker rm -f" ,(getenv "MCP_PACKAGE_NAME_WIKI") "2>/dev/null || true;"
-                                                  "docker run -i --name" ,(getenv "MCP_PACKAGE_NAME_WIKI") "--rm -p" ,(concat "127.0.0.1:" (getenv "MCP_PACKAGE_PORT_WIKI") ":" (getenv "MCP_PACKAGE_PORT_WIKI")) "-v" ,(concat (getenv "MCP_PACKAGE_NAME_WIKI") ":/app/credentials") ,(getenv "MCP_PACKAGE_CONTAINER_WIKI_BTS") "proxy" ,(getenv "MCP_PACKAGE_PRODUCT_WIKI"))))
-                                ("bts" . (:command "bash"
-                                          :args ("-c"
-                                                 "docker stop -t 10" ,(getenv "MCP_PACKAGE_NAME_BTS") "2>/dev/null || true;"
-                                                 "docker wait" ,(getenv "MCP_PACKAGE_NAME_BTS") "2>/dev/null || true;"
-                                                 "docker rm -f" ,(getenv "MCP_PACKAGE_NAME_BTS") "2>/dev/null || true;"
-                                                 "docker run -i --name" ,(getenv "MCP_PACKAGE_NAME_BTS") "--rm -p" ,(concat "127.0.0.1:" (getenv "MCP_PACKAGE_PORT_BTS") ":" (getenv "MCP_PACKAGE_PORT_BTS")) "-v" ,(concat (getenv "MCP_PACKAGE_NAME_BTS") ":/app/credentials") ,(getenv "MCP_PACKAGE_CONTAINER_WIKI_BTS") "proxy" ,(getenv "MCP_PACKAGE_PRODUCT_BTS"))))
+                                ("bts" . (:command "npx"
+                                           :args ("--registry"
+                                                  ,(getenv "MCP_REGISTRY_FLAVA")
+                                                  ,(getenv "MCP_PACKAGE_FLAVA")
+                                                  ,(getenv "MCP_URL_FLAVA_BTS"))))
+                                ("wiki" . (:command "npx"
+                                           :args ("--registry"
+                                                  ,(getenv "MCP_REGISTRY_FLAVA")
+                                                  ,(getenv "MCP_PACKAGE_FLAVA")
+                                                  ,(getenv "MCP_URL_FLAVA_WIKI"))))
                                  )))
   :init
   (require 'mcp-hub nil :noerror)
