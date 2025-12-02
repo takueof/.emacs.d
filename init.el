@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-12-01T11:53:51+09:00>
+;; Time-stamp: <2025-12-02T13:20:33+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -857,10 +857,14 @@
 ;; ------------------------------------
 ;; Claude Code (AI)
 ;; ------------------------------------
-(leaf claude-code
-  :unless (member system-type '(ms-dos windows-nt))
-  :ensure t
-  :bind (("C-c c t" . claude-code-transient)))
+(leaf claude-code-ide
+  :when (and (executable-find "claude")
+             (not (member system-type '(ms-dos windows-nt))))
+  :vc (:url "https://github.com/manzaltu/claude-code-ide.el" :rev :newest)
+  :bind (("C-c a i" . claude-code-ide-menu))
+  :custom ((claude-code-ide-diagnostics-backend . 'flycheck))
+  :config
+  (claude-code-ide-emacs-tools-setup))
 
 
 ;; ------------------------------------
