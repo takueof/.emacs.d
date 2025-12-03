@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-12-02T13:20:33+09:00>
+;; Time-stamp: <2025-12-03T14:05:45+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1544,9 +1544,9 @@
            ;; https://github.com/emacs-mirror/emacs/blob/0008003c3e466269074001d637cda872d6fee9be/src/kqueue.c#L387-L401
            (lsp-enable-file-watchers . nil)
            (lsp-eldoc-enable-hover . nil) ; Use `lsp-ui'
-           (lsp-enable-indentation . nil) ; Use `prettier-mode' and each major-mode
+           (lsp-enable-indentation . nil) ; Use another formatter and each major-mode
            (lsp-enable-text-document-color . nil) ; Use major-mode
-           (lsp-before-save-edits . nil) ; Use `prettier-mode' and each major-mode
+           (lsp-before-save-edits . nil) ; Use another formatter and each major-mode
            (lsp-modeline-diagnostics-enable . nil)
            (lsp-headerline-breadcrumb-enable . nil)
            (lsp-progress-function . 'ignore)
@@ -1558,13 +1558,13 @@
            ;;
            ;; `lsp-javascript' (with TypeScript)
            ;;
-           (lsp-javascript-format-enable . nil) ; Use `prettier-mode'
-           (lsp-typescript-format-enable . nil) ; Use `prettier-mode'
+           (lsp-javascript-format-enable . nil) ; Use another formatter and each major-mode
+           (lsp-typescript-format-enable . nil) ; Use another formatter and each major-mode
            (lsp-typescript-surveys-enabled . nil)
            ;;
            ;; `lsp-html'
            ;;
-           (lsp-html-format-enable . nil) ; Use `prettier-mode'
+           (lsp-html-format-enable . nil) ; Use another formatter and each major-mode
            (lsp-html-auto-closing-tags . nil) ; Use `web-mode'
            ;;
            ;; `lsp-eslint'
@@ -1730,15 +1730,6 @@
 
 
 ;; ------------------------------------
-;; コードフォーマッタ
-;; ------------------------------------
-(leaf prettier
-  :ensure t
-  :custom ((prettier-lighter . ""))
-  :global-minor-mode global-prettier-mode)
-
-
-;; ------------------------------------
 ;; 汎用プロジェクト管理
 ;; ------------------------------------
 (leaf projectile
@@ -1775,6 +1766,39 @@
            (recentf-max-saved-items . 20)
            ;; ローカル環境にのみ保存
            (recentf-save-file . "~/.emacs.recentf.el")))
+
+
+;; ------------------------------------
+;; コードフォーマッタ
+;; ------------------------------------
+(leaf reformatter
+  :ensure t
+  :hook ((css-mode-hook . web-format-on-save-mode)
+         (html-mode-hook . web-format-on-save-mode)
+         (js-mode-hook . web-format-on-save-mode)
+         (js2-mode-hook . web-format-on-save-mode)
+         (json-mode-hook . web-format-on-save-mode)
+         (markdown-mode-hook . web-format-on-save-mode)
+         (scss-mode-hook . web-format-on-save-mode)
+         (web-mode-hook . web-format-on-save-mode))
+  :config
+  (reformatter-define web-format
+    :program (let ((dir (expand-file-name default-directory))
+                   (bin-path nil)
+                   (executable-name (if (member system-type '(ms-dos windows-nt))
+                                        "prettier.cmd"
+                                      "prettier")))
+               (while (and dir (not bin-path))
+                 (let ((path (expand-file-name (concat "node_modules/.bin/" executable-name) dir)))
+                   (if (file-executable-p path)
+                       (setq bin-path path)
+                     (let ((parent (file-name-directory (directory-file-name dir))))
+                       (if (or (not parent) (equal parent dir))
+                           (setq dir nil) ; reached root directory
+                         (setq dir parent))))))
+               (or bin-path
+                   (executable-find "prettier")))
+    :args `("--write" "--stdin-filepath" ,(buffer-file-name))))
 
 
 ;; ------------------------------------
@@ -1934,31 +1958,6 @@
 
 
 ;; ------------------------------------
-;; Emacs Lisp
-;; ------------------------------------
-(leaf emacs-lisp-mode
-  :hook ((emacs-lisp-mode-hook . my-emacs-lisp-mode-initialize))
-  :init
-  (defun my-emacs-lisp-mode-initialize ()
-    "Initialize `emacs-lisp-mode' before load."
-    (if (fboundp 'prettier-mode)
-        (prettier-mode -1))))
-
-
-;; ------------------------------------
-;; Emacs Lisp インタラクション
-;; ------------------------------------
-(leaf ielm
-  :hook ((ielm-mode-hook . my-ielm-mode-initialize))
-  :init
-  (defun my-ielm-mode-initialize ()
-    "Initialize `ielm' major mode before load."
-    (setq-local tab-width 8)
-    (if (fboundp 'prettier-mode)
-        (prettier-mode -1))))
-
-
-;; ------------------------------------
 ;; JavaScript (Base)
 ;; ------------------------------------
 ;; HACK: 後ほど `js2-minor-mode' で拡張する
@@ -2025,30 +2024,6 @@
 ;; ------------------------------------
 (leaf json-mode
   :ensure t)
-
-
-;; ------------------------------------
-;; Lisp
-;; ------------------------------------
-(leaf lisp-interaction-mode
-  :hook ((lisp-interaction-mode . my-lisp-interaction-mode-initialize))
-  :init
-  (defun my-lisp-interaction-mode-initialize ()
-    "Initialize `lisp-interaction-mode' before load."
-    (if (fboundp 'prettier-mode)
-        (prettier-mode -1))))
-
-
-;; ------------------------------------
-;; Lisp
-;; ------------------------------------
-(leaf lisp-mode
-  :hook ((lisp-mode-hook . my-lisp-mode-initialize))
-  :init
-  (defun my-lisp-mode-initialize ()
-    "Initialize `lisp-mode' before load."
-    (if (fboundp 'prettier-mode)
-        (prettier-mode -1))))
 
 
 ;; ------------------------------------
