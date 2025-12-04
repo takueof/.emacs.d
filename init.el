@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-12-04T09:16:10+09:00>
+;; Time-stamp: <2025-12-04T09:36:19+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1177,8 +1177,11 @@
 ;; ------------------------------------
 (leaf dired
   :hook ((dired-mode-hook . my-dired-mode-initialize))
-  :custom ((dired-kill-when-opening-new-dired-buffer . t))
-  :init
+  :bind ((dired-mode-map
+         ("r" . #'wdired-change-to-wdired-mode)))
+  :custom ((dired-kill-when-opening-new-dired-buffer . t)
+           (wdired-allow-to-change-permissions . 'advanced))
+  :config
   (defun my-dired-mode-initialize ()
     "Initialize `dired-mode'."
     ;; 常にすべての情報を表示（簡易モードにしない）
