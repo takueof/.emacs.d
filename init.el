@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-12-04T09:36:19+09:00>
+;; Time-stamp: <2025-12-05T05:34:38+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1016,33 +1016,20 @@
 ;; ------------------------------------
 (leaf consult
   :ensure t
-  :bind (;; 上書き
+  :bind (;; リマップ
+         ([remap goto-line] . consult-goto-line)
+         ([remap imenu] . consult-imenu)
+         ([remap project-switch-to-buffer] . consult-project-buffer)
+         ([remap switch-to-buffer] . consult-buffer)
+         ;; 上書き
          ("C-s" . consult-line)
-         ("C-x b" . consult-buffer)
          ("C-x 4 b" . consult-buffer-other-window)
          ("C-x 5 b" . consult-buffer-other-frame)
-         ;; コマンド群
-         ("C-c c h" . consult-history)
-         ("C-c c m" . consult-mode-command)
-         ("C-c c b" . consult-bookmark)
-         ("C-c c k" . consult-kmacro)
-         ("C-c c e" . consult-compile-error)
-         ("C-c c g" . consult-goto-line)
-         ([remap goto-line] . consult-goto-line)
-         ("C-c C-l" . consult-goto-line)
-         ("C-c c o" . consult-outline)
-         ("C-c c m" . consult-mark)
-         ("C-c c M" . consult-global-mark)
-         ("C-c c i" . consult-imenu)
-         ("C-c c f" . consult-focus-lines)
-         ;; コマンド群（検索）
-         ("C-c c s f" . consult-find)
-         ("C-c c s L" . consult-locate)
-         ("C-c c s g" . consult-grep)
-         ("C-c c s G" . consult-git-grep)
-         ("C-c c s r" . consult-ripgrep)
-         ("C-c c s l" . consult-line))
-  :hook ((completion-list-mode . consult-preview-at-point-mode))
+         ;; ミニバッファ
+         (minibuffer-local-map
+          :package emacs
+          ("C-r" . consult-history)))
+  :hook ((completion-list-mode-hook . consult-preview-at-point-mode))
   :custom ((register-preview-function . #'consult-register-format)
            (xref-show-xrefs-function . #'consult-xref)
            (xref-show-definitions-function . #'consult-xref))
