@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-12-03T14:05:45+09:00>
+;; Time-stamp: <2025-12-04T09:16:10+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -780,17 +780,15 @@
 
 
 ;; ------------------------------------
-;; 絞り込み：スペース区切りによる複数キーワード
+;; 非同期補完候補生成
 ;; ------------------------------------
 (leaf affe
   :ensure t
   :after (consult orderless)
+  :bind (("C-M-F" . affe-find)
+         ("C-M-G" . affe-grep))
   :custom ((affe-regexp-function . #'orderless-pattern-compiler)
-           (affe-highlight-function . #'orderless--highlight))
-  :config
-  (consult-customize affe-grep
-                     :preview-key (kbd "M-.")))
-
+           (affe-highlight-function . #'orderless--highlight)))
 
 ;; ------------------------------------
 ;; 各種検索／置換強化
@@ -852,6 +850,15 @@
   :custom ((bookmark-version-control . t)
            ;; ローカル環境にのみ保存
            (bookmark-default-file . "~/.emacs.bookmark.el")))
+
+
+;; ------------------------------------
+;; ンライン補完候補生成
+;; ------------------------------------
+(leaf cape
+  :ensure t
+  :config
+  (add-to-list 'completion-at-point-functions #'cape-file))
 
 
 ;; ------------------------------------
@@ -1061,6 +1068,20 @@
 
 
 ;; ------------------------------------
+;; インライン補完
+;; ------------------------------------
+(leaf corfu
+  :ensure t
+  :custom ((corfu-auto . t)
+           (corfu-auto-delay . 0)
+           (corfu-auto-prefix . 1)
+           (corfu-popupinfo-delay . nil))
+  :bind ((corfu-map
+          ("C-s" . corfu-insert-separator)))
+  :global-minor-mode global-corfu-mode corfu-popupinfo-mode)
+
+
+;; ------------------------------------
 ;; 矩形選択
 ;; ------------------------------------
 (leaf cua-base
@@ -1229,28 +1250,17 @@
 
 
 ;; ------------------------------------
-;; コンテキストメニュー
-;; ------------------------------------
-(leaf embark
-  :ensure t
-  :bind (("C-." . embark-act)
-         ("C-;" . embark-dwim)
-         ("C-x ? b" . embark-bindings))
-  :custom ((prefix-help-command . #'embark-prefix-help-command))
-  :config
-  (add-to-list 'display-buffer-alist
-               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                 nil
-                 (window-parameters (mode-line-format . none)))))
-
-
-;; ------------------------------------
-;; Embark <=> Consult 連携
+;; 補完候補へのアクション提供
 ;; ------------------------------------
 (leaf embark-consult
   :ensure t
-  :after (embark consult)
-  :hook ((embark-collect-mode . consult-preview-at-point-mode)))
+  :after consult
+  :bind ((minibuffer-mode-map
+          :package emacs
+          ("M-." . embark-dwim)
+          ("C-." . embark-act)))
+  :hook ((embark-collect-mode . consult-preview-at-point-mode))
+  :custom ((prefix-help-command . #'embark-prefix-help-command)))
 
 
 ;; ------------------------------------
@@ -1611,7 +1621,7 @@
 
 
 ;; ------------------------------------
-;; 補完候補一覧の横に項目情報を表示
+;; 補完候補に項目情報を追加
 ;; ------------------------------------
 (leaf marginalia
   :ensure t
@@ -1856,8 +1866,7 @@
           ("<backspace>" . vertico-directory-delete-char)
           ("<DEL>" . vertico-directory-delete-char)
           ("<escape>" . minibuffer-keyboard-quit)
-          ("RET" . vertico-directory-enter)
-          ("M-." . vertico-repeat)))
+          ("RET" . vertico-directory-enter)))
   :hook ((minibuffer-setup . vertico-repeat-save))
   :custom ((vertico-count . 20)
            (vertico-cycle . t)
