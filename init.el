@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2025-12-05T05:34:38+09:00>
+;; Time-stamp: <2026-01-15T16:51:51+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1636,27 +1636,32 @@
   :hook ((gptel-mode-hook . mcp-hub-start-all-server)
          (gptel-mode-hook . gptel-mcp-connect))
   :custom ((mcp-hub-servers . `(("platform" . (:command "npx"
-                                               :args ("--registry"
+                                                :args ("-y"
+                                                       "--registry"
                                                       ,(getenv "MCP_REGISTRY")
                                                       ,(concat (getenv "MCP_PACKAGE_NAMESPACE") "/ark-code-assist-platform-mcp" (getenv "MCP_PACKAGE_VERSION")))))
                                 ("service" . (:command "npx"
-                                              :args ("--registry"
+                                              :args ("-y"
+                                                     "--registry"
                                                      ,(getenv "MCP_REGISTRY")
                                                      ,(concat (getenv "MCP_PACKAGE_NAMESPACE") "/ark-code-assist-service-mcp" (getenv "MCP_PACKAGE_VERSION")))
                                               :env (:TOOL_DESCRIPTION "Based on the content of the entered prompt, return the source code used in the mail-frontend service (YMail Frontend Web UI, YMail Frontend Web UI, YMail Frontend Web UI, YMail Frontend Web UI, YMail Frontend Web UI)."
                                                     :GROUP_ID "ymail-frontend"
                                                     :DOCUMENT_IDS "ymail-web-ui-latest, ymail-web-ui-x-wing, ymail-web-ui-promo, ymail-web-ui-purchase, ymail-web-ui-login")))
                                 ("techportal" . (:command "npx"
-                                                 :args ("--registry"
+                                                 :args ("-y"
+                                                        "--registry"
                                                         ,(getenv "MCP_REGISTRY")
                                                         ,(concat (getenv "MCP_PACKAGE_NAMESPACE") "/ark-code-assist-techportal-mcp" (getenv "MCP_PACKAGE_VERSION")))))
                                 ("bts" . (:command "npx"
-                                           :args ("--registry"
+                                           :args ("-y"
+                                                  "--registry"
                                                   ,(getenv "MCP_REGISTRY_FLAVA")
                                                   ,(getenv "MCP_PACKAGE_FLAVA")
                                                   ,(getenv "MCP_URL_FLAVA_BTS"))))
                                 ("wiki" . (:command "npx"
-                                           :args ("--registry"
+                                           :args ("-y"
+                                                  "--registry"
                                                   ,(getenv "MCP_REGISTRY_FLAVA")
                                                   ,(getenv "MCP_PACKAGE_FLAVA")
                                                   ,(getenv "MCP_URL_FLAVA_WIKI"))))
