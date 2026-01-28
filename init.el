@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2026-01-15T16:51:51+09:00>
+;; Time-stamp: <2026-01-29T01:30:56+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1578,7 +1578,7 @@
 
 
 ;; ------------------------------------
-;; LSP (Language Server Protocol) クライアント：拡張 (UI)
+;; LSP 拡張：UI
 ;; ------------------------------------
 ;; `lsp-mode' が自動ロードする
 ;; ------------------------------------
@@ -1601,7 +1601,22 @@
 
 
 ;; ------------------------------------
-;; LSP (Language Server Protocol) クライアント：拡張 (Tailwind CSS)
+;; LSP 拡張：Python (use `pyright')
+;; ------------------------------------
+;; `lsp-mode' は何もしない
+;; ------------------------------------
+(leaf lsp-pyright
+  :when (and (featurep 'lsp-mode)
+             (executable-find "pyright"))
+  :ensure t
+  :require t
+  :hook ((python-mode-hook . lsp))
+  :custom ((lsp-pyright-type-checking-mode . "strict")
+           (lsp-pyright-basedpyright-inlay-hints-generic-types . t)))
+
+
+;; ------------------------------------
+;; LSP 拡張：Tailwind CSS
 ;; ------------------------------------
 ;; `lsp-mode' が自動ロードする
 ;; ------------------------------------
