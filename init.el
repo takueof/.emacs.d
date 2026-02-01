@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2025 Taku WATABE
-;; Time-stamp: <2026-01-29T01:35:28+09:00>
+;; Copyright (C) 2013-2026 Taku WATABE
+;; Time-stamp: <2026-02-01T14:26:51+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1562,16 +1562,15 @@
 
 ;; ------------------------------------
 ;; LSP 拡張：Python (use `pyright')
-;; ------------------------------------
-;; `lsp-mode' は何もしない
+;;
+;; See also:
+;; https://github.com/emacs-lsp/lsp-pyright
 ;; ------------------------------------
 (leaf lsp-pyright
-  :when (and (featurep 'lsp-mode)
-             (executable-find "pyright"))
   :ensure t
-  :require t
   :hook ((python-mode-hook . lsp))
-  :custom ((lsp-pyright-type-checking-mode . "strict")
+  :custom ((lsp-pyright-langserver-command . "uv run pyright")
+           (lsp-pyright-type-checking-mode . "strict")
            (lsp-pyright-basedpyright-inlay-hints-generic-types . t)))
 
 
