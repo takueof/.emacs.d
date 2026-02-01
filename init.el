@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-01T14:26:51+09:00>
+;; Time-stamp: <2026-02-01T16:05:34+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -809,6 +809,19 @@
 
 
 ;; ------------------------------------
+;; コードフォーマッタ
+;; ------------------------------------
+(leaf apheleia
+  :ensure t
+  :custom ((apheleia-mode-lighter . ""))
+  :global-minor-mode apheleia-global-mode
+  :config
+  ;; Python フォーマッタ変更：`black' → `ruff'
+  (add-to-list 'apheleia-mode-alist '(python-mode . ruff))
+  (add-to-list 'apheleia-mode-alist '(python-ts-mode . ruff)))
+
+
+;; ------------------------------------
 ;; 他ウインドウ弱調化
 ;; ------------------------------------
 (leaf auto-dim-other-buffers
@@ -822,8 +835,8 @@
 (leaf autorevert
   :custom (;; ファイル監視（通知）を使わない
            ;;
-           ;; GNU Emacs の仕様では 1024 - 50 = 974 個以上のファイル監視を
-           ;; 登録できない
+           ;; GNU Emacs の仕様では 1024 - 50 = 974 個以上の
+           ;; ファイル監視を登録できない
            ;; 少しでもファイル監視を減らすため無効化
            ;;
            ;; See also:
@@ -1152,7 +1165,7 @@
 (leaf dired
   :hook ((dired-mode-hook . my-dired-mode-initialize))
   :bind ((dired-mode-map
-         ("r" . #'wdired-change-to-wdired-mode)))
+          ("r" . #'wdired-change-to-wdired-mode)))
   :custom ((dired-kill-when-opening-new-dired-buffer . t)
            (wdired-allow-to-change-permissions . 'advanced))
   :config
@@ -1483,6 +1496,7 @@
          (js-mode-hook . lsp)
          (json-mode-hook . lsp)
          (markdown-mode-hook . lsp)
+         (python-mode-hook . lsp)
          (scss-mode-hook . lsp)
          (web-mode-hook . lsp)
          (yaml-mode-hook . lsp))
@@ -1561,7 +1575,7 @@
 
 
 ;; ------------------------------------
-;; LSP 拡張：Python (use `pyright')
+;; LSP 拡張：Python（型検査）
 ;;
 ;; See also:
 ;; https://github.com/emacs-lsp/lsp-pyright
@@ -1694,39 +1708,6 @@
            (recentf-max-saved-items . 20)
            ;; ローカル環境にのみ保存
            (recentf-save-file . "~/.emacs.recentf.el")))
-
-
-;; ------------------------------------
-;; コードフォーマッタ
-;; ------------------------------------
-(leaf reformatter
-  :ensure t
-  :hook ((css-mode-hook . web-format-on-save-mode)
-         (html-mode-hook . web-format-on-save-mode)
-         (js-mode-hook . web-format-on-save-mode)
-         (js2-mode-hook . web-format-on-save-mode)
-         (json-mode-hook . web-format-on-save-mode)
-         (markdown-mode-hook . web-format-on-save-mode)
-         (scss-mode-hook . web-format-on-save-mode)
-         (web-mode-hook . web-format-on-save-mode))
-  :config
-  (reformatter-define web-format
-    :program (let ((dir (expand-file-name default-directory))
-                   (bin-path nil)
-                   (executable-name (if (member system-type '(ms-dos windows-nt))
-                                        "prettier.cmd"
-                                      "prettier")))
-               (while (and dir (not bin-path))
-                 (let ((path (expand-file-name (concat "node_modules/.bin/" executable-name) dir)))
-                   (if (file-executable-p path)
-                       (setq bin-path path)
-                     (let ((parent (file-name-directory (directory-file-name dir))))
-                       (if (or (not parent) (equal parent dir))
-                           (setq dir nil) ; reached root directory
-                         (setq dir parent))))))
-               (or bin-path
-                   (executable-find "prettier")))
-    :args `("--write" "--stdin-filepath" ,(buffer-file-name))))
 
 
 ;; ------------------------------------
@@ -2509,8 +2490,8 @@
 ;; ============================================================================
 (leaf *early-init-el-restore
   :custom (;; ガベージコレクション閾値を既定値に戻す
-           (gc-cons-threshold . 800000)
-  )) ; END of *early-init-el-restore
+           (gc-cons-threshold . 800000))
+  ) ; END of *early-init-el-restore
 
 
 ;; ============================================================================
