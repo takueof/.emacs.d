@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-01T16:05:34+09:00>
+;; Time-stamp: <2026-02-02T05:16:33+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -695,7 +695,7 @@
   :defer-config
   (leaf tramp-cache
     :custom (;; WARNING: `tramp' ロード後に実行しないと適用されない
-             ;; ローカル環境にのみ保存
+             ;;          ローカル環境にのみ保存
              (tramp-persistency-file-name . "~/.emacs.tramp"))))
 
 
@@ -814,11 +814,11 @@
 (leaf apheleia
   :ensure t
   :custom ((apheleia-mode-lighter . ""))
-  :global-minor-mode apheleia-global-mode
-  :config
+  :defer-config
   ;; Python フォーマッタ変更：`black' → `ruff'
   (add-to-list 'apheleia-mode-alist '(python-mode . ruff))
-  (add-to-list 'apheleia-mode-alist '(python-ts-mode . ruff)))
+  (add-to-list 'apheleia-mode-alist '(python-ts-mode . ruff))
+  :global-minor-mode apheleia-global-mode)
 
 
 ;; ------------------------------------
@@ -2036,7 +2036,6 @@
            (web-mode-enable-element-content-fontification . t)
            (web-mode-enable-element-tag-fontification . t))
   :defer-config
-  ;; 確実に定義された後で追加
   (add-to-list 'web-mode-comment-formats '("php" . "//"))
   (add-to-list 'web-mode-comment-formats '("javascript" . "//")))
 
