@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-02T05:16:33+09:00>
+;; Time-stamp: <2026-02-02T18:26:03+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1496,7 +1496,6 @@
          (js-mode-hook . lsp)
          (json-mode-hook . lsp)
          (markdown-mode-hook . lsp)
-         (python-mode-hook . lsp)
          (scss-mode-hook . lsp)
          (web-mode-hook . lsp)
          (yaml-mode-hook . lsp))
@@ -1862,6 +1861,17 @@
 ;; Docker's Dockerfile
 ;; ------------------------------------
 (leaf dockerfile-mode
+  :ensure t)
+
+
+;; ------------------------------------
+;; Jupiter
+;;
+;; See also:
+;; https://docs.jupyter.org/en/latest/
+;; https://github.com/emacs-jupyter/jupyter
+;; ------------------------------------
+(leaf jupyter
   :ensure t)
 
 
