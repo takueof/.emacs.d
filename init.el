@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-04T11:21:23+09:00>
+;; Time-stamp: <2026-02-04T14:20:54+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -815,7 +815,17 @@
   :ensure t
   :custom ((apheleia-mode-lighter . ""))
   :defer-config
-  ;; Python フォーマッタ変更：`black' → `ruff'
+  ;; JavaScript フォーマッタパーサー変更
+  ;;   -> "babel-flow" から "typescript" に
+  ;;
+  ;; See also:
+  ;; https://prettier.io/docs/options#parser
+  (add-to-list 'apheleia-formatters '(prettier-javascript
+                                      . ("apheleia-npx" "prettier" "--stdin-filepath" filepath
+                                         "--parser=typescript"
+                                         (apheleia-formatters-js-indent "--use-tabs" "--tab-width"))))
+  ;; Python フォーマッタ変更
+  ;;   -> `black' から `ruff' に
   (add-to-list 'apheleia-mode-alist '(python-mode . ruff))
   (add-to-list 'apheleia-mode-alist '(python-ts-mode . ruff))
   :global-minor-mode apheleia-global-mode)
