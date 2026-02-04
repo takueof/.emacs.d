@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-04T11:18:22+09:00>
+;; Time-stamp: <2026-02-04T11:19:14+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1491,14 +1491,13 @@
 (leaf lsp-mode
   :ensure t
   :hook (;; 有効化は必要最小限にとどめる
-         (css-mode-hook . lsp)
-         (dockerfile-mode-hook . lsp)
-         (js-mode-hook . lsp)
-         (json-mode-hook . lsp)
-         (markdown-mode-hook . lsp)
-         (scss-mode-hook . lsp)
-         (web-mode-hook . lsp)
-         (yaml-mode-hook . lsp))
+         (css-mode-hook . lsp-deferred)
+         (js-mode-hook . lsp-deferred)
+         (json-mode-hook . lsp-deferred)
+         (markdown-mode-hook . lsp-deferred)
+         (scss-mode-hook . lsp-deferred)
+         (web-mode-hook . lsp-deferred)
+         (yaml-mode-hook . lsp-deferred))
   :custom (;;
            ;; `lsp-mode'
            ;;
