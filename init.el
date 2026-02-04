@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-02T18:26:03+09:00>
+;; Time-stamp: <2026-02-04T11:18:22+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1855,13 +1855,6 @@
 ;; ------------------------------------
 (leaf css-mode
   :custom ((css-indent-offset . 2)))
-
-
-;; ------------------------------------
-;; Docker's Dockerfile
-;; ------------------------------------
-(leaf dockerfile-mode
-  :ensure t)
 
 
 ;; ------------------------------------
