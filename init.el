@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-04T14:20:54+09:00>
+;; Time-stamp: <2026-02-10T11:14:46+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -85,10 +85,10 @@
 ;; ----------------------------------------------------------------------------
 ;; GNU Emacs における Shift_JIS 定義 `japanese-shift-jis' は、
 ;; 「JIS X 0208 附属書1」を厳格に実装したもの
-;; ゆえに、一部文字（例：「～」(U+FF5E)）が未定義であるなどし、
+;; ゆえに一部文字（例：「～」(U+FF5E)）が未定義であるなどし、
 ;; 実用上問題が発生しやすい
 ;;
-;; そこで、タイムスタンプ時点で最も普及している Microsoft の Shift_JIS 実装
+;; そこでタイムスタンプ時点において最も普及している Microsoft の Shift_JIS 実装
 ;; Microsoft Code Page 932 (`japanese-cp932') を、
 ;; デフォルトの Shift_JIS 実装として認識させる
 ;; ----------------------------------------------------------------------------
@@ -194,7 +194,7 @@
  '(scroll-up-aggressively nil) ; default
  '(scroll-down-aggressively nil) ; default
  ;;
- ;; なるべくウインドウ上下から2行目でスクロール開始
+ ;; なるべくウインドウ上下から2行目でスクロールを開始させる
  ;;
  '(scroll-margin 2)
  '(maximum-scroll-margin 2)
@@ -216,7 +216,7 @@
  ;;
  '(line-spacing nil)
  ;;
- ;; 行間移動に論理行を使用
+ ;; 行間移動に論理行を使用する
  ;;
  '(line-move-visual t)
  ;;
@@ -235,11 +235,11 @@
  ;;
  '(indent-tabs-mode nil)
  ;;
- ;; タブは常にインデントのみ実施
+ ;; タブは常にインデントのみ実施する
  ;;
  '(tab-always-indent t)
  ;;
- ;; 自分用デフォルトタブ文字表示幅
+ ;; 自分用デフォルトタブ文字表示幅を設定する
  ;; 必要なら各メジャーモードごとに設定しなおす
  ;;
  '(tab-width 4)
@@ -250,29 +250,29 @@
  '(read-buffer-completion-ignore-case t)
  '(read-file-name-completion-ignore-case t)
  ;;
- ;; 新規ファイル／バッファ作成時の確認は省略
+ ;; 新規ファイル／バッファ作成時の確認は省略する
  ;;
  '(confirm-nonexistent-file-or-buffer nil)
  ;;
- ;; 最終行への改行（空行）挿入を強制
+ ;; 最終行への改行（空行）挿入を強制させる
  ;;
  ;; 不要なら各メジャーモードごとに設定させる
  ;;
  '(require-final-newline t)
  '(mode-require-final-newline t)
  ;;
- ;; `undo' 上限を引き上げ
+ ;; `undo' 上限を引き上げる
  ;;
  '(undo-limit 600000)
  '(undo-strong-limit 900000) ; (= 1.5 (/ undo-strong-limit undo-limit)) を踏襲
  ;;
- ;; 自動バックアップは不要
+ ;; 自動バックアップは不要なので無効化する
  ;;
  '(auto-save-default nil)
  '(make-backup-files nil)
  `(auto-save-list-file-prefix ,(convert-standard-filename "~/.emacs.auto-save-list/.saves-")) ; ローカル環境化
  ;;
- ;; ロックファイル不要
+ ;; ロックファイルは不要なので無効化する
  ;;
  '(create-lockfiles nil)
  ;;
@@ -297,11 +297,11 @@
  ;;
  '(enable-recursive-minibuffers t)
  ;;
- ;; Trash（「ごみ箱」など）が使える場合はそちらへ廃棄
+ ;; Trash（「ごみ箱」など）が使える場合はそちらへ廃棄させる
  ;;
  '(delete-by-moving-to-trash t)
  ;;
- ;; YES/NO 選択を簡略化
+ ;; YES/NO 選択を簡略化する
  ;;
  '(use-short-answers t)
  ;;
@@ -325,7 +325,7 @@
  ;;
  '(w32-recognize-altgr nil)
  ;;
- ;; 証明書
+ ;; 証明書を明示的に設定する
  ;;
  `(gnutls-trustfiles ',(mapcar 'convert-standard-filename
                                (if (member system-type '(ms-dos windows-nt))
@@ -345,7 +345,7 @@
 ;; ============================================================================
 ;; ベル音 (Windows ONLY)
 ;; ============================================================================
-(if (fboundp #'set-message-beep) ; Windows 環境でのみ存在
+(if (fboundp #'set-message-beep)
     ;; なし
     (set-message-beep 'silent))
 
@@ -362,7 +362,7 @@
 ;; ============================================================================
 (when (require 'nsm nil :noerror)
   (custom-set-variables
-   ;; ローカル環境にのみ保存
+   ;; ローカル環境にのみ保存させる
    '(nsm-settings-file "~/.emacs.network-security.data")))
 
 
@@ -414,7 +414,7 @@
 ;;          なるべく早いタイミングで開始
 ;; ============================================================================
 (leaf server
-  :custom (;; ローカル環境にのみ保存
+  :custom (;; ローカル環境にのみ保存させる
            (server-auth-dir . "~/.emacs.server"))
   :config
   (server-start t))
@@ -428,40 +428,40 @@
   :after my-utils
   :bind (;; ヘルプ表示を割り当てなおす
          ("C-x ?" . help-command)
-         ;; ウインドウ中央表示はもっともシンプルなものを使用
+         ;; ウインドウ中央表示はもっともシンプルなものを使用する
          ;; `recenter-top-bottom' は使わない
          ("C-l" . recenter)
          ;; リージョン範囲をソート
          ("C-c s" . sort-lines)
-         ;; 1つ前のエラーを表示
+         ;; 1つ前のエラーを表示する
          ("C-x \\" . previous-error)
-         ;; メジャーモードを再適用後に `revert-buffer-quick' 実行
+         ;; メジャーモードを再適用後に `revert-buffer-quick' 実行させる
          ("C-c r" . my-revert-buffer-quick-with-normal-mode)
-         ;; 行頭移動は物理行
+         ;; 行頭移動は物理行とする
          ("C-a" . my-beginning-of-smart-indented-line)
-         ;; 前のウインドウに移動
+         ;; 前のウインドウに移動する
          ("C-x p" . my-other-window-reverse)
-         ;; 前のフレームに移動
+         ;; 前のフレームに移動する
          ("C-x 5 p" . my-other-frame-reverse)
-         ;; 折り返し表示を強制切替
+         ;; 折り返し表示を強制的に切り替える
          ("C-x w" . my-toggle-truncate-lines-force)
-         ;; カーソル位置に YEN SIGN (U+00A5) を挿入
+         ;; カーソル位置に YEN SIGN (U+00A5) を挿入する
          ("C-c i \\" . my-insert-yen-sign)
-         ;; カーソル位置にファイル名を挿入
+         ;; カーソル位置にファイル名を挿入する
          ("C-c i f" . my-insert-file-name)
-         ;; カーソル位置にファイルパスを挿入
+         ;; カーソル位置にファイルパスを挿入する
          ("C-c i p" . my-insert-file-path)
-         ;; 一括エンコーディング変換
+         ;; 一括でエンコーディング変換させる
          ("C-c RET f" . my-change-files-coding-system)
-         ;; フレーム背景透明度切替
+         ;; フレーム背景の透明度を切り替える
          ("C-c w t" . my-toggle-frame-transparency))
   :config
-  ;; <Backspace> と <DEL> を 交換
+  ;; <Backspace> と <DEL> を 交換する
   (keyboard-translate ?\C-h ?\C-?)
   ;; <DEL> を <C-d> にする
   (keyboard-translate ?\C-? ?\C-d)
   ;; `ido-undo-merge-work-directory' 実行のため <C-z> を押しすぎた場合、
-  ;; `suspend-frame' が起動しないよう配慮
+  ;; `suspend-frame' が起動しないよう配慮する
   (global-unset-key (kbd "C-z"))
   ) ; End of *global-keybind
 
@@ -475,7 +475,7 @@
            (eol-mnemonic-mac . "[CR]")
            (eol-mnemonic-unix . "[LF]")
            (eol-mnemonic-undecided . "")
-           ;; カーソルの行と列表記を好みに変更
+           ;; カーソルの行と列表記を好みに変更する
            (mode-line-position-column-line-format . '(" (%l:%c)")))
   :config
   (line-number-mode +1)
@@ -525,10 +525,10 @@
             ;;        都度評価にしたい
             (time-stamp-format . ,(concat "%:y-%02m-%02dT%02H:%02M:%02S"
                                           (replace-regexp-in-string
-                                           ;; 強制的にコロン付与
+                                           ;; 強制的にコロンを付与する
                                            ;; コロンなし形式を返されるため
-                                           ;; 厳密チェックで "±1259" のみ利用
-                                           ;;   → 他は無視
+                                           ;; 厳密チェックで "±1259" のみ利用する
+                                           ;;   → 他は無視する
                                            "\\`\\([\\+\\-]\\(?:0[0-9]\\|1[0-2]\\)\\)\\([0-5][0-9]\\)\\'"
                                            "\\1:\\2"
                                            ;; タイムゾーンが "+0000" を返す
@@ -540,7 +540,7 @@
 ;; IME patch (Windows ONLY)
 ;; ============================================================================
 ;; WARNING: 全ての IM に影響するため、
-;;          なるべく早いタイミングでインストール
+;;          なるべく早いタイミングでインストールする
 ;; ============================================================================
 (leaf tr-ime
   :when (member system-type '(ms-dos windows-nt))
@@ -560,11 +560,11 @@
 ;; Input Method (IM)
 ;; ============================================================================
 (leaf *input-method
-  ;; WARNING: `window-system' 外の環境（例：ターミナル）では例外発生
+  ;; WARNING: `window-system' 外の環境（例：ターミナル）では例外が発生する
   :when window-system
   :after my-utils
   :hook (;; -------------------------------------------------------------------
-         ;; ウインドウ選択後、IM の状態に応じてフェイス `cursor' を変更
+         ;; ウインドウ選択後、IM の状態に応じてフェイス `cursor' を変更する
          ;;
          ;; `cursor' はフレーム単位
          ;; しかし、`current-input-method' はバッファローカル変数
@@ -575,7 +575,7 @@
          ;;
          ;; バッファ切替時は、特に何もしない
          ;; -------------------------------------------------------------------
-         ;; `select-window' 実行後に起動するフックを利用
+         ;; `select-window' 実行後に起動するフックを利用する
          (buffer-list-update-hook . my-change-cursor-faces-by-current-input-method)
          ;; IM の activate/deactivate と連動させる
          (input-method-activate-hook . my-change-cursor-faces-by-current-input-method)
@@ -641,7 +641,7 @@
 ;; ============================================================================
 (leaf ansi-color
   :config
-  ;; `comint-mode' および派生モードで、ANSI エスケープシーケンスの解釈を開始
+  ;; `comint-mode' と派生モードで ANSI エスケープシーケンスの解釈を開始する
   (ansi-color-for-comint-mode-on))
 
 
@@ -695,7 +695,7 @@
   :defer-config
   (leaf tramp-cache
     :custom (;; WARNING: `tramp' ロード後に実行しないと適用されない
-             ;;          ローカル環境にのみ保存
+             ;;          ローカル環境にのみ保存させる
              (tramp-persistency-file-name . "~/.emacs.tramp"))))
 
 
@@ -790,6 +790,7 @@
   :custom ((affe-regexp-function . #'orderless-pattern-compiler)
            (affe-highlight-function . #'orderless--highlight)))
 
+
 ;; ------------------------------------
 ;; 各種検索／置換強化
 ;; ------------------------------------
@@ -815,8 +816,7 @@
   :ensure t
   :custom ((apheleia-mode-lighter . ""))
   :defer-config
-  ;; JavaScript フォーマッタパーサー変更
-  ;;   -> "babel-flow" から "typescript" に
+  ;; JavaScript パーサーを "babel-flow" から "typescript" に変更する
   ;;
   ;; See also:
   ;; https://prettier.io/docs/options#parser
@@ -824,8 +824,7 @@
                                       . ("apheleia-npx" "prettier" "--stdin-filepath" filepath
                                          "--parser=typescript"
                                          (apheleia-formatters-js-indent "--use-tabs" "--tab-width"))))
-  ;; Python フォーマッタ変更
-  ;;   -> `black' から `ruff' に
+  ;; Python フォーマッタを `black' から `ruff' に変更する
   (add-to-list 'apheleia-mode-alist '(python-mode . ruff))
   (add-to-list 'apheleia-mode-alist '(python-ts-mode . ruff))
   :global-minor-mode apheleia-global-mode)
@@ -847,7 +846,7 @@
            ;;
            ;; GNU Emacs の仕様では 1024 - 50 = 974 個以上の
            ;; ファイル監視を登録できない
-           ;; 少しでもファイル監視を減らすため無効化
+           ;; 少しでもファイル監視を減らすため無効化する
            ;;
            ;; See also:
            ;; https://www.reddit.com/r/emacs/comments/mq2znn/comment/gugo0n4/?context=3
@@ -871,7 +870,7 @@
 ;; ------------------------------------
 (leaf bookmark
   :custom ((bookmark-version-control . t)
-           ;; ローカル環境にのみ保存
+           ;; ローカル環境にのみ保存させる
            (bookmark-default-file . "~/.emacs.bookmark.el")))
 
 
@@ -899,7 +898,7 @@
   (defun my-comint-mode-initialize ()
     "Initialize `comint-mode'."
     (setq-local comint-input-sender-no-newline t))
-  ;; プロセスごとのコーディングシステム変換表
+  ;; プロセスごとのコーディングシステム変換表を追加する
   ;;
   ;; See also:
   ;; https://www.emacswiki.org/emacs/ShellMode#toc1
@@ -961,7 +960,7 @@
   :after company
   :ensure t
   :custom ((company-statistics-size . 500)
-           ;; ローカル環境にのみ保存
+           ;; ローカル環境にのみ保存させる
            (company-statistics-file . "~/.emacs.company-statistics-cache.el"))
   :global-minor-mode t)
 
@@ -985,7 +984,7 @@
   ;; ----------------------------------
   (defun my-compilation-message (cur-buffer msg)
     "Show status messages when compile done in `compilation-mode'."
-    (let ((msg-text (string-trim msg)) ; 改行文字が含まれうる問題を回避
+    (let ((msg-text (string-trim msg)) ; 改行文字が含まれうる問題を回避する
           (msg-title (buffer-name))
           (msg-face 'compilation-mode-line-fail))
       (message "%s: %s"
@@ -1004,7 +1003,7 @@
     "Created buffer names by `compile' command."
     :group 'compilation
     :type '(list (repeat string)))
-  ;; `process-status' と `exit-status' の値も得たいので、アドバイスを利用
+  ;; `process-status' と `exit-status' の値も得たいので、アドバイスを利用する
   ;; `compilation-finish-functions' にフックした関数では `msg' しか
   ;; 参照できないため
   (defun my-compilation-auto-quit-window (process-status exit-status msg)
@@ -1013,7 +1012,7 @@
                      my-compilation-auto-quit-window-enable-buffer-names)
              (or (and (equal process-status 'exit)
                       (zerop exit-status))
-                 ;; 改行文字が含まれうる問題を回避
+                 ;; 改行文字が含まれうる問題を回避する
                  (string-equal "finished" (string-trim msg))))
         (quit-window nil (get-buffer-window))))
   (advice-add #'compilation-handle-exit
@@ -1082,7 +1081,7 @@
 ;; 矩形選択
 ;; ------------------------------------
 (leaf cua-base
-  ;; 特殊キーバインド無効
+  ;; 特殊キーバインドを無効化する
   :global-minor-mode cua-selection-mode)
 
 
@@ -1135,11 +1134,11 @@
          ("C-c d F" . desktop-change-dir)
          ("C-c d r" . desktop-revert))
   :custom ((desktop-load-locked-desktop . t)
-           (desktop-globals-to-save . '(;; 保存は必要最小限
+           (desktop-globals-to-save . '(;; 保存は必要最小限にする
                                         search-ring
                                         register-alist
                                         file-name-history))
-           (desktop-locals-to-save . '(;; 保存は必要最小限
+           (desktop-locals-to-save . '(;; 保存は必要最小限にする
                                        ;;
                                        ;; WARNING: ソート厳禁！
                                        ;;          正常に動作しなくなるため
@@ -1181,9 +1180,9 @@
   :config
   (defun my-dired-mode-initialize ()
     "Initialize `dired-mode'."
-    ;; 常にすべての情報を表示（簡易モードにしない）
+    ;; 常にすべての情報を表示する（簡易モードにしない）
     (dired-hide-details-mode -1)
-    ;; `'windmove を機能させる
+    ;; `windmove' を機能させる
     (keymap-local-unset "C-S-f" t)
     (keymap-local-unset "C-S-b" t)
     (keymap-local-unset "C-S-n" t)
@@ -1194,7 +1193,7 @@
 ;; ディレクトリブラウジング：拡張
 ;; ------------------------------------
 (leaf dired+
-  :vc (:url "https://github.com/emacsmirror/dired-plus")
+  :vc (:url "https://github.com/emacsmirror/dired-plus" :rev :newest)
   :after dired
   :require t
   :custom ((diredp-hide-details-initially-flag . nil)
@@ -1288,7 +1287,7 @@
   :config
   ;; ----------------------------------
   ;; HACK: `flycheck-checker-error-threshold' 以上の項目が出現すると
-  ;;       生成されうる警告バッファの出現を抑制
+  ;;       生成されうる警告バッファの出現を抑制する
   ;; ----------------------------------
   (with-eval-after-load 'warnings
     (add-to-list 'warning-suppress-log-types '(flycheck syntax-checker)))
@@ -1310,13 +1309,13 @@
     ;; 他の部分は元定義と一致させる
     (make-directory (file-name-directory file-name) t)
     ;; FIXME: もっと柔軟に設定できるようにならないか？
-    (let ((coding-system-for-write 'utf-8-unix) ; ここだけ変更（決め打ち）
+    (let ((coding-system-for-write 'utf-8-unix) ; ここだけ変更決め打ちで変更する
           (jka-compr-inhibit t))
       (write-region nil nil file-name nil 0))))
 
 
 ;; ------------------------------------
-;; 自動静的解析：拡張（モードライン変更）
+;; 自動静的解析拡張：モードライン変更
 ;; ------------------------------------
 (leaf flycheck-color-mode-line
   :after flycheck
@@ -1335,7 +1334,7 @@
 ;; 自動スペルチェッカ
 ;; ------------------------------------
 (leaf flyspell
-  :bind (;; HACK: `flyspell' がキーバインドを横取りする問題を回避
+  :bind (;; HACK: `flyspell' がキーバインドを横取りする問題を回避する
          (:flyspell-mode-map
           ("M-TAB" . nil)
           ("C-;" . nil)
@@ -1431,13 +1430,13 @@
   :custom ((ibuffer-default-sorting-mode . 'filename/process)
            (ibuffer-expert . t))
   :config
-  ;; バッファ名の表示を30文字に変更
-  ;;   -> カラム幅が揃わなくなるため -1 は不可
-  (let* (;; `customize-mark-to-save' の評価を t にするため明示的にコピー
+  ;; バッファ名の表示を30文字に変更する
+  ;;   -> カラム幅が揃わなくなるため `-1' は不可
+  (let* (;; `customize-mark-to-save' の評価を t にするため明示的にコピーする
          (formats (copy-tree ibuffer-formats))
          (settings (assoc 'name (assoc 'mark formats))))
     ;; 該当する設定項目がなければ何もしない
-    ;; 将来的に項目が変更された場合でも、例外を出さないための対策
+    ;; 将来的に項目が変更された場合でも、例外を出さないため
     (when settings
       (setcdr settings '(30 30 :left :elide))
       ;; WARNING: この `custom-set-variables' は `:custom' に移動できない
@@ -1447,7 +1446,7 @@
 
 
 ;; ------------------------------------
-;; 強化バッファ一覧：拡張（`projectile' サポート）
+;; 強化バッファ一覧拡張：`projectile' サポート
 ;; ------------------------------------
 (leaf ibuffer-projectile
   :after (ibuffer projectile)
@@ -1456,7 +1455,9 @@
 
 
 ;; ------------------------------------
-;; ファイル操作の簡略化（デフォルト OFF だが他機能から切替可にしておく）
+;; ファイル操作の簡略化
+;; ------------------------------------
+;; デフォルト OFF だが、他機能から切替可能にしておく
 ;; ------------------------------------
 (leaf ido
   :custom ((ido-enable-flex-matching . t)
@@ -1465,7 +1466,7 @@
            (ido-max-file-prompt-width . 0)
            (ido-use-filename-at-point . 'guess)
            (ido-unc-hosts . t)
-           ;; ローカル環境にのみ保存
+           ;; ローカル環境にのみ保存させる
            (ido-save-directory-list-file . "~/.emacs.ido-save-directory-list.el")))
 
 
@@ -1513,12 +1514,12 @@
            ;;
            (lsp-semantic-tokens-enable . t)
            (lsp-restart . 'auto-restart)
-           ;; ローカル環境にのみ保存
+           ;; ローカル環境にのみ保存させる
            (lsp-session-file . "~/.emacs.lsp-session")
-           ;; LSP サーバからのファイル監視要求を無視
+           ;; LSP サーバからのファイル監視要求を無視する
            ;;
            ;; GNU Emacs の仕様で 1024 - 50 = 974 個以上のファイル監視が登録不可
-           ;; LSP サーバによっては大量のファイル監視要求を行う → 意図的に無視
+           ;; LSP サーバによっては大量のファイル監視要求を行う → 意図的に無視する
            ;;
            ;; See also:
            ;; https://www.reddit.com/r/emacs/comments/mq2znn/no_file_descriptors_left/
@@ -1578,7 +1579,7 @@
            (lsp-ui-doc-max-width . 200)
            (lsp-ui-doc-max-height . 50)
            (lsp-ui-doc-delay . 0.25)
-           ;; `lsp-ui-doc' を有効にしているので他は不要
+           ;; `lsp-ui-doc' を有効にしているため、他は不要になる
            (lsp-ui-sideline-enable . nil)))
 
 
@@ -1630,17 +1631,17 @@
   :after exec-path-from-shell
   :ensure t
   :require t
-  :custom `(;; C/Migemo 利用設定
+  :custom `(;; C/Migemo を利用する
             (migemo-command . ,(executable-find "cmigemo"))
             (migemo-options . '("-q" "--emacs"))
-            ;; 空白文字と認識させる対象を拡大
+            ;; 空白文字の対象を拡大する
             (migemo-white-space-regexp . "[[:space:]\s-]*")
             ;; ユーザ別基礎ディレクトリは設定ディレクトリ内にまとめる
             (migemo-directory . ,(convert-standard-filename "~"))
             ;; `migemo' 側で定義済の `isearch' 関連キーバインドを使わせない
             ;; ミニバッファ内で `yank' できない現象が発生する問題の対策
             (migemo-use-default-isearch-keybinding . nil)
-            ;; 辞書ファイルはデフォルトを利用
+            ;; 辞書ファイルはデフォルトを利用する
             (migemo-dictionary . ,(catch 'founded
                                     (dolist (path '("/opt/homebrew/share/migemo/utf-8/migemo-dict"
                                                     "C:/programs/cmigemo/dict/utf-8/migemo-dic"))
@@ -1648,13 +1649,13 @@
                                           (throw 'founded path)))))
             (migemo-user-dictionary . nil)
             (migemo-regex-dictionary . nil)
-            ;; 辞書エンコーディング明示
+            ;; 辞書エンコーディングを明示する
             (migemo-coding-system . 'utf-8-unix)
-            ;; キャッシュ利用
+            ;; キャッシュを利用する
             (migemo-use-pattern-alist . t)
             (migemo-use-frequent-pattern-alist . t)
             (migemo-pattern-alist-length . 1024)
-            ;; ローカル環境にのみ保存
+            ;; ローカル環境にのみ保存させる
             (migemo-pattern-alist-file . "~/.emacs.migemo-pattern")
             (migemo-frequent-pattern-alist-file . "~/.emacs.migemo-frequent"))
   :config
@@ -1668,7 +1669,7 @@
   :ensure t
   :custom ((completion-styles . '(orderless)))
   :defer-config
-  ;; `migemo' 利用可能時
+  ;; `migemo' が利用可能なら使う
   ;;
   ;; See also:
   ;; https://nyoho.jp/diary/?date=20210615
@@ -1696,7 +1697,7 @@
             (projectile-completion-system . ',(cond ((featurep 'ido) 'ido)
                                                     (t 'default)))
             (projectile-keymap-prefix . ,(kbd "C-c C-p"))
-            ;; ローカル環境にのみ保存
+            ;; ローカル環境にのみ保存させる
             (projectile-cache-file . "~/.emacs.projectile.cache")
             (projectile-known-projects-file . "~/.emacs.projectile-bookmarks.eld"))
   :global-minor-mode t
@@ -1719,7 +1720,7 @@
 (leaf recentf
   :custom (;; 履歴保存数は絞る
            (recentf-max-saved-items . 20)
-           ;; ローカル環境にのみ保存
+           ;; ローカル環境にのみ保存させる
            (recentf-save-file . "~/.emacs.recentf.el")))
 
 
@@ -1729,7 +1730,7 @@
 (leaf savehist
   :custom (;; 履歴保存数は絞る
            (history-length . 100)
-           ;; ローカル環境にのみ保存
+           ;; ローカル環境にのみ保存させる
            (savehist-file . "~/.emacs.savehist.el"))
   :global-minor-mode t)
 
@@ -1738,7 +1739,7 @@
 ;; ファイルごとにカーソル位置を保存
 ;; ------------------------------------
 (leaf saveplace
-  :custom (;; ローカル環境にのみ保存
+  :custom (;; ローカル環境にのみ保存させる
            (save-place-file . "~/.emacs.saveplace.el"))
   :global-minor-mode save-place-mode)
 
@@ -1747,7 +1748,7 @@
 ;; 基礎編集コマンド集
 ;; ------------------------------------
 (leaf simple
-  ;; 暫定マークを使用
+  ;; 暫定マークを使用する
   :global-minor-mode transient-mark-mode)
 
 
@@ -1792,7 +1793,7 @@
 ;; ------------------------------------
 (leaf whitespace
   :hook ((after-change-major-mode-hook . my-whitespace-mode-initialize))
-  :custom (;; 「不正」位置の空白文字のみ強調
+  :custom (;; 「不正」位置の空白文字のみ強調させる
            (whitespace-style . '(empty
                                  face
                                  newline
@@ -1805,7 +1806,7 @@
                                  tabs
                                  trailing))
            ;; -------------------------
-           ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調表示
+           ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調表示する
            ;;
            ;; 表示テスト:
            ;;   U+0009: 「	」
@@ -1834,7 +1835,7 @@
   (defun my-whitespace-mode-initialize ()
     "Initialize `whitespace'."
     ;; --------------------------------
-    ;; HACK: 一部メジャーモードでは無効化
+    ;; HACK: 一部メジャーモードでは無効にする
     ;; --------------------------------
     (with-eval-after-load 'whitespace
       (if (member major-mode '(;; 降順ソート
@@ -1872,17 +1873,6 @@
 
 
 ;; ------------------------------------
-;; Jupiter
-;;
-;; See also:
-;; https://docs.jupyter.org/en/latest/
-;; https://github.com/emacs-jupyter/jupyter
-;; ------------------------------------
-(leaf jupyter
-  :ensure t)
-
-
-;; ------------------------------------
 ;; JavaScript (Base)
 ;; ------------------------------------
 ;; HACK: 後ほど `js2-minor-mode' で拡張する
@@ -1915,14 +1905,14 @@
   ;;       `js2-mode' は直接用いない
   :hook ((js-mode-hook . js2-minor-mode)
          (js-jsx-mode-hook . js2-minor-mode))
-  :custom ((js2-highlight-level . 3) ; すべての構文強調を有効化
+  :custom ((js2-highlight-level . 3) ; すべての構文強調を有効にする
            (js2-bounce-indent-p . t)
            (js2-idle-timer-delay . 0.25)
            (js2-dynamic-idle-timer-adjust . 0)
            (js2-concat-multiline-strings . t)
            ;; 文法チェック関連
            ;;
-           ;; 他ツールに任せるため、すべて無効化
+           ;; 他ツールに任せるため、すべて無効にする
            (js2-mode-show-parse-errors . nil)
            (js2-mode-assume-strict . nil)
            (js2-mode-show-strict-warnings . nil)
@@ -1939,7 +1929,7 @@
            (js2-include-node-externs . t)
            ;; JSLint
            ;;
-           ;; 他ツールに任せるため、すべて無効化
+           ;; 他ツールに任せるため、すべて無効にする
            (js2-include-jslint-globals . nil)
            (js2-include-jslint-declaration-externs . nil)))
 
@@ -1965,10 +1955,9 @@
             (markdown-fontify-whole-heading-line . t)
             (markdown-fontify-code-blocks-natively . t))
   :config
-  ;; プレーンテキストファイルは除外
+  ;; プレーンテキストファイルは除外する
   (setq auto-mode-alist
         (delete '("\\.text\\'" . markdown-mode) auto-mode-alist)))
-
 
 
 ;; ------------------------------------
@@ -1993,8 +1982,8 @@
 ;; ------------------------------------
 (leaf scss-mode
   :ensure t
-  :custom (;; コンパイルは常に手動（保存時は何もしない）
-           ;; 各種ツール経由でコンパイルされうるため
+  :custom (;; 保存時コンパイルを無効にする
+           ;; 各種外部ツールがコンパイルするため
            (scss-compile-at-save . nil)))
 
 
@@ -2111,23 +2100,23 @@
 ;;
 ;; 文字拡大／縮小モード：
 ;;   C-x C-0
-;; カーソルがポイントしている文字の「簡易」情報を表示：
+;; カーソルがポイントしている文字の「簡易」情報を表示する：
 ;;   C-x =
-;; カーソルがポイントしている文字の「詳細」情報を表示：
+;; カーソルがポイントしている文字の「詳細」情報を表示する：
 ;;   C-u C-x =
-;; フォントセットの詳細を別バッファに表示：
+;; フォントセットの詳細を別バッファに表示する：
 ;;   M-x describe-fontset
-;; 定義済フォントセット一覧を別バッファに表示：
+;; 定義済フォントセット一覧を別バッファに表示する：
 ;;   M-x list-fontsets
-;; 利用可能フォント一覧：
+;; 利用可能フォントを一覧表示する：
 ;;   (dolist (xlfd (x-list-fonts "*")) (insert (format "%S" xlfd) "\n"))
-;; 該当ファミリフォントの一覧：
+;; 該当ファミリフォントを一覧表示する：
 ;;   (list-fonts (font-spec :family "ファミリ名"))
-;; 定義済フォントセット一覧：
+;; 定義済フォントセットを一覧表示する：
 ;;   (fontset-list)
 ;; 定義済フォントセットと別名（短縮名、エイリアス）の `alist'：
 ;;   `fontset-alias-alist'
-;; フレーム使用中フォント表示：
+;; フレーム使用中フォントを表示する：
 ;;   (frame-parameter nil 'font)
 ;; ============================================================================
 ;; 関連 GNU Emacs Lisp
@@ -2234,13 +2223,13 @@
 ;; https://emacs.g.hatena.ne.jp/sakito/20100127
 ;; ============================================================================
 (leaf *font
-  ;; GUI 上でのみ設定（設定する意味がないため、ターミナル上では何もしない）
+  ;; GUI 上でのみ設定する（設定する意味がないため、ターミナル上では何もしない）
   :when window-system
   :after my-utils
-  :custom (;; シンボルや句読点などを表示するフォントを、設定に応じて選択
+  :custom (;; シンボルや句読点などを表示するフォントを、設定に応じて選択する
            ;;   → GNU Emacs 25 より前のふるまいに戻す
            (use-default-font-for-symbols . nil)
-           ;; 人為的に italic/bold フォントを選択 (Windows ONLY)
+           ;; 人為的に italic/bold フォントを選択する (Windows ONLY)
            (w32-enable-synthesized-fonts . t))
   :config
   ;; --------------------------------------------------------------------------
@@ -2335,7 +2324,7 @@
                               'thai-tis620
                               (font-spec :family (my-fallback-font-family "Ayuthaya"
                                                                           "Tahoma")))
-    ;; アラビア文字：Unicode 直接指定
+    ;; アラビア文字：Unicode 直接指定を行う
     ;;               `cp858' との重複を避けるため、`cp1256' による指定はしない
     (dolist (range '((cons #x00600 #x006FF) ; U+0600-U+06FF (Arabic)
                      (cons #x00750 #x0077F) ; U+0750–U+077F (Arabic Supplement)
@@ -2369,15 +2358,14 @@
                                                                           "Hiragino Sans"
                                                                           "メイリオ"
                                                                           "ＭＳ ゴシック")))
-    ;; 「〜」(U+301C: WAVE DASH) と「～」(U+FF5E: FULLWIDTH TILDE) の字形を変更
+    ;; 「〜」(U+301C: WAVE DASH) と「～」(U+FF5E: FULLWIDTH TILDE) の字形を変更する
     ;;
     ;; 対象：
     ;;
     ;;   * "Migu 1M"
     ;;   * "ＭＳ ゴシック"
     ;;
-    ;; 前述のフォントは U+301C と U+FF5E で字形が異なるので、視覚的な区別が可能
-    ;;
+    ;; 前述のフォントは U+301C と U+FF5E で字形が異なるので、視覚的な区別が可能になる
     (my-set-fontset-font-safe fontset-name
                               ;; 「〜」(U+301C: WAVE DASH)
                               (cons (string-to-char "〜") (string-to-char "〜"))
@@ -2404,7 +2392,7 @@
     ;;
     ;;   * "Inconsolata"
     ;;
-    ;; 前述のフォントは除外
+    ;; 前述のフォントは除外する
     (dolist (code (mapcar 'string-to-char
                           (split-string "ı░▒▓╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪▌αßΓπΣσµτΦΘΩδφε≥≤ⁿ≈∙√" "" t)))
       (my-set-fontset-font-safe fontset-name
@@ -2419,7 +2407,7 @@
     ;;
     ;;   * "Consolas"
     ;;
-    ;; 前述のフォントは除外
+    ;; 前述のフォントは除外する
     (my-set-fontset-font-safe fontset-name
                               (cons (string-to-char "₧") (string-to-char "₧"))
                               (font-spec :family (my-fallback-font-family "Inconsolata"
@@ -2434,7 +2422,7 @@
     ;;   * "Menlo"
     ;;   * "Consolas"
     ;;
-    ;; 前述のフォントは除外
+    ;; 前述のフォントは除外する
     (dolist (code (mapcar 'string-to-char
                           (split-string "⌐‗" "" t)))
       (my-set-fontset-font-safe fontset-name
@@ -2448,12 +2436,12 @@
     ;;   * "VL Gothic"
     ;;   * "Migu 1M"
     ;;
-    ;; 前述のフォントは除外
+    ;; 前述のフォントは除外する
     (my-set-fontset-font-safe fontset-name
                               (cons (string-to-char "￤") (string-to-char "￤"))
                               (font-spec :family (my-fallback-font-family "Hiragino Sans"
                                                                           "ＭＳ ゴシック")))
-    ;; 一部グリフが `cp858' に含まれているため半角になる状態を回避
+    ;; 一部グリフが `cp858' に含まれているため半角になる状態を回避する
     (dolist (code (mapcar 'string-to-char
                           (split-string "∞∩≡■" "" t)))
       (my-set-fontset-font-safe fontset-name
@@ -2461,13 +2449,13 @@
                                 (font-spec :family (my-fallback-font-family "VL Gothic"
                                                                             "Hiragino Sans"
                                                                             "ＭＳ ゴシック"))))
-    ;; 一部グリフが次のフォントで半角になる状態を回避
+    ;; 一部グリフが次のフォントで半角になる状態を回避する
     ;;
     ;;   * "VL Gothic"
     ;;   * "Hiragino Sans"
     ;;   * "メイリオ"
     ;;
-    ;; 前述のフォントは除外
+    ;; 前述のフォントは除外する
     (dolist (code (mapcar 'string-to-char
                           (split-string "±×÷" "" t)))
       (my-set-fontset-font-safe fontset-name
@@ -2481,7 +2469,7 @@
                                                                           "Symbola"
                                                                           "Segoe UI Emoji"
                                                                           "Segoe UI Symbol")))
-    ;; WARNING: フォントサイズ変更「専用」の設定
+    ;; WARNING: フォントサイズ変更「専用」の設定を行う
     ;;          他の `my-set-fontset-font-safe' で `:size' は設定しないこと！
     ;;          `C-x C-0' によるズームが効かなくなるため
     (my-set-fontset-font-safe fontset-name
@@ -2492,7 +2480,7 @@
     ;; フォントセット適用
     ;; ------------------------------------------------------------------------
     (modify-all-frames-parameters `((font . ,fontset-name)))
-    ;; 各種 UI にも適用
+    ;; 各種 UI にも適用する
     ;;
     ;; TODO: ダイアログの face も変えたい
     ;;       シンボル名不明
