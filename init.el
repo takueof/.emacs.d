@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-10T11:15:38+09:00>
+;; Time-stamp: <2026-02-14T17:29:00+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1152,16 +1152,6 @@
 
 
 ;; ------------------------------------
-;; 各種マウス操作無効化
-;; ------------------------------------
-(leaf disable-mouse
-  :ensure t
-  :custom ((disable-mouse-mode-lighter . "")
-           (disable-mouse-mode-global-lighter . ""))
-  :global-minor-mode global-disable-mouse-mode)
-
-
-;; ------------------------------------
 ;; 行番号表示
 ;; ------------------------------------
 (leaf display-line-numbers
@@ -1478,6 +1468,14 @@
 
 
 ;; ------------------------------------
+;; 各種マウス操作無効化
+;; ------------------------------------
+(leaf inhibit-mouse
+  :ensure t
+  :global-minor-mode t)
+
+
+;; ------------------------------------
 ;; インクリメンタル検索
 ;; ------------------------------------
 (leaf isearch
@@ -1592,8 +1590,7 @@
 (leaf lsp-pyright
   :ensure t
   :hook ((python-mode-hook . my-lsp-pyright-initialize))
-  :custom ((lsp-pyright-langserver-command . "uv run pyright")
-           (lsp-pyright-type-checking-mode . "strict")
+  :custom ((lsp-pyright-type-checking-mode . "strict")
            (lsp-pyright-basedpyright-inlay-hints-generic-types . t))
   :init
   (defun my-lsp-pyright-initialize ()
@@ -1947,6 +1944,7 @@
 ;; See also:
 ;; https://docs.jupyter.org/en/latest/
 ;; https://github.com/emacs-jupyter/jupyter
+;; https://docs.astral.sh/uv/guides/integration/jupyter/
 ;; ------------------------------------
 (leaf jupyter
   :ensure t)
