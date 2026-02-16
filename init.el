@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-16T13:25:46+09:00>
+;; Time-stamp: <2026-02-16T13:36:13+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -176,10 +176,6 @@
  ;; クリップボードと `kill-ring' を同期させる
  ;;
  '(select-enable-clipboard t)
- ;;
- ;; Yank (Paste) 時にプロパティを全破棄し、プレーンテキストを利用
- ;;
- '(yank-excluded-properties t)
  ;;
  ;; プレビューウインドウの表示を即時にする
  ;;
