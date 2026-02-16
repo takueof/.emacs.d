@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-14T17:29:00+09:00>
+;; Time-stamp: <2026-02-16T13:25:46+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1114,6 +1114,7 @@
              (global-company-mode nil "company")
              (global-flycheck-mode nil "flycheck")
              (global-whitespace-mode nil "whitespace")
+             (inibit-mouse-mode nil "inhibit-mouse")
              (js2-minor-mode nil "js2-mode")
              (lsp-mode nil "lsp-mode")
              (projectile-mode nil "projectile")
@@ -1947,7 +1948,20 @@
 ;; https://docs.astral.sh/uv/guides/integration/jupyter/
 ;; ------------------------------------
 (leaf jupyter
-  :ensure t)
+  :ensure t
+  :custom (;; HACK: ZMQ ではなく WebSocket を使う（ZMQ が不安定）
+           (jupyter-use-zmq . nil))
+  :config
+  ;; `uv' プロジェクトディレクトリで .venv/bin/jupyter を自動検出
+  (defun my-set-local-jupyter-command ()
+    "Set `jupyter-command' to project's .venv if it exists."
+    (when-let* ((venv-dir (locate-dominating-file default-directory ".venv"))
+                (jupyter-path (expand-file-name ".venv/bin/jupyter" venv-dir)))
+      (when (file-executable-p jupyter-path)
+        (setq-local jupyter-command jupyter-path)
+        (message "Using project jupyter: %s" jupyter-path))))
+  (add-hook 'python-mode-hook #'my-set-local-jupyter-command)
+  (add-hook 'jupyter-repl-mode-hook #'my-set-local-jupyter-command))
 
 
 ;; ------------------------------------
@@ -1984,6 +1998,23 @@
 ;; ------------------------------------
 (leaf php-mode
   :ensure t)
+
+
+;; ------------------------------------
+;; Python
+;; ------------------------------------
+(leaf python-mode
+  :config
+  ;; `uv' プロジェクトディレクトリで .venv/bin/python を自動検出
+  (defun my-set-local-python-shell-interpreter ()
+    "Set `python-shell-interpreter' to project's .venv if it exists."
+    (when-let* ((venv-dir (locate-dominating-file default-directory ".venv"))
+                (python-path (expand-file-name ".venv/bin/python" venv-dir)))
+      (when (file-executable-p python-path)
+        (setq-local python-shell-interpreter python-path)
+        (message "Using project python: %s" python-path))))
+  (add-hook 'python-mode-hook #'my-set-local-python-shell-interpreter)
+  (add-hook 'jupyter-repl-mode-hook #'my-set-local-python-shell-interpreter))
 
 
 ;; ------------------------------------
