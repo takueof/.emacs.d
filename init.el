@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-16T13:36:13+09:00>
+;; Time-stamp: <2026-02-16T14:35:54+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1680,6 +1680,15 @@
 
 
 ;; ------------------------------------
+;; マークアップフォーマット変換器
+;; ------------------------------------
+(leaf pandoc-mode
+  :ensure t
+  :hook ((pandoc-mode-hook . pandoc-load-default-settings)
+         (org-mode-hook . pandoc-mode)))
+
+
+;; ------------------------------------
 ;; 汎用プロジェクト管理
 ;; ------------------------------------
 (leaf projectile
@@ -1932,7 +1941,8 @@
 ;; JSON
 ;; ------------------------------------
 (leaf json-mode
-  :ensure t)
+  :ensure t
+  :mode (("\\.ipynb\\'" . json-mode)))
 
 
 ;; ------------------------------------
@@ -1986,7 +1996,9 @@
   :bind (("C-c o l" . org-store-link)
          ("C-c o a" . org-agenda)
          ("C-c o r" . org-capture))
-  :custom ((org-use-speed-commands . t)))
+  :custom ((org-use-speed-commands . t))
+  :config
+  (org-babel-do-load-languages 'org-babel-load-languages '((jupyter . t))))
 
 
 ;; ------------------------------------
