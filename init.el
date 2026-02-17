@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-17T19:38:52+09:00>
+;; Time-stamp: <2026-02-17T20:15:25+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -758,26 +758,6 @@
 ;; Minor modes
 ;; ============================================================================
 ;; ------------------------------------
-;; アクティビティ管理
-;; ------------------------------------
-(leaf activities
-  :disabled t
-  :ensure t
-  :bind (("C-c a n" . activities-new)
-         ("C-c a d" . activities-define)
-         ("C-c a a" . activities-resume)
-         ("C-c a s" . activities-save-all)
-         ("C-c a S" . activities-suspend)
-         ("C-c a k" . activities-kill)
-         ("C-c a RET" . activities-switch)
-         ("C-c a b" . activities-switch-buffer)
-         ("C-c a r" . activities-revert)
-         ("C-c a l" . activities-list))
-  :custom ((activities-set-frame-name . nil))
-  :global-minor-mode activities-mode)
-
-
-;; ------------------------------------
 ;; 非同期補完候補生成
 ;; ------------------------------------
 (leaf affe
@@ -1142,34 +1122,6 @@
 
 
 ;; ------------------------------------
-;; デスクトップ環境保存＆復旧
-;; ------------------------------------
-(leaf desktop
-  :bind (("C-c d C" . desktop-clear)
-         ("C-c d S" . desktop-save)
-         ("C-c d s" . desktop-save-in-desktop-dir)
-         ("C-c d D" . desktop-remove)
-         ("C-c d F" . desktop-change-dir)
-         ("C-c d r" . desktop-revert))
-  :custom ((desktop-load-locked-desktop . t)
-           (desktop-globals-to-save . '(;; 保存は必要最小限にする
-                                        search-ring
-                                        register-alist
-                                        file-name-history))
-           (desktop-locals-to-save . '(;; 保存は必要最小限にする
-                                       ;;
-                                       ;; WARNING: ソート厳禁！
-                                       ;;          正常に動作しなくなるため
-                                       desktop-locals-to-save ; 先頭＆必須
-                                       truncate-lines
-                                       case-fold-search
-                                       case-replace))
-           (desktop-lazy-verbose . nil)
-           (desktop-lazy-idle-delay . 5))
-  :global-minor-mode desktop-save-mode)
-
-
-;; ------------------------------------
 ;; 行番号表示
 ;; ------------------------------------
 (leaf display-line-numbers
@@ -1217,6 +1169,22 @@
   :when (executable-find "rg")
   :ensure t
   :hook (xref-backend-functions . dumber-jump-xref-activate))
+
+
+;; ------------------------------------
+;; セッション管理
+;; ------------------------------------
+(leaf easysession
+  :ensure t
+  :leaf-defer nil
+  :bind (("C-c d l" . easysession-switch-to-and-restore-geometry)
+         ("C-c d s" . easysession-save)
+         ("C-c d r" . easysession-rename)
+         ("C-c d R" . easysession-reset)
+         ("C-c d u" . easysession-unload)
+         ("C-c d d" . easysession-delete))
+  :config
+  (easysession-setup))
 
 
 ;; ------------------------------------
