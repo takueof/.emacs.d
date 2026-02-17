@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-16T14:35:54+09:00>
+;; Time-stamp: <2026-02-17T19:23:37+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1090,6 +1090,25 @@
 
 
 ;; ------------------------------------
+;; DAP (Debug Adapter Protocol)
+;; ------------------------------------
+(leaf dap-mode
+  :ensure t
+  :custom ((dap-python-debugger . 'debugpy))
+  :config
+  (dap-auto-configure-mode)
+  ;;
+  ;; Python
+  ;;
+  (leaf dap-mode-python
+    :hook ((python-mode-hook . my-dap-mode-python-hook))
+    :init
+    (defun my-dap-mode-python-hook ()
+      "Initialize `dap-mode' in `python-mode'"
+      (require 'dap-python nil :noerror))))
+
+
+;; ------------------------------------
 ;; モードラインからモードの表示を消す
 ;; ------------------------------------
 (leaf delight
@@ -1684,8 +1703,7 @@
 ;; ------------------------------------
 (leaf pandoc-mode
   :ensure t
-  :hook ((pandoc-mode-hook . pandoc-load-default-settings)
-         (org-mode-hook . pandoc-mode)))
+  :hook ((pandoc-mode-hook . pandoc-load-default-settings)))
 
 
 ;; ------------------------------------
