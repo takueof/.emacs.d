@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-17T20:15:25+09:00>
+;; Time-stamp: <2026-02-17T20:15:49+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -684,6 +684,14 @@
   :ensure t
   :bind (("C-x g" . magit-status))
   :custom ((auto-revert-buffer-list-filter . #'magit-auto-revert-buffer-p)))
+
+
+;; ============================================================================
+;; Git インターフェース拡張：GitHub CLI `gh' コマンド対応
+;; ============================================================================
+(leaf magit-gh
+  :ensure t
+  :after magit)
 
 
 ;; ============================================================================
