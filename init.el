@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-17T19:23:37+09:00>
+;; Time-stamp: <2026-02-17T19:26:01+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1129,7 +1129,7 @@
              (global-company-mode nil "company")
              (global-flycheck-mode nil "flycheck")
              (global-whitespace-mode nil "whitespace")
-             (inibit-mouse-mode nil "inhibit-mouse")
+             (inhibit-mouse-mode nil "inhibit-mouse")
              (js2-minor-mode nil "js2-mode")
              (lsp-mode nil "lsp-mode")
              (projectile-mode nil "projectile")
