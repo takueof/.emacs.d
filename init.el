@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-17T19:26:01+09:00>
+;; Time-stamp: <2026-02-17T19:27:56+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -781,8 +781,8 @@
 (leaf affe
   :ensure t
   :after (consult orderless)
-  :bind (("C-M-F" . affe-find)
-         ("C-M-G" . affe-grep))
+  :bind (("C-M-S-f" . affe-find)
+         ("C-M-S-g" . affe-grep))
   :custom ((affe-regexp-function . #'orderless-pattern-compiler)
            (affe-highlight-function . #'orderless--highlight)))
 
