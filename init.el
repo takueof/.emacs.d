@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-18T10:37:05+09:00>
+;; Time-stamp: <2026-02-18T10:54:16+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1091,11 +1091,20 @@
   ;; Python
   ;;
   (leaf dap-mode-python
-    :hook ((python-mode-hook . my-dap-mode-python-hook))
+    :hook ((python-mode-hook . my-dap-mode-python-hook)
+           (python-mode-hook . my-set-local-dap-python-executable))
     :init
     (defun my-dap-mode-python-hook ()
       "Initialize `dap-mode' in `python-mode'"
-      (require 'dap-python nil :noerror))))
+      (require 'dap-python nil :noerror))
+    ;; `uv' プロジェクトディレクトリで .venv/bin/python を自動検出
+    (defun my-set-local-dap-python-executable ()
+      "Set `dap-python-executable' to project's .venv if it exists."
+      (when-let* ((venv-dir (locate-dominating-file default-directory ".venv"))
+                  (python-path (expand-file-name ".venv/bin/python" venv-dir)))
+        (when (file-executable-p python-path)
+          (setq-local dap-python-executable python-path)
+          (message "Using project dap-python-executable: %s" python-path))))))
 
 
 ;; ------------------------------------
@@ -1955,9 +1964,11 @@
 ;; ------------------------------------
 (leaf jupyter
   :ensure t
+  :hook ((python-mode-hook . my-set-local-jupyter-command)
+         (jupyter-repl-mode-hook . my-set-local-jupyter-command))
   :custom (;; HACK: ZMQ ではなく WebSocket を使う（ZMQ が不安定）
            (jupyter-use-zmq . nil))
-  :config
+  :init
   ;; `uv' プロジェクトディレクトリで .venv/bin/jupyter を自動検出
   (defun my-set-local-jupyter-command ()
     "Set `jupyter-command' to project's .venv if it exists."
@@ -1965,9 +1976,7 @@
                 (jupyter-path (expand-file-name ".venv/bin/jupyter" venv-dir)))
       (when (file-executable-p jupyter-path)
         (setq-local jupyter-command jupyter-path)
-        (message "Using project jupyter: %s" jupyter-path))))
-  (add-hook 'python-mode-hook #'my-set-local-jupyter-command)
-  (add-hook 'jupyter-repl-mode-hook #'my-set-local-jupyter-command))
+        (message "Using project jupyter: %s" jupyter-path)))))
 
 
 ;; ------------------------------------
@@ -2012,7 +2021,9 @@
 ;; Python
 ;; ------------------------------------
 (leaf python-mode
-  :config
+  :hook ((python-mode-hook . my-set-local-python-shell-interpreter)
+         (jupyter-repl-mode-hook . my-set-local-python-shell-interpreter))
+  :init
   ;; `uv' プロジェクトディレクトリで .venv/bin/python を自動検出
   (defun my-set-local-python-shell-interpreter ()
     "Set `python-shell-interpreter' to project's .venv if it exists."
@@ -2020,9 +2031,7 @@
                 (python-path (expand-file-name ".venv/bin/python" venv-dir)))
       (when (file-executable-p python-path)
         (setq-local python-shell-interpreter python-path)
-        (message "Using project python: %s" python-path))))
-  (add-hook 'python-mode-hook #'my-set-local-python-shell-interpreter)
-  (add-hook 'jupyter-repl-mode-hook #'my-set-local-python-shell-interpreter))
+        (message "Using project python: %s" python-path)))))
 
 
 ;; ------------------------------------
