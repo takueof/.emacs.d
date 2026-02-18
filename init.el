@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-17T21:17:35+09:00>
+;; Time-stamp: <2026-02-18T10:37:05+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1109,6 +1109,7 @@
              (auto-dim-other-buffers-mode nil "auto-dim-other-buffers")
              (company-mode nil "company")
              (company-box-mode nil "company-box")
+             (easysession-save-mode nil "easysession")
              (editorconfig-mode nil "editorconfig")
              (eldoc-mode nil "eldoc")
              (flycheck-mode nil "flycheck")
