@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-18T10:54:16+09:00>
+;; Time-stamp: <2026-02-20T15:14:36+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1084,7 +1084,12 @@
 ;; ------------------------------------
 (leaf dap-mode
   :ensure t
-  :custom ((dap-python-debugger . 'debugpy))
+  :custom ((dap-auto-configure-features . '(sessions
+                                            locals
+                                            breakpoints
+                                            expressions
+                                            tooltip))
+           (dap-python-debugger . 'debugpy))
   :config
   (dap-auto-configure-mode)
   ;;
