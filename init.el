@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-24T13:55:30+09:00>
+;; Time-stamp: <2026-02-24T14:13:08+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -181,7 +181,7 @@
  ;;
  '(register-preview-delay nil)
  ;;
- ;; スクロール時、自動スクロールをアグレッシブにする
+ ;; スクロール時、自動スクロールをアグレッシブにしない
  ;;
  ;; See also:
  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Scrolling.html
@@ -216,17 +216,17 @@
  ;;
  '(line-move-visual t)
  ;;
- ;; デフォルトの行表示は折り返し「なし」
+ ;; 行表示は折り返さない
  ;;
  '(truncate-lines t)
  '(truncate-partial-width-windows t)
  '(default-truncate-lines t)
  ;;
- ;; デフォルトの行文字数を、端末エミュレータのデファクトスタンダードにあわせる
+ ;; 行文字数を、端末エミュレータのデファクトスタンダードにあわせる
  ;;
  '(fill-column 80)
  ;;
- ;; デフォルトのインデント利用文字は、常に半角空白 (U+0020) のみ
+ ;; インデント利用文字は、常に半角空白 (U+0020) のみとする
  ;; 必要なら各メジャーモードごとに設定しなおす
  ;;
  '(indent-tabs-mode nil)
@@ -246,12 +246,11 @@
  '(read-buffer-completion-ignore-case t)
  '(read-file-name-completion-ignore-case t)
  ;;
- ;; 新規ファイル／バッファ作成時の確認は省略する
+ ;; 新規ファイル／バッファ作成時の確認を省略する
  ;;
  '(confirm-nonexistent-file-or-buffer nil)
  ;;
  ;; 最終行への改行（空行）挿入を強制させる
- ;;
  ;; 不要なら各メジャーモードごとに設定させる
  ;;
  '(require-final-newline t)
@@ -262,13 +261,13 @@
  '(undo-limit 600000)
  '(undo-strong-limit 900000) ; (= 1.5 (/ undo-strong-limit undo-limit)) を踏襲
  ;;
- ;; 自動バックアップは不要なので無効化する
+ ;; 自動バックアップを無効にする
  ;;
  '(auto-save-default nil)
  '(make-backup-files nil)
  `(auto-save-list-file-prefix ,(convert-standard-filename "~/.emacs.auto-save-list/.saves-")) ; ローカル環境化
  ;;
- ;; ロックファイルは不要なので無効化する
+ ;; ロックファイルを無効にする
  ;;
  '(create-lockfiles nil)
  ;;
