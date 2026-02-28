@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-01T00:54:53+09:00>
+;; Time-stamp: <2026-03-01T00:55:30+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -799,19 +799,39 @@
 ;; ------------------------------------
 (leaf apheleia
   :ensure t
+  :hook ((apheleia-mode-hook . my-apheleia-initialize))
   :custom ((apheleia-mode-lighter . ""))
+  :init
+  (defun my-apheleia-initialize ()
+    "Initialize `apheleia' before load."
+    ;; `uv' プロジェクトディレクトリで .venv/bin/ruff を自動検出
+    (when-let* ((venv-dir (locate-dominating-file default-directory ".venv"))
+                (ruff-path (expand-file-name ".venv/bin/ruff" venv-dir)))
+      (when (file-executable-p ruff-path)
+        (let ((local-apheleia-formatters (copy-tree apheleia-formatters)))
+          (setcar (member "ruff" (assoc 'ruff local-apheleia-formatters)) ruff-path)
+          (setcar (member "ruff" (assoc 'ruff-isort local-apheleia-formatters)) ruff-path)
+          (setq-local apheleia-formatters local-apheleia-formatters)
+          (message "Using project ruff: %s" ruff-path)))))
   :defer-config
-  ;; JavaScript パーサーを "babel-flow" から "typescript" に変更する
+  ;;
+  ;; JavaScript
+  ;;
+  ;; パーサーを "babel-flow" から "typescript" に変更する
   ;;
   ;; See also:
   ;; https://prettier.io/docs/options#parser
-  (add-to-list 'apheleia-formatters '(prettier-javascript
-                                      . ("apheleia-npx" "prettier" "--stdin-filepath" filepath
-                                         "--parser=typescript"
-                                         (apheleia-formatters-js-indent "--use-tabs" "--tab-width"))))
-  ;; Python フォーマッタを `black' から `ruff' に変更する
-  (add-to-list 'apheleia-mode-alist '(python-mode . ruff))
-  (add-to-list 'apheleia-mode-alist '(python-ts-mode . ruff))
+  (ignore-errors ; "--parser=babel-flow" がなければ何もしない
+    (setcar (member "--parser=babel-flow" (assoc 'prettier-javascript apheleia-formatters)) "--parser=typescript"))
+  ;;
+  ;; Python
+  ;;
+  ;; フォーマッターを `black' から `ruff-isort' → `ruff' 実行に変更する
+  ;;
+  ;; See also:
+  ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Association-Lists.html
+  (setcdr (assoc 'python-mode apheleia-mode-alist) '(ruff-isort ruff))
+  (setcdr (assoc 'python-ts-mode apheleia-mode-alist) '(ruff-isort ruff))
   :global-minor-mode apheleia-global-mode)
 
 
