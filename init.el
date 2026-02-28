@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-01T00:41:44+09:00>
+;; Time-stamp: <2026-03-01T00:48:39+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -881,7 +881,7 @@
            (comint-eol-on-send . t))
   :init
   (defun my-comint-mode-initialize ()
-    "Initialize `comint-mode'."
+    "Initialize `comint-mode' before load."
     (setq-local comint-input-sender-no-newline t))
   ;; プロセスごとのコーディングシステム変換表を追加する
   ;;
@@ -1095,15 +1095,12 @@
   ;; Python
   ;;
   (leaf dap-mode-python
-    :hook ((python-mode-hook . my-dap-mode-python-hook)
-           (python-mode-hook . my-set-local-dap-python-executable))
+    :hook ((python-mode-hook . my-dap-mode-python-initialize))
     :init
-    (defun my-dap-mode-python-hook ()
-      "Initialize `dap-mode' in `python-mode'"
-      (require 'dap-python nil :noerror))
-    ;; `uv' プロジェクトディレクトリで .venv/bin/python を自動検出
-    (defun my-set-local-dap-python-executable ()
-      "Set `dap-python-executable' to project's .venv if it exists."
+    (defun my-dap-mode-python-initialize ()
+      "Initialize `dap-mode' before load in `python-mode'."
+      (require 'dap-python nil :noerror)
+      ;; `uv' プロジェクトディレクトリで .venv/bin/python を自動検出
       (when-let* ((venv-dir (locate-dominating-file default-directory ".venv"))
                   (python-path (expand-file-name ".venv/bin/python" venv-dir)))
         (when (file-executable-p python-path)
@@ -1159,9 +1156,9 @@
           ("r" . #'wdired-change-to-wdired-mode)))
   :custom ((dired-kill-when-opening-new-dired-buffer . t)
            (wdired-allow-to-change-permissions . 'advanced))
-  :config
+  :init
   (defun my-dired-mode-initialize ()
-    "Initialize `dired-mode'."
+    "Initialize `dired-mode' before load."
     ;; 常にすべての情報を表示する（簡易モードにしない）
     (dired-hide-details-mode -1)
     ;; `windmove' を機能させる
@@ -1844,7 +1841,7 @@
                                             (tab-mark ?\t [?» ?\t] [?\\ ?\t]))))
   :init
   (defun my-whitespace-mode-initialize ()
-    "Initialize `whitespace'."
+    "Initialize `whitespace' before load."
     ;; --------------------------------
     ;; HACK: 一部メジャーモードでは無効にする
     ;; --------------------------------
@@ -1963,14 +1960,14 @@
 ;; ------------------------------------
 (leaf jupyter
   :ensure t
-  :hook ((python-mode-hook . my-set-local-jupyter-command)
-         (jupyter-repl-mode-hook . my-set-local-jupyter-command))
+  :hook ((python-mode-hook . my-jupyter-initialize)
+         (jupyter-repl-mode-hook . my-jupyter-initialize))
   :custom (;; HACK: ZMQ ではなく WebSocket を使う（ZMQ が不安定）
            (jupyter-use-zmq . nil))
   :init
-  ;; `uv' プロジェクトディレクトリで .venv/bin/jupyter を自動検出
-  (defun my-set-local-jupyter-command ()
-    "Set `jupyter-command' to project's .venv if it exists."
+  (defun my-jupyter-initialize ()
+    "Initialize `jupyter' before load."
+    ;; `uv' プロジェクトディレクトリで .venv/bin/jupyter を自動検出
     (when-let* ((venv-dir (locate-dominating-file default-directory ".venv"))
                 (jupyter-path (expand-file-name ".venv/bin/jupyter" venv-dir)))
       (when (file-executable-p jupyter-path)
@@ -2020,12 +2017,12 @@
 ;; Python
 ;; ------------------------------------
 (leaf python-mode
-  :hook ((python-mode-hook . my-set-local-python-shell-interpreter)
-         (jupyter-repl-mode-hook . my-set-local-python-shell-interpreter))
+  :hook ((python-mode-hook . my-python-mode-initialize)
+         (jupyter-repl-mode-hook . my-python-mode-initialize))
   :init
-  ;; `uv' プロジェクトディレクトリで .venv/bin/python を自動検出
-  (defun my-set-local-python-shell-interpreter ()
-    "Set `python-shell-interpreter' to project's .venv if it exists."
+  (defun my-python-mode-initialize ()
+    "Initialize `python-mode' before load."
+    ;; `uv' プロジェクトディレクトリで .venv/bin/python を自動検出
     (when-let* ((venv-dir (locate-dominating-file default-directory ".venv"))
                 (python-path (expand-file-name ".venv/bin/python" venv-dir)))
       (when (file-executable-p python-path)
