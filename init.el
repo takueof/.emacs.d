@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-01T00:55:30+09:00>
+;; Time-stamp: <2026-03-01T01:44:05+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -799,7 +799,7 @@
 ;; ------------------------------------
 (leaf apheleia
   :ensure t
-  :hook ((apheleia-mode-hook . my-apheleia-initialize))
+  :hook ((apheleia-mode-on-hook . my-apheleia-initialize))
   :custom ((apheleia-mode-lighter . ""))
   :init
   (defun my-apheleia-initialize ()
@@ -808,11 +808,12 @@
     (when-let* ((venv-dir (locate-dominating-file default-directory ".venv"))
                 (ruff-path (expand-file-name ".venv/bin/ruff" venv-dir)))
       (when (file-executable-p ruff-path)
-        (let ((local-apheleia-formatters (copy-tree apheleia-formatters)))
-          (setcar (member "ruff" (assoc 'ruff local-apheleia-formatters)) ruff-path)
-          (setcar (member "ruff" (assoc 'ruff-isort local-apheleia-formatters)) ruff-path)
-          (setq-local apheleia-formatters local-apheleia-formatters)
-          (message "Using project ruff: %s" ruff-path)))))
+        (with-eval-after-load 'apheleia-formatters
+          (let ((local-apheleia-formatters (copy-tree apheleia-formatters)))
+            (setcar (member "ruff" (assoc 'ruff local-apheleia-formatters)) ruff-path)
+            (setcar (member "ruff" (assoc 'ruff-isort local-apheleia-formatters)) ruff-path)
+            (setq-local apheleia-formatters local-apheleia-formatters)
+            (message "Using project ruff: %s" ruff-path))))))
   :defer-config
   ;;
   ;; JavaScript
