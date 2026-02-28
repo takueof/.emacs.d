@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-24T14:13:08+09:00>
+;; Time-stamp: <2026-02-28T16:32:01+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1704,12 +1704,11 @@
 (leaf projectile
   :ensure t
   :bind ((:projectile-mode-map
-          ("C-." . projectile-next-project-buffer)
-          ("C-," . projectile-previous-project-buffer)))
+          ("C-;" . projectile-next-project-buffer)
+          ("C-:" . projectile-previous-project-buffer)))
   :custom `((projectile-enable-caching . t)
             (projectile-completion-system . ',(cond ((featurep 'ido) 'ido)
                                                     (t 'default)))
-            (projectile-keymap-prefix . ,(kbd "C-c C-p"))
             ;; ローカル環境にのみ保存させる
             (projectile-cache-file . "~/.emacs.projectile.cache")
             (projectile-known-projects-file . "~/.emacs.projectile-bookmarks.eld"))
