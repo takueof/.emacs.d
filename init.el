@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-28T16:32:01+09:00>
+;; Time-stamp: <2026-02-28T16:36:35+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1562,26 +1562,6 @@
                                         ;; https://discord.com/channels/789885435026604033/1167077517157470278/1174364060712714310
                                         ;; https://github.com/microsoft/vscode-eslint/issues/1518#issuecomment-1319753092
                                         (useFlatConfig . true)))))
-
-
-;; ------------------------------------
-;; LSP 拡張：Python（型検査）
-;; ------------------------------------
-;; `lsp-mode' が自動ロード「しない」
-;;
-;; See also:
-;; https://github.com/emacs-lsp/lsp-pyright
-;; ------------------------------------
-(leaf lsp-pyright
-  :ensure t
-  :hook ((python-mode-hook . my-lsp-pyright-initialize))
-  :custom ((lsp-pyright-type-checking-mode . "strict")
-           (lsp-pyright-basedpyright-inlay-hints-generic-types . t))
-  :init
-  (defun my-lsp-pyright-initialize ()
-    "Initialize `lsp-pyright'."
-    (require 'lsp-pyright nil :noerror)
-    (lsp-deferred)))
 
 
 ;; ------------------------------------
