@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-02-28T16:36:35+09:00>
+;; Time-stamp: <2026-03-01T00:41:44+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -1510,6 +1510,7 @@
          (js-mode-hook . lsp-deferred)
          (json-mode-hook . lsp-deferred)
          (markdown-mode-hook . lsp-deferred)
+         (python-mode-hook . lsp-deferred)
          (scss-mode-hook . lsp-deferred)
          (web-mode-hook . lsp-deferred)
          (yaml-mode-hook . lsp-deferred))
@@ -1595,6 +1596,24 @@
 (leaf lsp-tailwindcss
   :ensure t
   :custom ((lsp-tailwindcss-add-on-mode . t)))
+
+
+;; ------------------------------------
+;; LSP 拡張：ty（Python 型チェッカー）
+;; ------------------------------------
+;; `lsp-mode' が自動ロードする
+;; ------------------------------------
+(leaf lsp-python-ty
+  :hook ((python-mode-hook . my-lsp-python-ty-initialize))
+  :init
+  (defun my-lsp-python-ty-initialize ()
+    "Initialize `lsp-python-ty' before load."
+    ;; `uv' プロジェクトディレクトリで .venv/bin/ty を自動検出
+    (when-let* ((venv-dir (locate-dominating-file default-directory ".venv"))
+                (ty-path (expand-file-name ".venv/bin/ty" venv-dir)))
+      (when (file-executable-p ty-path)
+        (setq-local lsp-python-ty-clients-server-command `(,ty-path "server"))
+        (message "Using project ty: %s" ty-path)))))
 
 
 ;; ------------------------------------
