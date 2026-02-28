@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-01T01:44:05+09:00>
+;; Time-stamp: <2026-03-01T01:49:24+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -917,7 +917,6 @@
 ;; ------------------------------------
 (leaf company
   :ensure t
-  :hook ((after-init-hook . global-company-mode))
   :custom (;; `company'
            (company-tooltip-limit . 20)
            (company-tooltip-minimum . 10)
@@ -948,7 +947,8 @@
                                            scss-mode))
            (company-dabbrev-code-other-buffers . t)
            (company-dabbrev-code-everywhere . t)
-           (company-dabbrev-code-ignore-case . t)))
+           (company-dabbrev-code-ignore-case . t))
+  :global-minor-mode global-company-mode)
 
 
 ;; ------------------------------------
