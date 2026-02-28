@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-01T00:51:45+09:00>
+;; Time-stamp: <2026-03-01T00:54:53+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -988,9 +988,8 @@
     "Created buffer names by `compile' command."
     :group 'compilation
     :type '(list (repeat string)))
-  ;; `process-status' と `exit-status' の値も得たいので、アドバイスを利用する
-  ;; `compilation-finish-functions' にフックした関数では `msg' しか
-  ;; 参照できないため
+  ;; NOTE: `compilation-finish-functions' にフックするだけでは、
+  ;;       `msg' しか参照できない
   (defun my-compilation-auto-quit-window (process-status exit-status msg)
     "Run `quit-window' when `compile' successed."
     (if (and (member (buffer-name)
@@ -1000,6 +999,7 @@
                  ;; 改行文字が含まれうる問題を回避する
                  (string-equal "finished" (string-trim msg))))
         (quit-window nil (get-buffer-window))))
+  ;; HACK: アドバイス経由で `process-status' と `exit-status' を得る
   (advice-add #'compilation-handle-exit
               :after
               #'my-compilation-auto-quit-window))
