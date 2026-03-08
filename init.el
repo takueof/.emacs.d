@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-08T23:46:09+09:00>
+;; Time-stamp: <2026-03-08T23:46:52+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -722,23 +722,19 @@
 (leaf vterm
   :unless (member system-type '(ms-dos windows-nt))
   :ensure t
-  :bind (("C-`" . vterm-toggle)
-         (:vterm-mode-map
-          ("C-y" . vterm-yank) ; なぜかデフォルトで割当済なのに機能していない
-          ("C-RET" . vterm-toggle-insert-cd)))
-  :custom ((vterm-shell . "bash")
+  :bind (("C-`" . vterm-toggle))
+  :custom ((vterm-buffer-name-string . "vterm - %s")
            (vterm-max-scrollback . 100000)
-           (vterm-enable-manipulate-selection-data-by-osc52 . t)
-           (vterm-buffer-name-string . "vterm - %s"))
+           (vterm-shell . "bash"))
   :defer-config
   ;; WARNING: 確実に `vterm-keymap-exceptions' が存在する状態で「追加」しないと
   ;;          他のキーバインドに影響が出る
   ;;
-  ;; For `windmove'
-  (add-to-list 'vterm-keymap-exceptions "C-S-b" t)
-  (add-to-list 'vterm-keymap-exceptions "C-S-f" t)
-  (add-to-list 'vterm-keymap-exceptions "C-S-n" t)
-  (add-to-list 'vterm-keymap-exceptions "C-S-p" t))
+  ;; For `windmove':
+  (add-to-list 'vterm-keymap-exceptions "C-S-b")
+  (add-to-list 'vterm-keymap-exceptions "C-S-f")
+  (add-to-list 'vterm-keymap-exceptions "C-S-n")
+  (add-to-list 'vterm-keymap-exceptions "C-S-p"))
 
 
 ;; ============================================================================
