@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-11T09:11:55+09:00>
+;; Time-stamp: <2026-03-11T11:45:09+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -657,11 +657,14 @@
 ;; ============================================================================
 (leaf diff-hl
   :ensure t
-  :bind (("C-c v n" . diff-hl-next-hunk)
+  :bind (("C-c v g" . diff-hl-diff-goto-hunk)
+         ("C-c v n" . diff-hl-next-hunk)
          ("C-c v p" . diff-hl-previous-hunk)
          ("C-c v r" . diff-hl-revert-hunk)
          ("C-c v v" . diff-hl-show-hunk))
   :hook ((magit-post-refresh-hook . diff-hl-magit-post-refresh))
+  :custom `((diff-hl-update-async . 'thread)
+            (diff-hl-command-prefix . ,(kbd "C-c v")))
   :config
   (diff-hl-dired-mode +1)
   (diff-hl-margin-mode +1)
