@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-15T09:45:23+09:00>
+;; Time-stamp: <2026-03-15T09:48:38+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -455,6 +455,8 @@
   (keyboard-translate ?\C-h ?\C-?)
   ;; <DEL> を <C-d> にする
   (keyboard-translate ?\C-? ?\C-d)
+  ;; 誤字の元になる `transpose-chars' 実行を抑制する
+  (global-unset-key (kbd "C-t"))
   ;; `ido-undo-merge-work-directory' 実行のため <C-z> を押しすぎた場合、
   ;; `suspend-frame' が起動しないよう配慮する
   (global-unset-key (kbd "C-z"))
