@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-15T09:48:38+09:00>
+;; Time-stamp: <2026-03-15T09:57:34+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -727,7 +727,9 @@
 (leaf vterm
   :unless (member system-type '(ms-dos windows-nt))
   :ensure t
-  :bind (("C-`" . vterm-toggle))
+  :bind (("C-`" . vterm-toggle)
+         (:vterm-mode-map
+          ("C-t" . vterm-other-window)))
   :custom ((vterm-buffer-name-string . "vterm - %s")
            (vterm-copy-mode-remove-fake-newlines . t)
            (vterm-max-scrollback . 100000)
