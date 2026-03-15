@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-15T10:01:52+09:00>
+;; Time-stamp: <2026-03-15T10:13:04+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -413,6 +413,16 @@
            (server-auth-dir . "~/.emacs.server"))
   :config
   (server-start t))
+
+
+;; ============================================================================
+;; 認証
+;; ============================================================================
+(leaf auth-source
+  :defer-config
+  (when (member system-type '(darwin))
+    (add-to-list 'auth-sources 'macos-keychain-internet)
+    (add-to-list 'auth-sources 'macos-keychain-generic)))
 
 
 ;; ============================================================================
