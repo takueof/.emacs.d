@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-15T10:13:04+09:00>
+;; Time-stamp: <2026-03-15T20:49:33+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1095,7 +1095,7 @@
            (corfu-auto-delay . 0)
            (corfu-auto-prefix . 1)
            (corfu-popupinfo-delay . nil))
-  :bind ((corfu-map
+  :bind ((:corfu-map
           ("C-s" . corfu-insert-separator)))
   :global-minor-mode global-corfu-mode corfu-popupinfo-mode)
 
@@ -1182,7 +1182,7 @@
 ;; ------------------------------------
 (leaf dired
   :hook ((dired-mode-hook . my-dired-mode-initialize))
-  :bind ((dired-mode-map
+  :bind ((:dired-mode-map
           ("r" . #'wdired-change-to-wdired-mode)))
   :custom ((dired-kill-when-opening-new-dired-buffer . t)
            (wdired-allow-to-change-permissions . 'advanced))
@@ -1277,7 +1277,7 @@
 (leaf embark-consult
   :ensure t
   :after consult
-  :bind ((minibuffer-mode-map
+  :bind ((:minibuffer-mode-map
           :package emacs
           ("M-." . embark-dwim)
           ("C-." . embark-act)))
