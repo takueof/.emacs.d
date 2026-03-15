@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-11T11:45:09+09:00>
+;; Time-stamp: <2026-03-15T09:45:23+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -727,17 +727,18 @@
   :ensure t
   :bind (("C-`" . vterm-toggle))
   :custom ((vterm-buffer-name-string . "vterm - %s")
+           (vterm-copy-mode-remove-fake-newlines . t)
            (vterm-max-scrollback . 100000)
            (vterm-shell . "bash"))
   :defer-config
-  ;; WARNING: 確実に `vterm-keymap-exceptions' が存在する状態で「追加」しないと
-  ;;          他のキーバインドに影響が出る
+  ;; WARNING: 確実に `vterm-keymap-exceptions' が存在する状態で
+  ;;          「リストの末尾に追加」しないと他のキーバインドに影響が出る
   ;;
   ;; For `windmove':
-  (add-to-list 'vterm-keymap-exceptions "C-S-b")
-  (add-to-list 'vterm-keymap-exceptions "C-S-f")
-  (add-to-list 'vterm-keymap-exceptions "C-S-n")
-  (add-to-list 'vterm-keymap-exceptions "C-S-p"))
+  (add-to-list 'vterm-keymap-exceptions "C-S-b" t)
+  (add-to-list 'vterm-keymap-exceptions "C-S-f" t)
+  (add-to-list 'vterm-keymap-exceptions "C-S-n" t)
+  (add-to-list 'vterm-keymap-exceptions "C-S-p" t))
 
 
 ;; ============================================================================
@@ -1088,9 +1089,8 @@
 ;; ------------------------------------
 ;; 矩形選択
 ;; ------------------------------------
-(leaf cua-base
-  ;; 特殊キーバインドを無効化する
-  :global-minor-mode cua-selection-mode)
+(leaf rect
+  :bind ("C-<return>" . rectangle-mark-mode))
 
 
 ;; ------------------------------------
