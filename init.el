@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-15T09:57:34+09:00>
+;; Time-stamp: <2026-03-15T10:01:52+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1091,13 +1091,6 @@
 
 
 ;; ------------------------------------
-;; 矩形選択
-;; ------------------------------------
-(leaf rect
-  :bind ("C-<return>" . rectangle-mark-mode))
-
-
-;; ------------------------------------
 ;; バッファ内マッチ補完
 ;; ------------------------------------
 (leaf dabbrev
@@ -1758,6 +1751,13 @@
            (recentf-max-saved-items . 20)
            ;; ローカル環境にのみ保存させる
            (recentf-save-file . "~/.emacs.recentf.el")))
+
+
+;; ------------------------------------
+;; 矩形選択
+;; ------------------------------------
+(leaf rect
+  :bind ("C-<return>" . rectangle-mark-mode))
 
 
 ;; ------------------------------------
