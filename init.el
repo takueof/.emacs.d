@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-15T20:49:33+09:00>
+;; Time-stamp: <2026-03-22T22:24:57+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1101,6 +1101,31 @@
 
 
 ;; ------------------------------------
+;; CUA 標準キー（と矩形選択サポート）
+;; ------------------------------------
+(leaf cua-mode
+  :custom ((cua-enable-cua-keys . nil)
+           (cua-remap-control-v . nil)
+           (cua-remap-control-z . nil)
+           (cua-prefix-override-inhibit-delay . nil)
+           (cua-enable-register-prefix . nil)
+           (cua-check-pending-input . nil))
+  :init
+  (defun my-fix-error-cua-mode-in-vterm (f &rest args)
+    "Fix error to use `cua-mode' in `vterm'.
+F is inner function in `cua-mode', ARGS are F arguments."
+    (if buffer-read-only
+        (prog2
+            (setq-local buffer-read-only nil)
+            (apply f args) ; Support return values
+          (setq-local buffer-read-only t))
+      (apply f args)))
+  :advice ((:around cua-cut-region my-fix-error-cua-mode-in-vterm)
+           (:around cua-paste my-fix-error-cua-mode-in-vterm))
+  :global-minor-mode cua-selection-mode)
+
+
+;; ------------------------------------
 ;; バッファ内マッチ補完
 ;; ------------------------------------
 (leaf dabbrev
@@ -1761,13 +1786,6 @@
            (recentf-max-saved-items . 20)
            ;; ローカル環境にのみ保存させる
            (recentf-save-file . "~/.emacs.recentf.el")))
-
-
-;; ------------------------------------
-;; 矩形選択
-;; ------------------------------------
-(leaf rect
-  :bind ("C-<return>" . rectangle-mark-mode))
 
 
 ;; ------------------------------------
