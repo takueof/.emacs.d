@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-22T22:26:36+09:00>
+;; Time-stamp: <2026-03-23T04:38:10+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -2043,18 +2043,13 @@ F is inner function in `cua-mode', ARGS are F arguments."
 ;; ------------------------------------
 (leaf markdown-mode
   :ensure t
-  :mode (("\\.mdx\\'" . markdown-mode))
-  :custom `((markdown-command . ,(or (executable-find "pandoc")
-                                     "markdown"))
+  :custom `((markdown-coding-system . 'utf-8-unix)
             (markdown-enable-highlighting-syntax . t)
-            (markdown-coding-system . 'utf-8-unix)
-            (markdown-split-window-direction . 'right)
+            (markdown-fontify-code-blocks-natively . t)
             (markdown-fontify-whole-heading-line . t)
-            (markdown-fontify-code-blocks-natively . t))
-  :config
-  ;; プレーンテキストファイルは除外する
-  (setq auto-mode-alist
-        (delete '("\\.text\\'" . markdown-mode) auto-mode-alist)))
+            (markdown-open-command . ,(if (functionp 'arto-open)
+                                          ''arto-open
+                                        nil))))
 
 
 ;; ------------------------------------
