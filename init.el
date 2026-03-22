@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-22T22:24:57+09:00>
+;; Time-stamp: <2026-03-22T22:26:36+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -851,6 +851,13 @@
   (setcdr (assoc 'python-mode apheleia-mode-alist) '(ruff-isort ruff))
   (setcdr (assoc 'python-ts-mode apheleia-mode-alist) '(ruff-isort ruff))
   :global-minor-mode apheleia-global-mode)
+
+
+;; ------------------------------------
+;; Markdown リーダー (macOS ONLY)
+;; ------------------------------------
+(leaf arto
+  :vc (:url "https://github.com/arto-app/arto.el" :rev :newest))
 
 
 ;; ------------------------------------
