@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-23T04:38:10+09:00>
+;; Time-stamp: <2026-03-25T19:02:49+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1025,7 +1025,6 @@
                                'compilation-mode-line-exit
                              'compilation-mode-line-fail)))))
   (add-to-list 'compilation-finish-functions 'my-compilation-message)
-  :config
   ;; ----------------------------------
   ;; HACK: コンパイル完了後、正常に終了していれば自動でウインドウを閉じる
   ;; ----------------------------------
@@ -1044,10 +1043,8 @@
                  ;; 改行文字が含まれうる問題を回避する
                  (string-equal "finished" (string-trim msg))))
         (quit-window nil (get-buffer-window))))
-  ;; HACK: アドバイス経由で `process-status' と `exit-status' を得る
-  (advice-add #'compilation-handle-exit
-              :after
-              #'my-compilation-auto-quit-window))
+  :advice (;; HACK: アドバイス経由で `process-status' と `exit-status' を得る
+           (:after compilation-handle-exit my-compilation-auto-quit-window)))
 
 
 ;; ------------------------------------
