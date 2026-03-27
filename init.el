@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-25T19:02:49+09:00>
+;; Time-stamp: <2026-03-27T10:28:31+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -740,10 +740,17 @@
   :bind (("C-`" . vterm-toggle)
          (:vterm-mode-map
           ("C-t" . vterm-other-window)))
+  :hook ((vterm-mode-hook . my-vterm-initialize))
   :custom ((vterm-buffer-name-string . "vterm - %s")
            (vterm-copy-mode-remove-fake-newlines . t)
            (vterm-max-scrollback . 100000)
            (vterm-shell . "bash"))
+  :init
+  (defun my-vterm-initialize ()
+    "Initialize `vterm' before load."
+    ;; 干渉する minor-mode を無効にする
+    (setq-local cua-mode nil)
+    (setq-local undo-fu-mode nil))
   :defer-config
   ;; WARNING: 確実に `vterm-keymap-exceptions' が存在する状態で
   ;;          「リストの末尾に追加」しないと他のキーバインドに影響が出る
@@ -1114,18 +1121,6 @@
            (cua-prefix-override-inhibit-delay . nil)
            (cua-enable-register-prefix . nil)
            (cua-check-pending-input . nil))
-  :init
-  (defun my-fix-error-cua-mode-in-vterm (f &rest args)
-    "Fix error to use `cua-mode' in `vterm'.
-F is inner function in `cua-mode', ARGS are F arguments."
-    (if buffer-read-only
-        (prog2
-            (setq-local buffer-read-only nil)
-            (apply f args) ; Support return values
-          (setq-local buffer-read-only t))
-      (apply f args)))
-  :advice ((:around cua-cut-region my-fix-error-cua-mode-in-vterm)
-           (:around cua-paste my-fix-error-cua-mode-in-vterm))
   :global-minor-mode cua-selection-mode)
 
 
