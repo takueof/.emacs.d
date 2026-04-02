@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-03-27T10:28:31+09:00>
+;; Time-stamp: <2026-04-02T10:01:19+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1250,8 +1250,8 @@
 (leaf easysession
   :ensure t
   :leaf-defer nil
-  :bind (("C-c d l" . easysession-switch-to-and-restore-geometry)
-         ("C-c d L" . easysession-switch-to)
+  :bind (("C-c d l" . easysession-switch-to)
+         ("C-c d L" . easysession-switch-to-and-restore-geometry)
          ("C-c d s" . easysession-save)
          ("C-c d r" . easysession-rename)
          ("C-c d R" . easysession-reset)
