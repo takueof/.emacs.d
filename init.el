@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-02T10:01:19+09:00>
+;; Time-stamp: <2026-04-06T08:28:01+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -864,6 +864,7 @@
 ;; Markdown リーダー (macOS ONLY)
 ;; ------------------------------------
 (leaf arto
+  :when (executable-find "arto")
   :vc (:url "https://github.com/arto-app/arto.el" :rev :newest))
 
 
@@ -1401,7 +1402,6 @@
          (js2-mode-hook . flyspell-prog-mode)
          (lisp-interaction-mode-hook . flyspell-prog-mode)
          (lisp-mode-hook . flyspell-prog-mode)
-         (php-mode-hook . flyspell-prog-mode)
          (python-mode-hook . flyspell-prog-mode)
          (scss-mode-hook . flyspell-prog-mode)
          (web-mode-hook . flyspell-prog-mode))
@@ -1552,8 +1552,7 @@
 ;; LSP (Language Server Protocol) クライアント
 ;;
 ;; See also:
-;; https://microsoft.github.io/language-server-protocol/
-;; https://langserver.org/
+;; https://emacs-lsp.github.io/lsp-mode/page/languages/
 ;; ------------------------------------
 (leaf lsp-mode
   :ensure t
@@ -1565,6 +1564,7 @@
          (python-mode-hook . lsp-deferred)
          (scss-mode-hook . lsp-deferred)
          (web-mode-hook . lsp-deferred)
+         (nxml-mode-hook . lsp-deferred)
          (yaml-mode-hook . lsp-deferred))
   :custom (;;
            ;; `lsp-mode'
@@ -1742,14 +1742,6 @@
 
 
 ;; ------------------------------------
-;; マークアップフォーマット変換器
-;; ------------------------------------
-(leaf pandoc-mode
-  :ensure t
-  :hook ((pandoc-mode-hook . pandoc-load-default-settings)))
-
-
-;; ------------------------------------
 ;; 汎用プロジェクト管理
 ;; ------------------------------------
 (leaf projectile
@@ -1919,16 +1911,6 @@
 ;; Major modes
 ;; ============================================================================
 ;; ------------------------------------
-;; Apache
-;; ------------------------------------
-(leaf apache-mode
-  :ensure t
-  :mode (("\\.conf\\'" . apache-mode))
-  :config
-  (setq-local apache-indent-level 4))
-
-
-;; ------------------------------------
 ;; CSS
 ;; ------------------------------------
 (leaf css-mode
@@ -2041,7 +2023,9 @@
             (markdown-fontify-whole-heading-line . t)
             (markdown-open-command . ,(if (functionp 'arto-open)
                                           ''arto-open
-                                        nil))))
+                                        nil)))
+  :config
+  (require 'lsp-marksman nil :noerror))
 
 
 ;; ------------------------------------
@@ -2054,13 +2038,6 @@
   :custom ((org-use-speed-commands . t))
   :config
   (org-babel-do-load-languages 'org-babel-load-languages '((jupyter . t))))
-
-
-;; ------------------------------------
-;; PHP
-;; ------------------------------------
-(leaf php-mode
-  :ensure t)
 
 
 ;; ------------------------------------
@@ -2088,24 +2065,6 @@
   :custom (;; 保存時コンパイルを無効にする
            ;; 各種外部ツールがコンパイルするため
            (scss-compile-at-save . nil)))
-
-
-;; ------------------------------------
-;; SGML
-;; ------------------------------------
-(leaf sgml-mode
-  :mode (("\\.sgml\\'" . html-mode)))
-
-
-;; ------------------------------------
-;; TeX
-;; ------------------------------------
-(leaf tex-mode
-  :hook ((tex-mode-hook . my-tex-mode-initialize))
-  :init
-  (defun my-tex-mode-initialize ()
-    "Initialize `tex-mode' before load."
-    (setq-local truncate-lines nil)))
 
 
 ;; ------------------------------------
