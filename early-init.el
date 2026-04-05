@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2021-2025 Taku WATABE
-;; Time-stamp: <2025-06-07T07:40:46+09:00>
+;; Copyright (C) 2021-2026 Taku WATABE
+;; Time-stamp: <2026-04-06T08:29:32+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -92,31 +92,6 @@
 (tab-bar-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
-;;
-;; For `frame'
-;;
-;; See also:
-;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Creating-Frames.html
-(add-hook 'after-make-frame-functions
-  ;; `lambda' is intentionally used.
-  ;; Because this function isn't reused until a frame is created.
-  #'(lambda (&optional frame)
-      "Initialize `frameset' with `after-make-frame-functions' in FRAME."
-      ;; Set all items that don't need to be saved to `desktop' to `:never'.
-      (when (listp frameset-filter-alist)
-        (let ((availables '(;; List only the items you want to save in `desktop'.
-                             width
-                             height
-                             top
-                             left
-                             GUI:width
-                             GUI:height
-                             GUI:top
-                             GUI:left)))
-          (dolist (item frameset-filter-alist)
-            (unless (member (car item) availables)
-              ;; Set all other items to `:never'.
-              (setcdr item :never)))))))
 
 
 ;; ============================================================================
