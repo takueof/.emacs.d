@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-06T08:28:01+09:00>
+;; Time-stamp: <2026-04-09T17:24:37+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -734,42 +734,26 @@
 ;; ============================================================================
 ;; ターミナルエミュレータ
 ;; ============================================================================
-(leaf vterm
+(leaf ghostel
   :unless (member system-type '(ms-dos windows-nt))
   :ensure t
-  :bind (("C-`" . vterm-toggle)
-         (:vterm-mode-map
-          ("C-t" . vterm-other-window)))
-  :hook ((vterm-mode-hook . my-vterm-initialize))
-  :custom ((vterm-buffer-name-string . "vterm - %s")
-           (vterm-copy-mode-remove-fake-newlines . t)
-           (vterm-max-scrollback . 100000)
-           (vterm-shell . "bash"))
+  :hook ((ghostel-mode-hook . my-ghostel-initialize))
+  :custom ((ghostel-shell . "bash"))
   :init
-  (defun my-vterm-initialize ()
-    "Initialize `vterm' before load."
+  (defun my-ghostel-initialize ()
+    "Initialize `ghostel' before load."
     ;; 干渉する minor-mode を無効にする
     (setq-local cua-mode nil)
     (setq-local undo-fu-mode nil))
   :defer-config
-  ;; WARNING: 確実に `vterm-keymap-exceptions' が存在する状態で
+  ;; WARNING: 確実に `ghostel-keymap-exceptions' が存在する状態で
   ;;          「リストの末尾に追加」しないと他のキーバインドに影響が出る
   ;;
   ;; For `windmove':
-  (add-to-list 'vterm-keymap-exceptions "C-S-b" t)
-  (add-to-list 'vterm-keymap-exceptions "C-S-f" t)
-  (add-to-list 'vterm-keymap-exceptions "C-S-n" t)
-  (add-to-list 'vterm-keymap-exceptions "C-S-p" t))
-
-
-;; ============================================================================
-;; ターミナルエミュレータ：拡張（切り換え）
-;; ============================================================================
-(leaf vterm-toggle
-  :unless (member system-type '(ms-dos windows-nt))
-  :ensure t
-  :after vterm
-  :custom ((vterm-toggle-scope . 'project)))
+  (add-to-list 'ghostel-keymap-exceptions "C-S-b" t)
+  (add-to-list 'ghostel-keymap-exceptions "C-S-f" t)
+  (add-to-list 'ghostel-keymap-exceptions "C-S-n" t)
+  (add-to-list 'ghostel-keymap-exceptions "C-S-p" t))
 
 
 ;; ============================================================================
@@ -1755,9 +1739,7 @@
             ;; ローカル環境にのみ保存させる
             (projectile-cache-file . "~/.emacs.projectile.cache")
             (projectile-known-projects-file . "~/.emacs.projectile-bookmarks.eld"))
-  :global-minor-mode t
-  :defer-config
-  (add-to-list 'projectile-globally-ignored-modes "vterm-mode"))
+  :global-minor-mode t)
 
 
 ;; ------------------------------------
