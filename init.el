@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-09T17:24:37+09:00>
+;; Time-stamp: <2026-04-09T17:25:36+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -782,6 +782,95 @@
          ("C-M-S-g" . affe-grep))
   :custom ((affe-regexp-function . #'orderless-pattern-compiler)
            (affe-highlight-function . #'orderless--highlight)))
+
+
+;; ------------------------------------
+;; LLM エージェントと ACP (Agent Client Protocol) で対話
+;; ------------------------------------
+(leaf agent-shell
+  :unless (member system-type '(ms-dos windows-nt))
+  :ensure t
+  :bind ((:agent-shell-mode-map
+          ("RET" . newline)
+          ("M-RET" . shell-maker-submit)))
+  :custom `((agent-shell-show-welcome-message . nil)
+            (agent-shell-mcp-servers . '(((name . "mcp-platform")
+                                          (type . "stdio")
+                                          (command . "npx")
+                                          (args . ("-y"
+                                                   "--registry"
+                                                   ,(getenv "AI_MCP_OLD_REGISTRY")
+                                                   ,(getenv "AI_MCP_OLD_PLATFORM"))))
+                                         ((name . "mcp-service")
+                                          (type . "stdio")
+                                          (command . "npx")
+                                          (args . ("-y"
+                                                   "--registry"
+                                                   ,(getenv "AI_MCP_OLD_REGISTRY")
+                                                   ,(getenv "AI_MCP_OLD_SERVICE"))))
+                                         ((name . "mcp-techportal")
+                                          (type . "stdio")
+                                          (command . "npx")
+                                          (args . ("-y"
+                                                   "--registry"
+                                                   ,(getenv "AI_MCP_OLD_REGISTRY")
+                                                   ,(getenv "AI_MCP_OLD_TECHPORTAL"))))
+
+                                         ((name . "mcp-calendar")
+                                          (type . "stdio")
+                                          (command . "npx")
+                                          (args . ("-y"
+                                                   "--registry"
+                                                   ,(getenv "AI_MCP_REGISTRY")
+                                                   ,(getenv "AI_MCP_PACKAGE")
+                                                   ,(getenv "AI_MCP_CALENDAR"))))
+                                         ((name . "mcp-drive")
+                                          (type . "stdio")
+                                          (command . "npx")
+                                          (args . ("-y"
+                                                   "--registry"
+                                                   ,(getenv "AI_MCP_REGISTRY")
+                                                   ,(getenv "AI_MCP_PACKAGE")
+                                                   ,(getenv "AI_MCP_DRIVE"))))
+                                         ((name . "mcp-mail")
+                                          (type . "stdio")
+                                          (command . "npx")
+                                          (args . ("-y"
+                                                   "--registry"
+                                                   ,(getenv "AI_MCP_REGISTRY")
+                                                   ,(getenv "AI_MCP_PACKAGE")
+                                                   ,(getenv "AI_MCP_MAIL"))))
+                                         ((name . "mcp-bts")
+                                          (type . "stdio")
+                                          (command . "npx")
+                                          (args . ("-y"
+                                                   "--registry"
+                                                   ,(getenv "AI_MCP_REGISTRY")
+                                                   ,(getenv "AI_MCP_PACKAGE")
+                                                   ,(getenv "AI_MCP_BTS"))))
+                                         ((name . "mcp-wiki")
+                                          (type . "stdio")
+                                          (command . "npx")
+                                          (args . ("-y"
+                                                   "--registry"
+                                                   ,(getenv "AI_MCP_REGISTRY")
+                                                   ,(getenv "AI_MCP_PACKAGE")
+                                                   ,(getenv "AI_MCP_WIKI")))))))
+  :init
+  ;; FIXME: まだエラーになる！
+  ;;        もしかしたら、社内専用 AWS 互換サーバーエンドポイントと繋がっていないとダメかも？
+  ;;        VPN OFF すなわち HTTP 404 の場合はどうするか考えないとダメ？
+  (defun my-agent-shell-initialize (f &rest args)
+    "Initialize `agent-shell' between from package load to call `agent-shell' function.
+F is inner function in `agent-shell', ARGS are F arguments."
+    ;; 確実に `agent-shell-make-environment-variables' を定義させる
+    (require 'agent-shell nil :noerror)
+    ;; `agent-shell-make-environment-variables' 定義後に環境変数を渡す
+    (customize-set-variable 'agent-shell-anthropic-claude-environment
+                            (agent-shell-make-environment-variables :inherit-env t))
+    (apply f args))
+  :advice (;; HACK: 適切な hook がないため `:advice' でしのぐ
+           (:around agent-shell my-agent-shell-initialize)))
 
 
 ;; ------------------------------------
