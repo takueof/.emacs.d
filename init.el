@@ -1376,20 +1376,6 @@ F is inner function in `agent-shell', ARGS are F arguments."
 
 
 ;; ------------------------------------
-;; インライン補完
-;; ------------------------------------
-(leaf corfu
-  :ensure t
-  :custom ((corfu-auto . t)
-           (corfu-auto-delay . 0)
-           (corfu-auto-prefix . 1)
-           (corfu-popupinfo-delay . nil))
-  :bind ((:corfu-map
-          ("C-s" . corfu-insert-separator)))
-  :global-minor-mode global-corfu-mode corfu-popupinfo-mode)
-
-
-;; ------------------------------------
 ;; Debug Adapter Protocol (DAP)
 ;; ------------------------------------
 (leaf dap-mode
