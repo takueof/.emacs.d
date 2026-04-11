@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-10T12:15:37+09:00>
+;; Time-stamp: <2026-04-12T08:36:50+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1121,7 +1121,14 @@
                                                    "--registry"
                                                    ,(getenv "AI_MCP_OLD_REGISTRY")
                                                    ,(getenv "AI_MCP_OLD_TECHPORTAL"))))
-
+                                         ((name . "mcp-bts")
+                                          (type . "stdio")
+                                          (command . "npx")
+                                          (args . ("-y"
+                                                   "--registry"
+                                                   ,(getenv "AI_MCP_REGISTRY")
+                                                   ,(getenv "AI_MCP_PACKAGE")
+                                                   ,(getenv "AI_MCP_BTS"))))
                                          ((name . "mcp-calendar")
                                           (type . "stdio")
                                           (command . "npx")
@@ -1154,14 +1161,6 @@
                                                    ,(getenv "AI_MCP_REGISTRY")
                                                    ,(getenv "AI_MCP_PACKAGE")
                                                    ,(getenv "AI_MCP_SLACK"))))
-                                         ((name . "mcp-bts")
-                                          (type . "stdio")
-                                          (command . "npx")
-                                          (args . ("-y"
-                                                   "--registry"
-                                                   ,(getenv "AI_MCP_REGISTRY")
-                                                   ,(getenv "AI_MCP_PACKAGE")
-                                                   ,(getenv "AI_MCP_BTS"))))
                                          ((name . "mcp-wiki")
                                           (type . "stdio")
                                           (command . "npx")
