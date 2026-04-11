@@ -1274,15 +1274,6 @@ F is inner function in `agent-shell', ARGS are F arguments."
 
 
 ;; ------------------------------------
-;; インライン補完候補生成
-;; ------------------------------------
-(leaf cape
-  :ensure t
-  :config
-  (add-to-list 'completion-at-point-functions #'cape-file))
-
-
-;; ------------------------------------
 ;; 補完フレームワーク
 ;; ------------------------------------
 (leaf company
