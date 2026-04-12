@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-12T08:36:50+09:00>
+;; Time-stamp: <2026-04-12T20:30:42+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -2132,9 +2132,10 @@ F is inner function in `agent-shell', ARGS are F arguments."
     (setq-local undo-fu-mode nil))
   :defer-config
   ;; WARNING: 確実に `ghostel-keymap-exceptions' が存在する状態で
-  ;;          「リストの末尾に追加」しないと他のキーバインドに影響が出る
+  ;;          リストを操作しないと他のキーバインドに影響が出る
   ;;
-  ;; For `windmove':
+  ;; `windmove' 用の設定をする
+  ;; 設定はリストの末尾に追加せねばならない
   (add-to-list 'ghostel-keymap-exceptions "C-S-b" t)
   (add-to-list 'ghostel-keymap-exceptions "C-S-f" t)
   (add-to-list 'ghostel-keymap-exceptions "C-S-n" t)
