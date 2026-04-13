@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-12T20:30:42+09:00>
+;; Time-stamp: <2026-04-13T22:39:01+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -648,22 +648,8 @@
           ("C-," . nil)
           ("C-." . nil)
           ("C-c $" . nil)))
-  :hook (;; Full
-         (markdown-mode-hook . flyspell-mode)
-         (org-mode-hook . flyspell-mode)
-         (text-mode-hook . flyspell-mode)
-         ;; Comments ONLY
-         (css-mode-hook . flyspell-prog-mode)
-         (emacs-lisp-mode-hook . flyspell-prog-mode)
-         (html-mode-hook . flyspell-prog-mode)
-         (ielm-mode-hook . flyspell-prog-mode)
-         (js-mode-hook . flyspell-prog-mode)
-         (js2-mode-hook . flyspell-prog-mode)
-         (lisp-interaction-mode-hook . flyspell-prog-mode)
-         (lisp-mode-hook . flyspell-prog-mode)
-         (python-mode-hook . flyspell-prog-mode)
-         (scss-mode-hook . flyspell-prog-mode)
-         (web-mode-hook . flyspell-prog-mode))
+  :hook ((text-mode-hook . flyspell-mode)
+         (prog-mode-hook . flyspell-prog-mode))
   :custom ((flyspell-delay . 1.0)))
 
 
