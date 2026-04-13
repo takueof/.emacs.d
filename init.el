@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-13T22:47:16+09:00>
+;; Time-stamp: <2026-04-13T22:51:25+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1847,7 +1847,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
 
 
 ;; ------------------------------------
-;; `redo' 追加
+;; `redo' を追加する
 ;; ------------------------------------
 (leaf undo-fu
   :ensure t
