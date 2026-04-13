@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-13T22:39:01+09:00>
+;; Time-stamp: <2026-04-13T22:47:16+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1244,16 +1244,6 @@ F is inner function in `agent-shell', ARGS are F arguments."
 (leaf auto-dim-other-buffers
   :ensure t
   :hook ((window-setup-hook . auto-dim-other-buffers-mode)))
-
-
-;; ------------------------------------
-;; フィルタ → 選択 → アクション
-;; ------------------------------------
-(leaf avy
-  :ensure t
-  :bind (("M-j" . avy-goto-char-timer)
-         (:isearch-mode-map
-          ("M-j" . avy-isearch))))
 
 
 ;; ------------------------------------
