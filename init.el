@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-13T22:51:25+09:00>
+;; Time-stamp: <2026-04-16T03:44:41+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1539,7 +1539,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
   :ensure t
   :bind (("C-c t t" . google-translate-at-point)
          ("C-c t RET" . google-translate-smooth-translate))
-  :custom ((google-translate-output-destination . 'echo-area)
+  :custom ((google-translate-output-destination . 'help)
            (google-translate-display-translation-phonetic . nil)
            (google-translate-translation-to-kill-ring . t)
            (google-translate-default-source-language . "en")
