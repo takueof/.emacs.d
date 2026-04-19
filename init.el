@@ -972,8 +972,10 @@
   :config
   ;; C-h を backspace とみなす
   (keyboard-translate ?\C-h ?\C-?)
-  ;; 誤字の元になる `transpose-chars' 実行を抑制する
+  ;; 誤字の元になる `transpose-chars' キーバインドを明示的に解除しておく
   (global-unset-key (kbd "C-t"))
+  ;; 誤字の元になる `transpose-lines' キーバインドを明示的に解除しておく
+  (global-unset-key (kbd "C-M-t"))
   ;; `ido-undo-merge-work-directory' 実行のため <C-z> を押しすぎた場合、
   ;; `suspend-frame' が起動しないよう配慮する
   (global-unset-key (kbd "C-z")))
