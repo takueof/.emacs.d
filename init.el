@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-16T03:44:41+09:00>
+;; Time-stamp: <2026-04-19T18:19:05+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1177,8 +1177,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;; ------------------------------------
 (leaf anzu
   :ensure t
-  :bind (("M-%" . anzu-query-replace)
-         ("C-M-%" . anzu-query-replace-regexp))
+  :bind (("C-r" . anzu-query-replace-regexp))
   :custom ((anzu-minimum-input-length . 3)
            (anzu-search-threshold . 1000)
            (anzu-replace-to-string-separator . " -> "))
@@ -1844,7 +1843,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;; ------------------------------------
 (leaf substitute
   :ensure t
-  :bind (("C-M-b" . substitute-target-in-buffer))
+  :bind (("C-M-r" . substitute-target-in-buffer))
   :custom ((substitute-highlight . t)))
 
 
