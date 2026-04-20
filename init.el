@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-19T18:19:05+09:00>
+;; Time-stamp: <2026-04-21T04:08:30+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -317,6 +317,12 @@
  ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Windows-Keyboard.html
  ;;
  '(w32-recognize-altgr nil)
+ ;;
+ ;; キャレットの視認性が悪くなる問題を回避する (Windows ONLY)
+ ;;
+ ;; See: https://mementomori.social/@tml/116416045226298692
+ ;;
+ '(w32-use-visible-system-caret nil)
  ;;
  ;; 証明書を明示的に設定する
  ;;
