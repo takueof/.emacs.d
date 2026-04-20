@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-21T04:26:57+09:00>
+;; Time-stamp: <2026-04-21T05:00:54+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1242,6 +1242,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;; ------------------------------------
 (leaf arto
   :when (executable-find "arto")
+  ;; NOTE: 起動には `markdown-open' のキーバインドを使うため、何もしない
   :vc (:url "https://github.com/arto-app/arto.el" :rev :newest))
 
 
