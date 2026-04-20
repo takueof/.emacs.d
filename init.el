@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-21T04:08:30+09:00>
+;; Time-stamp: <2026-04-21T04:26:57+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1353,36 +1353,6 @@ F is inner function in `agent-shell', ARGS are F arguments."
            (copilot-indent-offset-warning-disable . t))
   :config
   (add-to-list 'copilot-major-mode-alist '("web" . "html")))
-
-
-;; ------------------------------------
-;; Debug Adapter Protocol (DAP)
-;; ------------------------------------
-(leaf dap-mode
-  :ensure t
-  :custom ((dap-auto-configure-features . '(sessions
-                                            locals
-                                            breakpoints
-                                            expressions
-                                            tooltip))
-           (dap-python-debugger . 'debugpy))
-  :config
-  (dap-auto-configure-mode)
-  ;;
-  ;; Python
-  ;;
-  (leaf dap-mode-python
-    :hook ((python-mode-hook . my-dap-mode-python-initialize))
-    :init
-    (defun my-dap-mode-python-initialize ()
-      "Initialize `dap-mode' before load in `python-mode'."
-      (require 'dap-python nil :noerror)
-      ;; `uv' プロジェクトディレクトリで .venv/bin/python を自動検出
-      (when-let* ((venv-dir (locate-dominating-file default-directory ".venv"))
-                  (python-path (expand-file-name ".venv/bin/python" venv-dir)))
-        (when (file-executable-p python-path)
-          (setq-local dap-python-executable python-path)
-          (message "Using project dap-python-executable: %s" python-path))))))
 
 
 ;; ------------------------------------
