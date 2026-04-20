@@ -1600,7 +1600,8 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;; ------------------------------------
 ;; Language Server Protocol (LSP) クライアント
 ;;
-;; See: https://emacs-lsp.github.io/lsp-mode/page/languages/
+;; See:
+;; https://emacs-lsp.github.io/lsp-mode/page/languages/
 ;; ------------------------------------
 (leaf lsp-mode
   :ensure t
@@ -1808,7 +1809,8 @@ F is inner function in `agent-shell', ARGS are F arguments."
   :defer-config
   ;; `migemo' が利用可能なら使う
   ;;
-  ;; See: https://nyoho.jp/diary/?date=20210615
+  ;; See:
+  ;; https://nyoho.jp/diary/?date=20210615
   (leaf orderless-migemo
     :after migemo
     :config
