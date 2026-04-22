@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-23T05:38:41+09:00>
+;; Time-stamp: <2026-04-23T05:42:36+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1990,76 +1990,7 @@
   :bind ((:agent-shell-mode-map
           ("RET" . newline)
           ("M-RET" . shell-maker-submit)))
-  :custom `((agent-shell-show-welcome-message . nil)
-            (agent-shell-mcp-servers . '(((name . "mcp-platform")
-                                          (type . "stdio")
-                                          (command . "npx")
-                                          (args . ("-y"
-                                                   "--registry"
-                                                   ,(getenv "AI_MCP_OLD_REGISTRY")
-                                                   ,(getenv "AI_MCP_OLD_PLATFORM"))))
-                                         ((name . "mcp-service")
-                                          (type . "stdio")
-                                          (command . "npx")
-                                          (args . ("-y"
-                                                   "--registry"
-                                                   ,(getenv "AI_MCP_OLD_REGISTRY")
-                                                   ,(getenv "AI_MCP_OLD_SERVICE"))))
-                                         ((name . "mcp-techportal")
-                                          (type . "stdio")
-                                          (command . "npx")
-                                          (args . ("-y"
-                                                   "--registry"
-                                                   ,(getenv "AI_MCP_OLD_REGISTRY")
-                                                   ,(getenv "AI_MCP_OLD_TECHPORTAL"))))
-                                         ((name . "mcp-bts")
-                                          (type . "stdio")
-                                          (command . "npx")
-                                          (args . ("-y"
-                                                   "--registry"
-                                                   ,(getenv "AI_MCP_REGISTRY")
-                                                   ,(getenv "AI_MCP_PACKAGE")
-                                                   ,(getenv "AI_MCP_BTS"))))
-                                         ((name . "mcp-calendar")
-                                          (type . "stdio")
-                                          (command . "npx")
-                                          (args . ("-y"
-                                                   "--registry"
-                                                   ,(getenv "AI_MCP_REGISTRY")
-                                                   ,(getenv "AI_MCP_PACKAGE")
-                                                   ,(getenv "AI_MCP_CALENDAR"))))
-                                         ((name . "mcp-drive")
-                                          (type . "stdio")
-                                          (command . "npx")
-                                          (args . ("-y"
-                                                   "--registry"
-                                                   ,(getenv "AI_MCP_REGISTRY")
-                                                   ,(getenv "AI_MCP_PACKAGE")
-                                                   ,(getenv "AI_MCP_DRIVE"))))
-                                         ((name . "mcp-mail")
-                                          (type . "stdio")
-                                          (command . "npx")
-                                          (args . ("-y"
-                                                   "--registry"
-                                                   ,(getenv "AI_MCP_REGISTRY")
-                                                   ,(getenv "AI_MCP_PACKAGE")
-                                                   ,(getenv "AI_MCP_MAIL"))))
-                                         ((name . "mcp-slack")
-                                          (type . "stdio")
-                                          (command . "npx")
-                                          (args . ("-y"
-                                                   "--registry"
-                                                   ,(getenv "AI_MCP_REGISTRY")
-                                                   ,(getenv "AI_MCP_PACKAGE")
-                                                   ,(getenv "AI_MCP_SLACK"))))
-                                         ((name . "mcp-wiki")
-                                          (type . "stdio")
-                                          (command . "npx")
-                                          (args . ("-y"
-                                                   "--registry"
-                                                   ,(getenv "AI_MCP_REGISTRY")
-                                                   ,(getenv "AI_MCP_PACKAGE")
-                                                   ,(getenv "AI_MCP_WIKI")))))))
+  :custom ((agent-shell-show-welcome-message . nil))
   :init
   (defun my-agent-shell-initialize (f &rest args)
     "Initialize `agent-shell' between from package load to call `agent-shell' function.
