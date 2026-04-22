@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-23T05:30:50+09:00>
+;; Time-stamp: <2026-04-23T05:34:26+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1079,24 +1079,6 @@
 
 
 ;; ------------------------------------
-;; 各種検索／置換強化
-;; ------------------------------------
-(leaf anzu
-  :ensure t
-  :bind (("C-r" . anzu-query-replace-regexp))
-  :custom ((anzu-minimum-input-length . 3)
-           (anzu-search-threshold . 1000)
-           (anzu-replace-to-string-separator . " -> "))
-  :global-minor-mode global-anzu-mode)
-;;
-;; `migemo' が準備できたら使いはじめる
-;;
-(leaf anzu-migemo
-  :after migemo
-  :custom ((anzu-use-migemo . t)))
-
-
-;; ------------------------------------
 ;; コードフォーマッター
 ;; ------------------------------------
 (leaf apheleia
@@ -1263,7 +1245,6 @@
   :ensure t
   :config
   (delight '(;; 降順ソート
-             (anzu-mode nil "anzu")
              (auto-dim-other-buffers-mode nil "auto-dim-other-buffers")
              (company-mode nil "company")
              (company-box-mode nil "company-box")
@@ -1274,7 +1255,6 @@
              (flymake-mode nil "flymake")
              (flyspell-mode nil "flyspell")
              (flyspell-prog-mode nil "flyspell")
-             (global-anzu-mode nil "anzu")
              (global-company-mode nil "company")
              (global-flycheck-mode nil "flycheck")
              (global-whitespace-mode nil "whitespace")
