@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-22T23:13:15+09:00>
+;; Time-stamp: <2026-04-23T04:06:14+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -2080,7 +2080,8 @@ F is inner function in `agent-shell', ARGS are F arguments."
   :ensure t
   :bind (("C-`" . vterm))
   :hook ((vterm-mode-hook . my-vterm-initialize))
-  :custom ((vterm-copy-mode-remove-fake-newlines . t)
+  :custom ((vterm-buffer-name-string . "%s")
+           (vterm-copy-mode-remove-fake-newlines . t)
            (vterm-max-scrollback . 100000)
            (vterm-shell . "bash"))
   :init
