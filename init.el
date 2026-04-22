@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-23T05:34:26+09:00>
+;; Time-stamp: <2026-04-23T05:38:41+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1982,7 +1982,7 @@
 
 
 ;; ============================================================================
-;; LLM と ACP (Agent Client Protocol) 経由で対話する専用シェル UI (AI)
+;; LLM と ACP (Agent Client Protocol) 経由で対話するインターフェース (AI)
 ;; ============================================================================
 (leaf agent-shell
   :when (executable-find "claude-agent-acp")
