@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-23T04:06:14+09:00>
+;; Time-stamp: <2026-04-23T05:26:23+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -484,7 +484,6 @@
 ;; コンパイル
 ;; ------------------------------------
 (leaf compile
-  :after (nvm exec-path-from-shell)
   :bind (("C-c x" . compile))
   :hook ((compilation-filter-hook . ansi-color-compilation-filter))
   :custom ((compilation-window-height . 15)
@@ -1071,15 +1070,12 @@
 
 
 ;; ------------------------------------
-;; 非同期補完候補生成
+;; 非同期あいまい検索
 ;; ------------------------------------
 (leaf affe
   :ensure t
-  :after (consult orderless)
   :bind (("C-M-S-f" . affe-find)
-         ("C-M-S-g" . affe-grep))
-  :custom ((affe-regexp-function . #'orderless-pattern-compiler)
-           (affe-highlight-function . #'orderless--highlight)))
+         ("C-M-S-g" . affe-grep)))
 
 
 ;; ------------------------------------
@@ -1187,12 +1183,13 @@ F is inner function in `agent-shell', ARGS are F arguments."
   :custom ((anzu-minimum-input-length . 3)
            (anzu-search-threshold . 1000)
            (anzu-replace-to-string-separator . " -> "))
-  :init
-  ;; `migemo' 利用可能時
-  (leaf anzu-migemo
-    :after migemo
-    :custom ((anzu-use-migemo . t)))
   :global-minor-mode global-anzu-mode)
+;;
+;; `migemo' が準備できたら使いはじめる
+;;
+(leaf anzu-migemo
+  :after migemo
+  :custom ((anzu-use-migemo . t)))
 
 
 ;; ------------------------------------
@@ -1305,7 +1302,6 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;; 補完フレームワーク：拡張（補完候補のソート）
 ;; ------------------------------------
 (leaf company-statistics
-  :after company
   :ensure t
   :custom ((company-statistics-size . 500)
            ;; ローカル環境にのみ保存させる
@@ -1411,8 +1407,8 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;; ディレクトリブラウジング：拡張
 ;; ------------------------------------
 (leaf dired+
-  :vc (:url "https://github.com/emacsmirror/dired-plus" :rev :newest)
   :after dired
+  :vc (:url "https://github.com/emacsmirror/dired-plus" :rev :newest)
   :require t
   :custom ((diredp-hide-details-initially-flag . nil)
            (diredp-hide-details-propagate-flag . nil))
@@ -1451,7 +1447,6 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;; ------------------------------------
 (leaf embark-consult
   :ensure t
-  :after consult
   :bind ((:minibuffer-mode-map
           :package emacs
           ("M-." . embark-dwim)
@@ -1505,7 +1500,6 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;; テキスト＆コード静的解析：拡張（モードライン変更）
 ;; ------------------------------------
 (leaf flycheck-color-mode-line
-  :after flycheck
   :ensure t
   :hook ((flycheck-mode-hook . flycheck-color-mode-line-mode)))
 
@@ -1561,7 +1555,6 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;; 強化バッファ一覧：拡張（`projectile' サポート）
 ;; ------------------------------------
 (leaf ibuffer-projectile
-  :after (ibuffer projectile)
   :ensure t
   :hook ((ibuffer-hook . ibuffer-projectile-set-filter-groups)))
 
@@ -1707,8 +1700,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;; Git インターフェース：拡張（GitHub CLI 対応）
 ;; ------------------------------------
 (leaf magit-gh
-  :ensure t
-  :after magit)
+  :ensure t)
 
 
 ;; ------------------------------------
@@ -1727,7 +1719,6 @@ F is inner function in `agent-shell', ARGS are F arguments."
 (leaf migemo
   :when (executable-find "cmigemo")
   :leaf-defer nil
-  :after exec-path-from-shell
   :ensure t
   :require t
   :custom `(;; C/Migemo を利用する
@@ -1778,26 +1769,30 @@ F is inner function in `agent-shell', ARGS are F arguments."
 
 
 ;; ------------------------------------
-;; 無順序スペース区切り補完
+;; 正規表現を任意順でマッチさせる補完スタイル
 ;; ------------------------------------
 (leaf orderless
   :ensure t
-  :custom ((completion-styles . '(orderless)))
-  :defer-config
-  ;; `migemo' が利用可能なら使う
-  ;;
-  ;; See:
-  ;; https://nyoho.jp/diary/?date=20210615
-  (leaf orderless-migemo
-    :after migemo
-    :config
-    (defun my-orderless-migemo (component)
-      "Match COMPONENT as `migemo'."
-      (let ((pattern (migemo-get-pattern component)))
-        (condition-case nil
-            (progn (string-match-p pattern "") pattern)
-          (invalid-regexp nil))))
-    (add-to-list 'orderless-matching-styles #'my-orderless-migemo t)))
+  :custom ((completion-styles . '(orderless))
+           ;; `affe' と連携する
+           (affe-regexp-function . #'orderless-pattern-compiler)
+           (affe-highlight-function . #'orderless--highlight)))
+;;
+;; `migemo' が準備できたら使いはじめる
+;;
+;; See:
+;; https://nyoho.jp/diary/?date=20210615
+;;
+(leaf orderless-migemo
+  :after migemo
+  :config
+  (defun my-orderless-migemo (component)
+    "Match COMPONENT as `migemo'."
+    (let ((pattern (migemo-get-pattern component)))
+      (condition-case nil
+          (progn (string-match-p pattern "") pattern)
+        (invalid-regexp nil))))
+  (add-to-list 'orderless-matching-styles #'my-orderless-migemo))
 
 
 ;; ------------------------------------
