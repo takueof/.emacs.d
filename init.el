@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-23T05:42:36+09:00>
+;; Time-stamp: <2026-04-23T09:31:47+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1985,12 +1985,26 @@
 ;; LLM と ACP (Agent Client Protocol) 経由で対話するインターフェース (AI)
 ;; ============================================================================
 (leaf agent-shell
+  ;; FIXME: ヘッダーの ➤ を → に変えたい
+  ;;        しかし `agent-shell.el' の L3227 をはじめ、
+  ;;        複数部分で文字列 " ➤ " として直接記載されている
+  ;;        PR 出すしかない……？
   :when (executable-find "claude-agent-acp")
   :ensure t
-  :bind ((:agent-shell-mode-map
+  :bind (("C-c a i" . agent-shell)
+         (:agent-shell-mode-map
           ("RET" . newline)
-          ("M-RET" . shell-maker-submit)))
-  :custom ((agent-shell-show-welcome-message . nil))
+          ("C-j" . shell-maker-submit)))
+  :custom ((agent-shell-busy-indicator-frames . 'dots-round)
+           (agent-shell-context-sources . '(region))
+           (agent-shell-embed-file-size-limit . 1048576) ; 1MB
+           (agent-shell-file-completion-enabled . nil)
+           (agent-shell-header-style . 'text)
+           (agent-shell-permission-icon . "⚠️")
+           (agent-shell-preferred-agent-config . 'claude-code)
+           (agent-shell-session-strategy . 'latest)
+           (agent-shell-show-session-id . t)
+           (agent-shell-show-welcome-message . nil))
   :init
   (defun my-agent-shell-initialize (f &rest args)
     "Initialize `agent-shell' between from package load to call `agent-shell' function.
