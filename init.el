@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-23T09:31:47+09:00>
+;; Time-stamp: <2026-04-23T11:08:08+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -905,8 +905,8 @@
     ;; --------------------------------
     (with-eval-after-load 'whitespace
       (if (member major-mode '(;; 降順ソート
-                               lisp-interaction-mode
-                               ))
+                               agent-shell-mode
+                               lisp-interaction-mode))
           (whitespace-mode -1))))
   :global-minor-mode global-whitespace-mode)
 
