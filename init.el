@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-25T16:04:31+09:00>
+;; Time-stamp: <2026-04-26T09:44:39+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1505,6 +1505,35 @@
            (lsp-javascript-format-enable . nil) ; Use another formatter and each major-mode
            (lsp-typescript-format-enable . nil) ; Use another formatter and each major-mode
            (lsp-typescript-surveys-enabled . nil)
+           ;;
+           ;; `lsp-json'
+           ;;
+           (lsp-json-schemas . `[;; NOTE: "JSON Schema Store" で JSON スキーマを検索できる
+                                 ;;       https://www.schemastore.org/
+                                 ;;
+                                 ;; Claude Code
+                                 (:fileMatch ["/.claude-plugin/marketplace.json"] :url "https://json.schemastore.org/claude-code-marketplace.json")
+                                 (:fileMatch ["/.claude-plugin/plugin.json"] :url "https://json.schemastore.org/claude-code-plugin-manifest.json")
+                                 (:fileMatch ["/.claude/settings.*.json"] :url "https://json.schemastore.org/claude-code-settings.json")
+                                 (:fileMatch ["/.claude/settings.json"] :url "https://json.schemastore.org/claude-code-settings.json")
+                                 (:fileMatch ["/settings.*.json"] :url "https://json.schemastore.org/claude-code-settings.json")
+                                 (:fileMatch ["/settings.json"] :url "https://json.schemastore.org/claude-code-settings.json")
+                                 ;; `lsp-json--schema-associations'
+                                 ;;
+                                 ;; NOTE: 定義が古いため http → https 化しておく
+                                 (:fileMatch ["/.babelrc"] :url "https://json.schemastore.org/babelrc")
+                                 (:fileMatch ["/.bowerrc"] :url "https://json.schemastore.org/bowerrc")
+                                 (:fileMatch ["/.eslintrc"] :url "https://json.schemastore.org/eslintrc")
+                                 (:fileMatch ["/.eslintrc.json"] :url "https://json.schemastore.org/eslintrc")
+                                 (:fileMatch ["/babel.config.json"] :url "https://json.schemastore.org/babelrc")
+                                 (:fileMatch ["/jsconfig.*.json"] :url "https://json.schemastore.org/jsconfig")
+                                 (:fileMatch ["/jsconfig.json"] :url "https://json.schemastore.org/jsconfig")
+                                 (:fileMatch ["/omnisharp.json"] :url "https://json.schemastore.org/omnisharp")
+                                 (:fileMatch ["/package.json"] :url "https://json.schemastore.org/package")
+                                 (:fileMatch ["/project.*.json"] :url "https://json.schemastore.org/project")
+                                 (:fileMatch ["/tsconfig.*.json"] :url "https://json.schemastore.org/tsconfig")
+                                 (:fileMatch ["/tsconfig.json"] :url "https://json.schemastore.org/tsconfig")
+                                 (:fileMatch ["/typings.json"] :url "https://json.schemastore.org/typings")])
            ;;
            ;; `lsp-html'
            ;;
