@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-26T09:50:29+09:00>
+;; Time-stamp: <2026-04-26T10:18:57+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1534,6 +1534,8 @@
                                  (:fileMatch ["/tsconfig.*.json"] :url "https://json.schemastore.org/tsconfig")
                                  (:fileMatch ["/tsconfig.json"] :url "https://json.schemastore.org/tsconfig")
                                  (:fileMatch ["/typings.json"] :url "https://json.schemastore.org/typings")])
+           ;; プロキシサーバー証明書を、設定済の信頼済 CA 証明書群を用いて検証しないようにする
+           (lsp-http-proxyStrictSSL . nil) ; HACK: 強制 Secure Internet Gateway (SIG) 有効環境で JSON schema が取得不能になる問題を回避する
            ;;
            ;; `lsp-html'
            ;;
