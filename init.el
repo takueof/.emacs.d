@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-26T10:18:57+09:00>
+;; Time-stamp: <2026-04-29T17:05:59+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1468,7 +1468,6 @@
          (python-mode-hook . lsp-deferred)
          (scss-mode-hook . lsp-deferred)
          (web-mode-hook . lsp-deferred)
-         (nxml-mode-hook . lsp-deferred)
          (yaml-mode-hook . lsp-deferred))
   :custom (;;
            ;; `lsp-mode'
