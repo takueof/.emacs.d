@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-04-29T17:05:59+09:00>
+;; Time-stamp: <2026-05-01T10:23:58+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1062,6 +1062,19 @@
 
 
 ;; ------------------------------------
+;; キーボード駆動メニュー実装ライブラリ
+;;
+;; WARNING: 依存する外部パッケージがあるため、なるはやでインストールしておく
+;; ------------------------------------
+(leaf transient
+  :ensure t
+  :custom (;; ローカル環境にのみ保存させる
+           (transient-levels-file . "~/.emacs.transient.levels.el")
+           (transient-values-file . "~/.emacs.transient.values.el")
+           (transient-history-file . "~/.emacs.transient.history.el")))
+
+
+;; ------------------------------------
 ;; Node.js モジュールパス解決
 ;; ------------------------------------
 (leaf add-node-modules-path
@@ -1734,21 +1747,6 @@
   :ensure t
   :bind (("C-M-r" . substitute-target-in-buffer))
   :custom ((substitute-highlight . t)))
-
-
-;; ------------------------------------
-;; キーボード駆動メニュー実装ライブラリ
-;; ------------------------------------
-;; 次のパッケージが依存している：
-;;   * `agent-shell'
-;;   * `magit'
-(leaf transient
-  ;; NOTE: `user-emacs-directory' 内で `transient' は暗黙的利用のみ
-  :ensure nil ; 明示的にはインストールしない
-  :custom (;; ローカル環境にのみ保存させる
-           (transient-levels-file . "~/.emacs.transient.levels.el")
-           (transient-values-file . "~/.emacs.transient.values.el")
-           (transient-history-file . "~/.emacs.transient.history.el")))
 
 
 ;; ------------------------------------
