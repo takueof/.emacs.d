@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-01T10:23:58+09:00>
+;; Time-stamp: <2026-05-04T09:21:06+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1528,8 +1528,6 @@
                                  (:fileMatch ["/.claude-plugin/plugin.json"] :url "https://json.schemastore.org/claude-code-plugin-manifest.json")
                                  (:fileMatch ["/.claude/settings.*.json"] :url "https://json.schemastore.org/claude-code-settings.json")
                                  (:fileMatch ["/.claude/settings.json"] :url "https://json.schemastore.org/claude-code-settings.json")
-                                 (:fileMatch ["/settings.*.json"] :url "https://json.schemastore.org/claude-code-settings.json")
-                                 (:fileMatch ["/settings.json"] :url "https://json.schemastore.org/claude-code-settings.json")
                                  ;; `lsp-json--schema-associations'
                                  ;;
                                  ;; NOTE: 定義が古いため http → https 化しておく
