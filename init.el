@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-04T09:21:06+09:00>
+;; Time-stamp: <2026-05-06T22:44:21+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1520,32 +1520,11 @@
            ;;
            ;; `lsp-json'
            ;;
-           (lsp-json-schemas . `[;; NOTE: "JSON Schema Store" で JSON スキーマを検索できる
-                                 ;;       https://www.schemastore.org/
-                                 ;;
-                                 ;; Claude Code
-                                 (:fileMatch ["/.claude-plugin/marketplace.json"] :url "https://json.schemastore.org/claude-code-marketplace.json")
-                                 (:fileMatch ["/.claude-plugin/plugin.json"] :url "https://json.schemastore.org/claude-code-plugin-manifest.json")
-                                 (:fileMatch ["/.claude/settings.*.json"] :url "https://json.schemastore.org/claude-code-settings.json")
-                                 (:fileMatch ["/.claude/settings.json"] :url "https://json.schemastore.org/claude-code-settings.json")
-                                 ;; `lsp-json--schema-associations'
-                                 ;;
-                                 ;; NOTE: 定義が古いため http → https 化しておく
-                                 (:fileMatch ["/.babelrc"] :url "https://json.schemastore.org/babelrc")
-                                 (:fileMatch ["/.bowerrc"] :url "https://json.schemastore.org/bowerrc")
-                                 (:fileMatch ["/.eslintrc"] :url "https://json.schemastore.org/eslintrc")
-                                 (:fileMatch ["/.eslintrc.json"] :url "https://json.schemastore.org/eslintrc")
-                                 (:fileMatch ["/babel.config.json"] :url "https://json.schemastore.org/babelrc")
-                                 (:fileMatch ["/jsconfig.*.json"] :url "https://json.schemastore.org/jsconfig")
-                                 (:fileMatch ["/jsconfig.json"] :url "https://json.schemastore.org/jsconfig")
-                                 (:fileMatch ["/omnisharp.json"] :url "https://json.schemastore.org/omnisharp")
-                                 (:fileMatch ["/package.json"] :url "https://json.schemastore.org/package")
-                                 (:fileMatch ["/project.*.json"] :url "https://json.schemastore.org/project")
-                                 (:fileMatch ["/tsconfig.*.json"] :url "https://json.schemastore.org/tsconfig")
-                                 (:fileMatch ["/tsconfig.json"] :url "https://json.schemastore.org/tsconfig")
-                                 (:fileMatch ["/typings.json"] :url "https://json.schemastore.org/typings")])
-           ;; プロキシサーバー証明書を、設定済の信頼済 CA 証明書群を用いて検証しないようにする
-           (lsp-http-proxyStrictSSL . nil) ; HACK: 強制 Secure Internet Gateway (SIG) 有効環境で JSON schema が取得不能になる問題を回避する
+           ;; NOTE: Secure Internet Gateway (SIG) 強制有効環境では、
+           ;;       JSON schema が取得不能になる
+           ;;       プロキシサーバー証明書を信頼済 CA 証明書群では
+           ;;       検証「しない」設定に変更して回避するしかない
+           (lsp-http-proxyStrictSSL . nil)
            ;;
            ;; `lsp-html'
            ;;
