@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-07T16:01:03+09:00>
+;; Time-stamp: <2026-05-08T09:30:00+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -322,16 +322,7 @@
  ;;
  ;; See: https://mementomori.social/@tml/116416045226298692
  ;;
- '(w32-use-visible-system-caret nil)
- ;;
- ;; 証明書を明示的に設定する
- ;;
- `(gnutls-trustfiles ',(mapcar 'convert-standard-filename
-                               (if (member system-type '(ms-dos windows-nt))
-                                   '("C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"
-                                     "C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.crt")
-                                 '("/private/etc/ssl/cert.pem"
-                                   "/etc/ssl/cert.pem")))))
+ '(w32-use-visible-system-caret nil))
 
 
 ;; ------------------------------------
@@ -354,6 +345,16 @@
 ;; ------------------------------------
 (if (fboundp #'set-message-beep)
     (set-message-beep 'silent))
+
+
+;; ------------------------------------
+;; CA 証明書を明示する (Windows ONLY)
+;; ------------------------------------
+(if (member system-type '(ms-dos windows-nt))
+    (custom-set-variables
+     (gnutls-trustfiles ',(mapcar 'convert-standard-filename
+                                  '("C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"
+                                    "C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.crt")))))
 
 
 ;; ============================================================================
