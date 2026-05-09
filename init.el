@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-09T22:54:34+09:00>
+;; Time-stamp: <2026-05-09T23:15:12+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1141,8 +1141,9 @@
 ;; ------------------------------------
 (leaf arto
   :when (executable-find "arto")
-  ;; NOTE: 起動には `markdown-open' のキーバインドを使うため、何もしない
-  :vc (:url "https://github.com/arto-app/arto.el" :rev :newest))
+  :vc (:url "https://github.com/arto-app/arto.el" :rev :newest)
+  ;; `markdown-open' で起動可能にする
+  :custom ((markdown-open-command . #'arto-open)))
 
 
 ;; ------------------------------------
@@ -1861,15 +1862,16 @@
 ;; ------------------------------------
 ;; Markdown
 ;; ------------------------------------
+;; NOTE: <C-c C-c o> exec `markdown-open'
 (leaf markdown-mode
   :ensure t
   :custom `((markdown-coding-system . 'utf-8-unix)
             (markdown-enable-highlighting-syntax . t)
+            (markdown-enable-math . t)
+            (markdown-enable-prefix-prompts . nil)
             (markdown-fontify-code-blocks-natively . t)
             (markdown-fontify-whole-heading-line . t)
-            (markdown-open-command . ,(if (fboundp 'arto-open)
-                                          '#'arto-open
-                                        nil))))
+            (markdown-use-pandoc-style-yaml-metadata . t)))
 
 
 ;; ------------------------------------
