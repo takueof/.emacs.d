@@ -352,9 +352,9 @@
 ;; ------------------------------------
 (if (member system-type '(ms-dos windows-nt))
     (custom-set-variables
-     (gnutls-trustfiles ',(mapcar 'convert-standard-filename
-                                  '("C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"
-                                    "C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.crt")))))
+     `(gnutls-trustfiles ',(mapcar 'convert-standard-filename
+                                   '("C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"
+                                     "C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.crt")))))
 
 
 ;; ============================================================================
