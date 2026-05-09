@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-09T09:57:13+09:00>
+;; Time-stamp: <2026-05-09T22:37:18+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1867,7 +1867,7 @@
             (markdown-fontify-code-blocks-natively . t)
             (markdown-fontify-whole-heading-line . t)
             (markdown-open-command . ,(if (fboundp 'arto-open)
-                                          ''arto-open
+                                          '#'arto-open
                                         nil)))
   :config
   (require 'lsp-marksman nil :noerror))
