@@ -1337,6 +1337,7 @@
          ("C-c d R" . easysession-reset)
          ("C-c d u" . easysession-unload)
          ("C-c d d" . easysession-delete))
+  :custom ((easysession-directory . "~/.emacs-easysession"))
   :config
   (easysession-setup))
 
