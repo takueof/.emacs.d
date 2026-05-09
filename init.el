@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-09T09:51:11+09:00>
+;; Time-stamp: <2026-05-09T09:57:13+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1070,9 +1070,9 @@
 (leaf transient
   :ensure t
   :custom (;; ローカル環境にのみ保存させる
-           (transient-levels-file . "~/.emacs-transient.levels.eld")
-           (transient-values-file . "~/.emacs-transient.values.eld")
-           (transient-history-file . "~/.emacs-transient.history.eld")))
+           (transient-levels-file . "~/.emacs-transient-levels.eld")
+           (transient-values-file . "~/.emacs-transient-values.eld")
+           (transient-history-file . "~/.emacs-transient-history.eld")))
 
 
 ;; ------------------------------------
