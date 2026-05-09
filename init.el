@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-09T23:15:12+09:00>
+;; Time-stamp: <2026-05-09T23:25:45+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1862,7 +1862,7 @@
 ;; ------------------------------------
 ;; Markdown
 ;; ------------------------------------
-;; NOTE: <C-c C-c o> exec `markdown-open'
+;; NOTE: `markdown-open' → [C-c C-c o]
 (leaf markdown-mode
   :ensure t
   :custom `((markdown-coding-system . 'utf-8-unix)
