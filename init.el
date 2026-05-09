@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-08T15:41:53+09:00>
+;; Time-stamp: <2026-05-09T09:51:11+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -252,7 +252,7 @@
  ;;
  '(auto-save-default nil)
  '(make-backup-files nil)
- `(auto-save-list-file-prefix ,(convert-standard-filename "~/.emacs.auto-save-list/.saves-")) ; ローカル環境化
+ `(auto-save-list-file-prefix ,(convert-standard-filename "~/.emacs-auto-save-list/.saves-")) ; ローカル環境化
  ;;
  ;; ロックファイルを無効にする
  ;;
@@ -367,7 +367,7 @@
   ;; HACK: 未 `require' だと `custom-set-variables' が効かない問題を回避する
   (custom-set-variables
    ;; ローカル環境にのみ保存させる
-   '(nsm-settings-file "~/.emacs.network-security.data")))
+   '(nsm-settings-file "~/.emacs-network-security.eld")))
 
 
 ;; ------------------------------------
@@ -407,7 +407,7 @@
 ;; ------------------------------------
 (leaf server
   :custom (;; ローカル環境にのみ保存させる
-           (server-auth-dir . "~/.emacs.server"))
+           (server-auth-dir . "~/.emacs-server.eld"))
   :config
   (server-start t))
 
@@ -455,7 +455,7 @@
 (leaf bookmark
   :custom ((bookmark-version-control . t)
            ;; ローカル環境にのみ保存させる
-           (bookmark-default-file . "~/.emacs.bookmark.el")))
+           (bookmark-default-file . "~/.emacs-bookmark.eld")))
 
 
 ;; ------------------------------------
@@ -709,7 +709,7 @@
            (ido-use-filename-at-point . 'guess)
            (ido-unc-hosts . t)
            ;; ローカル環境にのみ保存させる
-           (ido-save-directory-list-file . "~/.emacs.ido-save-directory-list.el")))
+           (ido-save-directory-list-file . "~/.emacs-ido-save-directory-list.eld")))
 
 
 ;; ------------------------------------
@@ -762,7 +762,7 @@
   :custom (;; 履歴保存数は絞る
            (recentf-max-saved-items . 20)
            ;; ローカル環境にのみ保存させる
-           (recentf-save-file . "~/.emacs.recentf.el")))
+           (recentf-save-file . "~/.emacs-recentf.eld")))
 
 
 ;; ------------------------------------
@@ -772,7 +772,7 @@
   :custom (;; 履歴保存数は絞る
            (history-length . 100)
            ;; ローカル環境にのみ保存させる
-           (savehist-file . "~/.emacs.savehist.el"))
+           (savehist-file . "~/.emacs-savehist.eld"))
   :global-minor-mode t)
 
 
@@ -781,7 +781,7 @@
 ;; ------------------------------------
 (leaf saveplace
   :custom (;; ローカル環境にのみ保存させる
-           (save-place-file . "~/.emacs.saveplace.el"))
+           (save-place-file . "~/.emacs-saveplace.eld"))
   :global-minor-mode save-place-mode)
 
 
@@ -1070,9 +1070,9 @@
 (leaf transient
   :ensure t
   :custom (;; ローカル環境にのみ保存させる
-           (transient-levels-file . "~/.emacs.transient.levels.el")
-           (transient-values-file . "~/.emacs.transient.values.el")
-           (transient-history-file . "~/.emacs.transient.history.el")))
+           (transient-levels-file . "~/.emacs-transient.levels.eld")
+           (transient-values-file . "~/.emacs-transient.values.eld")
+           (transient-history-file . "~/.emacs-transient.history.eld")))
 
 
 ;; ------------------------------------
@@ -1206,7 +1206,7 @@
   :ensure t
   :custom ((company-statistics-size . 500)
            ;; ローカル環境にのみ保存させる
-           (company-statistics-file . "~/.emacs.company-statistics-cache.el"))
+           (company-statistics-file . "~/.emacs-company-statistics-cache.eld"))
   :global-minor-mode t)
 
 
@@ -1490,7 +1490,7 @@
            (lsp-semantic-tokens-enable . t)
            (lsp-restart . 'auto-restart)
            ;; ローカル環境にのみ保存させる
-           (lsp-session-file . "~/.emacs.lsp-session")
+           (lsp-session-file . "~/.emacs-lsp-session.eld")
            ;; LSP サーバからのファイル監視要求を無視する
            ;;
            ;; GNU Emacs の仕様で 1024 - 50 = 974 個以上のファイル監視が登録不可
@@ -1653,8 +1653,8 @@
             (migemo-use-frequent-pattern-alist . t)
             (migemo-pattern-alist-length . 1024)
             ;; ローカル環境にのみ保存させる
-            (migemo-pattern-alist-file . "~/.emacs.migemo-pattern")
-            (migemo-frequent-pattern-alist-file . "~/.emacs.migemo-frequent"))
+            (migemo-pattern-alist-file . "~/.emacs-migemo-pattern.eld")
+            (migemo-frequent-pattern-alist-file . "~/.emacs-migemo-frequent.eld"))
   :config
   (migemo-init))
 
@@ -1714,8 +1714,8 @@
             (projectile-completion-system . ',(cond ((featurep 'ido) 'ido)
                                                     (t 'default)))
             ;; ローカル環境にのみ保存させる
-            (projectile-cache-file . "~/.emacs.projectile.cache")
-            (projectile-known-projects-file . "~/.emacs.projectile-bookmarks.eld"))
+            (projectile-cache-file . "~/.emacs-projectile-cache.eld")
+            (projectile-known-projects-file . "~/.emacs-projectile-bookmarks.eld"))
   :global-minor-mode t)
 
 
