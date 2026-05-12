@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-09T23:31:19+09:00>
+;; Time-stamp: <2026-05-13T07:53:26+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -55,8 +55,6 @@
 ;; ------------------------------------
 ;; 「UTF-8（BOM 有）」のエイリアスを作成
 ;; デフォルト名は長いため
-;;
-;; See: `mule-conf.el'
 ;; ------------------------------------
 (define-coding-system-alias 'utf-8-bom 'utf-8-with-signature)
 
@@ -2051,27 +2049,25 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;;          そのため、「上書きしたい定義は後に書く」よう注意すること
 ;;
 ;; 文字幅調整テスト
+;;   ไไ| タイ文字
+;;   简| 簡体字
+;;   〺| 繁体字
+;;   한| 韓国語
+;;   あ| 日本語
+;;   漢| 日本語
 ;;   az| アルファベット
 ;;   ¡©| ラテン文字 (`iso-8859-1')
-;;   αß| ラテン文字 (`cp437')
-;;   €ı| ラテン文字 (`cp858')
+;;   αı| ラテン文字 (`cp437')
+;;   ₧€| ラテン文字 (`cp858')
 ;;   ⌐░| 半角記号
-;;   ×| 全角記号
-;;   あ| ひらがな（日本語）
-;;   简| 簡体字
-;;   粵| 繁体字
-;;   한| ハングル
-;;   ไไ| タイ文字
+;;   〇| 全角記号
 ;;   😊| 絵文字
-;;
-;; アラビア文字テスト
-;;   ء آ أ ؤ إ ئ ا ب ة ت ث ج ح خ د
 ;;
 ;; 波ダッシュ字形テスト
 ;;   「〜」(U+301C: WAVE DASH)
 ;;   「～」(U+FF5E: FULLWIDTH TILDE)
 ;;
-;; 関連コマンド一覧
+;; 関連コマンド
 ;;   文字拡大／縮小モード：
 ;;     C-x C-0
 ;;   カーソルがポイントしている文字の「簡易」情報を表示する：
@@ -2093,65 +2089,31 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;;   フレーム使用中フォントを表示する：
 ;;     (frame-parameter nil 'font)
 ;;
-;; 関連ファイル
-;;   `my-utils.el': 独自サポート関数＆マクロ定義
-;;   `mule-conf.el': 文字セット定義（`set-fontset-font' 第2引数の定義一覧）
-;;   `mule-diag.el': 文字セット／コーディングシステム用ツール定義
+;; 関連パッケージ
+;;   `mule': Basic commands for multilingual environment
+;;   `my-utils': 独自サポート関数＆マクロ定義
 ;;
-;; エンコーディング解説
-;;   ISO/IEC 8859-1 (`iso-8859-1')
-;;     概要：
-;;       * 国際標準のラテン文字セット
-;;       * ASCII (`ascii') を基底に、更なる文字が追加されたもの
-;;     視覚可能な追加文字：
+;; コードページ
+;;   ISO/IEC 8859-1 (`iso-8859-1') → `ascii' の拡張
+;;     追加文字：
 ;;       ¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ
-;;     全角フォントで表示されてほしいもの：
-;;       ±×÷
-;;     フォントによっては、他の文字と判別しにくいもの：
+;;     フォント側が考慮していないと判別しにくい文字：
 ;;       "Ø" (U+00d8: LATIN CAPITAL LETTER O WITH STROKE)
 ;;     See:
 ;;       https://en.wikipedia.org/wiki/ISO/IEC_8859-1
 ;;
-;;   Code page 437 (`cp437')
-;;     概要：
-;;       * ISO/IEC 8859-1 (`iso-8859-1') を基底に、更なる文字が追加されたもの
-;;     視覚可能な追加文字：
+;;   Code page 850 (`cp850') → `iso-8859-1' の拡張
+;;     追加文字：
 ;;       ₧ƒ⌐¬░▒▓│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀αßΓπΣσµτΦΘΩδ∞φε∩≡≥≤⌠⌡≈∙√ⁿ■
-;;     全角フォントで表示されてほしいもの：
-;;       ∞∩≡■
 ;;     See:
-;;       https://en.wikipedia.org/wiki/Code_page_437
+;;       https://en.wikipedia.org/wiki/Code_page_850
 ;;
-;;   Code page 858 (`cp858')
-;;     概要：
-;;       * Code Page 437 (`cp437') を基底に、更なる文字が追加されたもの
-;;       * `cp850' の "ı" (U+0131) が "€" (U+20AC) に置換されている
-;;     視覚可能な追加文字：
-;;       €ıþ‗
+;;   Code page 858 (`cp858') → `cp850' から "ı" (U+0131) を "€" (U+20AC) に置換したもの
 ;;     See:
-;;       https://en.wikipedia.org/wiki/Code_page_850 (include `cp858' document)
+;;       https://en.wikipedia.org/wiki/Code_page_850#Code_page_858
 ;;
-;;   JIS X 0213:2004 (`japanese-jisx0213.2004-1' and `japanese-jisx0213-2')
-;;     字形変更：
-;;       逢芦飴溢茨鰯淫迂厩噂餌襖迦牙廻恢晦蟹葛鞄釜翰翫徽祇汲灸笈卿饗僅喰櫛屑粂
-;;       祁隙倦捲牽鍵諺巷梗膏鵠甑叉榊薩鯖錆鮫餐杓灼酋楯薯藷哨鞘杖蝕訊逗摺撰煎煽
-;;       穿箭詮噌遡揃遜腿蛸辿樽歎註瀦捗槌鎚辻挺鄭擢溺兎堵屠賭瀞遁謎灘楢禰牌這秤
-;;       駁箸叛挽誹樋稗逼謬豹廟瀕斧蔽瞥蔑篇娩鞭庖蓬鱒迄儲餅籾爺鑓愈猷漣煉簾榔屢
-;;       冤叟咬嘲囀徘扁棘橙狡甕甦疼祟竈筵篝腱艘芒虔蜃蠅訝靄靱騙鴉
-;;     平仮名、片仮名、記号など：
-;;       ゔヿヷヸヹヺㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽ
-;;     第3水準（追加、1面）：
-;;       旧：倶剥叱呑嘘妍屏并痩繋
-;;       新：俱剝𠮟吞噓姸屛幷瘦繫
-;;     第4水準（一部、2面）：
-;;       𠂉𪚲
-;;
-;;   Microsoft Code page 932 (`cp932')
-;;     概要：
-;;       * 日本語
-;;       * 俗称「Microsoft Shift_JIS」
-;;       * JIS X 0213:2004 にはない文字が定義されている
-;;     `cp932' にはあるが、JIS X 0213:2004 にはない文字：
+;;   Code page 932 (`cp932') → 通称「Microsoft Shift_JIS」
+;;     `cp932' にしかない文字（JIS X 0213:2004 にない）：
 ;;       仼伹俍僴僘兤冾凬劜勀卲叝﨎坙坥墲奓奣妺峵巐弡恝悅惞愠愰戓敎昻昮晴朎櫢汯
 ;;       浯涖淸淲渹猤玽珒珵琩皂益硺礼靖精羡羽菶蕫蠇譓赶﨣軏逸遧釞鈆鉷﨧鋕﨨鎤鏸
 ;;       鐱鑈閒﨩靃靑飯飼餧館髙鮻鶴￢￤
@@ -2159,6 +2121,21 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;;       https://ja.wikipedia.org/wiki/Cp932
 ;;       https://internet.watch.impress.co.jp/www/column/ogata/news4.htm
 ;;       https://seiai.ed.jp/sys/text/csd/cf14/c14b050.html
+;;
+;;   JIS X 0213:2004（`japanese-jisx0213.2004-1' と `japanese-jisx0213-2'）
+;;     2004 で字形が変更された文字：
+;;       逢芦飴溢茨鰯淫迂厩噂餌襖迦牙廻恢晦蟹葛鞄釜翰翫徽祇汲灸笈卿饗僅喰櫛屑粂
+;;       祁隙倦捲牽鍵諺巷梗膏鵠甑叉榊薩鯖錆鮫餐杓灼酋楯薯藷哨鞘杖蝕訊逗摺撰煎煽
+;;       穿箭詮噌遡揃遜腿蛸辿樽歎註瀦捗槌鎚辻挺鄭擢溺兎堵屠賭瀞遁謎灘楢禰牌這秤
+;;       駁箸叛挽誹樋稗逼謬豹廟瀕斧蔽瞥蔑篇娩鞭庖蓬鱒迄儲餅籾爺鑓愈猷漣煉簾榔屢
+;;       冤叟咬嘲囀徘扁棘橙狡甕甦疼祟竈筵篝腱艘芒虔蜃蠅訝靄靱騙鴉
+;;     追加文字：
+;;       ゔヿヷヸヹヺㇰㇱㇲㇳㇴㇵㇶㇷㇸㇹㇺㇻㇼㇽ
+;;     第3水準（追加、1面）：
+;;       旧：倶剥叱呑嘘妍屏并痩繋
+;;       新：俱剝𠮟吞噓姸屛幷瘦繫
+;;     第4水準（一部、2面）：
+;;       𠂉𪚲
 ;;
 ;; 参考文献
 ;;   https://www.gnu.org/software/emacs/manual/html_node/elisp/Font-Lookup.html
@@ -2233,15 +2210,15 @@ F is inner function in `agent-shell', ARGS are F arguments."
 
 
   ;; ----------------------------------
-  ;; フォントセット定義
+  ;; フォントセット：プログラミング
   ;; ----------------------------------
-  (let* (;; デフォルトフォントサイズ (pt)
+  (let* (;; 名称
+         (fontset "programming")
+         ;; デフォルトフォントサイズ (pt)
          ;;
          ;; NOTE: 浮動小数点型 → pt
          ;;       整数型 → px
          (font-size (if (equal window-system 'w32) 12.0 14.0))
-         ;; フォントセット ID
-         (fontset "programming")
          ;; 基礎フォント
          (base-font-family (my-fallback-font-family "Inconsolata"
                                                     "Menlo"
@@ -2250,173 +2227,224 @@ F is inner function in `agent-shell', ARGS are F arguments."
                                                     "Courier"))
          ;; フォントセット生成
          (fontset-name (create-fontset-from-ascii-font base-font-family)))
-    ;; 簡体字：GB 18030
+    ;;
+    ;; Unicode
+    ;;
     (my-set-fontset-font-safe fontset-name
-                              'gb18030
-                              (font-spec :family (my-fallback-font-family "PingFang SC"
-                                                                          "Microsoft YaHei")))
-    ;; 繁体字（香港／マカオ）：HKSCS-2016
-    (my-set-fontset-font-safe fontset-name
-                              'big5-hkscs
-                              (font-spec :family (my-fallback-font-family "PingFang HK"
-                                                                          "MingLiU-ExtB")))
-    ;; 繁体字：Big5
-    (my-set-fontset-font-safe fontset-name
-                              'big5
-                              (font-spec :family (my-fallback-font-family "PingFang TC"
-                                                                          "Microsoft JhengHei")))
-    ;; ハングル：KS C 5601-1987 (a.k.a. KS X 1001:1998)
-    (my-set-fontset-font-safe fontset-name
-                              'korean-ksc5601
-                              (font-spec :family (my-fallback-font-family "Apple SD Gothic Neo"
-                                                                          "Malgun Gothic")))
-    ;; タイ文字：Thai Industrial Standard 620-2533 (TIS-620)
-    (my-set-fontset-font-safe fontset-name
-                              'thai-tis620
-                              (font-spec :family (my-fallback-font-family "Ayuthaya"
-                                                                          "Tahoma")))
+                              'unicode
+                              (font-spec :family base-font-family))
+    ;;
     ;; アラビア文字
     ;;
-    ;; HACK: Unicode 直接指定（`cp858' との重複を避け、`cp1256' は利用禁止）
-    (dolist (range '((cons #x00600 #x006FF) ; U+0600-U+06FF (Arabic)
-                     (cons #x00750 #x0077F) ; U+0750–U+077F (Arabic Supplement)
-                     (cons #x008A0 #x008FF) ; U+08A0–U+08FF (Arabic Extended-A)
-                     (cons #x0FB50 #x0FDFF) ; U+FB50–U+FDFF (Arabic Presentation Forms-A)
-                     (cons #x0FE70 #X0FEFF) ; U+FE70–U+FEFF (Arabic Presentation Forms-B)
-                     (cons #x10E60 #x10E7F) ; U+10E60–U+10E7F (Rumi Numeral Symbols)
-                     (cons #x1EC70 #x1ECBF) ; U+1EC70–U+1ECBF (Indic Siyaq Numbers)
-                     (cons #x1EE00 #x1EEFF))) ; U+1EE00-U+1EEFF (Arabic Mathematical Alphabetic Symbols)
-      (my-set-fontset-font-safe fontset-name
-                                range
-                                (font-spec :family (my-fallback-font-family "Baghdad"
-                                                                            "Microsoft Sans Serif"))))
-    ;; 日本語：JIS X 0213:2004
     (my-set-fontset-font-safe fontset-name
-                              'japanese-jisx0213.2004-1
-                              (font-spec :family (my-fallback-font-family "VL Gothic"
-                                                                          "Hiragino Sans"
-                                                                          "メイリオ"
-                                                                          "ＭＳ ゴシック")))
-    (my-set-fontset-font-safe fontset-name
-                              'japanese-jisx0213-2
-                              (font-spec :family (my-fallback-font-family "VL Gothic"
-                                                                          "Hiragino Sans"
-                                                                          "メイリオ"
-                                                                          "ＭＳ ゴシック")))
-    ;; 日本語：Code page 932 (`cp932')
-    (my-set-fontset-font-safe fontset-name
-                              'cp932
-                              (font-spec :family (my-fallback-font-family "VL Gothic"
-                                                                          "Hiragino Sans"
-                                                                          "メイリオ"
-                                                                          "ＭＳ ゴシック")))
-    ;; 「〜」(U+301C: WAVE DASH) と「～」(U+FF5E: FULLWIDTH TILDE) の字形を変更する
-    ;; 視覚的な区別を可能にする
+                              'iso-8859-6
+                              (font-spec :family (my-fallback-font-family "Baghdad"
+                                                                          "Microsoft Sans Serif")))
     ;;
-    ;; 対応フォント：
-    ;;   * "Migu 1M"
-    ;;   * "ＭＳ ゴシック"
+    ;; タイ文字
+    ;;
     (my-set-fontset-font-safe fontset-name
-                              ;; 「〜」(U+301C: WAVE DASH)
-                              (cons (string-to-char "〜") (string-to-char "〜"))
-                              (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                          "Hiragino Sans"
-                                                                          "ＭＳ ゴシック")))
+                              'iso-8859-11
+                              (font-spec :family (my-fallback-font-family "Ayuthaya"
+                                                                          "Tahoma")))
+    ;;
+    ;; 簡体字
+    ;;
+    (dolist (charset '(gb18030-2-byte
+                       gb18030-4-byte-bmp
+                       gb18030-4-byte-smp
+                       gb18030-4-byte-ext-1
+                       gb18030-4-byte-ext-2))
+      (my-set-fontset-font-safe fontset-name
+                                charset
+                                (font-spec :family (my-fallback-font-family "PingFang SC"
+                                                                            "Microsoft YaHei"))))
+    ;;
+    ;; 繁体字
+    ;;
+    (dolist (charset '(chinese-big5-1
+                       chinese-big5-2))
+      (my-set-fontset-font-safe fontset-name
+                                charset
+                                (font-spec :family (my-fallback-font-family "PingFang TC"
+                                                                            "Microsoft JhengHei"))))
+    ;;
+    ;; 韓国語
+    ;;
     (my-set-fontset-font-safe fontset-name
-                              ;; 「～」(U+FF5E: FULLWIDTH TILDE)
-                              (cons (string-to-char "～") (string-to-char "～"))
+                              'cp949-2-byte ; `ascii' は含めない
+                              (font-spec :family (my-fallback-font-family "Apple SD Gothic Neo"
+                                                                          "Malgun Gothic")))
+    ;;
+    ;; 日本語
+    ;;
+    (my-set-fontset-font-safe fontset-name
+                              'cp932-2-byte ; `ascii' と `katakana-sjis' は含めない
                               (font-spec :family (my-fallback-font-family "Migu 1M"
+                                                                          "VL Gothic"
                                                                           "Hiragino Sans"
+                                                                          "メイリオ"
                                                                           "ＭＳ ゴシック")))
-    ;; ラテン文字：Code page 858 (`cp858')
+    (dolist (charset '(japanese-jisx0213.2004-1
+                       japanese-jisx0213-2))
+      (my-set-fontset-font-safe fontset-name
+                                charset
+                                (font-spec :family (my-fallback-font-family "Migu 1M"
+                                                                            "VL Gothic"
+                                                                            "Hiragino Sans"
+                                                                            "メイリオ"
+                                                                            "ＭＳ ゴシック"))))
+    (dolist (code (mapcar 'string-to-char
+                          ;; U+301C: WAVE DASH
+                          ;; U+FF5E: FULLWIDTH TILDE
+                          (split-string "〜～" "" t)))
+      ;; HACK: フォントによっては「同一字形の別文字」を「別字形」にする
+      (my-set-fontset-font-safe fontset-name
+                                (cons code code)
+                                (font-spec :family (my-fallback-font-family "Migu 1M"
+                                                                            "Hiragino Sans"
+                                                                            "ＭＳ ゴシック"))))
+    ;;
+    ;; ラテン文字
+    ;;
     (my-set-fontset-font-safe fontset-name
                               'cp858
-                              (font-spec :family (my-fallback-font-family "Inconsolata"
-                                                                          "Menlo"
-                                                                          "Consolas"
-                                                                          "Courier New"
-                                                                          "Courier")))
-    ;; 未実装グリフのフォールバック
-    ;;
-    ;; 未対応フォント：
-    ;;   * "Inconsolata"
+                              (font-spec :family base-font-family))
     (dolist (code (mapcar 'string-to-char
                           (split-string "ı░▒▓╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪▌αßΓπΣσµτΦΘΩδφε≥≤ⁿ≈∙√" "" t)))
+      ;; HACK: フォント "Inconsolata" で未実装の文字を補完する
       (my-set-fontset-font-safe fontset-name
                                 (cons code code)
                                 (font-spec :family (my-fallback-font-family "Menlo"
                                                                             "Consolas"
                                                                             "Courier New"
                                                                             "Courier"))))
-    ;; 未実装グリフのフォールバック
-    ;;
-    ;; 未対応フォント：
-    ;;   * "Consolas"
-    (my-set-fontset-font-safe fontset-name
-                              (cons (string-to-char "₧") (string-to-char "₧"))
-                              (font-spec :family (my-fallback-font-family "Inconsolata"
-                                                                          "Menlo"
-                                                                          "Courier New"
-                                                                          "Courier")))
-    ;; 未実装グリフのフォールバック
-    ;;
-    ;; 未対応フォント：
-    ;;   * "Inconsolata"
-    ;;   * "Menlo"
-    ;;   * "Consolas"
     (dolist (code (mapcar 'string-to-char
                           (split-string "⌐‗" "" t)))
+      ;; HACK: フォント "Inconsolata", "Menlo", "Consolas" で未実装の文字を補完する
       (my-set-fontset-font-safe fontset-name
                                 (cons code code)
                                 (font-spec :family (my-fallback-font-family "Courier New"
                                                                             "Courier"))))
-    ;; 未実装グリフのフォールバック
     ;;
-    ;; 未対応フォント対象：
-    ;;   * "VL Gothic"
-    ;;   * "Migu 1M"
-    (my-set-fontset-font-safe fontset-name
-                              (cons (string-to-char "￤") (string-to-char "￤"))
-                              (font-spec :family (my-fallback-font-family "Hiragino Sans"
-                                                                          "ＭＳ ゴシック")))
-    ;; 一部グリフが `cp858' に含まれているため半角になる状態を回避する
-    (dolist (code (mapcar 'string-to-char
-                          (split-string "∞∩≡■" "" t)))
-      (my-set-fontset-font-safe fontset-name
-                                (cons code code)
-                                (font-spec :family (my-fallback-font-family "VL Gothic"
-                                                                            "Hiragino Sans"
-                                                                            "ＭＳ ゴシック"))))
-    ;; 一部グリフが半角になる状態を回避する
+    ;; Emoji
     ;;
-    ;; 一部グリフが半角で定義されているフォント：
-    ;;   * "VL Gothic"
-    ;;   * "Hiragino Sans"
-    ;;   * "メイリオ"
-    (dolist (code (mapcar 'string-to-char
-                          (split-string "±×÷" "" t)))
-      (my-set-fontset-font-safe fontset-name
-                                (cons code code)
-                                (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                            "ＭＳ ゴシック"))))
-    ;; 絵文字 (Emoji)
     (my-set-fontset-font-safe fontset-name
                               'emoji
                               (font-spec :family (my-fallback-font-family "Apple Color Emoji"
                                                                           "Symbola"
                                                                           "Segoe UI Emoji"
                                                                           "Segoe UI Symbol")))
-    ;; WARNING: フォントサイズ変更「専用」の設定を行う
-    ;;          他の `my-set-fontset-font-safe' で `:size' は設定しないこと！
-    ;;          `C-x C-0' によるズームが効かなくなるため
+    ;;
+    ;; ASCII
+    ;;
+    ;; HACK: フォントサイズ変更「専用」の設定を行う
+    ;;
+    ;; WARNING: 他の `my-set-fontset-font-safe' で `:size' 設定禁止！
+    ;;          <C-x C-0> によるズームが効かなくなる！
     (my-set-fontset-font-safe fontset-name
-                              'ascii
+                              'ascii ; この charset だけ変更せねばならない
                               (font-spec :size font-size
                                          :family base-font-family))
     ;; 適用
     (modify-all-frames-parameters `((font . ,fontset-name)))
-    (custom-set-faces `(tooltip ((t (:font ,fontset-name)))))
-    )
+    (custom-set-faces `(tooltip ((t (:font ,fontset-name))))))
+
+  ;; ----------------------------------
+  ;; フォントセット：シェル
+  ;; ----------------------------------
+  (let* (;; 名称
+         (fontset "shell")
+         ;; デフォルトフォントサイズ (pt)
+         ;;
+         ;; NOTE: 浮動小数点型 → pt
+         ;;       整数型 → px
+         (font-size (if (equal window-system 'w32) 12.0 14.0))
+         ;; 基礎フォント
+         (base-font-family (my-fallback-font-family "Inconsolata"
+                                                    "Menlo"
+                                                    "Consolas"
+                                                    "Courier New"
+                                                    "Courier"))
+         ;; フォントセット生成
+         (fontset-name (create-fontset-from-ascii-font base-font-family)))
+    ;;
+    ;; Unicode
+    ;;
+    (my-set-fontset-font-safe fontset-name
+                              'unicode
+                              (font-spec :family base-font-family))
+    ;;
+    ;; 日本語
+    ;;
+    (my-set-fontset-font-safe fontset-name
+                              'cp932-2-byte ; `ascii' と `katakana-sjis' は含めない
+                              (font-spec :family (my-fallback-font-family "Migu 1M"
+                                                                          "VL Gothic"
+                                                                          "Hiragino Sans"
+                                                                          "メイリオ"
+                                                                          "ＭＳ ゴシック")))
+    (dolist (charset '(japanese-jisx0213.2004-1
+                       japanese-jisx0213-2))
+      (my-set-fontset-font-safe fontset-name
+                                charset
+                                (font-spec :family (my-fallback-font-family "Migu 1M"
+                                                                            "VL Gothic"
+                                                                            "Hiragino Sans"
+                                                                            "メイリオ"
+                                                                            "ＭＳ ゴシック"))))
+    (dolist (code (mapcar 'string-to-char
+                          ;; U+301C: WAVE DASH
+                          ;; U+FF5E: FULLWIDTH TILDE
+                          (split-string "〜～" "" t)))
+      ;; HACK: フォントによっては「同一字形の別文字」を「別字形」にする
+      (my-set-fontset-font-safe fontset-name
+                                (cons code code)
+                                (font-spec :family (my-fallback-font-family "Migu 1M"
+                                                                            "Hiragino Sans"
+                                                                            "ＭＳ ゴシック"))))
+    ;;
+    ;; ラテン文字
+    ;;
+    (my-set-fontset-font-safe fontset-name
+                              'cp858
+                              (font-spec :family base-font-family))
+    (dolist (code (mapcar 'string-to-char
+                          (split-string "ı░▒▓╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪▌αßΓπΣσµτΦΘΩδφε≥≤ⁿ≈∙√" "" t)))
+      ;; HACK: フォント "Inconsolata" で未実装の文字を補完する
+      (my-set-fontset-font-safe fontset-name
+                                (cons code code)
+                                (font-spec :family (my-fallback-font-family "Menlo"
+                                                                            "Consolas"
+                                                                            "Courier New"
+                                                                            "Courier"))))
+    (dolist (code (mapcar 'string-to-char
+                          (split-string "⌐‗" "" t)))
+      ;; HACK: フォント "Inconsolata", "Menlo", "Consolas" で未実装の文字を補完する
+      (my-set-fontset-font-safe fontset-name
+                                (cons code code)
+                                (font-spec :family (my-fallback-font-family "Courier New"
+                                                                            "Courier"))))
+    ;;
+    ;; Emoji
+    ;;
+    (my-set-fontset-font-safe fontset-name
+                              'emoji
+                              (font-spec :family (my-fallback-font-family "Apple Color Emoji"
+                                                                          "Symbola"
+                                                                          "Segoe UI Emoji"
+                                                                          "Segoe UI Symbol")))
+    ;;
+    ;; ASCII
+    ;;
+    ;; HACK: フォントサイズ変更「専用」の設定を行う
+    ;;
+    ;; WARNING: 他の `my-set-fontset-font-safe' で `:size' 設定禁止！
+    ;;          <C-x C-0> によるズームが効かなくなる！
+    (my-set-fontset-font-safe fontset-name
+                              'ascii ; この charset だけ変更せねばならない
+                              (font-spec :size font-size
+                                         :family base-font-family)))
   ) ; END of *font
 
 
