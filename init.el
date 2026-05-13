@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-13T07:53:26+09:00>
+;; Time-stamp: <2026-05-13T15:44:00+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -2016,16 +2016,17 @@
          (:agent-shell-mode-map
           ("RET" . newline)
           ("C-j" . shell-maker-submit)))
-  :custom ((agent-shell-busy-indicator-frames . 'dots-round)
-           (agent-shell-context-sources . '(region))
-           (agent-shell-embed-file-size-limit . 1048576) ; 1MB
-           (agent-shell-file-completion-enabled . nil)
-           (agent-shell-header-style . 'text)
-           (agent-shell-permission-icon . "⚠️")
-           (agent-shell-preferred-agent-config . 'claude-code)
-           (agent-shell-session-strategy . 'latest)
-           (agent-shell-show-session-id . t)
-           (agent-shell-show-welcome-message . nil))
+  :custom `((agent-shell-anthropic-default-model-id . ,(getenv "ANTHROPIC_DEFAULT_SONNET_MODEL"))
+            (agent-shell-busy-indicator-frames . 'dots-round)
+            (agent-shell-context-sources . '(region))
+            (agent-shell-embed-file-size-limit . 1048576) ; 1MB (unit: byte)
+            (agent-shell-file-completion-enabled . nil)
+            (agent-shell-header-style . 'text)
+            (agent-shell-highlight-blocks . t)
+            (agent-shell-permission-icon . "⚠️")
+            (agent-shell-preferred-agent-config . 'claude-code)
+            (agent-shell-session-strategy . 'latest)
+            (agent-shell-show-welcome-message . nil))
   :init
   (defun my-agent-shell-initialize (f &rest args)
     "Initialize `agent-shell' between from package load to call `agent-shell' function.
