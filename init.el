@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-13T15:44:00+09:00>
+;; Time-stamp: <2026-05-21T05:05:04+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -2069,29 +2069,26 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;;   「～」(U+FF5E: FULLWIDTH TILDE)
 ;;
 ;; 関連コマンド
-;;   文字拡大／縮小モード：
+;;   文字拡大／縮小モードに入る：
 ;;     C-x C-0
 ;;   カーソルがポイントしている文字の「簡易」情報を表示する：
 ;;     C-x =
 ;;   カーソルがポイントしている文字の「詳細」情報を表示する：
 ;;     C-u C-x =
-;;   フォントセットの詳細を別バッファに表示する：
+;;   定義済フォントセットを表示する：
 ;;     M-x describe-fontset
-;;   定義済フォントセット一覧を別バッファに表示する：
-;;     M-x list-fontsets
-;;   利用可能フォントを一覧表示する：
-;;     (dolist (xlfd (x-list-fonts "*")) (insert (format "%S" xlfd) "\n"))
-;;   該当ファミリフォントを一覧表示する：
-;;     (list-fonts (font-spec :family "ファミリ名"))
-;;   定義済フォントセットを一覧表示する：
-;;     (fontset-list)
-;;   定義済フォントセットと別名（短縮名、エイリアス）の `alist'：
-;;     `fontset-alias-alist'
-;;   フレーム使用中フォントを表示する：
+;;   利用可能なフォントのリストを取得する：
+;;     (x-list-fonts "*")
+;;   定義済フォントセットと別名（エイリアス）のリスト：
+;;     fontset-alias-alist
+;;   frame で使われているフォントを取得する：
 ;;     (frame-parameter nil 'font)
+;;   カレントバッファで定義されている face のリストを取得する：
+;;     (face-list)
 ;;
 ;; 関連パッケージ
 ;;   `mule': Basic commands for multilingual environment
+;;   `faces': フェイス実装
 ;;   `my-utils': 独自サポート関数＆マクロ定義
 ;;
 ;; コードページ
@@ -2214,7 +2211,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
   ;; フォントセット：プログラミング
   ;; ----------------------------------
   (let* (;; 名称
-         (fontset "programming")
+         (fontset-name "programming")
          ;; デフォルトフォントサイズ (pt)
          ;;
          ;; NOTE: 浮動小数点型 → pt
@@ -2227,24 +2224,24 @@ F is inner function in `agent-shell', ARGS are F arguments."
                                                     "Courier New"
                                                     "Courier"))
          ;; フォントセット生成
-         (fontset-name (create-fontset-from-ascii-font base-font-family)))
+         (fontset (create-fontset-from-ascii-font base-font-family nil fontset-name)))
     ;;
     ;; Unicode
     ;;
-    (my-set-fontset-font-safe fontset-name
+    (my-set-fontset-font-safe fontset
                               'unicode
                               (font-spec :family base-font-family))
     ;;
     ;; アラビア文字
     ;;
-    (my-set-fontset-font-safe fontset-name
+    (my-set-fontset-font-safe fontset
                               'iso-8859-6
                               (font-spec :family (my-fallback-font-family "Baghdad"
                                                                           "Microsoft Sans Serif")))
     ;;
     ;; タイ文字
     ;;
-    (my-set-fontset-font-safe fontset-name
+    (my-set-fontset-font-safe fontset
                               'iso-8859-11
                               (font-spec :family (my-fallback-font-family "Ayuthaya"
                                                                           "Tahoma")))
@@ -2256,7 +2253,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
                        gb18030-4-byte-smp
                        gb18030-4-byte-ext-1
                        gb18030-4-byte-ext-2))
-      (my-set-fontset-font-safe fontset-name
+      (my-set-fontset-font-safe fontset
                                 charset
                                 (font-spec :family (my-fallback-font-family "PingFang SC"
                                                                             "Microsoft YaHei"))))
@@ -2265,30 +2262,29 @@ F is inner function in `agent-shell', ARGS are F arguments."
     ;;
     (dolist (charset '(chinese-big5-1
                        chinese-big5-2))
-      (my-set-fontset-font-safe fontset-name
+      (my-set-fontset-font-safe fontset
                                 charset
                                 (font-spec :family (my-fallback-font-family "PingFang TC"
                                                                             "Microsoft JhengHei"))))
     ;;
     ;; 韓国語
     ;;
-    (my-set-fontset-font-safe fontset-name
+    (my-set-fontset-font-safe fontset
                               'cp949-2-byte ; `ascii' は含めない
                               (font-spec :family (my-fallback-font-family "Apple SD Gothic Neo"
                                                                           "Malgun Gothic")))
     ;;
     ;; 日本語
     ;;
-    (my-set-fontset-font-safe fontset-name
+    (my-set-fontset-font-safe fontset
                               'cp932-2-byte ; `ascii' と `katakana-sjis' は含めない
-                              (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                          "VL Gothic"
+                              (font-spec :family (my-fallback-font-family "VL Gothic"
                                                                           "Hiragino Sans"
                                                                           "メイリオ"
                                                                           "ＭＳ ゴシック")))
     (dolist (charset '(japanese-jisx0213.2004-1
                        japanese-jisx0213-2))
-      (my-set-fontset-font-safe fontset-name
+      (my-set-fontset-font-safe fontset
                                 charset
                                 (font-spec :family (my-fallback-font-family "Migu 1M"
                                                                             "VL Gothic"
@@ -2300,7 +2296,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
                           ;; U+FF5E: FULLWIDTH TILDE
                           (split-string "〜～" "" t)))
       ;; HACK: フォントによっては「同一字形の別文字」を「別字形」にする
-      (my-set-fontset-font-safe fontset-name
+      (my-set-fontset-font-safe fontset
                                 (cons code code)
                                 (font-spec :family (my-fallback-font-family "Migu 1M"
                                                                             "Hiragino Sans"
@@ -2308,13 +2304,13 @@ F is inner function in `agent-shell', ARGS are F arguments."
     ;;
     ;; ラテン文字
     ;;
-    (my-set-fontset-font-safe fontset-name
+    (my-set-fontset-font-safe fontset
                               'cp858
                               (font-spec :family base-font-family))
     (dolist (code (mapcar 'string-to-char
                           (split-string "ı░▒▓╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪▌αßΓπΣσµτΦΘΩδφε≥≤ⁿ≈∙√" "" t)))
       ;; HACK: フォント "Inconsolata" で未実装の文字を補完する
-      (my-set-fontset-font-safe fontset-name
+      (my-set-fontset-font-safe fontset
                                 (cons code code)
                                 (font-spec :family (my-fallback-font-family "Menlo"
                                                                             "Consolas"
@@ -2323,14 +2319,14 @@ F is inner function in `agent-shell', ARGS are F arguments."
     (dolist (code (mapcar 'string-to-char
                           (split-string "⌐‗" "" t)))
       ;; HACK: フォント "Inconsolata", "Menlo", "Consolas" で未実装の文字を補完する
-      (my-set-fontset-font-safe fontset-name
+      (my-set-fontset-font-safe fontset
                                 (cons code code)
                                 (font-spec :family (my-fallback-font-family "Courier New"
                                                                             "Courier"))))
     ;;
     ;; Emoji
     ;;
-    (my-set-fontset-font-safe fontset-name
+    (my-set-fontset-font-safe fontset
                               'emoji
                               (font-spec :family (my-fallback-font-family "Apple Color Emoji"
                                                                           "Symbola"
@@ -2343,54 +2339,53 @@ F is inner function in `agent-shell', ARGS are F arguments."
     ;;
     ;; WARNING: 他の `my-set-fontset-font-safe' で `:size' 設定禁止！
     ;;          <C-x C-0> によるズームが効かなくなる！
-    (my-set-fontset-font-safe fontset-name
+    (my-set-fontset-font-safe fontset
                               'ascii ; この charset だけ変更せねばならない
                               (font-spec :size font-size
                                          :family base-font-family))
+    ;;
     ;; 適用
-    (modify-all-frames-parameters `((font . ,fontset-name)))
-    (custom-set-faces `(tooltip ((t (:font ,fontset-name))))))
+    ;;
+    (modify-all-frames-parameters `((font . ,fontset))) ; frame 全体
+    ) ; End of "programming"
 
   ;; ----------------------------------
-  ;; フォントセット：シェル
+  ;; フォントセット：ターミナル
   ;; ----------------------------------
   (let* (;; 名称
-         (fontset "shell")
+         (fontset-name "terminal")
          ;; デフォルトフォントサイズ (pt)
          ;;
          ;; NOTE: 浮動小数点型 → pt
          ;;       整数型 → px
          (font-size (if (equal window-system 'w32) 12.0 14.0))
          ;; 基礎フォント
-         (base-font-family (my-fallback-font-family "Inconsolata"
-                                                    "Menlo"
+         (base-font-family (my-fallback-font-family "Menlo"
                                                     "Consolas"
                                                     "Courier New"
                                                     "Courier"))
          ;; フォントセット生成
-         (fontset-name (create-fontset-from-ascii-font base-font-family)))
+         (fontset (create-fontset-from-ascii-font base-font-family nil fontset-name)))
     ;;
     ;; Unicode
     ;;
-    (my-set-fontset-font-safe fontset-name
+    (my-set-fontset-font-safe fontset
                               'unicode
                               (font-spec :family base-font-family))
     ;;
     ;; 日本語
     ;;
-    (my-set-fontset-font-safe fontset-name
+    (my-set-fontset-font-safe fontset
                               'cp932-2-byte ; `ascii' と `katakana-sjis' は含めない
-                              (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                          "VL Gothic"
+                              (font-spec :family (my-fallback-font-family "VL Gothic"
                                                                           "Hiragino Sans"
                                                                           "メイリオ"
                                                                           "ＭＳ ゴシック")))
     (dolist (charset '(japanese-jisx0213.2004-1
                        japanese-jisx0213-2))
-      (my-set-fontset-font-safe fontset-name
+      (my-set-fontset-font-safe fontset
                                 charset
                                 (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                            "VL Gothic"
                                                                             "Hiragino Sans"
                                                                             "メイリオ"
                                                                             "ＭＳ ゴシック"))))
@@ -2399,7 +2394,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
                           ;; U+FF5E: FULLWIDTH TILDE
                           (split-string "〜～" "" t)))
       ;; HACK: フォントによっては「同一字形の別文字」を「別字形」にする
-      (my-set-fontset-font-safe fontset-name
+      (my-set-fontset-font-safe fontset
                                 (cons code code)
                                 (font-spec :family (my-fallback-font-family "Migu 1M"
                                                                             "Hiragino Sans"
@@ -2407,29 +2402,20 @@ F is inner function in `agent-shell', ARGS are F arguments."
     ;;
     ;; ラテン文字
     ;;
-    (my-set-fontset-font-safe fontset-name
+    (my-set-fontset-font-safe fontset
                               'cp858
                               (font-spec :family base-font-family))
     (dolist (code (mapcar 'string-to-char
-                          (split-string "ı░▒▓╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪▌αßΓπΣσµτΦΘΩδφε≥≤ⁿ≈∙√" "" t)))
-      ;; HACK: フォント "Inconsolata" で未実装の文字を補完する
-      (my-set-fontset-font-safe fontset-name
-                                (cons code code)
-                                (font-spec :family (my-fallback-font-family "Menlo"
-                                                                            "Consolas"
-                                                                            "Courier New"
-                                                                            "Courier"))))
-    (dolist (code (mapcar 'string-to-char
                           (split-string "⌐‗" "" t)))
-      ;; HACK: フォント "Inconsolata", "Menlo", "Consolas" で未実装の文字を補完する
-      (my-set-fontset-font-safe fontset-name
+      ;; HACK: フォント "Menlo", "Consolas" で未実装の文字を補完する
+      (my-set-fontset-font-safe fontset
                                 (cons code code)
                                 (font-spec :family (my-fallback-font-family "Courier New"
                                                                             "Courier"))))
     ;;
     ;; Emoji
     ;;
-    (my-set-fontset-font-safe fontset-name
+    (my-set-fontset-font-safe fontset
                               'emoji
                               (font-spec :family (my-fallback-font-family "Apple Color Emoji"
                                                                           "Symbola"
@@ -2442,10 +2428,17 @@ F is inner function in `agent-shell', ARGS are F arguments."
     ;;
     ;; WARNING: 他の `my-set-fontset-font-safe' で `:size' 設定禁止！
     ;;          <C-x C-0> によるズームが効かなくなる！
-    (my-set-fontset-font-safe fontset-name
+    (my-set-fontset-font-safe fontset
                               'ascii ; この charset だけ変更せねばならない
                               (font-spec :size font-size
-                                         :family base-font-family)))
+                                         :family base-font-family))
+    ;;
+    ;; 適用
+    ;;
+    ;; FIXME: 効いてないっぽい
+    ;;        `modify-all-frames-parameters' が強すぎる……？
+    (face-remap-set-base 'term :font fontset) ; ターミナルエミュレーターのみ
+    ) ; END of "terminal"
   ) ; END of *font
 
 
