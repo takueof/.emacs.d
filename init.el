@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-21T05:05:04+09:00>
+;; Time-stamp: <2026-05-22T22:11:32+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1978,7 +1978,7 @@
 (leaf vterm
   :unless (member system-type '(ms-dos windows-nt))
   :ensure t
-  :bind (("C-`" . vterm))
+  :bind (("C-t C-t" . vterm))
   :hook ((vterm-mode-hook . my-vterm-initialize))
   :custom ((vterm-buffer-name-string . "*vterm::%s*")
            (vterm-copy-mode-remove-fake-newlines . t)
