@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-23T07:50:52+09:00>
+;; Time-stamp: <2026-05-23T07:59:42+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1978,7 +1978,9 @@
 (leaf ghostel
   :unless (member system-type '(ms-dos windows-nt))
   :ensure t
-  :bind (("C-t C-t" . ghostel-project))
+  :bind (("C-t C-t" . ghostel-project)
+         (:ghostel-mode-map
+          ("C-c M-d" . ignore)))
   :hook ((vterm-mode-hook . my-vterm-initialize))
   :custom ((ghostel-bold-color 'bright)
            (ghostel-module-auto-install . 'download))
