@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-23T05:45:50+09:00>
+;; Time-stamp: <2026-05-23T07:43:29+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1975,12 +1975,35 @@
 ;; ============================================================================
 ;; ターミナルエミュレーター
 ;; ============================================================================
+(leaf ghostel
+  :unless (member system-type '(ms-dos windows-nt))
+  :ensure t
+  :bind (("C-t C-t" . ghostel))
+  :hook ((vterm-mode-hook . my-vterm-initialize))
+  :custom ((ghostel-bold-color 'bright)
+           (ghostel-module-auto-install . 'download))
+  :init
+  (defun my-ghostel-initialize ()
+    "Initialize `ghostel' before load."
+    ;; 干渉するマイナーモードを無効にする
+    (setq-local cua-mode nil)
+    (setq-local undo-fu-mode nil))
+  :defer-config
+  ;; WARNING: 確実に `ghostel-keymap-exceptions' が存在する状態で
+  ;;          リストを操作しないと他のキーバインドに影響が出る
+  ;;
+  ;; `windmove' 用の設定をする
+  ;; 設定はリストの末尾に追加せねばならない
+  (add-to-list 'ghostel-keymap-exceptions "C-S-b" t)
+  (add-to-list 'ghostel-keymap-exceptions "C-S-f" t)
+  (add-to-list 'ghostel-keymap-exceptions "C-S-n" t)
+  (add-to-list 'ghostel-keymap-exceptions "C-S-p" t))
+
 (leaf vterm
   :unless (member system-type '(ms-dos windows-nt))
   :ensure t
-  :bind (("C-t C-t" . vterm))
   :hook ((vterm-mode-hook . my-vterm-initialize))
-  :custom ((vterm-buffer-name-string . "*vterm::%s*")
+  :custom ((vterm-buffer-name-string . "*vterm*")
            (vterm-copy-mode-remove-fake-newlines . t)
            (vterm-max-scrollback . 100000)
            (vterm-shell . "bash"))
