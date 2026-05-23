@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-23T19:24:46+09:00>
+;; Time-stamp: <2026-05-23T19:49:36+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -2184,6 +2184,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
          (my-fallback-font-family "Migu 1M"))
     (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.785))
     (add-to-list 'face-font-rescale-alist '("-Consolas-" . 0.950))
+    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.950))
     (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.785)))
    (;; macOS プリインストール ONLY
@@ -2263,7 +2264,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
     (my-set-fontset-font-safe fontset
                               'cp858
                               (font-spec :family (my-fallback-font-family "Menlo"
-                                                                          "Consolas")))
+                                                                          "Courier New")))
     ;;
     ;; Emoji
     ;;
