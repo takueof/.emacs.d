@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-23T07:59:42+09:00>
+;; Time-stamp: <2026-05-23T19:24:46+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -2183,6 +2183,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
     (and (my-fallback-font-family "Moralerspace Neon HW")
          (my-fallback-font-family "Migu 1M"))
     (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.785))
+    (add-to-list 'face-font-rescale-alist '("-Consolas-" . 0.950))
     (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.785)))
    (;; macOS プリインストール ONLY
@@ -2208,7 +2209,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
          ;;
          ;; NOTE: 浮動小数点型 → pt
          ;;       整数型 → px
-         (font-size (if (equal window-system 'w32) 12.0 14.0))
+         (font-size (if (equal window-system 'w32) 10.0 14.0))
          ;; 基礎フォント
          (base-font-family (my-fallback-font-family "Moralerspace Neon HW"
                                                     "Menlo"
