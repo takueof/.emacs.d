@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-24T15:28:31+09:00>
+;; Time-stamp: <2026-05-24T18:38:43+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -818,44 +818,23 @@
 ;; ------------------------------------
 (leaf whitespace
   :hook ((after-change-major-mode-hook . my-whitespace-mode-initialize))
-  :custom (;; 「不正」位置の空白文字のみ強調させる
-           (whitespace-style . '(empty
-                                 face
-                                 newline
-                                 newline-mark
-                                 space-after-tab
-                                 space-before-tab
-                                 space-mark ; HARD SPACE の ON/OFF も含む
-                                 spaces ; HARD SPACE の ON/OFF も含む
-                                 tab-mark
-                                 tabs
-                                 trailing))
-           ;;
-           ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調する
-           ;;
-           ;; 表示テスト:
-           ;;   U+0009: "	"
-           ;;   U+00A0: " "
-           ;;   U+3000: "　"
-           ;;
-           (whitespace-hspace-regexp . "\\(\u00A0\\|\u08A0\\|\u0920\\|\u0E20\\|\u0F20\\|\u3000\\)+")
-           (whitespace-trailing-regexp . "\\([\t \u00A0\u3000]+\\)$")
-           ;; 行カラム最大値は `fill-column' を参照させる
+  :custom (;; `fill-column' を参照する
            (whitespace-line-column . nil)
            ;;
-           ;; HACK: 半角空白 (U+0020) は強調しない
+           ;; HACK: 全角空白 (U+3000) を SPACE カテゴリに含めて強調する
            ;;
-           ;; 表示テスト:
-           ;;   U+0020: " "
+           ;; U+00A0: " "
+           ;; U+0020: " "
+           ;; U+3000: "　"
+           ;; U+0009: "	"
            ;;
-           (whitespace-display-mappings . '(;; EOL -> DOLLAR SIGN
-                                            (newline-mark ?\n [?$ ?\n])
-                                            ;; TAB -> CURRENCY SIGN
-                                            (space-mark ?\u00A0 [?¤] [?_])
-                                            ;; IDEOGRAPHIC SPACE -> WHITE SQUARE
-                                            (space-mark ?\u3000 [?\u25a1] [?_ ?_])
-                                            ;; Tab -> RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
-                                            (tab-mark ?\t [?» ?\t] [?\\ ?\t]))))
+           (whitespace-space-regexp . "\\([ \u3000]+\\)")
+           (whitespace-display-mappings . '(;; IDEOGRAPHIC SPACE (U+3000) → FULLWIDTH BROKEN BAR (U+FFE4)
+                                            (space-mark ?\u3000 [?\uFFE4])
+                                            ;; NO-BREAK SPACE (U+00A0) → CURRENCY SIGN (U+00A4)
+                                            (space-mark ?\u00A0 [?¤])
+                                            ;; LF (U+000A) → DOWNWARDS ARROW WITH CORNER LEFTWARDS (U+21B5)
+                                            (newline-mark ?\n [?↵ ?\n]))))
   :init
   (defun my-whitespace-mode-initialize ()
     "Initialize `whitespace' before load."
@@ -865,6 +844,7 @@
     (with-eval-after-load 'whitespace
       (if (member major-mode '(;; 降順ソート
                                agent-shell-mode
+                               ghostel-mode
                                lisp-interaction-mode
                                vterm-mode))
           (whitespace-mode -1))))
