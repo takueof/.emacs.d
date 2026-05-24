@@ -1,9 +1,9 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-05-24T13:16:45+09:00>
+;; Time-stamp: <2026-05-24T14:15:53+09:00>
 
-;; Author: Taku Watabe <taku.eof@gmail.com>
+;; Author: Taku WATABE <taku.eof@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
