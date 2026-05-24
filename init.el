@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-24T18:38:43+09:00>
+;; Time-stamp: <2026-05-24T18:49:40+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -177,9 +177,11 @@
 (setopt truncate-lines t)
 (setopt truncate-partial-width-windows nil) ; `truncate-lines' 値を尊重する
 ;;
-;; 行文字数を、ターミナルのデファクトスタンダードにあわせる
+;; 強制折り返しを事実上無効にする
 ;;
-(setopt fill-column 80)
+;; HACK: GNU Emacs が認識可能な整数の最大値を指定する
+;;
+(setopt fill-column most-positive-fixnum)
 ;;
 ;; <tab> キーはインデントのみ行う
 ;;
