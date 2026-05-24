@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-04-06T08:29:32+09:00>
+;; Time-stamp: <2026-05-24T13:16:45+09:00>
 
 ;; Author: Taku Watabe <taku.eof@gmail.com>
 
@@ -23,65 +23,54 @@
 ;; This config file is for "GNU Emacs" ONLY.
 ;; Unsupported other "emacsen" ("XEmacs" and others).
 
-;; WARNING: MUST USE English ONLY because `set-language-environment' not set.
+;; WARNING: MUST use English ONLY because `set-language-environment' not set.
 
 ;;; Code:
 
-
-;; ============================================================================
-;; Initialize settings
-;; ============================================================================
-;; Don't use `custom-set-variables' and `add-to-list'.
-;; Because those functions introduces configuration delays.
-;; ============================================================================
 ;;
-;; Don't allow additional notes for `custom-set-variables' and
-;; `custom-set-faces' to `user-init-file'.
-;; Automatic saving is done in another file.
+;; Don't edit and create `custom-file'.
 ;;
-;; WARNING: If you don't write this setting at the beginning,
-;;          `custom.el' will not be generated.
+(setopt custom-file null-device)
 ;;
-(setq custom-file (locate-user-emacs-file "custom.el"))
+;; Don't generate lockfiles.
 ;;
-;; Don't use "Native Compile".
+(setopt create-lockfiles nil)
 ;;
-;; Because, I have problems with slower execution than "Byte Compile" on both
-;; my macOS and Windows environments.
+;; Don't generate auto backup files.
 ;;
-(setq no-native-compile t)
+(setopt auto-save-default nil)
+(setopt make-backup-files nil)
+(setopt auto-save-list-file-prefix "~/.emacs-auto-save-list/.saves-")
+;;
+;; Precompute activation actions to speed up startup.
+;;
+(setopt package-quickstart t)
+;;
+;; Don't use "Native compile" because that caused crash and delay.
+;;
+(setopt no-native-compile t)
 ;;
 ;; Don't show `*Warnings*' buffer when asynchronous native compiling.
 ;;
-(setq native-comp-async-report-warnings-errors nil)
+(setopt native-comp-async-report-warnings-errors nil)
 ;;
 ;; Prevents garbage collection that occurs at startup.
 ;;
 ;; WARNING: Must set the values really need at the end of `init.el'.
 ;;
-(setq gc-cons-threshold most-positive-fixnum)
-;;
-;; Faster font display.
-;;
-(setq inhibit-compacting-font-caches t)
+(setopt gc-cons-threshold most-positive-fixnum)
 ;;
 ;; Increase subprocess main memory.
 ;;
-(setq read-process-output-max (* 1024 1024 1024)) ; 1GB
-;;
-;; Package initialization occurs before `user-init-file' is loaded
-;; but after `early-init-file'.
-;;
-(setq package-enable-at-startup nil)
+(setopt read-process-output-max 1073741824) ; 1GB
 ;;
 ;; Prohibit frame resizing, which is affected by font changes.
-;; Because we easily halve startup times.
 ;;
-(setq frame-inhibit-implied-resize t)
+(setopt frame-inhibit-implied-resize t)
 ;;
 ;; Enable frame resizing in px units.
 ;;
-(setq frame-resize-pixelwise t)
+(setopt frame-resize-pixelwise t)
 ;;
 ;; Disable UI elements
 ;;

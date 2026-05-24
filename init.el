@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-23T19:55:05+09:00>
+;; Time-stamp: <2026-05-24T14:14:21+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -103,224 +103,171 @@
 ;; ============================================================================
 ;; デフォルト値
 ;; ============================================================================
-(custom-set-variables
- ;;
- ;; フレームタイトルはカレントバッファ名を基準にする
- ;;
- '(frame-title-format (format "%%b - GNU Emacs v%s" emacs-version))
- ;;
- ;; スタートアップ表示は一切させない
- ;;
- ;; See:
- ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Startup-Summary.html
- ;;
- '(inhibit-startup-screen t)
- '(inhibit-startup-message t)
- '(inhibit-startup-buffer-menu t)
- '(inhibit-startup-echo-area-message t)
- ;;
- ;; *scratch* バッファのデフォルトメッセージは表示しない
- ;;
- '(initial-scratch-message nil)
- ;;
- ;; ベルは視覚のみ、音なし
- ;;
- '(visible-bell t)
- '(ring-bell-function 'ignore)
- ;;
- ;; タイプ時にマウスポインタを自動で隠す
- ;;
- '(make-pointer-invisible t)
- ;;
- ;; 空行をフリンジに表示
- ;;
- '(indicate-empty-lines t)
- ;;
- ;; ファイル先頭＆末尾の状態表示をフリンジに表示
- ;;
- '(indicate-buffer-boundaries 'right)
- ;;
- ;; `kill-line' で改行も含めて削除
- ;;
- '(kill-whole-line t)
- ;;
- ;; 読取専用バッファにおける `kill-line' 実行時、
- ;; エコーエリアに関連メッセージが表示されるようにする
- ;;
- '(kill-read-only-ok t)
- ;;
- ;; 同一（重複）文字列は `kill-ring' に保存しない
- ;;
- '(kill-do-not-save-duplicates t)
- ;;
- ;; `undo' 時に `redo' 履歴は無視する
- ;;
- '(undo-no-redo t)
- ;;
- ;; クリップボードと `kill-ring' を同期させる
- ;;
- '(select-enable-clipboard t)
- ;;
- ;; プレビューウインドウの表示を即時にする
- ;;
- '(register-preview-delay nil)
- ;;
- ;; スクロール時、自動スクロールをアグレッシブにしない
- ;;
- ;; See:
- ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Auto-Scrolling.html
- '(scroll-conservatively 0) ; default
- '(scroll-step 0) ; default
- '(scroll-up-aggressively nil) ; default
- '(scroll-down-aggressively nil) ; default
- ;;
- ;; なるべくウインドウ上下から2行目でスクロールを開始させる
- ;;
- '(scroll-margin 2)
- '(maximum-scroll-margin 2)
- ;;
- ;; ページ単位スクロール時に行を重複させる
- ;;
- '(next-screen-context-lines 2)
- ;;
- ;; スクロール時、なるべく先頭ないし最後の文字にポイントを移動させる
- ;;
- '(scroll-error-top-bottom t)
- ;;
- ;; スクロール時、ポイントを同一スクリーン位置に留まらせなくてもよい
- ;; non-nil にするとスクロールが不安定になりがちなため、nil とする
- ;;
- '(scroll-preserve-screen-position nil)
- ;;
- ;; 行間調整はしない
- ;;
- '(line-spacing nil)
- ;;
- ;; 行間移動に論理行を使用する
- ;;
- '(line-move-visual t)
- ;;
- ;; 行表示は折り返さない
- ;;
- '(truncate-lines t)
- '(truncate-partial-width-windows t)
- '(default-truncate-lines t)
- ;;
- ;; 行文字数を、端末エミュレータのデファクトスタンダードにあわせる
- ;;
- '(fill-column 80)
- ;;
- ;; インデント利用文字は、常に半角空白 (U+0020) のみとする
- ;; 必要なら各メジャーモードごとに設定しなおす
- ;;
- '(indent-tabs-mode nil)
- ;;
- ;; タブは常にインデントのみ実施する
- ;;
- '(tab-always-indent t)
- ;;
- ;; 自分用デフォルトタブ文字表示幅を設定する
- ;; 必要なら各メジャーモードごとに設定しなおす
- ;;
- '(tab-width 4)
- ;;
- ;; 大文字／小文字を区別しない
- ;;
- '(case-fold-search t)
- '(read-buffer-completion-ignore-case t)
- '(read-file-name-completion-ignore-case t)
- ;;
- ;; 新規ファイル／バッファ作成時の確認を省略する
- ;;
- '(confirm-nonexistent-file-or-buffer nil)
- ;;
- ;; 最終行への改行（空行）挿入を強制させる
- ;; 不要なら各メジャーモードごとに設定させる
- ;;
- '(require-final-newline t)
- '(mode-require-final-newline t)
- ;;
- ;; `undo' 上限を引き上げる
- ;;
- '(undo-limit 600000)
- '(undo-strong-limit 900000) ; (= 1.5 (/ undo-strong-limit undo-limit)) を踏襲
- ;;
- ;; 自動バックアップを無効にする
- ;;
- '(auto-save-default nil)
- '(make-backup-files nil)
- `(auto-save-list-file-prefix ,(convert-standard-filename "~/.emacs-auto-save-list/.saves-")) ; ローカル環境化
- ;;
- ;; ロックファイルを無効にする
- ;;
- '(create-lockfiles nil)
- ;;
- ;; `eval-expression' 時の出力を省略させない
- ;;
- '(eval-expression-print-level nil)
- '(eval-expression-print-length nil)
- ;;
- ;; 補完表示は循環させる
- ;;
- '(completion-cycle-threshold t)
- ;;
- ;; 補完表示は縦にする
- ;;
- '(completions-format 'vertical)
- ;;
- ;; エコーエリアの最大行数を増やす
- ;;
- '(message-log-max 2000)
- ;;
- ;; ミニバッファで各種コマンドを利用できるようにする
- ;;
- '(enable-recursive-minibuffers t)
- ;;
- ;; ニーモニックを改行コードにちなんだ表現にする
- ;;
- '(eol-mnemonic-dos "[CRLF]")
- '(eol-mnemonic-mac "[CR]")
- '(eol-mnemonic-unix "[LF]")
- '(eol-mnemonic-undecided "")
- ;;
- ;; カーソルの行列表記を好みに変更する
- ;;
- '(mode-line-position-column-line-format '(" (%l:%c)"))
- ;;
- ;; Trash（「ごみ箱」など）が使える場合はそちらへ廃棄させる
- ;;
- '(delete-by-moving-to-trash t)
- ;;
- ;; YES/NO 選択を簡略化する
- ;;
- '(use-short-answers t)
- ;;
- ;; Option キーを `meta' とみなす (macOS GUI ONLY)
- ;;
- `(mac-option-modifier ,(if (display-graphic-p)
-                            ''meta
-                          ''(:function alt :mouse alt)))
- ;;
- ;; Command キーは何もしない (macOS GUI ONLY)
- ;;
- `(mac-command-modifier ,(if (display-graphic-p)
-                             nil
-                           ''meta))
- ;;
- ;; 右 <Alt> + 左 <Ctrl> で <AltGr> が発送されないようにする (Windows ONLY)
- ;; <AltGr> は独自のキーコードであり、<C-M-> であるとみなされない
- ;;
- ;; See:
- ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Windows-Keyboard.html
- ;;
- '(w32-recognize-altgr nil)
- ;;
- ;; キャレットの視認性が悪くなる問題を回避する (Windows ONLY)
- ;;
- ;; See:
- ;; https://mementomori.social/@tml/116416045226298692
- ;;
- '(w32-use-visible-system-caret nil))
+;;
+;; フレームタイトルはカレントバッファ名を基準にする
+;;
+(setopt frame-title-format (format "%%b - GNU Emacs v%s" emacs-version))
+;;
+;; スタートアップ表示を無効にする
+;;
+(setopt inhibit-startup-screen t)
+(setopt inhibit-startup-message t)
+(setopt inhibit-startup-buffer-menu t)
+;;
+;; *scratch* バッファに何も表示しない
+;;
+(setopt initial-scratch-message nil)
+;;
+;; 入力時にポインターを自動で隠す
+;;
+(setopt make-pointer-invisible t)
+;;
+;; フリンジに空行を表示する
+;;
+(setopt indicate-empty-lines t)
+;;
+;; 右フリンジにファイル先頭＆末尾の状態を表示する
+;;
+(setopt indicate-buffer-boundaries 'right)
+;;
+;; 読取専用テキストの kill を許可する
+;;
+(setopt kill-read-only-ok t)
+;;
+;; `kill-line' で改行も含めて削除する
+;;
+(setopt kill-whole-line t)
+;;
+;; `kill-ring' で同一（重複）文字列を無視する
+;;
+(setopt kill-do-not-save-duplicates t)
+;;
+;; `undo' で `redo' 履歴を無視する
+;;
+(setopt undo-no-redo t)
+;;
+;; クリップボードと `kill-ring' を同期する
+;;
+(setopt select-enable-clipboard t)
+;;
+;; レジスタープレビューを表示しない
+;;
+(setopt register-preview-delay nil)
+;;
+;; ウインドウ上下端から10行目でスクロールを開始させる
+;;
+(setopt scroll-margin 10)
+(setopt next-screen-context-lines 10)
+;;
+;; スクロール不能ならバッファ先頭／末尾文字にポイントを移動する
+;;
+(setopt scroll-error-top-bottom t)
+;;
+;; 行間調整をしない
+;;
+(setopt line-spacing nil)
+;;
+;; 行間移動に論理行を使う
+;;
+(setopt line-move-visual t)
+;;
+;; 折り返しなし行を使う
+;;
+(setopt truncate-lines t)
+(setopt truncate-partial-width-windows nil) ; `truncate-lines' 値を尊重する
+;;
+;; 行文字数を、ターミナルのデファクトスタンダードにあわせる
+;;
+(setopt fill-column 80)
+;;
+;; <tab> キーはインデントのみ行う
+;;
+(setopt tab-always-indent t)
+;;
+;; 大文字／小文字の区別を無視する
+;;
+(setopt case-fold-search t)
+(setopt read-buffer-completion-ignore-case t)
+(setopt read-file-name-completion-ignore-case t)
+;;
+;; 新規ファイル／バッファ作成時の確認をしない
+;;
+(setopt confirm-nonexistent-file-or-buffer nil)
+;;
+;; 最終行への改行（空行）挿入を強制する
+;;
+(setopt require-final-newline t)
+(setopt mode-require-final-newline t)
+;;
+;; `undo' 上限を引き上げる
+;;
+(setopt undo-limit 600000)
+(setopt undo-strong-limit 900000) ; (= 1.5 (/ undo-strong-limit undo-limit)) を踏襲
+;;
+;; `eval-expression' 時の出力を制限しない
+;;
+(setopt eval-expression-print-level nil)
+(setopt eval-expression-print-length nil)
+;;
+;; 補完表示を循環させる
+;;
+(setopt completion-cycle-threshold t)
+;;
+;; 補完表示を縦にする
+;;
+(setopt completions-format 'vertical)
+;;
+;; ログバッファの上限を引き上げる
+;;
+(setopt message-log-max 2000)
+;;
+;; ミニバッファ内でミニバッファコマンドを使う
+;;
+(setopt enable-recursive-minibuffers t)
+;;
+;; ニーモニックを改行コードにちなんだ表現にする
+;;
+(setopt eol-mnemonic-dos "[CRLF]")
+(setopt eol-mnemonic-mac "[CR]")
+(setopt eol-mnemonic-unix "[LF]")
+(setopt eol-mnemonic-undecided "")
+;;
+;; カーソルの行列表記を変更する
+;;
+(setopt mode-line-position-column-line-format '(" (%l:%c)"))
+;;
+;; Trash（「ごみ箱」など）を使う
+;;
+(setopt delete-by-moving-to-trash t)
+;;
+;; y/n 選択を使う
+;;
+(setopt use-short-answers t)
+;;
+;; <Option> を <Meta> とみなす (macOS GUI ONLY)
+;;
+(if (display-graphic-p)
+    (setopt mac-option-modifier 'meta))
+;;
+;; <Command> に何もさせない (macOS GUI ONLY)
+;;
+(if (display-graphic-p)
+    (setopt mac-command-modifier nil))
+;;
+;; 右 <Alt> + 左 <Ctrl> で <AltGr> が発送されないようにする (Windows ONLY)
+;; <AltGr> は独自のキーコードであり、<C-M-> であるとみなされない
+;;
+;; See:
+;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Windows-Keyboard.html
+;;
+(setopt w32-recognize-altgr nil)
+;;
+;; キャレットの視認性が悪くなる問題を回避する (Windows ONLY)
+;;
+;; See:
+;; https://mementomori.social/@tml/116416045226298692
+;;
+(setopt w32-use-visible-system-caret nil)
 
 
 ;; ------------------------------------
@@ -349,23 +296,21 @@
 ;; CA 証明書を明示する (Windows ONLY)
 ;; ------------------------------------
 (if (member system-type '(ms-dos windows-nt))
-    (custom-set-variables
-     `(gnutls-trustfiles ',(mapcar 'convert-standard-filename
-                                   '("C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"
-                                     "C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.crt")))))
+    (setopt gnutls-trustfiles (mapcar 'convert-standard-filename
+                                      '("C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"
+                                        "C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.crt"))))
 
 
 ;; ============================================================================
 ;; パッケージマネージャー `package'
 ;;
-;; WARNING: `package' といったネットワークセキュリティを利用するパッケージの
-;;          利用前に `nsm-settings-file' を設定しなければならない
+;; WARNING: `package' といったネットワークセキュリティを使うパッケージの
+;;          実行前に `nsm-settings-file' を設定しなければならない
 ;; ============================================================================
 (when (require 'nsm nil :noerror) ; Network Security Manager
-  ;; HACK: 未 `require' だと `custom-set-variables' が効かない問題を回避する
-  (custom-set-variables
-   ;; ローカル環境にのみ保存させる
-   '(nsm-settings-file "~/.emacs-network-security.eld")))
+  ;; HACK: 未 `require' だと `setopt' が効かない問題を回避する
+  ;; ローカル環境にのみ保存させる
+  (setopt nsm-settings-file "~/.emacs-network-security.eld"))
 
 
 ;; ------------------------------------
@@ -681,7 +626,7 @@
            (ibuffer-expert . t))
   :config
   ;; バッファ名の表示を30文字に変更する
-  ;;   -> カラム幅が揃わなくなるため `-1' は不可
+  ;; カラム幅が揃わなくなるため `-1' は不可
   (let* (;; `customize-mark-to-save' の評価を t にするため明示的にコピーする
          (formats (copy-tree ibuffer-formats))
          (settings (assoc 'name (assoc 'mark formats))))
@@ -689,10 +634,9 @@
     ;; 将来的に項目が変更された場合でも、例外を出さないため
     (when settings
       (setcdr settings '(30 30 :left :elide))
-      ;; WARNING: この `custom-set-variables' は `:custom' に移動できない
-      ;;          変数 `settings' で加工を行った結果が入るため
-      (custom-set-variables
-       `(ibuffer-formats ',formats)))))
+      ;; WARNING: この `setopt' は `:custom' に移動できない
+      ;;          変数 `settings' で加工を行った結果を入れるため
+      (setopt ibuffer-formats formats))))
 
 
 ;; ------------------------------------
@@ -739,7 +683,7 @@
 
 
 ;; ------------------------------------
-;; アーカイブファイルを直接編集
+;; アーカイブファイルの直接編集
 ;; ------------------------------------
 (leaf jka-cmpr-hook
   :global-minor-mode auto-compression-mode)
@@ -764,7 +708,7 @@
 
 
 ;; ------------------------------------
-;; ミニバッファの履歴を残す
+;; ミニバッファの履歴
 ;; ------------------------------------
 (leaf savehist
   :custom (;; 履歴保存数は絞る
@@ -775,7 +719,7 @@
 
 
 ;; ------------------------------------
-;; ファイルごとにカーソル位置を保存
+;; ファイルごとのカーソル位置保存
 ;; ------------------------------------
 (leaf saveplace
   :custom (;; ローカル環境にのみ保存させる
@@ -787,8 +731,11 @@
 ;; 基礎編集コマンド集
 ;; ------------------------------------
 (leaf simple
-  ;; 暫定マークを使用する
-  :global-minor-mode transient-mark-mode)
+  :config
+  ;; インデントにタブ文字 (U+0009) を使わない
+  (indent-tabs-mode -1)
+  ;; 暫定マークを使う
+  (transient-mark-mode +1))
 
 
 ;; ------------------------------------
@@ -2169,7 +2116,10 @@ F is inner function in `agent-shell', ARGS are F arguments."
   ;; GUI 上でのみ設定する（設定する意味がないため、ターミナル上では何もしない）
   :when window-system
   :after my-utils
-  :custom (;; シンボルや句読点などを表示するフォントを、設定に応じて選択する
+  :custom (;; ガベージコレクト中にフォントキャッシュを圧縮しない
+           ;; 主記憶が十分なマシンでは、キャッシュ圧縮にかかる時間のほうが遅い
+           (inhibit-compacting-font-caches . t)
+           ;; シンボルや句読点などを表示するフォントを、設定に応じて選択する
            ;;   → GNU Emacs 25 より前のふるまいに戻す
            (use-default-font-for-symbols . nil)
            ;; 人為的に italic/bold フォントを選択する (Windows ONLY)
