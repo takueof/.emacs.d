@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-24T14:59:12+09:00>
+;; Time-stamp: <2026-05-24T15:28:31+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -35,11 +35,12 @@
 ;; ============================================================================
 ;; コーディングシステム
 ;; いくつかのデフォルトだけ決める（他は変えない）
+;; ============================================================================
 ;;
 ;; WARNING: `prefer-coding-system' は絶対に使わないこと！
 ;;          例：(prefer-coding-system 'utf-8-unix)
 ;;          システムごとに最適化された、自動設定のデフォルト定義を破壊するため
-;; ============================================================================
+;;
 ;; macOS ONLY
 (when (member system-type '(darwin))
   (set-keyboard-coding-system 'utf-8-unix)
@@ -60,7 +61,7 @@
 
 
 ;; ------------------------------------
-;; HACK: `japanese-cp932' を `shift_jis' として強制認識
+;; HACK: `japanese-cp932' を `shift_jis' として認識させる
 ;;       MIME を使用した自動判定を行うコード（`sgml-mode' など）でも
 ;;       例外が出ないようにする
 ;; ------------------------------------
@@ -71,7 +72,7 @@
 ;; ------------------------------------
 ;; HACK: `japanese-shift-jis' を `japanese-cp932' のエイリアスに変更する
 ;;       GNU Emacs における Shift_JIS 定義 `japanese-shift-jis' は、
-;;       「JIS X 0208 附属書1」を厳格に実装したものである
+;;       「JIS X 0208 附属書1」を厳格に実装している
 ;;       そのため一部文字（例：「～」(U+FF5E)）が未定義であるなどし、
 ;;       実用するうえで問題が出やすい
 ;;       そこで Microsoft の Shift_JIS 実装 `japanese-cp932' を、
@@ -305,7 +306,9 @@
 ;; Network Security Manager
 ;; ------------------------------------
 (when (require 'nsm nil :noerror)
+  ;;
   ;; HACK: 未 `require' だと `setopt' が効かない問題を回避する
+  ;;
   ;; ローカル環境にのみ保存させる
   (setopt nsm-settings-file "~/.emacs-network-security.eld"))
 
@@ -342,9 +345,10 @@
 ;; ============================================================================
 ;; ------------------------------------
 ;; サーバー化
+;; ------------------------------------
 ;;
 ;; WARNING: サーバー化に依存するパッケージがあるため、なるはやで開始しておく
-;; ------------------------------------
+;;
 (leaf server
   :custom (;; ローカル環境にのみ保存させる
            (server-auth-dir . "~/.emacs-server.eld"))
@@ -354,9 +358,10 @@
 
 ;; ------------------------------------
 ;; 認証 (macOS ONLY)
+;; ------------------------------------
 ;;
 ;; WARNING: 認証を使うパッケージがあるため、なるはやで設定しておく
-;; ------------------------------------
+;;
 (leaf auth-source
   :when (member system-type '(darwin))
   :defer-config
@@ -434,9 +439,9 @@
            (compilation-always-kill . t)
            (compilation-context-lines . t))
   :init
-  ;; ----------------------------------
+  ;;
   ;; HACK: コンパイル完了後、モードラインにも状態を簡易表示
-  ;; ----------------------------------
+  ;;
   (defun my-compilation-message (cur-buffer msg)
     "Show status messages when compile done in `compilation-mode'."
     (let ((msg-text (string-trim msg)) ; 改行文字が含まれうる問題を回避する
@@ -450,15 +455,17 @@
                                'compilation-mode-line-exit
                              'compilation-mode-line-fail)))))
   (add-to-list 'compilation-finish-functions 'my-compilation-message)
-  ;; ----------------------------------
+  ;;
   ;; HACK: コンパイル完了後、正常に終了していれば自動でウインドウを閉じる
-  ;; ----------------------------------
+  ;;
   (defcustom my-compilation-auto-quit-window-enable-buffer-names '("*compilation*")
     "Created buffer names by `compile' command."
     :group 'compilation
     :type '(list (repeat string)))
-  ;; NOTE: `compilation-finish-functions' にフックするだけでは、
-  ;;       `msg' しか参照できない
+  ;;
+  ;; HACK: アドバイス経由で `process-status' と `exit-status' を得る
+  ;;       `compilation-finish-functions' では `msg' しか参照できないため
+  ;;
   (defun my-compilation-auto-quit-window (process-status exit-status msg)
     "Run `quit-window' when `compile' successed."
     (if (and (member (buffer-name)
@@ -468,7 +475,9 @@
                  ;; 改行文字が含まれうる問題を回避する
                  (string-equal "finished" (string-trim msg))))
         (quit-window nil (get-buffer-window))))
-  :advice (;; HACK: アドバイス経由で `process-status' と `exit-status' を得る
+  :advice (;;
+           ;; HACK: アドバイス経由で `process-status' と `exit-status' を得る
+           ;;
            (:after compilation-handle-exit my-compilation-auto-quit-window)))
 
 
@@ -587,13 +596,15 @@
 ;; 自動スペルチェッカ
 ;; ------------------------------------
 (leaf flyspell
-  :bind (;; HACK: `flyspell' がキーバインドを横取りする問題を回避する
+  :bind (;;
+         ;; HACK: `flyspell' のキーバインド横取り問題を回避する
+         ;;
          (:flyspell-mode-map
-          ("M-TAB" . nil)
-          ("C-;" . nil)
-          ("C-," . nil)
-          ("C-." . nil)
-          ("C-c $" . nil)))
+          ("M-TAB" . 'ignore)
+          ("C-;" . 'ignore)
+          ("C-," . 'ignore)
+          ("C-." . 'ignore)
+          ("C-c $" . 'ignore)))
   :hook ((text-mode-hook . flyspell-mode)
          (prog-mode-hook . flyspell-prog-mode))
   :custom ((flyspell-delay . 1.0)))
@@ -631,8 +642,10 @@
     ;; 将来的に項目が変更された場合でも、例外を出さないため
     (when settings
       (setcdr settings '(30 30 :left :elide))
+      ;;
       ;; WARNING: この `setopt' は `:custom' に移動できない
       ;;          変数 `settings' で加工を行った結果を入れるため
+      ;;
       (setopt ibuffer-formats formats))))
 
 
@@ -640,7 +653,9 @@
 ;; ファイル操作の簡略化
 ;; ------------------------------------
 (leaf ido
+  ;;
   ;; HACK: デフォルト OFF だが、他機能から切り替え可能にしておく
+  ;;
   :custom ((ido-enable-flex-matching . t)
            (ido-create-new-buffer . 'always)
            (ido-use-virtual-buffers . t)
@@ -775,6 +790,7 @@
             ;;
             ;; FIXME: 現状、OS 側の動的なタイムゾーン変更に追従不能
             ;;        都度評価にしたい
+            ;;
             (time-stamp-format . ,(concat "%:y-%02m-%02dT%02H:%02M:%02S"
                                           (replace-regexp-in-string
                                            ;; 強制的にコロンを付与する
@@ -814,24 +830,24 @@
                                  tab-mark
                                  tabs
                                  trailing))
-           ;; -------------------------
-           ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調表示する
+           ;;
+           ;; HACK: 全角空白 (U+3000) を HARD SPACE とみなして強調する
            ;;
            ;; 表示テスト:
-           ;;   U+0009: 「	」
-           ;;   U+00A0: 「 」
-           ;;   U+3000: 「　」
-           ;; -------------------------
+           ;;   U+0009: "	"
+           ;;   U+00A0: " "
+           ;;   U+3000: "　"
+           ;;
            (whitespace-hspace-regexp . "\\(\u00A0\\|\u08A0\\|\u0920\\|\u0E20\\|\u0F20\\|\u3000\\)+")
            (whitespace-trailing-regexp . "\\([\t \u00A0\u3000]+\\)$")
            ;; 行カラム最大値は `fill-column' を参照させる
            (whitespace-line-column . nil)
-           ;; -------------------------
-           ;; HACK: 半角空白 (U+0020) を強調しないようにする
+           ;;
+           ;; HACK: 半角空白 (U+0020) は強調しない
            ;;
            ;; 表示テスト:
-           ;;   U+0020: 「 」
-           ;; -------------------------
+           ;;   U+0020: " "
+           ;;
            (whitespace-display-mappings . '(;; EOL -> DOLLAR SIGN
                                             (newline-mark ?\n [?$ ?\n])
                                             ;; TAB -> CURRENCY SIGN
@@ -843,9 +859,9 @@
   :init
   (defun my-whitespace-mode-initialize ()
     "Initialize `whitespace' before load."
-    ;; --------------------------------
+    ;;
     ;; HACK: 一部メジャーモードでは無効にする
-    ;; --------------------------------
+    ;;
     (with-eval-after-load 'whitespace
       (if (member major-mode '(;; 降順ソート
                                agent-shell-mode
@@ -894,11 +910,11 @@
          ;; ウインドウ中央表示はもっともシンプルなものを使用する
          ;; `recenter-top-bottom' は使わない
          ("C-l" . recenter)
-         ;; リージョン範囲をソート
+         ;; リージョン範囲をソートする
          ("C-c s" . sort-lines)
          ;; 1つ前のエラーを表示する
          ("C-x \\" . previous-error)
-         ;; メジャーモードを再適用後に `revert-buffer-quick' 実行させる
+         ;; メジャーモードを再適用後に `revert-buffer-quick' 実行する
          ("C-c r" . my-revert-buffer-quick-with-normal-mode)
          ;; 行頭移動は物理行とする
          ("C-a" . my-beginning-of-smart-indented-line)
@@ -914,19 +930,19 @@
          ("C-c i f" . my-insert-file-name)
          ;; カーソル位置にファイルパスを挿入する
          ("C-c i p" . my-insert-file-path)
-         ;; 一括でエンコーディング変換させる
+         ;; 一括でエンコーディング変換する
          ("C-c RET f" . my-change-files-coding-system)
          ;; フレーム背景の透明度を切り替える
          ("C-c w t" . my-toggle-frame-transparency))
   :config
-  ;; C-h を backspace とみなす
+  ;; <C-h> を <backspace> とみなす
   (keyboard-translate ?\C-h ?\C-?)
-  ;; 誤字の元になる `transpose-chars' キーバインドを明示的に解除しておく
+  ;; 誤字の元になる `transpose-chars' キーバインドを明示的に解除する
   (global-unset-key (kbd "C-t"))
-  ;; 誤字の元になる `transpose-lines' キーバインドを明示的に解除しておく
+  ;; 誤字の元になる `transpose-lines' キーバインドを明示的に解除する
   (global-unset-key (kbd "C-M-t"))
-  ;; `ido-undo-merge-work-directory' 実行のため <C-z> を押しすぎた場合、
-  ;; `suspend-frame' が起動しないよう配慮する
+  ;; `suspend-frame' キーバインドを明示的に解除する
+  ;; `ido-undo-merge-work-directory' を実行しやすくするため
   (global-unset-key (kbd "C-z")))
 
 
@@ -935,7 +951,7 @@
 ;; ============================================================================
 (leaf modus-themes
   :ensure t
-  :require t ; NOTE: 最新 MELPA 版を利用
+  :require t ; 最新 MELPA 版を利用する
   :custom ((modus-themes-bold-constructs . t)
            (modus-themes-common-palette-overrides . '((comment yellow-faint)
                                                       (string green-faint)
@@ -948,13 +964,16 @@
 
 ;; ============================================================================
 ;; 動的 IME パッチ (Windows ONLY)
+;; ============================================================================
 ;;
 ;; WARNING: 全 IM に影響するため、なるはやでインストールしておく
-;; ============================================================================
+;;
 (leaf tr-ime
   :when (member system-type '(ms-dos windows-nt))
   :ensure t
-  :custom '(;; 識別名 "W32-IME" は `tr-ime' 未適用だと使えない
+  :custom '(;;
+            ;; NOTE: 識別名 "W32-IME" は `tr-ime' 未適用だと使えない
+            ;;
             (default-input-method . "W32-IME")
             (w32-ime-buffer-switch-p . t)
             (w32-ime-mode-line-state-indicator . "[Aa]")
@@ -968,7 +987,11 @@
 ;; Input Method (IM)
 ;; ============================================================================
 (leaf *input-method
-  :when window-system ; CUI などは例外になるので、何もさせない
+  :when (and window-system ; GUI のみ
+             ;;
+             ;; WARNING: Windows ではカーソルのフェイスを変えると見えなくなる
+             ;;
+             (not (member system-type '(ms-dos windows-nt))))
   :after my-utils
   :hook (;; ウインドウ選択後、IM の状態に応じてフェイス `cursor' を変更する
          ;;
@@ -994,9 +1017,10 @@
 ;; ============================================================================
 ;; ------------------------------------
 ;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得＆設定
+;; ------------------------------------
 ;;
 ;; WARNING: 環境変数を使うパッケージがあるため、なるはやでインストールしておく
-;; ------------------------------------
+;;
 (leaf exec-path-from-shell
   :unless (member system-type '(ms-dos windows-nt))
   :ensure t
@@ -1006,9 +1030,10 @@
 
 ;; ------------------------------------
 ;; キーボード駆動メニュー実装ライブラリ
+;; ------------------------------------
 ;;
 ;; WARNING: 依存する外部パッケージがあるため、なるはやでインストールしておく
-;; ------------------------------------
+;;
 (leaf transient
   :ensure t
   :custom (;; ローカル環境にのみ保存させる
@@ -1310,31 +1335,32 @@
            (flycheck-idle-change-delay . 0.25)
            (flycheck-disabled-checkers . '(javascript-jscs)))
   :config
-  ;; ----------------------------------
+  ;;
   ;; HACK: `flycheck-checker-error-threshold' 以上の項目が出現すると
   ;;       生成されうる警告バッファの出現を抑制する
-  ;; ----------------------------------
+  ;;
   (with-eval-after-load 'warnings
     (add-to-list 'warning-suppress-log-types '(flycheck syntax-checker)))
-  ;; ----------------------------------
+  ;;
   ;; PATCH: Sass（.scss/.sass 両形式）チェック時にキャッシュを使わせない
-  ;; ----------------------------------
+  ;;
   (dolist (checker '(scss sass))
     (if (and (flycheck-registered-checker-p checker)
              (not (member "-C" (flycheck-checker-arguments checker))))
         ;; あえて破壊的に変更（元のリストに追加したい）
         (nconc (get checker 'flycheck-command) '("-C"))))
-  ;; ----------------------------------
+  ;;
   ;; PATCH: temp ファイルのデフォルトコーディングシステムを、
-  ;;        強制的に UTF-8 (LF) とする
-  ;; ----------------------------------
-  ;; オーバーライド
+  ;;        強制的に UTF-8 (LF) で認識させる
+  ;;
   (defun flycheck-save-buffer-to-file (file-name)
     "Save the contents of the current buffer to FILE-NAME."
     ;; 他の部分は元定義と一致させる
     (make-directory (file-name-directory file-name) t)
-    ;; FIXME: もっと柔軟に設定できるようにならないか？
-    (let ((coding-system-for-write 'utf-8-unix) ; ここだけ変更決め打ちで変更する
+    ;;
+    ;; FIXME: もっと柔軟に設定できるようにしたい
+    ;;
+    (let ((coding-system-for-write 'utf-8-unix) ; ここで決め打ちしている
           (jka-compr-inhibit t))
       (write-region nil nil file-name nil 0))))
 
@@ -1371,7 +1397,9 @@
 ;; ------------------------------------
 (leaf hl-todo
   :ensure t
-  :custom ((hl-todo-keyword-faces . '(;; 既存
+  :custom ((hl-todo-keyword-faces . '(;; 追加
+                                      ("PATCH" . "#ffcc00")
+                                      ;; 既存
                                       ("HOLD" . "#99ff99")
                                       ("TODO" . "#99ff99")
                                       ("NEXT" . "#99ff99")
@@ -1381,16 +1409,14 @@
                                       ("DONT" . "#ffffcc")
                                       ("FAIL" . "#ff0000")
                                       ("DONE" . "#00ff00")
-                                      ("NOTE"   . "#ffccff")
+                                      ("NOTE" . "#ffccff")
                                       ("KLUDGE" . "#ffccff")
-                                      ("HACK"   . "#ffccff")
-                                      ("TEMP"   . "#ffccff")
-                                      ("FIXME"  . "#ff0000")
-                                      ("XXX"   . "#ffccff")
+                                      ("HACK" . "#ffccff")
+                                      ("TEMP"  . "#ffccff")
+                                      ("FIXME" . "#ff0000")
+                                      ("XXX" . "#ffccff")
                                       ("CAUTION" . "#ffff00")
-                                      ("WARNING" . "#ff0000")
-                                      ;; 追加
-                                      ("PATCH" . "#ffcc00"))))
+                                      ("WARNING" . "#ff0000"))))
   :global-minor-mode global-hl-todo-mode)
 
 
@@ -1469,6 +1495,7 @@
            ;;       JSON schema が取得不能になる
            ;;       プロキシサーバー証明書を信頼済 CA 証明書群では
            ;;       検証「しない」設定に変更して回避するしかない
+           ;;
            (lsp-http-proxyStrictSSL . nil)
            ;;
            ;; `lsp-html'
@@ -1488,9 +1515,10 @@
 
 ;; ------------------------------------
 ;; LSP: 拡張 (UI)
-;;
-;; `lsp-mode' が自動ロードする
 ;; ------------------------------------
+;;
+;; NOTE: `lsp-mode' が自動ロードする
+;;
 (leaf lsp-ui
   :ensure t
   :bind ((:lsp-ui-mode-map
@@ -1511,9 +1539,10 @@
 
 ;; ------------------------------------
 ;; LSP: 拡張 (Tailwind CSS)
-;;
-;; `lsp-mode' が自動ロードする
 ;; ------------------------------------
+;;
+;; NOTE: `lsp-mode' が自動ロードする
+;;
 (leaf lsp-tailwindcss
   :ensure t
   :custom ((lsp-tailwindcss-add-on-mode . t)))
@@ -1521,9 +1550,10 @@
 
 ;; ------------------------------------
 ;; LSP: 拡張 (ty)
-;;
-;; `lsp-mode' が自動ロードする
 ;; ------------------------------------
+;;
+;; NOTE: `lsp-mode' が自動ロードする
+;;
 (leaf lsp-python-ty
   :hook ((python-mode-hook . my-lsp-python-ty-initialize))
   :init
@@ -1735,7 +1765,9 @@
 ;; ------------------------------------
 (leaf js2-mode
   :ensure t
+  ;;
   ;; HACK: `js2-minor-mode' で `js-mode' を拡張し、`js2-mode' は使わない
+  ;;
   :hook ((js-mode-hook . js2-minor-mode)
          (js-jsx-mode-hook . js2-minor-mode))
   :custom ((js2-highlight-level . 3) ; すべての構文強調を有効にする
@@ -1803,7 +1835,9 @@
 ;; ------------------------------------
 ;; Markdown
 ;; ------------------------------------
-;; NOTE: `markdown-open' → [C-c C-c o]
+;;
+;; NOTE: `markdown-open' → <C-c C-c o>
+;;
 (leaf markdown-mode
   :ensure t
   :custom `((markdown-coding-system . 'utf-8-unix)
@@ -1935,6 +1969,7 @@
     (setq-local cua-mode nil)
     (setq-local undo-fu-mode nil))
   :defer-config
+  ;;
   ;; WARNING: 確実に `ghostel-keymap-exceptions' が存在する状態で
   ;;          リストを操作しないと他のキーバインドに影響が出る
   ;;
@@ -1960,6 +1995,7 @@
     (setq-local cua-mode nil)
     (setq-local undo-fu-mode nil))
   :defer-config
+  ;;
   ;; WARNING: 確実に `vterm-keymap-exceptions' が存在する状態で
   ;;          リストを操作しないと他のキーバインドに影響が出る
   ;;
@@ -1975,10 +2011,12 @@
 ;; LLM と ACP (Agent Client Protocol) 経由で対話するインターフェース (AI)
 ;; ============================================================================
 (leaf agent-shell
+  ;;
   ;; FIXME: ヘッダーの ➤ を → に変えたい
   ;;        しかし `agent-shell.el' の L3227 をはじめ、
   ;;        複数部分で文字列 " ➤ " として直接記載されている
   ;;        PR 出すしかない……？
+  ;;
   :when (executable-find "claude-agent-acp")
   :ensure t
   :bind (("C-c a i" . agent-shell)
@@ -2006,12 +2044,15 @@ F is inner function in `agent-shell', ARGS are F arguments."
     (customize-set-variable 'agent-shell-anthropic-claude-environment
                             (agent-shell-make-environment-variables :inherit-env t))
     (apply f args))
-  :advice (;; HACK: 適切な hook がないため `:advice' でしのぐ
+  :advice (;;
+           ;; HACK: 適切な hook がないため `:advice' でしのぐ
+           ;;
            (:around agent-shell my-agent-shell-initialize)))
 
 
 ;; ============================================================================
 ;; フォント (GUI ONLY)
+;; ============================================================================
 ;;
 ;; 独自定義したフォント設定
 ;;
@@ -2027,17 +2068,18 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;;   バ| カタカナ
 ;;   漢| 漢字
 ;;   〇| 全角記号
+;;   　| IDEOGRAPHIC SPACE (U+3000)
 ;;   ～| FULLWIDTH TILDE (U+FF5E)
 ;;   〜| WAVE DASH (U+301C) `cp932' ONLY
 ;;   😊| Emoji
 ;;
 ;; 関連コマンド
 ;;   文字拡大／縮小モードに入る：
-;;     C-x C-0
+;;     <C-x C-0>
 ;;   カーソルがポイントしている文字の「簡易」情報を表示する：
-;;     C-x =
+;;     <C-x =>
 ;;   カーソルがポイントしている文字の「詳細」情報を表示する：
-;;     C-u C-x =
+;;     <C-u C-x =>
 ;;   定義済フォントセットを表示する：
 ;;     M-x describe-fontset
 ;;   利用可能なフォントのリストを取得する：
@@ -2108,9 +2150,11 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;;   https://www.emacswiki.org/emacs/DisplayingNonAsciiCharacters
 ;;   https://www.emacswiki.org/emacs/FontSets
 ;;   https://emacs.g.hatena.ne.jp/sakito/20100127
-;; ============================================================================
+;;
 (leaf *font
-  ;; GUI 上でのみ設定する（設定する意味がないため、ターミナル上では何もしない）
+  ;;
+  ;; NOTE: GUI のみ設定する（ターミナルでは設定できないし、する意味もない）
+  ;;
   :when window-system
   :after my-utils
   :custom (;; ガベージコレクト中にフォントキャッシュを圧縮しない
@@ -2155,8 +2199,9 @@ F is inner function in `agent-shell', ARGS are F arguments."
          (fontset-name "programming")
          ;; デフォルトフォントサイズ (pt)
          ;;
-         ;; NOTE: 浮動小数点型 → pt
-         ;;       整数型 → px
+         ;; NOTE: pt → 浮動小数点型
+         ;;       px → 整数型
+         ;;
          (font-size (if (equal window-system 'w32) 10.0 14.0))
          ;; 基礎フォント
          (base-font-family (my-fallback-font-family "Moralerspace Neon HW"
@@ -2200,7 +2245,9 @@ F is inner function in `agent-shell', ARGS are F arguments."
     (dolist (code (mapcar 'string-to-char
                           ;; WAVE DASH (U+301C), FULLWIDTH TILDE (U+FF5E)
                           (split-string "〜～" "" t)))
+      ;;
       ;; HACK: フォントによっては「同字形」の別文字を「別字形」にする
+      ;;
       (my-set-fontset-font-safe fontset
                                 (cons code code)
                                 (font-spec :family (my-fallback-font-family "Migu 1M"
@@ -2243,8 +2290,9 @@ F is inner function in `agent-shell', ARGS are F arguments."
          (fontset-name "terminal")
          ;; デフォルトフォントサイズ (pt)
          ;;
-         ;; NOTE: 浮動小数点型 → pt
-         ;;       整数型 → px
+         ;; NOTE: pt → 浮動小数点型
+         ;;       px → 整数型
+         ;;
          (font-size (if (equal window-system 'w32) 12.0 14.0))
          ;; 基礎フォント
          (base-font-family (my-fallback-font-family "Moralerspace Neon HW"
@@ -2273,7 +2321,9 @@ F is inner function in `agent-shell', ARGS are F arguments."
     (dolist (code (mapcar 'string-to-char
                           ;; WAVE DASH (U+301C), FULLWIDTH TILDE (U+FF5E)
                           (split-string "〜～" "" t)))
+      ;;
       ;; HACK: フォントによっては「同字形」の別文字を「別字形」にする
+      ;;
       (my-set-fontset-font-safe fontset
                                 (cons code code)
                                 (font-spec :family (my-fallback-font-family "Migu 1M"
@@ -2312,11 +2362,10 @@ F is inner function in `agent-shell', ARGS are F arguments."
 
 
 ;; ============================================================================
-;; `early-init.el' での一時的な設定をリセット
+;; `early-init.el' での一時設定を復元
 ;; ============================================================================
 (leaf *early-init-el-restore
-  :custom (;; ガベージコレクト閾値を既定値に戻す
-           (gc-cons-threshold . 800000)))
+  :custom ((gc-cons-threshold . 800000)))
 
 
 ;; ============================================================================
