@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-24T14:14:21+09:00>
+;; Time-stamp: <2026-05-24T14:56:13+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -209,7 +209,7 @@
 (setopt eval-expression-print-level nil)
 (setopt eval-expression-print-length nil)
 ;;
-;; 補完表示を循環させる
+;; 補完表示を循環する
 ;;
 (setopt completion-cycle-threshold t)
 ;;
