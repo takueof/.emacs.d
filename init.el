@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-24T14:57:07+09:00>
+;; Time-stamp: <2026-05-24T14:59:12+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -295,12 +295,16 @@
 
 
 ;; ============================================================================
-;; パッケージマネージャー `package'
+;; パッケージマネージャー
+;; ============================================================================
 ;;
 ;; WARNING: `package' といったネットワークセキュリティを使うパッケージの
 ;;          実行前に `nsm-settings-file' を設定しなければならない
-;; ============================================================================
-(when (require 'nsm nil :noerror) ; Network Security Manager
+;;
+;; ------------------------------------
+;; Network Security Manager
+;; ------------------------------------
+(when (require 'nsm nil :noerror)
   ;; HACK: 未 `require' だと `setopt' が効かない問題を回避する
   ;; ローカル環境にのみ保存させる
   (setopt nsm-settings-file "~/.emacs-network-security.eld"))
@@ -316,9 +320,9 @@
   (package-initialize))
 
 
-;; ============================================================================
-;; 詳細設定補助 `leaf'
-;; ============================================================================
+;; ------------------------------------
+;; 設定補助
+;; ------------------------------------
 (unless (package-installed-p 'leaf)
   (package-refresh-contents)
   (package-install 'leaf))
