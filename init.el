@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-25T14:39:09+09:00>
+;; Time-stamp: <2026-05-25T14:41:57+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -2017,7 +2017,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
     ;; 確実に `agent-shell-make-environment-variables' を定義させる
     (when (require 'agent-shell nil :noerror)
       ;; `agent-shell-make-environment-variables' 定義後に環境変数を渡す
-      (setopt 'agent-shell-anthropic-claude-environment
+      (setopt agent-shell-anthropic-claude-environment
               (agent-shell-make-environment-variables :inherit-env t)))
     (apply f args))
   :advice (;;
