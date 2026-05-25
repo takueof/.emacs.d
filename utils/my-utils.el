@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-24T14:16:19+09:00>
+;; Time-stamp: <2026-05-26T07:25:47+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -100,42 +100,13 @@ ARG is same argument of `other-frame'."
 
 
 ;; ============================================================================
-;; 折り返し表示
-;; ============================================================================
-(defun my-toggle-truncate-lines-force (&optional arg)
-  "Force switch the current buffer's display wrapping.
-
-ARG is non-nil to wrapping, or nil to no wrapping.
-
-It doesn't depend on `truncate-partial-width-windows' of `toggle-truncate-lines'."
-  (interactive "P")
-  (let ((after (if (null arg)
-                   (not truncate-lines)
-                 (> (prefix-numeric-value arg) 0))))
-    ;; 物理行移動はバッファの折り返し表示が有効でなければ意味がない
-    ;; ゆえに強制切替してムダを省く
-    ;;
-    ;; See also:
-    ;; `fill-column-indicator.el'
-    (setq-local line-move-visual (not after))
-    ;; `toggle-truncate-lines' は `truncate-partial-width-windows' が
-    ;; non-nil だと何もしない
-    ;; ゆえに `truncate-partial-width-windows' を `truncate-lines' の
-    ;; 切替予定値と同値に変更して `toggle-truncate-lines' を強制的に
-    ;; 機能させるよう準備する
-    (setq-local truncate-partial-width-windows after)
-    ;; 残りは任せる
-    (toggle-truncate-lines after)))
-
-
-;; ============================================================================
 ;; バッファ
 ;; ============================================================================
-(defun my-revert-buffer-quick-with-normal-mode (&optional auto-save)
-  "Run `normal-mode' after `revert-buffer-quick'.
+(defun my-revert-buffer (&optional auto-save)
+  "Run `revert-buffer-quick' and `normal-mode'.
 
 This function is force avoid the problem that `font-lock' could become invalid
- after running `revert-buffer-quick'.
+after running `revert-buffer-quick'.
 
 AUTO-SAVE is same as 1st argument of `revert-buffer-quick'"
   (interactive "P")
@@ -188,33 +159,6 @@ Return string of file path."
 
 
 ;; ============================================================================
-;; Input Method (IM)
-;; ============================================================================
-(defface my-cursor-default nil
-  "`cursor' face for `current-input-method' is nil."
-  :group 'customize)
-(copy-face 'cursor 'my-cursor-default)
-
-(defface my-cursor-input-method-activated '((t
-                                             :background "gold"))
-  "`cursor' face for `current-input-method' is non-nil."
-  :group 'customize)
-
-(defun my-change-cursor-faces-by-current-input-method ()
-  "Change cursor color with `current-input-method'."
-  (let* ((current-input-method (if (fboundp #'mac-input-source)
-                                   (let ((input-source (mac-input-source)))
-                                     (if (numberp (string-match "\\.US\\'" input-source))
-                                         nil
-                                       input-source))
-                                 current-input-method))
-         (cursor-face (if current-input-method
-                          'my-cursor-input-method-activated
-                        'my-cursor-default)))
-    (set-cursor-color (face-attribute cursor-face :background))))
-
-
-;; ============================================================================
 ;; フォントセット
 ;; ============================================================================
 (defmacro my-fallback-font-family (&rest families)
@@ -240,60 +184,6 @@ This feature seems to `car-safe' and `cdr-safe'."
            (debug t))
   ;; 例外を無視
   `(ignore-errors (set-fontset-font ,@args)))
-
-
-;; ============================================================================
-;; 一括エンコーディング変換
-;; ============================================================================
-(defun my-change-files-coding-system (dir regexp coding-system recursive)
-  "Convert CODING-SYSTEM for all files matched REGEXP in DIR.
-
-RECURSIVE is non-nil to find files for recursive.
-
-Return converted file numbers."
-  (interactive
-   (list (read-directory-name "Target directory: ")
-         (read-regexp "File name (RegExp): ")
-         (read-coding-system "Coding system: ")
-         (y-or-n-p "Recursive search? ")))
-  (let* ((target-files (if recursive
-                           (progn
-                             (require 'find-lisp nil :noerror)
-                             (declare-function find-lisp-find-files "find-lisp")
-                             (find-lisp-find-files dir regexp))
-                         (directory-files dir t regexp t)))
-         (target-files-length (safe-length target-files))
-         (before-buffer (current-buffer)))
-    (if (< 0 target-files-length)
-        (save-excursion
-          (with-temp-buffer
-            ;; 最終行処理は絶対にやらせない
-            (setq-local mode-require-final-newline nil)
-            (setq-local require-final-newline nil)
-            (dolist (path target-files)
-              ;; 変換開始
-              (set-visited-file-name path t)
-              (insert-file-contents path nil nil nil t) ; `erase-buffer' と同等の処理も実施
-              (set-buffer-file-coding-system coding-system)
-              (save-buffer)))
-          (set-buffer before-buffer)))
-    (message "%d files converted to `%S'" target-files-length coding-system)
-    target-files-length))
-
-
-;; ============================================================================
-;; フレーム
-;; ============================================================================
-(defun my-toggle-frame-transparency ()
-  "Switch frame background transparency between translucent and opaque."
-  (interactive)
-  (set-frame-parameter nil
-                       'alpha
-                       (let ((alpha (frame-parameter nil 'alpha)))
-                         (if (or (null alpha)
-                                 (equal alpha '(100 . 100)))
-                             '(80 . 50)
-                           '(100 . 100)))))
 
 (provide 'my-utils)
 
