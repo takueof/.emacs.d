@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-25T09:05:37+09:00>
+;; Time-stamp: <2026-05-25T09:06:22+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1993,12 +1993,6 @@
 ;; LLM と ACP (Agent Client Protocol) 経由で対話するインターフェース (AI)
 ;; ============================================================================
 (leaf agent-shell
-  ;;
-  ;; FIXME: ヘッダーの ➤ を → に変えたい
-  ;;        しかし `agent-shell.el' の L3227 をはじめ、
-  ;;        複数部分で文字列 " ➤ " として直接記載されている
-  ;;        PR 出すしかない……？
-  ;;
   :when (executable-find "claude-agent-acp")
   :ensure t
   :bind (("C-c a i" . agent-shell)
