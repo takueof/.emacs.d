@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-26T07:25:14+09:00>
+;; Time-stamp: <2026-05-27T08:30:36+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -873,6 +873,15 @@
   :global-minor-mode t)
 
 
+;; ------------------------------------
+;; `word-wrap' が有効なバッファの論理改行文字を拡張
+;; ------------------------------------
+(leaf word-wrap-whitespace-mode
+  :defer-config
+  (add-to-list 'word-wrap-whitespace-characters (string-to-char "]"))
+  :global-minor-mode global-word-wrap-whitespace-mode)
+
+
 ;; ============================================================================
 ;; 自作ユーティリティをロード
 ;; ============================================================================
@@ -986,6 +995,16 @@
            (transient-levels-file . "~/.emacs-transient-levels.eld")
            (transient-values-file . "~/.emacs-transient-values.eld")
            (transient-history-file . "~/.emacs-transient-history.eld")))
+
+
+;; ------------------------------------
+;; `wrap-prefix' 設定があるバッファで論理改行しても
+;; 表示だけプレフィクス（例：ビュレット "* "」）の分だけインデント
+;; 実際のテキストデータは変更しない（改行文字や空白文字などが入らない）
+;; ------------------------------------
+(leaf adaptive-wrap
+  :ensure t
+  :hook ((text-mode-hook . adaptive-wrap-prefix-mode)) )
 
 
 ;; ------------------------------------
@@ -1786,13 +1805,22 @@
 ;;
 (leaf markdown-mode
   :ensure t
-  :custom `((markdown-coding-system . 'utf-8-unix)
+  :custom `(
+            (markdown-coding-system . 'utf-8-unix)
+            (markdown-display-remote-images . t)
             (markdown-enable-highlighting-syntax . t)
             (markdown-enable-math . t)
             (markdown-enable-prefix-prompts . nil)
+            (markdown-enable-wiki-links . t)
+            (markdown-fontify-code-block-default-mode . 'normal-mode)
             (markdown-fontify-code-blocks-natively . t)
             (markdown-fontify-whole-heading-line . t)
-            (markdown-use-pandoc-style-yaml-metadata . t)))
+            (markdown-indent-on-enter . 'indent-and-new-item)
+            (markdown-special-ctrl-a/e . nil)
+            (markdown-unordered-list-item-prefix . "- ")
+            (markdown-use-pandoc-style-yaml-metadata . t)
+            (markdown-wiki-link-fontify-missing . t)
+            (markdown-wiki-link-search-type . 'project)))
 
 
 ;; ------------------------------------
