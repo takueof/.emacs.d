@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-05-24T14:15:53+09:00>
+;; Time-stamp: <2026-05-27T08:10:30+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -44,7 +44,7 @@
 ;;
 ;; Precompute activation actions to speed up startup.
 ;;
-(setopt package-quickstart t)
+;; (setopt package-quickstart t) ;; TODO: Enabled it always error
 ;;
 ;; Don't use "Native compile" because that caused crash and delay.
 ;;
