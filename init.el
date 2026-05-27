@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-27T16:45:12+09:00>
+;; Time-stamp: <2026-05-27T16:48:10+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1362,24 +1362,25 @@
 (leaf hl-todo
   :ensure t
   :custom ((hl-todo-keyword-faces . '(;; 追加
-                                      ("PATCH" . "#ffcc00")
+                                      ("PATCH" . "#ffff00")
+                                      ("See" . "#00ff00")
                                       ;; 既存
-                                      ("HOLD" . "#99ff99")
-                                      ("TODO" . "#99ff99")
-                                      ("NEXT" . "#99ff99")
-                                      ("THEM" . "#99ff99")
-                                      ("PROG" . "#00ffff")
-                                      ("OKAY" . "#00ffff")
-                                      ("DONT" . "#ffffcc")
-                                      ("FAIL" . "#ff0000")
                                       ("DONE" . "#00ff00")
-                                      ("NOTE" . "#ffccff")
-                                      ("KLUDGE" . "#ffccff")
-                                      ("HACK" . "#ffccff")
-                                      ("TEMP"  . "#ffccff")
-                                      ("FIXME" . "#ff0000")
-                                      ("XXX" . "#ffccff")
+                                      ("HOLD" . "#00ff00")
+                                      ("NEXT" . "#00ff00")
+                                      ("THEM" . "#00ff00")
+                                      ("TODO" . "#00ff00")
+                                      ("OKAY" . "#00ffff")
+                                      ("PROG" . "#00ffff")
+                                      ("HACK" . "#ff99ff")
+                                      ("KLUDGE" . "#ff99ff")
+                                      ("NOTE" . "#ff99ff")
+                                      ("TEMP"  . "#ff99ff")
+                                      ("XXX" . "#ff99ff")
                                       ("CAUTION" . "#ffff00")
+                                      ("DONT" . "#ffff00")
+                                      ("FAIL" . "#ff0000")
+                                      ("FIXME" . "#ff0000")
                                       ("WARNING" . "#ff0000"))))
   :global-minor-mode global-hl-todo-mode)
 
