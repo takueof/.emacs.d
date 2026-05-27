@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-26T07:25:47+09:00>
+;; Time-stamp: <2026-05-27T16:26:04+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -55,21 +55,19 @@ N is same meaning of `beginning-of-visual-line' argument."
 
 Move to the beginning of the line if the cursor is at the beginning or middle of the indent."
   (interactive)
-
-  ;; テスト:
-  ;; あああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ
-
-  ;; x 行目の先頭 (1 < x)
+  ;; x - 1 行目の行末とみなし、本判定前にポイント位置を調整
   (if (and (not (equal (my-visual-line-beginning-position) (line-beginning-position)))
            (equal (my-visual-line-beginning-position) (point)))
-      ;; x - 1 行目の行末とみなして判定を再開
       (backward-char))
-
-  (if (and (equal (my-visual-line-beginning-position) (line-beginning-position)) ; 1行目
-           (not (string-match                                                    ; インデント途中でない
-                 ;; Syntax Table で定義される空白文字 ([:space:]) だけでは
-                 ;; インデント途中か否か判定できない場合もある
-                 ;; 仕方ないので Emacs の正規表現が認識する全空白文字 (\s-) も包含
+  ;; 本判定
+  (if (and (;; 1行目
+            equal (my-visual-line-beginning-position) (line-beginning-position))
+           (;; インデント途中ではない
+            not (string-match
+                 ;; HACK: Unicode 空白文字 [:space:] だけでは
+                 ;;       インデント途中かどうか判定しきれない
+                 ;;       そこで GNU Emacs の正規表現における空白文字 [\s-] も
+                 ;;       追加することで補完する
                  "^[[:space:]\s-]+$"
                  (buffer-substring-no-properties (my-visual-line-beginning-position)
                                                  (point)))))
