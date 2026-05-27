@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-27T10:25:44+09:00>
+;; Time-stamp: <2026-05-27T10:46:49+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1786,23 +1786,10 @@
 
 
 ;; ------------------------------------
-;; Org
-;; ------------------------------------
-(leaf org
-  :bind (("C-c o l" . org-store-link)
-         ("C-c o a" . org-agenda)
-         ("C-c o r" . org-capture))
-  :custom ((org-use-speed-commands . t))
-  :config
-  (org-babel-do-load-languages 'org-babel-load-languages '((jupyter . t))))
-
-
-;; ------------------------------------
 ;; Python
 ;; ------------------------------------
 (leaf python-mode
-  :hook ((python-mode-hook . my-python-mode-initialize)
-         (jupyter-repl-mode-hook . my-python-mode-initialize))
+  :hook ((python-mode-hook . my-python-mode-initialize))
   :init
   (defun my-python-mode-initialize ()
     "Initialize `python-mode' before load."
