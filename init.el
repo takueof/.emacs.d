@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-27T10:46:49+09:00>
+;; Time-stamp: <2026-05-27T12:18:19+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -187,11 +187,9 @@
 ;;
 (setopt truncate-partial-width-windows nil)
 ;;
-;; 強制折り返しを事実上無効にする
+;; ターミナルのデファクトスタンダードにあわせる
 ;;
-;; HACK: GNU Emacs が認識可能な整数の最大値を指定する
-;;
-(setopt fill-column most-positive-fixnum)
+(setopt fill-column 80) ; Default: 70
 ;;
 ;; <tab> キーはインデントのみ行う
 ;;
@@ -813,6 +811,20 @@
   :hook ((after-change-major-mode-hook . my-whitespace-mode-initialize))
   :custom (;; `fill-column' を参照する
            (whitespace-line-column . nil)
+           ;; `whitespace-line-column' に関連しないスタイルのみ残す
+           (whitespace-style . '(empty
+                                 face
+                                 indentation
+                                 missing-newline-at-eof
+                                 newline
+                                 newline-mark
+                                 space-after-tab
+                                 space-before-tab
+                                 space-mark
+                                 spaces
+                                 tab-mark
+                                 tabs
+                                 trailing))
            ;;
            ;; HACK: 全角空白 (U+3000) を SPACE カテゴリに含めて強調する
            ;;
@@ -1005,15 +1017,6 @@
   :ensure t
   :hook ((prog-mode-hook . add-node-modules-path)
          (text-mode-hook . add-node-modules-path)))
-
-
-;; ------------------------------------
-;; 非同期あいまい検索
-;; ------------------------------------
-(leaf affe
-  :ensure t
-  :bind (("C-M-S-f" . affe-find)
-         ("C-M-S-g" . affe-grep)))
 
 
 ;; ------------------------------------
@@ -1605,10 +1608,10 @@
 ;; ------------------------------------
 (leaf orderless
   :ensure t
-  :custom ((completion-styles . '(orderless))
-           ;; `affe' と連携する
-           (affe-regexp-function . #'orderless-pattern-compiler)
-           (affe-highlight-function . #'orderless--highlight)))
+  :custom ((completion-category-defaults . nil)
+           (completion-category-overrides . '((file (styles partial-completion))))
+           (completion-pcm-leading-wildcard . t)
+           (completion-styles . '(orderless basic))))
 ;;
 ;; `migemo' が準備できたら使いはじめる
 ;;
@@ -1668,15 +1671,14 @@
 (leaf vertico
   :ensure t
   :bind ((:vertico-map
-          ("<backspace>" . vertico-directory-delete-char)
           ("<DEL>" . vertico-directory-delete-char)
+          ("<backspace>" . vertico-directory-delete-char)
           ("<escape>" . minibuffer-keyboard-quit)
           ("RET" . vertico-directory-enter)))
-  :hook ((minibuffer-setup . vertico-repeat-save))
-  :custom ((vertico-count . 20)
+  :custom ((vertico-count . 21)
            (vertico-cycle . t)
            (vertico-resize . t)
-           (vertico-sort-function . #'vertico-sort-history-alpha))
+           (vertico-scroll-margin . 10))
   :global-minor-mode t)
 
 
