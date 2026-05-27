@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-27T08:30:36+09:00>
+;; Time-stamp: <2026-05-27T10:08:01+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -102,6 +102,21 @@
 
 
 ;; ============================================================================
+;; `simple'
+;; ============================================================================
+;; モードラインを自分好みにする
+(line-number-mode +1)
+(column-number-mode +1)
+(size-indication-mode -1)
+;; インデントにタブ文字 (U+0009) を使わない
+(indent-tabs-mode -1)
+;; 暫定マークを使う
+(transient-mark-mode +1)
+;; 表示行モードを使う
+(global-visual-line-mode +1)
+
+
+;; ============================================================================
 ;; デフォルト値
 ;; ============================================================================
 ;;
@@ -168,14 +183,9 @@
 ;;
 (setopt line-spacing nil)
 ;;
-;; 行間移動に論理行を使う
+;; `truncate-lines' 値を尊重する
 ;;
-(setopt line-move-visual t)
-;;
-;; 折り返しなし行を使う
-;;
-(setopt truncate-lines t)
-(setopt truncate-partial-width-windows nil) ; `truncate-lines' 値を尊重する
+(setopt truncate-partial-width-windows nil)
 ;;
 ;; 強制折り返しを事実上無効にする
 ;;
@@ -278,14 +288,6 @@
 ;; ------------------------------------
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
-
-
-;; ------------------------------------
-;; モードラインを好みにする
-;; ------------------------------------
-(line-number-mode +1)
-(column-number-mode +1)
-(size-indication-mode +1)
 
 
 ;; ------------------------------------
@@ -742,17 +744,6 @@
 
 
 ;; ------------------------------------
-;; 基礎編集コマンド集
-;; ------------------------------------
-(leaf simple
-  :config
-  ;; インデントにタブ文字 (U+0009) を使わない
-  (indent-tabs-mode -1)
-  ;; 暫定マークを使う
-  (transient-mark-mode +1))
-
-
-;; ------------------------------------
 ;; タイムスタンプ
 ;; ------------------------------------
 (leaf time-stamp
@@ -1203,17 +1194,13 @@
              (flymake-mode nil "flymake")
              (flyspell-mode nil "flyspell")
              (flyspell-prog-mode nil "flyspell")
-             (global-company-mode nil "company")
-             (global-flycheck-mode nil "flycheck")
-             (global-whitespace-mode nil "whitespace")
              (inhibit-mouse-mode nil "inhibit-mouse")
              (js2-minor-mode nil "js2-mode")
              (lsp-mode nil "lsp-mode")
              (projectile-mode nil "projectile")
              (text-scale-mode nil "face-remap")
-             (whitespace-mode nil "whitespace")
-             (yas-global-mode nil "yasnippet")
-             (yas-minor-mode nil "yasnippet"))))
+             (visual-line-mode nil "simple")
+             (whitespace-mode nil "whitespace"))))
 
 
 ;; ------------------------------------
@@ -1859,17 +1846,6 @@
   :ensure t
   :custom (;; 保存時コンパイルを無効にする（他ツールに任せる）
            (scss-compile-at-save . nil)))
-
-
-;; ------------------------------------
-;; Text
-;; ------------------------------------
-(leaf text-mode
-  :hook ((text-mode-hook . my-text-mode-initialize))
-  :init
-  (defun my-text-mode-initialize ()
-    "Initialize `text-mode' before load."
-    (setq-local truncate-lines nil)))
 
 
 ;; ------------------------------------
