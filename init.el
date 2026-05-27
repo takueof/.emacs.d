@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-27T12:18:19+09:00>
+;; Time-stamp: <2026-05-27T16:27:35+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -913,8 +913,8 @@
          ("C-x p" . my-other-window-reverse)
          ;; 前のフレームに移動する
          ("C-x 5 p" . my-other-frame-reverse)
-         ;; 折り返し表示を切り替える
-         ("C-x w" . toggle-truncate-lines)
+         ;; バッファ単位で `visual-line-mode' を切り換える
+         ("C-c w" . visual-line-mode)
          ;; カーソル位置に YEN SIGN (U+00A5) を挿入する
          ("C-c i \\" . my-insert-yen-sign)
          ;; カーソル位置にファイル名を挿入する
