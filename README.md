@@ -1,6 +1,6 @@
 <!--
 Copyright (C) 2013-2024 Taku Watabe
-Time-stamp: <2024-01-08T08:13:29+09:00>
+Time-stamp: <2026-05-27T10:29:21+09:00>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 I wrote these files for "**macOS**" and "**Microsoft Windows**" environments, but perhaps it will work under "**GNU/Linux**" and "**UNIX**" environments.
 
-# Software License
+## Software License
 
 [GNU GENERAL PUBLIC LICENSE Version 3 (GNU GPLv3)](https://www.gnu.org/licenses/gpl-3.0) (at your option) or any later version.
 
