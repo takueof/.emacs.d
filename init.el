@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-27T16:27:35+09:00>
+;; Time-stamp: <2026-05-27T16:29:52+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -113,6 +113,9 @@
 ;; 暫定マークを使う
 (transient-mark-mode +1)
 ;; 表示行モードを使う
+(if (keymapp visual-line-mode-map)
+    ;; HACK: 強引に `visual-line-mode-map' を亡き者とする
+    (assoc-delete-all 'visual-line-mode minor-mode-map-alist))
 (global-visual-line-mode +1)
 
 
