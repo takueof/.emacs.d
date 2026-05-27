@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-27T16:29:52+09:00>
+;; Time-stamp: <2026-05-27T16:45:12+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1010,7 +1010,13 @@
 ;; ------------------------------------
 (leaf adaptive-wrap
   :ensure t
-  :hook ((text-mode-hook . adaptive-wrap-prefix-mode)) )
+  :hook ((text-mode-hook . adaptive-wrap-prefix-mode)
+         ;;
+         ;; HACK: `org-mode' で効かなくなるパターンを潰す
+         ;;
+         ;; See:
+         ;; https://taipapamotohus.com/post/adaptive-wrap/
+         (org-mode-hook . visual-line-mode)) )
 
 
 ;; ------------------------------------
