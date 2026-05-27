@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-27T10:08:01+09:00>
+;; Time-stamp: <2026-05-27T10:25:44+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1757,31 +1757,6 @@
 (leaf json-mode
   :ensure t
   :mode (("\\.ipynb\\'" . json-mode)))
-
-
-;; ------------------------------------
-;; Jupyter
-;;
-;; See:
-;; https://docs.jupyter.org/en/latest/
-;; https://github.com/emacs-jupyter/jupyter
-;; https://docs.astral.sh/uv/guides/integration/jupyter/
-;; ------------------------------------
-(leaf jupyter
-  :ensure t
-  :hook ((python-mode-hook . my-jupyter-initialize)
-         (jupyter-repl-mode-hook . my-jupyter-initialize))
-  :custom (;; HACK: WebSocket を使う（ZMQ が不安定）
-           (jupyter-use-zmq . nil))
-  :init
-  (defun my-jupyter-initialize ()
-    "Initialize `jupyter' before load."
-    ;; `uv' プロジェクトディレクトリで .venv/bin/jupyter を自動検出する
-    (when-let* ((venv-dir (locate-dominating-file default-directory ".venv"))
-                (jupyter-path (expand-file-name ".venv/bin/jupyter" venv-dir)))
-      (when (file-executable-p jupyter-path)
-        (setq-local jupyter-command jupyter-path)
-        (message "Using project jupyter: %s" jupyter-path)))))
 
 
 ;; ------------------------------------
