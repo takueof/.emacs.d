@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-27T16:48:10+09:00>
+;; Time-stamp: <2026-06-01T08:18:27+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -102,6 +102,13 @@
 
 
 ;; ============================================================================
+;; `word-wrap-mode'
+;; ============================================================================
+;; 単語区切り文字を拡張する
+(global-word-wrap-whitespace-mode +1)
+
+
+;; ============================================================================
 ;; `simple'
 ;; ============================================================================
 ;; モードラインを自分好みにする
@@ -112,11 +119,6 @@
 (indent-tabs-mode -1)
 ;; 暫定マークを使う
 (transient-mark-mode +1)
-;; 表示行モードを使う
-(if (keymapp visual-line-mode-map)
-    ;; HACK: 強引に `visual-line-mode-map' を亡き者とする
-    (assoc-delete-all 'visual-line-mode minor-mode-map-alist))
-(global-visual-line-mode +1)
 
 
 ;; ============================================================================
@@ -879,15 +881,6 @@
   :global-minor-mode t)
 
 
-;; ------------------------------------
-;; `word-wrap' が有効なバッファの論理改行文字を拡張
-;; ------------------------------------
-(leaf word-wrap-whitespace-mode
-  :defer-config
-  (add-to-list 'word-wrap-whitespace-characters (string-to-char "]"))
-  :global-minor-mode global-word-wrap-whitespace-mode)
-
-
 ;; ============================================================================
 ;; 自作ユーティリティをロード
 ;; ============================================================================
@@ -1211,7 +1204,7 @@
              (lsp-mode nil "lsp-mode")
              (projectile-mode nil "projectile")
              (text-scale-mode nil "face-remap")
-             (visual-line-mode nil "simple")
+             (visual-line-mode " S" "simple")
              (whitespace-mode nil "whitespace"))))
 
 
