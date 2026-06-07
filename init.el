@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-04T10:59:47+09:00>
+;; Time-stamp: <2026-06-08T08:45:50+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1068,7 +1068,7 @@
 ;; ------------------------------------
 (leaf arto
   :when (executable-find "arto")
-  :vc (:url "https://github.com/arto-app/arto.el" :rev :newest)
+  :vc (:url "https://github.com/arto-app/arto.el")
   ;; `markdown-open' で起動可能にする
   :custom ((markdown-open-command . #'arto-open)))
 
@@ -1232,7 +1232,7 @@
 ;; ------------------------------------
 (leaf dired+
   :after dired
-  :vc (:url "https://github.com/emacsmirror/dired-plus" :rev :newest)
+  :vc (:url "https://github.com/emacsmirror/dired-plus")
   :require t
   :custom ((diredp-hide-details-initially-flag . nil)
            (diredp-hide-details-propagate-flag . nil))
