@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-08T08:45:50+09:00>
+;; Time-stamp: <2026-06-09T07:23:08+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -48,9 +48,10 @@
   (set-terminal-coding-system 'utf-8)
   (setq-default default-process-coding-system '(utf-8 . utf-8)))
 
-;; Windows ONLY
-(when (member system-type '(ms-dos windows-nt))
-  (setq-default default-process-coding-system '(utf-8-unix . japanese-cp932-dos)))
+;; FIXME: この設定が悪さして、Unicode 文字が消失する現象が発生しているっぽい？
+;; ;; Windows ONLY
+;; (when (member system-type '(ms-dos windows-nt))
+;;   (setq-default default-process-coding-system '(utf-8-unix . japanese-cp932-dos)))
 
 
 ;; ------------------------------------
