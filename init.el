@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-10T21:10:20+09:00>
+;; Time-stamp: <2026-06-10T21:12:29+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1501,17 +1501,6 @@
            (lsp-ui-doc-delay . 0.25)
            ;; `lsp-ui-doc' を有効にしているため、他は不要になる
            (lsp-ui-sideline-enable . nil)))
-
-
-;; ------------------------------------
-;; LSP: 拡張 (Tailwind CSS)
-;; ------------------------------------
-;;
-;; NOTE: `lsp-mode' が自動ロードする
-;;
-(leaf lsp-tailwindcss
-  :ensure t
-  :custom ((lsp-tailwindcss-add-on-mode . t)))
 
 
 ;; ------------------------------------
