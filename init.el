@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-10T21:14:20+09:00>
+;; Time-stamp: <2026-06-10T21:14:50+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -46,10 +46,6 @@
   (set-selection-coding-system 'utf-8)
   (set-terminal-coding-system 'utf-8)
   (setq-default default-process-coding-system '(utf-8 . utf-8)))
-
-;; Windows ONLY
-(when (member system-type '(ms-dos windows-nt))
-  (setq-default default-process-coding-system '(utf-8-unix . japanese-cp932-dos)))
 
 
 ;; ------------------------------------
