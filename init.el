@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-10T14:16:16+09:00>
+;; Time-stamp: <2026-06-10T19:22:57+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -38,20 +38,18 @@
 ;; ============================================================================
 ;;
 ;; WARNING: `prefer-coding-system' は絶対に使わないこと！
-;;          例：(prefer-coding-system 'utf-8-unix)
-;;          システムごとに最適化された、自動設定のデフォルト定義を破壊するため
+;;          `system-type' ごとの規定値を完全破壊するため
 ;;
 ;; macOS ONLY
 (when (member system-type '(darwin))
-  (set-keyboard-coding-system 'utf-8-unix)
+  (set-keyboard-coding-system 'utf-8)
   (set-selection-coding-system 'utf-8)
   (set-terminal-coding-system 'utf-8)
-  (setq-default default-process-coding-system '(utf-8 . utf-8)))
+  (setq-default default-process-coding-system '(utf-8-unix . utf-8-unix)))
 
-;; FIXME: この設定が悪さして、Unicode 文字が消失する現象が発生しているっぽい？
-;; ;; Windows ONLY
-;; (when (member system-type '(ms-dos windows-nt))
-;;   (setq-default default-process-coding-system '(utf-8-unix . japanese-cp932-dos)))
+;; Windows ONLY
+(when (member system-type '(ms-dos windows-nt))
+  (setq-default default-process-coding-system '(utf-8-unix . japanese-cp932-dos)))
 
 
 ;; ------------------------------------
@@ -1026,6 +1024,12 @@
 ;; コードフォーマッター
 ;; ------------------------------------
 (leaf apheleia
+  ;;
+  ;; NOTE: Windows 環境では使えない
+  ;;       `apheleia' は設計上フォーマッターが外部プロセス任せのため
+  ;;       `default-process-coding-system' に `japanese-cp932' が必要な間は無理
+  ;;
+  :unless (member system-type '(ms-dos windows-nt))
   :ensure t
   :hook ((apheleia-mode-on-hook . my-apheleia-initialize))
   :custom ((apheleia-mode-lighter . ""))
