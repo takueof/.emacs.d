@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-12T09:27:44+09:00>
+;; Time-stamp: <2026-06-12T09:31:04+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1641,15 +1641,6 @@
             (projectile-cache-file . "~/.emacs-projectile-cache.eld")
             (projectile-known-projects-file . "~/.emacs-projectile-bookmarks.eld"))
   :global-minor-mode t)
-
-
-;; ------------------------------------
-;; 同時置換
-;; ------------------------------------
-(leaf substitute
-  :ensure t
-  :bind (("C-M-r" . substitute-target-in-buffer))
-  :custom ((substitute-highlight . t)))
 
 
 ;; ------------------------------------
