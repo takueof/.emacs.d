@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-12T10:54:00+09:00>
+;; Time-stamp: <2026-06-16T08:32:14+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1918,7 +1918,7 @@
          (:agent-shell-mode-map
           ("RET" . newline)
           ("C-j" . shell-maker-submit)))
-  :custom `((agent-shell-anthropic-default-model-id . ,(getenv "ANTHROPIC_DEFAULT_SONNET_MODEL"))
+  :custom `((agent-shell-anthropic-default-model-id . ,(getenv "ANTHROPIC_MODEL"))
             (agent-shell-busy-indicator-frames . 'dots-round)
             (agent-shell-context-sources . '(region))
             (agent-shell-embed-file-size-limit . 1048576) ; 1MB (unit: byte)
@@ -1927,6 +1927,7 @@
             (agent-shell-highlight-blocks . t)
             (agent-shell-permission-icon . "⚠️")
             (agent-shell-preferred-agent-config . 'claude-code)
+            (agent-shell-session-restore-verbosity . 'last)
             (agent-shell-session-strategy . 'latest)
             (agent-shell-show-welcome-message . nil))
   :init
