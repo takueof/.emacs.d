@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-17T09:13:58+09:00>
+;; Time-stamp: <2026-06-17T09:57:06+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -289,22 +289,31 @@
 
 
 ;; ------------------------------------
-;; CA 証明書を明示する (Windows ONLY)
+;; 認証元にキーチェーンを優先する (macOS ONLY)
 ;; ------------------------------------
-(if (member system-type '(ms-dos windows-nt))
-    (setopt gnutls-trustfiles (mapcar 'convert-standard-filename
-                                      '("C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"
-                                        "C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.crt"))))
+(if (and (member system-type '(darwin))
+         (require 'auth-source nil :noerror))
+    (setopt auth-sources (nconc '(macos-keychain-internet
+                                  macos-keychain-generic)
+                                auth-sources)))
 
 
 ;; ------------------------------------
-;; サーバー化
+;; 認証局の証明書を優先する (Windows ONLY)
 ;; ------------------------------------
-;;
-;; WARNING: サーバー化に依存するパッケージがあるため、なるはやで開始しておく
-;;
-(setopt server-auth-dir "~/.emacs-server.d") ; ローカル環境にのみ保存させる
-(server-start t)
+(if (and (member system-type '(ms-dos windows-nt))
+         (require 'gnutls nil :noerror))
+    (setopt gnutls-trustfiles (nconc '("C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"
+                                       "C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.crt")
+                                     gnutls-trustfiles)))
+
+
+;; ------------------------------------
+;; GNU Emacs サーバーを起動する
+;; ------------------------------------
+(when (require 'server nil :noerror)
+  (setopt server-auth-dir "~/.emacs-server.d") ; ローカル環境にのみ保存させる
+  (server-start t))
 
 
 ;; ============================================================================
@@ -355,19 +364,6 @@
 ;; ============================================================================
 ;; 組み込みパッケージ
 ;; ============================================================================
-;; ------------------------------------
-;; 認証 (macOS ONLY)
-;; ------------------------------------
-;;
-;; WARNING: 認証を使うパッケージがあるため、なるはやで設定しておく
-;;
-(leaf auth-source
-  :when (member system-type '(darwin))
-  :defer-config
-  (add-to-list 'auth-sources 'macos-keychain-internet)
-  (add-to-list 'auth-sources 'macos-keychain-generic))
-
-
 ;; ------------------------------------
 ;; `comint-mode' と派生モードで ANSI エスケープシーケンスの解釈を開始する
 ;; ------------------------------------
