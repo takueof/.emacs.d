@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-05-27T16:26:04+09:00>
+;; Time-stamp: <2026-06-17T10:33:18+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -184,8 +184,6 @@ This feature seems to `car-safe' and `cdr-safe'."
   `(ignore-errors (set-fontset-font ,@args)))
 
 (provide 'my-utils)
-
-
 ;; ============================================================================
 ;; Local Variables:
 ;; coding: utf-8-unix
