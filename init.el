@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-17T21:40:14+09:00>
+;; Time-stamp: <2026-06-17T21:41:49+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1019,11 +1019,15 @@
 ;; ------------------------------------
 (leaf apheleia
   ;;
-  ;; NOTE: Windows 環境では使えない
-  ;;       `apheleia' は設計上フォーマッターが外部プロセス任せのため
-  ;;       `default-process-coding-system' に `japanese-cp932' が必要な間は無理
+  ;; NOTE: プロセス間通信が Unicode でない環境では使えない
+  ;;       `apheleia' は設計上フォーマッターが外部プロセス任せ
+  ;;       よって `default-process-coding-system' が片方でも非 Unicode だと
+  ;;       文字化けが発生する
   ;;
-  :unless (member system-type '(ms-dos windows-nt))
+  :when (member 'unicode
+                (flatten-tree
+                 (mapcar #'coding-system-charset-list
+                         (flatten-tree default-process-coding-system))))
   :ensure t
   :hook ((apheleia-mode-on-hook . my-apheleia-initialize))
   :custom ((apheleia-mode-lighter . ""))
