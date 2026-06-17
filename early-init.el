@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-06-10T22:23:13+09:00>
+;; Time-stamp: <2026-06-17T10:33:35+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -44,10 +44,6 @@
 (setopt make-backup-files nil)
 (setopt auto-save-list-file-prefix "~/.emacs-auto-save-list/.saves-")
 ;;
-;; Precompute activation actions to speed up startup.
-;;
-;; (setopt package-quickstart t) ;; TODO: Enabled it always error
-;;
 ;; Don't use "Native compile" because that caused crash and delay.
 ;;
 (setopt no-native-compile t)
@@ -60,7 +56,7 @@
 ;;
 ;; WARNING: Must set the values really need at the end of `init.el'.
 ;;
-(setopt gc-cons-threshold most-positive-fixnum)
+(setopt gc-cons-threshold 1073741824) ; 1GB
 ;;
 ;; Increase subprocess main memory.
 ;;
@@ -73,18 +69,6 @@
 ;; Enable frame resizing in px units.
 ;;
 (setopt frame-resize-pixelwise t)
-;;
-;; Disable UI elements
-;;
-(blink-cursor-mode -1)
-(horizontal-scroll-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-(tab-bar-mode -1)
-(tool-bar-mode -1)
-(tooltip-mode -1)
-
-
 ;; ============================================================================
 ;; Local Variables:
 ;; coding: utf-8-unix
