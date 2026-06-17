@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-17T21:41:49+09:00>
+;; Time-stamp: <2026-06-17T21:44:28+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -2147,7 +2147,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
                                                                           "メイリオ"
                                                                           "ＭＳ ゴシック")))
 
-    (dolist (code (mapcar 'string-to-char
+    (dolist (code (mapcar #'string-to-char
                           ;; WAVE DASH (U+301C), FULLWIDTH TILDE (U+FF5E)
                           (split-string "〜～" "" t)))
       ;;
@@ -2223,7 +2223,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
                                                                           "Hiragino Sans"
                                                                           "メイリオ"
                                                                           "ＭＳ ゴシック")))
-    (dolist (code (mapcar 'string-to-char
+    (dolist (code (mapcar #'string-to-char
                           ;; WAVE DASH (U+301C), FULLWIDTH TILDE (U+FF5E)
                           (split-string "〜～" "" t)))
       ;;
