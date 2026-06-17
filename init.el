@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-17T09:58:39+09:00>
+;; Time-stamp: <2026-06-17T10:49:51+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -107,13 +107,25 @@
 ;; `simple'
 ;; ============================================================================
 ;; モードラインを自分好みにする
-(line-number-mode +1)
 (column-number-mode +1)
+(line-number-mode +1)
 (size-indication-mode -1)
 ;; インデントにタブ文字 (U+0009) を使わない
 (indent-tabs-mode -1)
-;; 暫定マークを使う
+;; リージョンを視覚化する
 (transient-mark-mode +1)
+
+
+;; ============================================================================
+;; 各種 UI
+;; ============================================================================
+(blink-cursor-mode -1)
+(horizontal-scroll-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(tab-bar-mode -1)
+(tool-bar-mode -1)
+(tooltip-mode -1)
 
 
 ;; ============================================================================
@@ -281,16 +293,24 @@
 (setopt w32-use-visible-system-caret nil)
 
 
-;; ------------------------------------
+;; ============================================================================
 ;; リージョンの大文字／小文字変換で、実行の是非を問わせない
-;; ------------------------------------
+;; ============================================================================
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 
 
-;; ------------------------------------
+;; ============================================================================
+;; GNU Emacs サーバー
+;; ============================================================================
+(when (require 'server nil :noerror)
+  (setopt server-auth-dir "~/.emacs-server.d") ; ローカル環境にのみ保存させる
+  (server-start t))
+
+
+;; ============================================================================
 ;; 認証元にキーチェーンを優先する (macOS ONLY)
-;; ------------------------------------
+;; ============================================================================
 (if (and (member system-type '(darwin))
          (require 'auth-source nil :noerror))
     (setopt auth-sources (nconc '(macos-keychain-internet
@@ -298,9 +318,9 @@
                                 auth-sources)))
 
 
-;; ------------------------------------
-;; 認証局の証明書を優先する (Windows ONLY)
-;; ------------------------------------
+;; ============================================================================
+;; 認証局の証明書を使わせる (Windows ONLY)
+;; ============================================================================
 (if (and (member system-type '(ms-dos windows-nt))
          (require 'gnutls nil :noerror))
     (setopt gnutls-trustfiles (nconc '("C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"
@@ -308,38 +328,27 @@
                                      gnutls-trustfiles)))
 
 
-;; ------------------------------------
-;; GNU Emacs サーバーを起動する
-;; ------------------------------------
-(when (require 'server nil :noerror)
-  (setopt server-auth-dir "~/.emacs-server.d") ; ローカル環境にのみ保存させる
-  (server-start t))
-
-
 ;; ============================================================================
 ;; パッケージマネージャー
 ;; ============================================================================
-;;
-;; WARNING: `package' といったネットワークセキュリティを使うパッケージの
-;;          実行前に `nsm-settings-file' を設定しなければならない
-;;
 ;; ------------------------------------
 ;; Network Security Manager
 ;; ------------------------------------
-(when (require 'nsm nil :noerror)
-  ;;
-  ;; HACK: 未 `require' だと `setopt' が効かない問題を回避する
-  ;;
-  ;; ローカル環境にのみ保存させる
-  (setopt nsm-settings-file "~/.emacs-network-security.eld"))
+;;
+;; WARNING: `package-initialize' は `nsm-settings-file' に依存するため、
+;;          実行前に `nsm' の設定を済ませておかねばならない
+;;
+(if (require 'nsm nil :noerror)
+    ;; ローカル環境にのみ保存させる
+    (setopt nsm-settings-file "~/.emacs-network-security.eld"))
 
 
 ;; ------------------------------------
 ;; ロード
 ;; ------------------------------------
 (when (require 'package nil :noerror)
-  ;; 確実に `package-archives' が定義済でなければならない
-  (add-to-list 'package-archives '("MELPA" . "https://melpa.org/packages/"))
+  (setopt package-archives (nconc '(("MELPA" . "https://melpa.org/packages/"))
+                                  package-archives))
   ;; あらゆるパッケージロードに先んじて初期化する
   (package-initialize))
 
@@ -2258,15 +2267,6 @@ F is inner function in `agent-shell', ARGS are F arguments."
     (face-remap-set-base 'term :font fontset) ; ターミナルのみ
     ) ; END of "terminal"
   ) ; END of *font
-
-
-;; ============================================================================
-;; `early-init.el' での一時設定を復元
-;; ============================================================================
-(leaf *early-init-el-restore
-  :custom ((gc-cons-threshold . 800000)))
-
-
 ;; ============================================================================
 ;; Local Variables:
 ;; no-byte-compile: t
