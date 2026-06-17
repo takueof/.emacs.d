@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-17T10:49:51+09:00>
+;; Time-stamp: <2026-06-17T21:40:14+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -94,6 +94,28 @@
                    :encode-translation-table (get 'japanese-ucs-cp932-to-jis-map 'translation-table))
 (coding-system-put 'iso-2022-jp ; JIS
                    :encode-translation-table (get 'japanese-ucs-cp932-to-jis-map 'translation-table))
+
+
+;; ============================================================================
+;; キー
+;; ============================================================================
+;; 文字 C-h を <backspace> とみなす
+;; NOTE: v30.1 未満の (keyboard-translate ?\C-h ?\C-?) と同義
+(key-translate "C-h" "<backspace>")
+;; ヘルプ表示を割り当てなおす
+(keymap-global-set "C-x ?" #'help-command)
+;; 1つ前のエラーを表示する
+(keymap-global-set "C-x \\" #'previous-error)
+;; リージョン範囲をソートする
+(keymap-global-set "C-c s" #'sort-lines)
+;; バッファ単位で `truncate-lines' を切り換える
+(keymap-global-set "C-c w" #'toggle-truncate-lines)
+;; 誤字の元になる `transpose-chars' を排除する
+(keymap-global-unset "C-t")
+;; 誤字の元になる `transpose-lines' を解除する
+(keymap-global-unset "C-M-t")
+;; `suspend-frame' キーバインドを明示的に解除する
+(keymap-global-unset "C-z")
 
 
 ;; ============================================================================
@@ -368,6 +390,28 @@
   :ensure t
   :config
   (leaf-keywords-init))
+
+
+;; ============================================================================
+;; 自作ユーティリティ
+;; ============================================================================
+(leaf my-utils
+  :load-path* "utils"
+  :require t
+  :bind (;; 行頭移動は物理行とする
+         ("C-a" . my-beginning-of-smart-indented-line)
+         ;; 前のウインドウに移動する
+         ("C-x p" . my-other-window-reverse)
+         ;; 前のフレームに移動する
+         ("C-x 5 p" . my-other-frame-reverse)
+         ;; カーソル位置に YEN SIGN (U+00A5) を挿入する
+         ("C-c i \\" . my-insert-yen-sign)
+         ;; カーソル位置にファイル名を挿入する
+         ("C-c i f" . my-insert-file-name)
+         ;; カーソル位置にファイルパスを挿入する
+         ("C-c i p" . my-insert-file-path)
+         ;; バッファリロード実行後にメジャーモードを読みなおす
+         ("C-c r" . my-revert-buffer)))
 
 
 ;; ============================================================================
@@ -879,54 +923,6 @@
 
 
 ;; ============================================================================
-;; 自作ユーティリティをロード
-;; ============================================================================
-(leaf my-utils
-  :load-path* "utils"
-  :require t)
-
-
-;; ============================================================================
-;; グローバルキーバインド
-;; ============================================================================
-(leaf *global-keybind
-  :leaf-defer nil
-  :after my-utils
-  :bind (;; ヘルプ表示を割り当てなおす
-         ("C-x ?" . help-command)
-         ;; 1つ前のエラーを表示する
-         ("C-x \\" . previous-error)
-         ;; 行頭移動は物理行とする
-         ("C-a" . my-beginning-of-smart-indented-line)
-         ;; 前のウインドウに移動する
-         ("C-x p" . my-other-window-reverse)
-         ;; 前のフレームに移動する
-         ("C-x 5 p" . my-other-frame-reverse)
-         ;; カーソル位置に YEN SIGN (U+00A5) を挿入する
-         ("C-c i \\" . my-insert-yen-sign)
-         ;; カーソル位置にファイル名を挿入する
-         ("C-c i f" . my-insert-file-name)
-         ;; カーソル位置にファイルパスを挿入する
-         ("C-c i p" . my-insert-file-path)
-         ;; バッファリロード実行後にメジャーモードを読みなおす
-         ("C-c r" . my-revert-buffer)
-         ;; リージョン範囲をソートする
-         ("C-c s" . sort-lines)
-         ;; バッファ単位で `truncate-lines' を切り換える
-         ("C-c w" . toggle-truncate-lines))
-  :config
-  ;; <C-h> を <backspace> とみなす
-  (keyboard-translate ?\C-h ?\C-?)
-  ;; 誤字の元になる `transpose-chars' キーバインドを明示的に解除する
-  (global-unset-key (kbd "C-t"))
-  ;; 誤字の元になる `transpose-lines' キーバインドを明示的に解除する
-  (global-unset-key (kbd "C-M-t"))
-  ;; `suspend-frame' キーバインドを明示的に解除する
-  ;; `ido-undo-merge-work-directory' を実行しやすくするため
-  (global-unset-key (kbd "C-z")))
-
-
-;; ============================================================================
 ;; カラーテーマ
 ;; ============================================================================
 (leaf modus-themes
@@ -945,9 +941,6 @@
 ;; ============================================================================
 ;; 動的 IME パッチ (Windows ONLY)
 ;; ============================================================================
-;;
-;; WARNING: 全 IM に影響するため、なるはやでインストールしておく
-;;
 (leaf tr-ime
   :when (member system-type '(ms-dos windows-nt))
   :ensure t
