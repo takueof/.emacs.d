@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-18T11:26:06+09:00>
+;; Time-stamp: <2026-06-18T11:26:26+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -880,12 +880,14 @@
            ;; U+0009: "	"
            ;;
            (whitespace-space-regexp . "\\([\u0020\u3000]+\\)")
-           (whitespace-display-mappings . '(;; IDEOGRAPHIC SPACE (U+3000) → FULLWIDTH BROKEN BAR (U+FFE4)
-                                            (space-mark ?\u3000 [?\uFFE4])
-                                            ;; NO-BREAK SPACE (U+00A0) → CURRENCY SIGN (U+00A4)
+           (whitespace-display-mappings . '(;; LF (U+000A) → "↵" DOWNWARDS ARROW WITH CORNER LEFTWARDS (U+21B5)
+                                            (newline-mark ?\u000A [?\u21B5 ?\n])
+                                            ;; IDEOGRAPHIC SPACE (U+3000) → "￩￫" HALFWIDTH LEFTWARDS ARROW (U+FFE9), HALFWIDTH RIGHTWARDS ARROW (U+FFEB)
+                                            (space-mark ?\u3000 [?\uFFE9 ?\uFFEB])
+                                            ;; NO-BREAK SPACE (U+00A0) → "¤" CURRENCY SIGN (U+00A4)
                                             (space-mark ?\u00A0 [?\u00A4])
-                                            ;; LF (U+000A) → DOWNWARDS ARROW WITH CORNER LEFTWARDS (U+21B5)
-                                            (newline-mark ?\u000A [?\u21B5 ?\n]))))
+                                            ;; TAB (U+0009) → "»" RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK (U+00BB)
+                                            (tab-mark ?\u0009 [?\u00BB ?\t]))))
   :init
   (defun my-whitespace-mode-initialize ()
     "Initialize `whitespace' before load."
