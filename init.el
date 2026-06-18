@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-17T21:44:28+09:00>
+;; Time-stamp: <2026-06-18T11:26:06+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -289,18 +289,18 @@
 ;;
 (setopt use-short-answers t)
 ;;
-;; <Option> を <Meta> とみなす (macOS GUI ONLY)
+;; <option> を <meta> とみなす (macOS GUI ONLY)
 ;;
 (if (display-graphic-p)
     (setopt mac-option-modifier 'meta))
 ;;
-;; <Command> に何もさせない (macOS GUI ONLY)
+;; <command> に何もさせない (macOS GUI ONLY)
 ;;
 (if (display-graphic-p)
     (setopt mac-command-modifier nil))
 ;;
-;; 右 <Alt> + 左 <Ctrl> で <AltGr> が発送されないようにする (Windows ONLY)
-;; <AltGr> は独自のキーコードであり、<C-M-> であるとみなされない
+;; 右 <alt> + 左 <ctrl> で <altgr> が発送されないようにする (Windows ONLY)
+;; <altgr> は Windows 独自のキーコードで、この設定をしないと C-M- にならない
 ;;
 ;; See:
 ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Windows-Keyboard.html
@@ -393,7 +393,7 @@
 
 
 ;; ============================================================================
-;; 自作ユーティリティ
+;; 自作ユーティリティ `my-utils'
 ;; ============================================================================
 (leaf my-utils
   :load-path* "utils"
