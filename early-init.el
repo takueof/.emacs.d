@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-06-17T10:33:35+09:00>
+;; Time-stamp: <2026-06-20T08:29:22+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -42,7 +42,7 @@
 ;;
 (setopt auto-save-default nil)
 (setopt make-backup-files nil)
-(setopt auto-save-list-file-prefix "~/.emacs-auto-save-list/.saves-")
+(setopt auto-save-list-file-prefix "~/.emacs-auto-save-list.d/.saves-")
 ;;
 ;; Don't use "Native compile" because that caused crash and delay.
 ;;

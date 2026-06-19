@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-18T11:26:26+09:00>
+;; Time-stamp: <2026-06-20T08:30:02+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1267,7 +1267,7 @@
          ("C-c d R" . easysession-reset)
          ("C-c d u" . easysession-unload)
          ("C-c d d" . easysession-delete))
-  :custom ((easysession-directory . "~/.emacs-easysession"))
+  :custom ((easysession-directory . "~/.emacs-easysession.d"))
   :config
   (easysession-setup))
 
