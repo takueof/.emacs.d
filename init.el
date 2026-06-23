@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-20T08:30:02+09:00>
+;; Time-stamp: <2026-06-23T20:42:40+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -734,7 +734,8 @@
 ;; ------------------------------------
 (leaf ispell
   :when (or (executable-find "aspell")
-            (executable-find "ispell"))
+            (executable-find "ispell")
+            (executable-find "hunspell"))
   :custom ((ispell-dictionary . "english")
            (ispell-extra-args . '("--sug-mode=fast"
                                   "--run-together"
