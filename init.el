@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-23T20:42:40+09:00>
+;; Time-stamp: <2026-06-25T05:39:02+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1643,16 +1643,6 @@
             (projectile-cache-file . "~/.emacs-projectile-cache.eld")
             (projectile-known-projects-file . "~/.emacs-projectile-bookmarks.eld"))
   :global-minor-mode t)
-
-
-;; ------------------------------------
-;; scratch バッファの実行結果をコメントに出力
-;; ------------------------------------
-(leaf scratch-comment
-  :ensure t
-  :bind ((lisp-interaction-mode-map
-          :package elisp-mode
-          ("C-j" . scratch-comment-eval-sexp))))
 
 
 ;; ------------------------------------
