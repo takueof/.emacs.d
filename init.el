@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-26T21:53:56+09:00>
+;; Time-stamp: <2026-06-26T22:36:08+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -343,11 +343,10 @@
 ;;
 ;; macOS キーチェーンにある認証局を優先する (macOS ONLY)
 ;;
-(if (and (member system-type '(darwin))
-         (require 'auth-source nil :noerror))
-    (setopt auth-sources (nconc '(macos-keychain-internet
-                                  macos-keychain-generic)
-                                auth-sources)))
+(when (and (member system-type '(darwin))
+           (require 'auth-source nil :noerror))
+  (add-to-list 'auth-sources 'macos-keychain-internet)
+  (add-to-list 'auth-sources 'macos-keychain-generic))
 ;;
 ;; <option> を <meta> とみなす (macOS GUI ONLY)
 ;;
@@ -377,11 +376,10 @@
 ;;
 ;; Cygwin の証明書を使う (Windows ONLY)
 ;;
-(if (and (member system-type '(windows-nt ms-dos))
-         (require 'gnutls nil :noerror))
-    (setopt gnutls-trustfiles (nconc '("C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"
-                                       "C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.crt")
-                                     gnutls-trustfiles)))
+(when (and (member system-type '(windows-nt ms-dos))
+           (require 'gnutls nil :noerror))
+  (add-to-list 'gnutls-trustfiles "C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.crt")
+  (add-to-list 'gnutls-trustfiles "C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"))
 
 
 ;; ============================================================================
@@ -419,8 +417,7 @@
 ;; パッケージマネージャー
 ;; ============================================================================
 (when (require 'package nil :noerror)
-  (setopt package-archives (nconc '(("MELPA" . "https://melpa.org/packages/"))
-                                  package-archives))
+  (add-to-list 'package-archives '("MELPA" . "https://melpa.org/packages/"))
   ;; あらゆるパッケージロードに先んじて初期化する
   (package-initialize))
 
