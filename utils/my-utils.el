@@ -1,7 +1,7 @@
-;;; my-utils.el --- 設定 - 独自ユーティリティ -*- lexical-binding: t; -*-
+;;; my-utils.el --- 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-17T10:33:18+09:00>
+;; Time-stamp: <2026-06-26T23:05:22+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -21,17 +21,16 @@
 
 ;;; Commentary:
 
-;; 独自定義した関数・マクロの集合
-;; `feature' 名 `my-utils'
+;; 独自定義した関数・マクロの集合。
+;; `feature' 名 `my-utils'。
 
-;; 疑似名前空間プレフィクスは `my-'
+;; 疑似名前空間プレフィクスは `my-'。
 
 ;;; Code:
 
-
-;; ============================================================================
+;;
 ;; 依存解決
-;; ============================================================================
+;;
 (autoload 'create-fontset-from-fontset-spec "fontset")
 (autoload 'x-compose-font-name "fontset")
 

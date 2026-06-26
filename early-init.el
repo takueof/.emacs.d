@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-06-26T22:45:39+09:00>
+;; Time-stamp: <2026-06-26T23:01:46+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -20,10 +20,11 @@
 
 ;;; Commentary:
 
-;; This config file is for "GNU Emacs" ONLY.
-;; Unsupported other "emacsen" ("XEmacs" and others).
+;; This config file support "GNU Emacs" ONLY.
+;; Other "emacsen" are unsupported (e.g. "XEmacs").
 
-;; WARNING: MUST use English ONLY because `set-language-environment' not set.
+;; WARNING: This file MUST ONLY use English.
+;;          Because `set-language-environment' has not been executed.
 
 ;;; Code:
 

@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-26T22:36:08+09:00>
+;; Time-stamp: <2026-06-26T23:03:54+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -20,13 +20,14 @@
 
 ;;; Commentary:
 
-;; This config file is for "GNU Emacs" ONLY.
-;; Unsupported other "emacsen" ("XEmacs" and others).
+;; This config file support "GNU Emacs" ONLY.
+;; Other "emacsen" are unsupported (e.g. "XEmacs").
 
-;; This file is VERY LONG.
-;; Therefore, I intentionally define file local variables in the first line.
+;; WARNING: Some file local variables are INTENTIONALLY defined in
+;;          the FIRST LINE.
+;;          Because this file is VERY LONG.
 
-;; Check initialization time: (emacs-init-time)
+;; (emacs-init-time)
 
 ;;; Code:
 (set-language-environment "Japanese")
