@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-25T05:39:02+09:00>
+;; Time-stamp: <2026-06-26T18:02:24+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -343,7 +343,7 @@
 ;; ============================================================================
 ;; 認証局の証明書を使わせる (Windows ONLY)
 ;; ============================================================================
-(if (and (member system-type '(ms-dos windows-nt))
+(if (and (member system-type '(windows-nt ms-dos))
          (require 'gnutls nil :noerror))
     (setopt gnutls-trustfiles (nconc '("C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"
                                        "C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.crt")
@@ -455,7 +455,7 @@
 ;; 共通コマンドインタプリタ (Windows ONLY)
 ;; ------------------------------------
 (leaf comint
-  :when (member system-type '(ms-dos windows-nt))
+  :when (member system-type '(windows-nt ms-dos))
   :hook ((comint-mode-hook . my-comint-mode-initialize))
   :custom ((comint-scroll-to-bottom-on-input . 'all)
            (comint-move-point-for-output . 'all)
@@ -942,10 +942,10 @@
 
 
 ;; ============================================================================
-;; 動的 IME パッチ (Windows ONLY)
+;; 動的 IME パッチ (Windows & Cigwin)
 ;; ============================================================================
 (leaf tr-ime
-  :when (member system-type '(ms-dos windows-nt))
+  :when (member system-type '(cygwin windows-nt ms-dos))
   :ensure t
   :custom '(;;
             ;; NOTE: 識別名 "W32-IME" は `tr-ime' 未適用だと使えない
@@ -972,7 +972,7 @@
 ;; WARNING: 環境変数を使うパッケージがあるため、なるはやでインストールしておく
 ;;
 (leaf exec-path-from-shell
-  :unless (member system-type '(ms-dos windows-nt))
+  :unless (member system-type '(windows-nt ms-dos))
   :ensure t
   :config
   (exec-path-from-shell-initialize))
@@ -1589,7 +1589,7 @@
 ;; nvm 経由で Node.js を利用する
 ;; ------------------------------------
 (leaf nvm
-  :unless (member system-type '(ms-dos windows-nt))
+  :unless (member system-type '(windows-nt ms-dos))
   :ensure t
   :hook ((change-major-mode-after-body-hook . my-nvm-use-for-buffer))
   :init
@@ -1857,7 +1857,7 @@
 ;; ターミナルエミュレーター
 ;; ============================================================================
 (leaf ghostel
-  :unless (member system-type '(ms-dos windows-nt))
+  :unless (member system-type '(windows-nt ms-dos))
   :ensure t
   :bind (("C-t C-t" . ghostel-project)
          (:ghostel-mode-map
@@ -1884,7 +1884,7 @@
   (add-to-list 'ghostel-keymap-exceptions "C-S-p" t))
 
 (leaf vterm
-  :unless (member system-type '(ms-dos windows-nt))
+  :unless (member system-type '(windows-nt ms-dos))
   :ensure t
   :hook ((vterm-mode-hook . my-vterm-initialize))
   :custom ((vterm-buffer-name-string . "*vterm*")
