@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-26T19:05:53+09:00>
+;; Time-stamp: <2026-06-26T19:09:40+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -238,11 +238,6 @@
 ;; 新規ファイル／バッファ作成時の確認をしない
 ;;
 (setopt confirm-nonexistent-file-or-buffer nil)
-;;
-;; 最終行への改行（空行）挿入を強制する
-;;
-(setopt require-final-newline t)
-(setopt mode-require-final-newline t)
 ;;
 ;; `undo' 上限を引き上げる
 ;;
