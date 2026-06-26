@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-06-26T19:06:48+09:00>
+;; Time-stamp: <2026-06-26T20:08:27+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -42,10 +42,10 @@
 ;;
 (setopt auto-save-default nil)
 (setopt make-backup-files nil)
-(setopt auto-save-list-file-prefix "~/.emacs-auto-save-list.d/.saves-")
 ;;
 ;; Save locally ONLY.
 ;;
+(setopt auto-save-list-file-prefix "~/.emacs-auto-save-list.d/.saves-")
 (setopt bookmark-default-file "~/.emacs-bookmark.eld")
 (setopt ido-save-directory-list-file "~/.emacs-ido-save-directory-list.eld")
 (setopt nsm-settings-file "~/.emacs-network-security.eld")
