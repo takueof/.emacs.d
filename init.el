@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-26T19:09:40+09:00>
+;; Time-stamp: <2026-06-26T20:05:23+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -106,48 +106,30 @@
 (keymap-global-set "C-x ?" #'help-command)
 ;; 1つ前のエラーを表示する
 (keymap-global-set "C-x \\" #'previous-error)
+;; Emoji 挿入
+(keymap-global-set "C-c e i" #'emoji-insert)
+(keymap-global-set "C-c e l" #'emoji-list)
+(keymap-global-set "C-c e r" #'emoji-recent)
+(keymap-global-set "C-c e s" #'emoji-search)
+;; 行番号表示を切り替える
+(keymap-global-set "C-c l" #'display-line-numbers-mode)
 ;; リージョン範囲をソートする
 (keymap-global-set "C-c s" #'sort-lines)
 ;; バッファ単位で `truncate-lines' を切り換える
 (keymap-global-set "C-c w" #'toggle-truncate-lines)
+;; 正規表現検索
+(keymap-global-set "C-M-g" #'rgrep)
+;; ウインドウ移動キーを直感的にする
+(keymap-global-set "C-S-b" #'windmove-left)
+(keymap-global-set "C-S-f" #'windmove-right)
+(keymap-global-set "C-S-n" #'windmove-down)
+(keymap-global-set "C-S-p" #'windmove-up)
 ;; 誤字の元になる `transpose-chars' を排除する
 (keymap-global-unset "C-t")
 ;; 誤字の元になる `transpose-lines' を解除する
 (keymap-global-unset "C-M-t")
 ;; `suspend-frame' キーバインドを明示的に解除する
 (keymap-global-unset "C-z")
-
-
-;; ============================================================================
-;; `word-wrap-mode'
-;; ============================================================================
-;; 単語区切り文字を拡張する
-(global-word-wrap-whitespace-mode +1)
-
-
-;; ============================================================================
-;; `simple'
-;; ============================================================================
-;; モードラインを自分好みにする
-(column-number-mode +1)
-(line-number-mode +1)
-(size-indication-mode -1)
-;; インデントにタブ文字 (U+0009) を使わない
-(indent-tabs-mode -1)
-;; リージョンを視覚化する
-(transient-mark-mode +1)
-
-
-;; ============================================================================
-;; 各種 UI
-;; ============================================================================
-(blink-cursor-mode -1)
-(horizontal-scroll-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-(tab-bar-mode -1)
-(tool-bar-mode -1)
-(tooltip-mode -1)
 
 
 ;; ============================================================================
@@ -232,6 +214,7 @@
 ;; 大文字／小文字の区別を無視する
 ;;
 (setopt case-fold-search t)
+(setopt dabbrev-case-fold-search t)
 (setopt read-buffer-completion-ignore-case t)
 (setopt read-file-name-completion-ignore-case t)
 ;;
@@ -286,7 +269,70 @@
 ;;
 ;; 履歴保存数は絞る
 ;;
+(setopt history-length 100)
 (setopt recentf-max-saved-items 20)
+;;
+;; ファイル監視（通知）を使わない
+;;
+;; GNU Emacs の仕様では 1024 - 50 = 974 個以上の
+;; ファイル監視を登録できない
+;; 少しでもファイル監視を減らすため無効化する
+;;
+;; See:
+;; https://www.reddit.com/r/emacs/comments/mq2znn/comment/gugo0n4/
+(setopt auto-revert-use-notify nil)
+(setopt auto-revert-check-vc-info t)
+;;
+;; `cua-mode'
+;;
+(setopt cua-check-pending-input nil)
+(setopt cua-enable-cua-keys nil)
+(setopt cua-enable-register-prefix nil)
+(setopt cua-prefix-override-inhibit-delay nil)
+(setopt cua-remap-control-v nil)
+(setopt cua-remap-control-z nil)
+;;
+;; `eldoc'
+;;
+(setopt eldoc-minor-mode-string nil)
+(setopt eldoc-idle-delay 0.25)
+(setopt eldoc-echo-area-use-multiline-p #'truncate-sym-name-if-fit)
+;;
+;; `elec-pair'
+;;
+(setopt electric-pair-preserve-balance t)
+(setopt electric-pair-delete-adjacent-pairs t)
+(setopt electric-pair-open-newline-between-pairs t)
+(setopt electric-pair-skip-whitespace t)
+;;
+;; `hl-line'
+;;
+(setopt global-hl-line-sticky-flag t)
+;;
+;; `ido'
+;;
+(setopt ido-create-new-buffer 'always)
+(setopt ido-enable-flex-matching t)
+(setopt ido-max-file-prompt-width 0)
+(setopt ido-unc-hosts t)
+(setopt ido-use-filename-at-point 'guess)
+(setopt ido-use-virtual-buffers t)
+;;
+;; `ispell'
+;;
+(setopt ispell-dictionary "english")
+(setopt ispell-extra-args '("--sug-mode=fast"
+                            "--run-together"
+                            "--run-together-limit=5"
+                            "--run-together-min=2"))
+;;
+;; `uniquify'
+;;
+(setopt uniquify-ignore-buffers-re "^*[^*]+*\\-")
+;;
+;; `windmove'
+;;
+(setopt windmove-wrap-around t)
 ;;
 ;; <option> を <meta> とみなす (macOS GUI ONLY)
 ;;
@@ -322,12 +368,6 @@
 
 
 ;; ============================================================================
-;; GNU Emacs サーバー
-;; ============================================================================
-(server-start t)
-
-
-;; ============================================================================
 ;; 認証元にキーチェーンを優先する (macOS ONLY)
 ;; ============================================================================
 (if (and (member system-type '(darwin))
@@ -345,6 +385,37 @@
     (setopt gnutls-trustfiles (nconc '("C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"
                                        "C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.crt")
                                      gnutls-trustfiles)))
+
+
+;; ============================================================================
+;; 組み込みマイナーモード
+;; ============================================================================
+(ansi-color-for-comint-mode-on) ; ANSI エスケープシーケンス解釈
+(auto-compression-mode +1); アーカイブファイルの直接編集
+(auto-image-file-mode +1) ; 画像の直接表示
+(blink-cursor-mode -1)
+(column-number-mode +1)
+(cua-selection-mode +1) ; CUA 標準キー（と矩形選択サポート）
+(editorconfig-mode +1) ; https://editorconfig.org/
+(electric-pair-mode +1) ; 区切り自動挿入
+(global-auto-revert-mode +1) ; 自動バッファ再読込
+(global-hl-line-mode +1) ; カレントカーソル行強調
+(global-word-wrap-whitespace-mode +1) ; 単語区切り文字の拡張
+(horizontal-scroll-bar-mode -1)
+(indent-tabs-mode -1) ; インデントにタブ文字 (U+0009) を使わない
+(line-number-mode +1)
+(menu-bar-mode -1)
+(save-place-mode +1) ; ファイルごとのカーソル位置保存
+(savehist-mode +1) ; ミニバッファの履歴
+(scroll-bar-mode -1)
+(server-start t) ; サーバー
+(size-indication-mode -1)
+(tab-bar-mode -1)
+(tool-bar-mode -1)
+(tooltip-mode -1)
+(transient-mark-mode +1) ; リージョンの視覚化
+(winner-mode +1) ; ウインドウの状態履歴を undo/redo
+(require 'uniquify nil :noerror) ; バッファ名をユニークにする
 
 
 ;; ============================================================================
@@ -402,38 +473,6 @@
 ;; ============================================================================
 ;; 組み込みパッケージ
 ;; ============================================================================
-;; ------------------------------------
-;; `comint-mode' と派生モードで ANSI エスケープシーケンスの解釈を開始する
-;; ------------------------------------
-(leaf ansi-color
-  :config
-  (ansi-color-for-comint-mode-on))
-
-
-;; ------------------------------------
-;; 自動バッファ再読込
-;; ------------------------------------
-(leaf autorevert
-  :custom (;; ファイル監視（通知）を使わない
-           ;;
-           ;; GNU Emacs の仕様では 1024 - 50 = 974 個以上の
-           ;; ファイル監視を登録できない
-           ;; 少しでもファイル監視を減らすため無効化する
-           ;;
-           ;; See:
-           ;; https://www.reddit.com/r/emacs/comments/mq2znn/comment/gugo0n4/?context=3
-           (auto-revert-use-notify . nil)
-           (auto-revert-check-vc-info . t))
-  :global-minor-mode global-auto-revert-mode)
-
-
-;; ------------------------------------
-;; ブックマーク
-;; ------------------------------------
-(leaf bookmark
-  :custom ((bookmark-version-control . t)))
-
-
 ;; ------------------------------------
 ;; 共通コマンドインタプリタ (Windows ONLY)
 ;; ------------------------------------
@@ -513,34 +552,6 @@
 
 
 ;; ------------------------------------
-;; CUA 標準キー（と矩形選択サポート）
-;; ------------------------------------
-(leaf cua-mode
-  :custom ((cua-enable-cua-keys . nil)
-           (cua-remap-control-v . nil)
-           (cua-remap-control-z . nil)
-           (cua-prefix-override-inhibit-delay . nil)
-           (cua-enable-register-prefix . nil)
-           (cua-check-pending-input . nil))
-  :global-minor-mode cua-selection-mode)
-
-
-;; ------------------------------------
-;; バッファ内マッチ補完
-;; ------------------------------------
-(leaf dabbrev
-  :custom (;; 補完時に大小文字を区別しない
-           (dabbrev-case-fold-search . t)))
-
-
-;; ------------------------------------
-;; 行番号表示
-;; ------------------------------------
-(leaf display-line-numbers
-  :bind (("C-c l" . display-line-numbers-mode)))
-
-
-;; ------------------------------------
 ;; ディレクトリブラウジング
 ;; ------------------------------------
 (leaf dired
@@ -562,68 +573,6 @@
 
 
 ;; ------------------------------------
-;; EditorConfig
-;;
-;; See:
-;; https://editorconfig.org/
-;; ------------------------------------
-(leaf editorconfig
-  :global-minor-mode t)
-
-
-;; ------------------------------------
-;; GNU Emacs Lisp ドキュメント表示
-;; ------------------------------------
-(leaf eldoc
-  :hook ((emacs-lisp-mode-hook . eldoc-mode)
-         (ielm-mode-hook . eldoc-mode)
-         (lisp-interaction-mode-hook . eldoc-mode)
-         (lisp-mode-hook . eldoc-mode))
-  :custom ((eldoc-minor-mode-string . nil)
-           (eldoc-idle-delay . 0.25)
-           (eldoc-echo-area-use-multiline-p . 'truncate-sym-name-if-fit)))
-
-
-;; ------------------------------------
-;; 区切り自動挿入
-;; ------------------------------------
-(leaf elec-pair
-  :custom ((electric-pair-preserve-balance . t)
-           (electric-pair-delete-adjacent-pairs . t)
-           (electric-pair-open-newline-between-pairs . t)
-           (electric-pair-skip-whitespace . t))
-  :global-minor-mode electric-pair-mode)
-
-
-;; ------------------------------------
-;; Emoji😊 挿入
-;; ------------------------------------
-(leaf emoji
-  :bind (("C-c e i" . emoji-insert)
-         ("C-c e r" . emoji-recent)
-         ("C-c e s" . emoji-search)
-         ("C-c e l" . emoji-list)
-         ("C-c e d" . emoji-describe)))
-
-
-;; ------------------------------------
-;; EWW (Emacs Web Wowser, Web Browser)
-;; ------------------------------------
-(leaf eww
-  :bind (("C-c C-e" . eww))
-  :custom ((eww-search-prefix . "https://www.google.com/search?&q=")
-           (eww-history-limit . nil)
-           (eww-auto-rename-buffer . 'title)))
-
-
-;; ------------------------------------
-;; テキスト＆コード静的解析 (OLD)
-;; ------------------------------------
-(leaf flymake
-  :custom ((flymake-run-in-place . nil)))
-
-
-;; ------------------------------------
 ;; 自動スペルチェッカ
 ;; ------------------------------------
 (leaf flyspell
@@ -639,21 +588,6 @@
   :hook ((text-mode-hook . flyspell-mode)
          (prog-mode-hook . flyspell-prog-mode))
   :custom ((flyspell-delay . 1.0)))
-
-
-;; ------------------------------------
-;; 正規表現検索
-;; ------------------------------------
-(leaf grep
-  :bind (("C-M-g" . rgrep)))
-
-
-;; ------------------------------------
-;; カレントカーソル行強調
-;; ------------------------------------
-(leaf hl-line
-  :custom ((global-hl-line-sticky-flag . t))
-  :global-minor-mode global-hl-line-mode)
 
 
 ;; ------------------------------------
@@ -678,81 +612,6 @@
       ;;          変数 `settings' で加工を行った結果を入れるため
       ;;
       (setopt ibuffer-formats formats))))
-
-
-;; ------------------------------------
-;; ファイル操作の簡略化
-;; ------------------------------------
-(leaf ido
-  ;;
-  ;; HACK: デフォルト OFF だが、他機能から切り替え可能にしておく
-  ;;
-  :custom ((ido-enable-flex-matching . t)
-           (ido-create-new-buffer . 'always)
-           (ido-use-virtual-buffers . t)
-           (ido-max-file-prompt-width . 0)
-           (ido-use-filename-at-point . 'guess)
-           (ido-unc-hosts . t)))
-
-
-;; ------------------------------------
-;; 画像の直接表示
-;; ------------------------------------
-(leaf image-file
-  :global-minor-mode auto-image-file-mode)
-
-
-;; ------------------------------------
-;; インクリメンタル検索
-;; ------------------------------------
-(leaf isearch
-  :custom ((isearch-case-fold-search . t)
-           (isearch-last-case-fold-search . t)))
-
-
-;; ------------------------------------
-;; スペルチェッカー
-;; ------------------------------------
-(leaf ispell
-  :when (or (executable-find "aspell")
-            (executable-find "ispell")
-            (executable-find "hunspell"))
-  :custom ((ispell-dictionary . "english")
-           (ispell-extra-args . '("--sug-mode=fast"
-                                  "--run-together"
-                                  "--run-together-limit=5"
-                                  "--run-together-min=2"))))
-
-
-;; ------------------------------------
-;; アーカイブファイルの直接編集
-;; ------------------------------------
-(leaf jka-cmpr-hook
-  :global-minor-mode auto-compression-mode)
-
-
-;; ------------------------------------
-;; 自動カラー表示
-;; ------------------------------------
-(leaf rainbow-mode
-  :defer-config
-  (add-to-list 'rainbow-html-colors-major-mode-list 'scss-mode))
-
-
-;; ------------------------------------
-;; ミニバッファの履歴
-;; ------------------------------------
-(leaf savehist
-  :custom (;; 履歴保存数は絞る
-           (history-length . 100))
-  :global-minor-mode t)
-
-
-;; ------------------------------------
-;; ファイルごとのカーソル位置保存
-;; ------------------------------------
-(leaf saveplace
-  :global-minor-mode save-place-mode)
 
 
 ;; ------------------------------------
@@ -810,15 +669,6 @@
 
 
 ;; ------------------------------------
-;; 自動生成されるバッファ名をユニーク性が高いものにする
-;; ------------------------------------
-(leaf uniquify
-  :require t
-  :custom ((uniquify-buffer-name-style . 'forward)
-           (uniquify-ignore-buffers-re . "^*[^*]+*\\-")))
-
-
-;; ------------------------------------
 ;; 空白文字強調
 ;; ------------------------------------
 (leaf whitespace
@@ -870,26 +720,6 @@
                                vterm-mode))
           (whitespace-mode -1))))
   :global-minor-mode global-whitespace-mode)
-
-
-;; ------------------------------------
-;; ウインドウ移動キーを直感的にする
-;; ------------------------------------
-(leaf windmove
-  :bind (("C-S-b" . windmove-left)
-         ("C-S-f" . windmove-right)
-         ("C-S-n" . windmove-down)
-         ("C-S-p" . windmove-up))
-  :custom (;; フレーム端のウインドウでは無限スクロールするようにふるまう
-           ;; 「マリオブラザーズ」左右画面端におけるループのような動き
-           (windmove-wrap-around . t)))
-
-
-;; ------------------------------------
-;; ウインドウの状態履歴を undo/redo
-;; ------------------------------------
-(leaf winner
-  :global-minor-mode t)
 
 
 ;; ============================================================================
