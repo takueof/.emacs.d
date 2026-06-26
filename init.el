@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-26T20:12:10+09:00>
+;; Time-stamp: <2026-06-26T21:53:56+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -341,7 +341,7 @@
 ;;
 (setopt windmove-wrap-around t)
 ;;
-;; 認証元にキーチェーンを優先する (macOS ONLY)
+;; macOS キーチェーンにある認証局を優先する (macOS ONLY)
 ;;
 (if (and (member system-type '(darwin))
          (require 'auth-source nil :noerror))
@@ -360,21 +360,22 @@
     (setopt mac-command-modifier nil))
 ;;
 ;; 右 <alt> + 左 <ctrl> で <altgr> が発送されないようにする (Windows ONLY)
-;; <altgr> は Windows 独自のキーコードで、この設定をしないと C-M- にならない
+;; <altgr> は Windows 独自のキーコード
+;; nil なら C-M- が発送される
 ;;
 ;; See:
 ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Windows-Keyboard.html
 ;;
 (setopt w32-recognize-altgr nil)
 ;;
-;; キャレットの視認性が悪くなる問題を回避する (Windows ONLY)
+;; キャレットを見やすくする (Windows ONLY)
 ;;
 ;; See:
 ;; https://mementomori.social/@tml/116416045226298692
 ;;
 (setopt w32-use-visible-system-caret nil)
 ;;
-;; 認証局の証明書を使わせる (Windows ONLY)
+;; Cygwin の証明書を使う (Windows ONLY)
 ;;
 (if (and (member system-type '(windows-nt ms-dos))
          (require 'gnutls nil :noerror))
@@ -402,24 +403,21 @@
 (line-number-mode +1)
 (menu-bar-mode -1)
 (save-place-mode +1) ; ファイルごとのカーソル位置保存
-(savehist-mode +1) ; ミニバッファの履歴
+(savehist-mode +1) ; ミニバッファの履歴保存
 (scroll-bar-mode -1)
-(server-start t) ; サーバー
+(server-start t) ; サーバー開始
 (size-indication-mode -1)
 (tab-bar-mode -1)
 (tool-bar-mode -1)
 (tooltip-mode -1)
-(transient-mark-mode +1) ; リージョンの視覚化
-(winner-mode +1) ; ウインドウの状態履歴を undo/redo
-(require 'uniquify nil :noerror) ; バッファ名をユニークにする
+(transient-mark-mode +1) ; リージョンを視覚化
+(winner-mode +1) ; ウィンドウ構成の変更を記録
+(require 'uniquify nil :noerror) ; バッファ名をユニーク化
 
 
 ;; ============================================================================
 ;; パッケージマネージャー
 ;; ============================================================================
-;; ------------------------------------
-;; ロード
-;; ------------------------------------
 (when (require 'package nil :noerror)
   (setopt package-archives (nconc '(("MELPA" . "https://melpa.org/packages/"))
                                   package-archives))
@@ -428,7 +426,10 @@
 
 
 ;; ------------------------------------
-;; 設定補助
+;; 設定補助 `leaf'
+;;
+;; See:
+;; https://github.com/conao3/leaf.el
 ;; ------------------------------------
 (unless (package-installed-p 'leaf)
   (package-refresh-contents)
@@ -759,7 +760,7 @@
 ;; マイナーモード：外部パッケージ
 ;; ============================================================================
 ;; ------------------------------------
-;; GNU/Linux, UNIX, macOS 環境変数 $PATH 自動取得＆設定
+;; 環境変数 $PATH 自動取得＆設定
 ;; ------------------------------------
 ;;
 ;; WARNING: 環境変数を使うパッケージがあるため、なるはやでインストールしておく
@@ -863,7 +864,7 @@
 
 
 ;; ------------------------------------
-;; Markdown リーダー (macOS ONLY)
+;; Markdown リーダー
 ;; ------------------------------------
 (leaf arto
   :when (executable-find "arto")
@@ -982,7 +983,7 @@
 
 
 ;; ------------------------------------
-;; モードラインからモードの表示を消す
+;; モードラインからモード表示を消す
 ;; ------------------------------------
 (leaf delight
   :ensure t
@@ -1379,7 +1380,7 @@
 
 
 ;; ------------------------------------
-;; nvm 経由で Node.js を利用する
+;; nvm 経由で Node.js を利用
 ;; ------------------------------------
 (leaf nvm
   :unless (member system-type '(windows-nt ms-dos))
@@ -1439,7 +1440,7 @@
 
 
 ;; ------------------------------------
-;; `redo' を追加する
+;; `redo' 実装
 ;; ------------------------------------
 (leaf undo-fu
   :ensure t
@@ -1456,9 +1457,10 @@
           ("<DEL>" . vertico-directory-delete-char)
           ("<backspace>" . vertico-directory-delete-char)
           ("<escape>" . minibuffer-keyboard-quit)
+          ("C-v" . vertico-scroll-up)
+          ("M-v" . vertico-scroll-down)
           ("RET" . vertico-directory-enter)))
   :custom ((vertico-count . 21)
-           (vertico-cycle . t)
            (vertico-resize . t)
            (vertico-scroll-margin . 10))
   :global-minor-mode t)
