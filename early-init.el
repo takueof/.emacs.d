@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-06-27T05:10:18+09:00>
+;; Time-stamp: <2026-06-27T05:19:20+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -29,20 +29,40 @@
 ;;; Code:
 
 ;;
-;; Don't edit and create `custom-file'.
+;; Prevents garbage collection that occurs at startup.
 ;;
-(setopt custom-file (if (member system-type '(cygwin ms-dos windows-nt))
-                        (concat temporary-file-directory "custom.el")
-                      null-device))
+(setopt gc-cons-threshold 1073741824) ; 1GB
+;;
+;; Increase subprocess main memory.
+;;
+(setopt read-process-output-max 1073741824) ; 1GB
 ;;
 ;; Don't generate lockfiles.
 ;;
 (setopt create-lockfiles nil)
 ;;
+;; Prohibit frame resizing, which is affected by font changes.
+;;
+(setopt frame-inhibit-implied-resize t)
+;;
+;; Enable frame resizing in px units.
+;;
+(setopt frame-resize-pixelwise t)
+;;
+;; Don't show `*Warnings*' buffer when asynchronous native compiling.
+;;
+(setopt native-comp-async-report-warnings-errors nil)
+;;
 ;; Don't generate auto backup files.
 ;;
 (setopt auto-save-default nil)
 (setopt make-backup-files nil)
+;;
+;; Don't edit and create `custom-file'.
+;;
+(setopt custom-file (if (member system-type '(cygwin ms-dos windows-nt))
+                        (concat temporary-file-directory "custom.el")
+                      null-device))
 ;;
 ;; Save locally ONLY.
 ;;
@@ -54,26 +74,6 @@
 (setopt save-place-file "~/.emacs-saveplace.eld")
 (setopt savehist-file "~/.emacs-savehist.eld")
 (setopt server-auth-dir "~/.emacs-server.d")
-;;
-;; Don't show `*Warnings*' buffer when asynchronous native compiling.
-;;
-(setopt native-comp-async-report-warnings-errors nil)
-;;
-;; Prevents garbage collection that occurs at startup.
-;;
-(setopt gc-cons-threshold 1073741824) ; 1GB
-;;
-;; Increase subprocess main memory.
-;;
-(setopt read-process-output-max 1073741824) ; 1GB
-;;
-;; Prohibit frame resizing, which is affected by font changes.
-;;
-(setopt frame-inhibit-implied-resize t)
-;;
-;; Enable frame resizing in px units.
-;;
-(setopt frame-resize-pixelwise t)
 ;; ============================================================================
 ;; Local Variables:
 ;; coding: utf-8-unix
