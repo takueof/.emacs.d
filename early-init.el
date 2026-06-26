@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-06-26T23:01:46+09:00>
+;; Time-stamp: <2026-06-27T05:10:18+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -31,7 +31,7 @@
 ;;
 ;; Don't edit and create `custom-file'.
 ;;
-(setopt custom-file (if (member system-type '(ms-dos windows-nt))
+(setopt custom-file (if (member system-type '(cygwin ms-dos windows-nt))
                         (concat temporary-file-directory "custom.el")
                       null-device))
 ;;
@@ -54,10 +54,6 @@
 (setopt save-place-file "~/.emacs-saveplace.eld")
 (setopt savehist-file "~/.emacs-savehist.eld")
 (setopt server-auth-dir "~/.emacs-server.d")
-;;
-;; Don't use "Native compile" because that caused crash and delay.
-;;
-(setopt no-native-compile t)
 ;;
 ;; Don't show `*Warnings*' buffer when asynchronous native compiling.
 ;;
