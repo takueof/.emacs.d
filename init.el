@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-26T23:03:54+09:00>
+;; Time-stamp: <2026-06-27T04:31:21+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -35,13 +35,14 @@
 
 ;; ============================================================================
 ;; コーディングシステム
-;; いくつかのデフォルトだけ決める（他は変えない）
 ;; ============================================================================
 ;;
 ;; WARNING: `prefer-coding-system' は絶対に使わないこと！
 ;;          `system-type' ごとの規定値を完全破壊するため
 ;;
-;; macOS ONLY
+;; ------------------------------------
+;; 問題がある macOS デフォルト値だけ変更 (macOS ONLY)
+;; ------------------------------------
 (when (member system-type '(darwin))
   (set-keyboard-coding-system 'utf-8-unix)
   (set-selection-coding-system 'utf-8)
@@ -1381,7 +1382,7 @@
 ;; nvm 経由で Node.js を利用
 ;; ------------------------------------
 (leaf nvm
-  :unless (member system-type '(windows-nt ms-dos))
+  :unless (member system-type '(cygwin windows-nt ms-dos))
   :ensure t
   :hook ((change-major-mode-after-body-hook . my-nvm-use-for-buffer))
   :init
@@ -1650,7 +1651,7 @@
 ;; ターミナルエミュレーター
 ;; ============================================================================
 (leaf ghostel
-  :unless (member system-type '(windows-nt ms-dos))
+  :unless (member system-type '(cygwin windows-nt ms-dos))
   :ensure t
   :bind (("C-t C-t" . ghostel-project)
          (:ghostel-mode-map
