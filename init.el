@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-26T20:05:23+09:00>
+;; Time-stamp: <2026-06-26T20:12:10+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -94,6 +94,13 @@
                    :encode-translation-table (get 'japanese-ucs-cp932-to-jis-map 'translation-table))
 (coding-system-put 'iso-2022-jp ; JIS
                    :encode-translation-table (get 'japanese-ucs-cp932-to-jis-map 'translation-table))
+
+
+;; ============================================================================
+;; リージョンの大文字／小文字変換で、実行の是非を問わせない
+;; ============================================================================
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
 
 
 ;; ============================================================================
@@ -334,6 +341,14 @@
 ;;
 (setopt windmove-wrap-around t)
 ;;
+;; 認証元にキーチェーンを優先する (macOS ONLY)
+;;
+(if (and (member system-type '(darwin))
+         (require 'auth-source nil :noerror))
+    (setopt auth-sources (nconc '(macos-keychain-internet
+                                  macos-keychain-generic)
+                                auth-sources)))
+;;
 ;; <option> を <meta> とみなす (macOS GUI ONLY)
 ;;
 (if (display-graphic-p)
@@ -358,28 +373,9 @@
 ;; https://mementomori.social/@tml/116416045226298692
 ;;
 (setopt w32-use-visible-system-caret nil)
-
-
-;; ============================================================================
-;; リージョンの大文字／小文字変換で、実行の是非を問わせない
-;; ============================================================================
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
-
-
-;; ============================================================================
-;; 認証元にキーチェーンを優先する (macOS ONLY)
-;; ============================================================================
-(if (and (member system-type '(darwin))
-         (require 'auth-source nil :noerror))
-    (setopt auth-sources (nconc '(macos-keychain-internet
-                                  macos-keychain-generic)
-                                auth-sources)))
-
-
-;; ============================================================================
+;;
 ;; 認証局の証明書を使わせる (Windows ONLY)
-;; ============================================================================
+;;
 (if (and (member system-type '(windows-nt ms-dos))
          (require 'gnutls nil :noerror))
     (setopt gnutls-trustfiles (nconc '("C:/programs/cygwin/etc/pki/tls/certs/ca-bundle.trust.crt"
