@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-27T04:31:21+09:00>
+;; Time-stamp: <2026-06-27T05:27:30+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1941,9 +1941,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
     (my-set-fontset-font-safe fontset
                               'ascii ; ASCII 文字のみ
                               (font-spec :size font-size
-                                         :family (my-fallback-font-family "Migu 1M"
-                                                                          "Menlo"
-                                                                          "Consolas")))
+                                         :family base-font-family))
     ;;
     ;; 適用
     ;;
@@ -2017,9 +2015,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
     (my-set-fontset-font-safe fontset
                               'ascii ; ASCII 文字のみ
                               (font-spec :size font-size
-                                         :family (my-fallback-font-family "Migu 1M"
-                                                                          "Menlo"
-                                                                          "Consolas")))
+                                         :family base-font-family))
     ;;
     ;; 適用
     ;;
