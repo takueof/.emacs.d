@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-06-26T20:08:27+09:00>
+;; Time-stamp: <2026-06-26T22:45:39+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -63,8 +63,6 @@
 (setopt native-comp-async-report-warnings-errors nil)
 ;;
 ;; Prevents garbage collection that occurs at startup.
-;;
-;; WARNING: Must set the values really need at the end of `init.el'.
 ;;
 (setopt gc-cons-threshold 1073741824) ; 1GB
 ;;
