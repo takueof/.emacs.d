@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-26T18:55:21+09:00>
+;; Time-stamp: <2026-06-26T19:05:53+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -289,6 +289,10 @@
 ;;
 (setopt use-short-answers t)
 ;;
+;; 履歴保存数は絞る
+;;
+(setopt recentf-max-saved-items 20)
+;;
 ;; <option> を <meta> とみなす (macOS GUI ONLY)
 ;;
 (if (display-graphic-p)
@@ -325,9 +329,7 @@
 ;; ============================================================================
 ;; GNU Emacs サーバー
 ;; ============================================================================
-(when (require 'server nil :noerror)
-  (setopt server-auth-dir "~/.emacs-server.d") ; ローカル環境にのみ保存させる
-  (server-start t))
+(server-start t)
 
 
 ;; ============================================================================
@@ -353,18 +355,6 @@
 ;; ============================================================================
 ;; パッケージマネージャー
 ;; ============================================================================
-;; ------------------------------------
-;; Network Security Manager
-;; ------------------------------------
-;;
-;; WARNING: `package-initialize' は `nsm-settings-file' に依存するため、
-;;          実行前に `nsm' の設定を済ませておかねばならない
-;;
-(if (require 'nsm nil :noerror)
-    ;; ローカル環境にのみ保存させる
-    (setopt nsm-settings-file "~/.emacs-network-security.eld"))
-
-
 ;; ------------------------------------
 ;; ロード
 ;; ------------------------------------
@@ -446,9 +436,7 @@
 ;; ブックマーク
 ;; ------------------------------------
 (leaf bookmark
-  :custom ((bookmark-version-control . t)
-           ;; ローカル環境にのみ保存させる
-           (bookmark-default-file . "~/.emacs-bookmark.eld")))
+  :custom ((bookmark-version-control . t)))
 
 
 ;; ------------------------------------
@@ -709,9 +697,7 @@
            (ido-use-virtual-buffers . t)
            (ido-max-file-prompt-width . 0)
            (ido-use-filename-at-point . 'guess)
-           (ido-unc-hosts . t)
-           ;; ローカル環境にのみ保存させる
-           (ido-save-directory-list-file . "~/.emacs-ido-save-directory-list.eld")))
+           (ido-unc-hosts . t)))
 
 
 ;; ------------------------------------
@@ -759,23 +745,11 @@
 
 
 ;; ------------------------------------
-;; ファイル履歴保存
-;; ------------------------------------
-(leaf recentf
-  :custom (;; 履歴保存数は絞る
-           (recentf-max-saved-items . 20)
-           ;; ローカル環境にのみ保存させる
-           (recentf-save-file . "~/.emacs-recentf.eld")))
-
-
-;; ------------------------------------
 ;; ミニバッファの履歴
 ;; ------------------------------------
 (leaf savehist
   :custom (;; 履歴保存数は絞る
-           (history-length . 100)
-           ;; ローカル環境にのみ保存させる
-           (savehist-file . "~/.emacs-savehist.eld"))
+           (history-length . 100))
   :global-minor-mode t)
 
 
@@ -783,8 +757,6 @@
 ;; ファイルごとのカーソル位置保存
 ;; ------------------------------------
 (leaf saveplace
-  :custom (;; ローカル環境にのみ保存させる
-           (save-place-file . "~/.emacs-saveplace.eld"))
   :global-minor-mode save-place-mode)
 
 
@@ -1909,6 +1881,7 @@
   :init
   (defun my-agent-shell-initialize (f &rest args)
     "Initialize `agent-shell' between from package load to call `agent-shell' function.
+
 F is inner function in `agent-shell', ARGS are F arguments."
     ;; 確実に `agent-shell-make-environment-variables' を定義させる
     (when (require 'agent-shell nil :noerror)
