@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-06-27T05:19:20+09:00>
+;; Time-stamp: <2026-06-30T19:22:43+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -60,9 +60,7 @@
 ;;
 ;; Don't edit and create `custom-file'.
 ;;
-(setopt custom-file (if (member system-type '(cygwin ms-dos windows-nt))
-                        (concat temporary-file-directory "custom.el")
-                      null-device))
+(setopt custom-file (concat temporary-file-directory "custom.el"))
 ;;
 ;; Save locally ONLY.
 ;;
