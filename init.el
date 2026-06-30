@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-29T13:15:20+09:00>
+;; Time-stamp: <2026-06-30T19:20:04+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -961,24 +961,6 @@
            (xref-show-xrefs-function . #'consult-xref)
            (xref-show-definitions-function . #'consult-xref))
   :advice ((:override register-preview consult-register-window)))
-
-
-;; ------------------------------------
-;; GitHub Copilot (AI)
-;; ------------------------------------
-(leaf copilot
-  :ensure t
-  :bind (("C-c c c" . copilot-mode)
-         ("C-TAB" . copilot-complete)
-         ("C-<tab>" . copilot-complete)
-         (:copilot-completion-map
-          ("TAB" . copilot-accept-completion)
-          ("<tab>" . copilot-accept-completion)))
-  :hook ((post-command-hook . copilot-clear-overlay))
-  :custom ((copilot-max-char . -1) ; No limit
-           (copilot-indent-offset-warning-disable . t))
-  :config
-  (add-to-list 'copilot-major-mode-alist '("web" . "html")))
 
 
 ;; ------------------------------------
