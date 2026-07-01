@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-01T22:24:58+09:00>
+;; Time-stamp: <2026-07-02T05:04:01+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1301,7 +1301,10 @@
 (leaf magit
   :ensure t
   :bind (("C-x g" . magit-status))
-  :custom ((auto-revert-buffer-list-filter . #'magit-auto-revert-buffer-p)))
+  :custom ((auto-revert-buffer-list-filter . #'magit-auto-revert-buffer-p)
+           (magit-diff-fontify-hunk . t)
+           (magit-diff-specify-hunk-foreground . nil)
+           (magit-diff-use-indicator-faces . t)))
 
 
 ;; ------------------------------------
