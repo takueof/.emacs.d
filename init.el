@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-30T19:20:04+09:00>
+;; Time-stamp: <2026-07-01T22:24:58+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1888,6 +1888,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
                               ;; ひらがな＆カタカナ文字全域に適用する
                               `(,(string-to-char "ぁ") . ,(string-to-char "ㇿ"))
                               (font-spec :family (my-fallback-font-family "Migu 1M"
+                                                                          "Moralerspace Neon HW"
                                                                           "Hiragino Sans"
                                                                           "メイリオ"
                                                                           "ＭＳ ゴシック")))
@@ -1930,80 +1931,6 @@ F is inner function in `agent-shell', ARGS are F arguments."
     ;;
     (modify-all-frames-parameters `((font . ,fontset))) ; frame 全体
     ) ; End of "programming"
-
-  ;; ----------------------------------
-  ;; フォントセット：ターミナル
-  ;; ----------------------------------
-  (let* (;; 名称
-         (fontset-name "terminal")
-         ;; デフォルトフォントサイズ (pt)
-         ;;
-         ;; NOTE: pt → 浮動小数点型
-         ;;       px → 整数型
-         ;;
-         (font-size (if (equal window-system 'w32) 12.0 14.0))
-         ;; 基礎フォント
-         (base-font-family (my-fallback-font-family "Moralerspace Neon HW"
-                                                    "Menlo"
-                                                    "Consolas"))
-         ;; フォントセット生成
-         (fontset (create-fontset-from-ascii-font base-font-family nil fontset-name)))
-    ;;
-    ;; 全文字
-    ;;
-    (my-set-fontset-font-safe fontset
-                              'emacs ; GNU Emacs が認識可能な全ての文字
-                              (font-spec :family base-font-family))
-    ;;
-    ;; 日本語
-    ;;
-    (my-set-fontset-font-safe fontset
-                              ;; 濁点＆半濁点文字が識別しやすいフォントがあれば差し替える
-                              ;; 例：「ぱ」「バ」
-                              ;; ひらがな＆カタカナ文字全域に適用する
-                              `(,(string-to-char "ぁ") . ,(string-to-char "ㇿ"))
-                              (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                          "Hiragino Sans"
-                                                                          "メイリオ"
-                                                                          "ＭＳ ゴシック")))
-    (dolist (code (mapcar #'string-to-char
-                          ;; WAVE DASH (U+301C), FULLWIDTH TILDE (U+FF5E)
-                          (split-string "〜～" "" t)))
-      ;;
-      ;; HACK: フォントによっては「同字形」の別文字を「別字形」にする
-      ;;
-      (my-set-fontset-font-safe fontset
-                                (cons code code)
-                                (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                            "ＭＳ ゴシック"))))
-    ;;
-    ;; ラテン文字（特に記号類）
-    ;;
-    (my-set-fontset-font-safe fontset
-                              'cp858
-                              (font-spec :family (my-fallback-font-family "Menlo"
-                                                                          "Courier New")))
-    ;;
-    ;; Emoji
-    ;;
-    (my-set-fontset-font-safe fontset
-                              'emoji
-                              (font-spec :family (my-fallback-font-family "Apple Color Emoji"
-                                                                          "Symbola"
-                                                                          "Segoe UI Emoji"
-                                                                          "Segoe UI Symbol")))
-    ;;
-    ;; HACK: フォントサイズ変更「専用」の設定を行う
-    ;;
-    (my-set-fontset-font-safe fontset
-                              'ascii ; ASCII 文字のみ
-                              (font-spec :size font-size
-                                         :family base-font-family))
-    ;;
-    ;; 適用
-    ;;
-    (face-remap-set-base 'term :font fontset) ; ターミナルのみ
-    ) ; END of "terminal"
   ) ; END of *font
 ;; ============================================================================
 ;; Local Variables:
