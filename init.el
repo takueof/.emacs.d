@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-08T23:04:43+09:00>
+;; Time-stamp: <2026-07-08T23:07:16+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -900,19 +900,20 @@
            (company-dabbrev-other-buffers . t)
            (company-dabbrev-downcase . nil)
            ;; `company-dabbrev-code'
-           (company-dabbrev-code-modes . '(batch-file-mode
+           (company-dabbrev-code-modes . '(;; 追加で認識させたいメジャーモード
+                                           ;; 降順 (DESC) ソート済
+                                           nxml-mode
+                                           sgml-mode
+                                           ;; WARNING: 既定値のためソート禁止
+                                           prog-mode
+                                           batch-file-mode
                                            csharp-mode
                                            css-mode
                                            erlang-mode
                                            haskell-mode
-                                           html-mode
                                            jde-mode
-                                           js-mode
-                                           js2-mode
                                            lua-mode
-                                           prog-mode
-                                           python-mode
-                                           scss-mode))
+                                           python-mode))
            (company-dabbrev-code-other-buffers . t)
            (company-dabbrev-code-everywhere . t)
            (company-dabbrev-code-ignore-case . t))
