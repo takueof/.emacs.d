@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-08T23:03:19+09:00>
+;; Time-stamp: <2026-07-08T23:04:43+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -798,7 +798,7 @@
          ;;
          ;; See:
          ;; https://taipapamotohus.com/post/adaptive-wrap/
-         (org-mode-hook . visual-line-mode)) )
+         (org-mode-hook . visual-line-mode)))
 
 
 ;; ------------------------------------
