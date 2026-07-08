@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-08T23:09:31+09:00>
+;; Time-stamp: <2026-07-08T23:11:03+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -292,6 +292,17 @@
 (setopt auto-revert-use-notify nil)
 (setopt auto-revert-check-vc-info t)
 ;;
+;; `comint'
+;;
+(setopt comint-buffer-maximum-size 10240)
+(setopt comint-completion-autolist t)
+(setopt comint-completion-fignore t)
+(setopt comint-history-isearch t)
+(setopt comint-input-autoexpand t)
+(setopt comint-move-point-for-matching-input 'end-of-line)
+(setopt comint-move-point-for-output 'all)
+(setopt comint-scroll-to-bottom-on-input 'all)
+;;
 ;; `cua-mode'
 ;;
 (setopt cua-check-pending-input nil)
@@ -375,6 +386,15 @@
 ;; https://mementomori.social/@tml/116416045226298692
 ;;
 (setopt w32-use-visible-system-caret nil)
+;;
+;; CRLF 改行を意図的に出力しているプロセスを教える (Windows ONLY)
+;;
+;; See:
+;; https://www.emacswiki.org/emacs/ShellMode#h5o-1
+;;
+(if (member system-type '(cygwin windows-nt ms-dos))
+    (add-to-list 'process-coding-system-alist
+                 '("[bB][aA][sS][hH]" . (undecided-dos . undecided-unix))))
 ;;
 ;; Cygwin の証明書を使う (Windows ONLY)
 ;;
@@ -469,29 +489,6 @@
 ;; ============================================================================
 ;; 組み込みパッケージ
 ;; ============================================================================
-;; ------------------------------------
-;; 共通コマンドインタプリタ (Windows ONLY)
-;; ------------------------------------
-(leaf comint
-  :when (member system-type '(windows-nt ms-dos))
-  :hook ((comint-mode-hook . my-comint-mode-initialize))
-  :custom ((comint-scroll-to-bottom-on-input . 'all)
-           (comint-move-point-for-output . 'all)
-           (comint-buffer-maximum-size . 5000)
-           (comint-process-echoes . t)
-           (comint-eol-on-send . t))
-  :init
-  (defun my-comint-mode-initialize ()
-    "Initialize `comint-mode' before load."
-    (setq-local comint-input-sender-no-newline t))
-  ;; プロセスごとのコーディングシステム変換表を追加する
-  ;;
-  ;; See:
-  ;; https://www.emacswiki.org/emacs/ShellMode#toc1
-  (add-to-list 'process-coding-system-alist
-               '("[bB][aA][sS][hH]" . (undecided-dos . undecided-unix))))
-
-
 ;; ------------------------------------
 ;; コンパイル
 ;; ------------------------------------
