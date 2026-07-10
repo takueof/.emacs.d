@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-06-30T19:22:43+09:00>
+;; Time-stamp: <2026-07-11T03:39:48+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -48,6 +48,10 @@
 ;; Enable frame resizing in px units.
 ;;
 (setopt frame-resize-pixelwise t)
+;;
+;; Use simplest frame title.
+;;
+(setopt frame-title-format "GNU Emacs")
 ;;
 ;; Don't show `*Warnings*' buffer when asynchronous native compiling.
 ;;

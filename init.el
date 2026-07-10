@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-11T03:37:37+09:00>
+;; Time-stamp: <2026-07-11T03:38:59+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -144,10 +144,6 @@
 ;; ============================================================================
 ;; デフォルト値
 ;; ============================================================================
-;;
-;; フレームタイトルはカレントバッファ名を基準にする
-;;
-(setopt frame-title-format (format "%%b - GNU Emacs v%s" emacs-version))
 ;;
 ;; スタートアップ表示を無効にする
 ;;
