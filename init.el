@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-11T03:10:15+09:00>
+;; Time-stamp: <2026-07-11T03:37:37+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -151,9 +151,8 @@
 ;;
 ;; スタートアップ表示を無効にする
 ;;
-(setopt inhibit-startup-screen t)
-(setopt inhibit-startup-message t)
 (setopt inhibit-startup-buffer-menu t)
+(setopt inhibit-startup-screen t)
 ;;
 ;; *scratch* バッファに何も表示しない
 ;;
@@ -197,8 +196,8 @@
 ;;
 ;; ウインドウ上下端から10行目でスクロールを開始させる
 ;;
-(setopt scroll-margin 10)
 (setopt next-screen-context-lines 10)
+(setopt scroll-margin 10)
 ;;
 ;; スクロール不能ならバッファ先頭／末尾文字にポイントを移動する
 ;;
@@ -238,8 +237,8 @@
 ;;
 ;; `eval-expression' 時の出力を制限しない
 ;;
-(setopt eval-expression-print-level nil)
 (setopt eval-expression-print-length nil)
+(setopt eval-expression-print-level nil)
 ;;
 ;; 補完表示を循環する
 ;;
@@ -261,8 +260,8 @@
 ;;
 (setopt eol-mnemonic-dos "[CRLF]")
 (setopt eol-mnemonic-mac "[CR]")
-(setopt eol-mnemonic-unix "[LF]")
 (setopt eol-mnemonic-undecided "")
+(setopt eol-mnemonic-unix "[LF]")
 ;;
 ;; カーソルの行列表記を変更する
 ;;
@@ -289,8 +288,8 @@
 ;;
 ;; See:
 ;; https://www.reddit.com/r/emacs/comments/mq2znn/comment/gugo0n4/
-(setopt auto-revert-use-notify nil)
 (setopt auto-revert-check-vc-info t)
+(setopt auto-revert-use-notify nil)
 ;;
 ;; `comint'
 ;;
@@ -314,14 +313,14 @@
 ;;
 ;; `eldoc'
 ;;
-(setopt eldoc-minor-mode-string nil)
 (setopt eldoc-echo-area-use-multiline-p t)
+(setopt eldoc-minor-mode-string nil)
 ;;
 ;; `elec-pair'
 ;;
-(setopt electric-pair-preserve-balance t)
 (setopt electric-pair-delete-adjacent-pairs t)
 (setopt electric-pair-open-newline-between-pairs t)
+(setopt electric-pair-preserve-balance t)
 (setopt electric-pair-skip-whitespace t)
 ;;
 ;; `hl-line'
