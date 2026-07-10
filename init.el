@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-08T23:11:03+09:00>
+;; Time-stamp: <2026-07-11T02:50:18+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -978,7 +978,6 @@
              (flymake-mode nil "flymake")
              (flyspell-mode nil "flyspell")
              (flyspell-prog-mode nil "flyspell")
-             (inhibit-mouse-mode nil "inhibit-mouse")
              (js2-minor-mode nil "js2-mode")
              (lsp-mode nil "lsp-mode")
              (projectile-mode nil "projectile")
@@ -1170,6 +1169,7 @@
 ;; ------------------------------------
 (leaf inhibit-mouse
   :ensure t
+  :custom ((inhibit-mouse-mode-lighter . ""))
   :global-minor-mode t)
 
 
