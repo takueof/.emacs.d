@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-11T02:58:59+09:00>
+;; Time-stamp: <2026-07-11T03:10:15+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -315,7 +315,7 @@
 ;; `eldoc'
 ;;
 (setopt eldoc-minor-mode-string nil)
-(setopt eldoc-echo-area-use-multiline-p #'truncate-sym-name-if-fit)
+(setopt eldoc-echo-area-use-multiline-p t)
 ;;
 ;; `elec-pair'
 ;;
