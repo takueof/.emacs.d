@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-07-11T03:39:48+09:00>
+;; Time-stamp: <2026-07-11T03:42:26+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -37,9 +37,22 @@
 ;;
 (setopt read-process-output-max 1073741824) ; 1GB
 ;;
+;; Don't show `*Warnings*' buffer when asynchronous native compiling.
+;;
+(setopt native-comp-async-report-warnings-errors nil)
+;;
 ;; Don't generate lockfiles.
 ;;
 (setopt create-lockfiles nil)
+;;
+;; Don't generate auto backup files.
+;;
+(setopt auto-save-default nil)
+(setopt make-backup-files nil)
+;;
+;; Don't edit and create `custom-file'.
+;;
+(setopt custom-file (concat temporary-file-directory "custom.el"))
 ;;
 ;; Prohibit frame resizing, which is affected by font changes.
 ;;
@@ -52,19 +65,6 @@
 ;; Use simplest frame title.
 ;;
 (setopt frame-title-format "GNU Emacs")
-;;
-;; Don't show `*Warnings*' buffer when asynchronous native compiling.
-;;
-(setopt native-comp-async-report-warnings-errors nil)
-;;
-;; Don't generate auto backup files.
-;;
-(setopt auto-save-default nil)
-(setopt make-backup-files nil)
-;;
-;; Don't edit and create `custom-file'.
-;;
-(setopt custom-file (concat temporary-file-directory "custom.el"))
 ;;
 ;; Save locally ONLY.
 ;;
