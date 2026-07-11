@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-11T03:38:59+09:00>
+;; Time-stamp: <2026-07-11T14:39:49+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -291,7 +291,6 @@
 ;;
 (setopt comint-buffer-maximum-size 10240)
 (setopt comint-completion-autolist t)
-(setopt comint-completion-fignore t)
 (setopt comint-history-isearch t)
 (setopt comint-input-autoexpand t)
 (setopt comint-move-point-for-matching-input 'end-of-line)
