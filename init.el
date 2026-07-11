@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-11T14:39:49+09:00>
+;; Time-stamp: <2026-07-12T00:27:26+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -145,27 +145,6 @@
 ;; デフォルト値
 ;; ============================================================================
 ;;
-;; スタートアップ表示を無効にする
-;;
-(setopt inhibit-startup-buffer-menu t)
-(setopt inhibit-startup-screen t)
-;;
-;; *scratch* バッファに何も表示しない
-;;
-(setopt initial-scratch-message nil)
-;;
-;; 入力時にポインターを自動で隠す
-;;
-(setopt make-pointer-invisible t)
-;;
-;; フリンジに空行を表示する
-;;
-(setopt indicate-empty-lines t)
-;;
-;; 右フリンジにファイル先頭＆末尾の状態を表示する
-;;
-(setopt indicate-buffer-boundaries 'right)
-;;
 ;; 読取専用テキストの kill を許可する
 ;;
 (setopt kill-read-only-ok t)
@@ -190,26 +169,9 @@
 ;;
 (setopt register-preview-delay nil)
 ;;
-;; ウインドウ上下端から10行目でスクロールを開始させる
-;;
-(setopt next-screen-context-lines 10)
-(setopt scroll-margin 10)
-;;
 ;; スクロール不能ならバッファ先頭／末尾文字にポイントを移動する
 ;;
 (setopt scroll-error-top-bottom t)
-;;
-;; 行間調整をしない
-;;
-(setopt line-spacing nil)
-;;
-;; `truncate-lines' 値を尊重する
-;;
-(setopt truncate-partial-width-windows nil)
-;;
-;; ターミナルのデファクトスタンダードにあわせる
-;;
-(setopt fill-column 80) ; Default: 70
 ;;
 ;; <tab> キーはインデントのみ行う
 ;;
@@ -217,19 +179,12 @@
 ;;
 ;; 大文字／小文字の区別を無視する
 ;;
-(setopt case-fold-search t)
 (setopt dabbrev-case-fold-search t)
-(setopt read-buffer-completion-ignore-case t)
 (setopt read-file-name-completion-ignore-case t)
 ;;
 ;; 新規ファイル／バッファ作成時の確認をしない
 ;;
 (setopt confirm-nonexistent-file-or-buffer nil)
-;;
-;; `undo' 上限を引き上げる
-;;
-(setopt undo-limit 600000)
-(setopt undo-strong-limit 900000) ; (= 1.5 (/ undo-strong-limit undo-limit)) を踏襲
 ;;
 ;; `eval-expression' 時の出力を制限しない
 ;;
@@ -244,36 +199,12 @@
 ;;
 (setopt completions-format 'vertical)
 ;;
-;; ログバッファの上限を引き上げる
-;;
-(setopt message-log-max 2000)
-;;
-;; ミニバッファ内でミニバッファコマンドを使う
-;;
-(setopt enable-recursive-minibuffers t)
-;;
-;; ニーモニックを改行コードにちなんだ表現にする
-;;
-(setopt eol-mnemonic-dos "[CRLF]")
-(setopt eol-mnemonic-mac "[CR]")
-(setopt eol-mnemonic-undecided "")
-(setopt eol-mnemonic-unix "[LF]")
-;;
 ;; カーソルの行列表記を変更する
 ;;
 (setopt mode-line-position-column-line-format '(" (%l:%c)"))
 ;;
-;; Trash（「ごみ箱」など）を使う
-;;
-(setopt delete-by-moving-to-trash t)
-;;
-;; y/n 選択を使う
-;;
-(setopt use-short-answers t)
-;;
 ;; 履歴保存数は絞る
 ;;
-(setopt history-length 100)
 (setopt recentf-max-saved-items 20)
 ;;
 ;; ファイル監視（通知）を使わない
@@ -327,7 +258,6 @@
 (setopt ido-create-new-buffer 'always)
 (setopt ido-enable-flex-matching t)
 (setopt ido-max-file-prompt-width 0)
-(setopt ido-unc-hosts t)
 (setopt ido-use-filename-at-point 'guess)
 (setopt ido-use-virtual-buffers t)
 ;;
@@ -363,31 +293,6 @@
 ;;
 (if (display-graphic-p)
     (setopt mac-command-modifier nil))
-;;
-;; 右 <alt> + 左 <ctrl> で <altgr> が発送されないようにする (Windows ONLY)
-;; <altgr> は Windows 独自のキーコード
-;; nil なら C-M- が発送される
-;;
-;; See:
-;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Windows-Keyboard.html
-;;
-(setopt w32-recognize-altgr nil)
-;;
-;; キャレットを見やすくする (Windows ONLY)
-;;
-;; See:
-;; https://mementomori.social/@tml/116416045226298692
-;;
-(setopt w32-use-visible-system-caret nil)
-;;
-;; CRLF 改行を意図的に出力しているプロセスを教える (Windows ONLY)
-;;
-;; See:
-;; https://www.emacswiki.org/emacs/ShellMode#h5o-1
-;;
-(if (member system-type '(cygwin windows-nt ms-dos))
-    (add-to-list 'process-coding-system-alist
-                 '("[bB][aA][sS][hH]" . (undecided-dos . undecided-unix))))
 ;;
 ;; Cygwin の証明書を使う (Windows ONLY)
 ;;
@@ -1108,11 +1013,10 @@
   :ensure t
   :bind (("C-c t t" . google-translate-at-point)
          ("C-c t RET" . google-translate-smooth-translate))
-  :custom ((google-translate-output-destination . 'help)
-           (google-translate-display-translation-phonetic . nil)
-           (google-translate-translation-to-kill-ring . t)
-           (google-translate-default-source-language . "en")
+  :custom ((google-translate-default-source-language . "en")
            (google-translate-default-target-language . "ja")
+           (google-translate-pop-up-buffer-set-focus . t)
+           (google-translate-show-phonetic . t)
            (google-translate-translation-directions-alist . '(("ja" . "en")
                                                               ("en" . "ja")
                                                               ("ko" . "ja")
@@ -1798,14 +1702,6 @@ F is inner function in `agent-shell', ARGS are F arguments."
   ;;
   :when window-system
   :after my-utils
-  :custom (;; ガベージコレクト中にフォントキャッシュを圧縮しない
-           ;; 主記憶が十分なマシンでは、キャッシュ圧縮にかかる時間のほうが遅い
-           (inhibit-compacting-font-caches . t)
-           ;; シンボルや句読点などを表示するフォントを、設定に応じて選択する
-           ;;   → GNU Emacs 25 より前のふるまいに戻す
-           (use-default-font-for-symbols . nil)
-           ;; 人為的に italic/bold フォントを選択する (Windows ONLY)
-           (w32-enable-synthesized-fonts . t))
   :config
   ;; ----------------------------------
   ;; スケール変換
