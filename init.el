@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-22T08:00:28+09:00>
+;; Time-stamp: <2026-07-22T08:31:21+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -203,7 +203,6 @@
 ;;
 ;; <tab> キーによる補完を有効にする
 ;;
-(setopt tab-always-indent 'complete)
 (setopt tab-first-completion 'word-or-paren-or-punct)
 ;;
 ;; 大文字／小文字の区別を無視する
