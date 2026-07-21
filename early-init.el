@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-07-12T00:03:59+09:00>
+;; Time-stamp: <2026-07-22T07:40:45+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -29,10 +29,6 @@
 ;;; Code:
 
 ;;
-;; Don't edit and create `custom-file'.
-;;
-(setopt custom-file (concat temporary-file-directory "custom.el"))
-;;
 ;; Prevents garbage collection that occurs at startup.
 ;;
 (setopt gc-cons-threshold 5368709120) ; 5GB
@@ -50,28 +46,13 @@
 (setopt undo-limit 600000)
 (setopt undo-strong-limit 900000) ; (= 1.5 (/ undo-strong-limit undo-limit))
 ;;
-;; Don't show `*Warnings*' buffer when asynchronous native compiling.
-;;
-(setopt native-comp-async-report-warnings-errors nil)
-;;
 ;; Don't generate lockfiles.
 ;;
 (setopt create-lockfiles nil)
 ;;
-;; Don't generate auto backup files.
-;;
-(setopt auto-save-default nil)
-(setopt make-backup-files nil)
-;;
 ;; Use system’s trash can.
 ;;
 (setopt delete-by-moving-to-trash t)
-;;
-;; Don't use unnecessary display.
-;;
-(setopt inhibit-startup-buffer-menu t)
-(setopt inhibit-startup-screen t)
-(setopt initial-scratch-message nil)
 ;;
 ;; Use right fringe that indicate buffer boundaries and scrolling.
 ;;
@@ -134,6 +115,10 @@
 ;;
 (setopt frame-title-format "GNU Emacs")
 ;;
+;; Don't use bell sound.
+;;
+(setopt ring-bell-function 'ignore)
+;;
 ;; Don't use system caret (Windows ONLY).
 ;;
 ;; See:
@@ -156,17 +141,6 @@
 (if (member system-type '(cygwin windows-nt ms-dos))
     (add-to-list 'process-coding-system-alist
                  '("[bB][aA][sS][hH]" . (undecided-dos . undecided-unix))))
-;;
-;; Save locally ONLY.
-;;
-(setopt auto-save-list-file-prefix "~/.emacs-auto-save-list.d/.saves-")
-(setopt bookmark-default-file "~/.emacs-bookmark.eld")
-(setopt ido-save-directory-list-file "~/.emacs-ido-save-directory-list.eld")
-(setopt nsm-settings-file "~/.emacs-network-security.eld")
-(setopt recentf-save-file "~/.emacs-recentf.eld")
-(setopt save-place-file "~/.emacs-saveplace.eld")
-(setopt savehist-file "~/.emacs-savehist.eld")
-(setopt server-auth-dir "~/.emacs-server.d")
 ;; ============================================================================
 ;; Local Variables:
 ;; coding: utf-8-unix

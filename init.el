@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-19T22:16:33+09:00>
+;; Time-stamp: <2026-07-22T07:36:57+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -145,6 +145,34 @@
 ;; デフォルト値
 ;; ============================================================================
 ;;
+;; Native comtile 時に `*Warnings*' バッファを表示させない
+;;
+(setopt native-comp-async-report-warnings-errors 'silent)
+;;
+;; `custom-file' の生成は許すが、決して使われない場所に置かせる
+;;
+(setopt custom-file (concat temporary-file-directory "custom.el"))
+;;
+;; Save locally ONLY.
+;;
+(setopt auto-save-list-file-prefix "~/.emacs-auto-save-list.d/.saves-")
+(setopt bookmark-default-file "~/.emacs-bookmark.eld")
+(setopt ido-save-directory-list-file "~/.emacs-ido-save-directory-list.eld")
+(setopt nsm-settings-file "~/.emacs-network-security.eld")
+(setopt recentf-save-file "~/.emacs-recentf.eld")
+(setopt save-place-file "~/.emacs-saveplace.eld")
+(setopt savehist-file "~/.emacs-savehist.eld")
+(setopt server-auth-dir "~/.emacs-server.d")
+;;
+;; 起動直後の表示（スタートアップメッセージ）を使わない（阻害する）
+;;
+(setopt inhibit-startup-buffer-menu t)
+(setopt inhibit-startup-screen t)
+;;
+;; `*scratch*' バッファの初期状態を空にする
+;;
+(setopt initial-scratch-message nil)
+;;
 ;; 読取専用テキストの kill を許可する
 ;;
 (setopt kill-read-only-ok t)
@@ -173,9 +201,10 @@
 ;;
 (setopt scroll-error-top-bottom t)
 ;;
-;; <tab> キーはインデントのみ行う
+;; <tab> キーによる補完を有効にする
 ;;
-(setopt tab-always-indent t)
+(setopt tab-always-indent 'complete)
+(setopt tab-first-completion 'word-or-paren-or-punct)
 ;;
 ;; 大文字／小文字の区別を無視する
 ;;
@@ -217,6 +246,11 @@
 ;; https://www.reddit.com/r/emacs/comments/mq2znn/comment/gugo0n4/
 (setopt auto-revert-check-vc-info t)
 (setopt auto-revert-use-notify nil)
+;;
+;; バックアップファイルは未知のゴミになりやすいため、使わない
+;;
+(setopt auto-save-default nil)
+(setopt make-backup-files nil)
 ;;
 ;; `comint'
 ;;
