@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-22T08:31:21+09:00>
+;; Time-stamp: <2026-07-22T16:00:54+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -778,15 +778,6 @@
   ;; https://prettier.io/docs/options#parser
   (ignore-errors ; "--parser=babel-flow" がなければ何もしない
     (setcar (member "--parser=babel-flow" (assoc 'prettier-javascript apheleia-formatters)) "--parser=typescript"))
-  ;;
-  ;; Python
-  ;;
-  ;; フォーマッターを `black' から `ruff-isort' → `ruff' 実行に変更する
-  ;;
-  ;; See:
-  ;; https://www.gnu.org/software/emacs/manual/html_node/elisp/Association-Lists.html
-  (setcdr (assoc 'python-mode apheleia-mode-alist) '(ruff-isort ruff))
-  (setcdr (assoc 'python-ts-mode apheleia-mode-alist) '(ruff-isort ruff))
   :global-minor-mode apheleia-global-mode)
 
 
@@ -814,20 +805,25 @@
 (leaf company
   :ensure t
   :custom (;; `company'
-           (company-tooltip-limit . 20)
-           (company-tooltip-minimum . 10)
-           (company-tooltip-offset-display . 'lines)
-           (company-tooltip-align-annotations . t)
-           (company-tooltip-flip-when-above . t)
-           (company-transformers . '(company-sort-by-occurrence))
-           (company-minimum-prefix-length . 1)
            (company-abort-manual-when-too-short . t)
            (company-idle-delay . 0.25)
+           (company-minimum-prefix-length . 1)
            (company-selection-wrap-around . t)
+           (company-tooltip-align-annotations . t)
+           (company-tooltip-flip-when-above . t)
+           (company-tooltip-limit . 20)
+           (company-tooltip-maximum-width . 200)
+           (company-tooltip-minimum . 10)
+           (company-tooltip-minimum-width . 20)
+           (company-tooltip-offset-display . 'lines)
+           (company-tooltip-width-grow-only . 100)
+           (company-transformers . '(company-sort-by-occurrence))
            ;; `company-dabbrev'
-           (company-dabbrev-other-buffers . t)
            (company-dabbrev-downcase . nil)
+           (company-dabbrev-other-buffers . t)
            ;; `company-dabbrev-code'
+           (company-dabbrev-code-everywhere . t)
+           (company-dabbrev-code-ignore-case . t)
            (company-dabbrev-code-modes . '(;; 追加で認識させたいメジャーモード
                                            ;; 降順 (DESC) ソート済
                                            nxml-mode
@@ -842,9 +838,7 @@
                                            jde-mode
                                            lua-mode
                                            python-mode))
-           (company-dabbrev-code-other-buffers . t)
-           (company-dabbrev-code-everywhere . t)
-           (company-dabbrev-code-ignore-case . t))
+           (company-dabbrev-code-other-buffers . t))
   :global-minor-mode global-company-mode)
 
 
@@ -1116,7 +1110,6 @@
          (js-mode-hook . lsp-deferred)
          (json-mode-hook . lsp-deferred)
          (markdown-mode-hook . lsp-deferred)
-         (python-mode-hook . lsp-deferred)
          (sgml-mode-hook . lsp-deferred)
          (web-mode-hook . lsp-deferred)
          (yaml-mode-hook . lsp-deferred))
@@ -1202,25 +1195,6 @@
            (lsp-ui-doc-delay . 0.25)
            ;; `lsp-ui-doc' を有効にしているため、他は不要になる
            (lsp-ui-sideline-enable . nil)))
-
-
-;; ------------------------------------
-;; LSP: 拡張 (ty)
-;; ------------------------------------
-;;
-;; NOTE: `lsp-mode' が自動ロードする
-;;
-(leaf lsp-python-ty
-  :hook ((python-mode-hook . my-lsp-python-ty-initialize))
-  :init
-  (defun my-lsp-python-ty-initialize ()
-    "Initialize `lsp-python-ty' before load."
-    ;; `uv' プロジェクトディレクトリで .venv/bin/ty を自動検出
-    (when-let* ((venv-dir (locate-dominating-file default-directory ".venv"))
-                (ty-path (expand-file-name ".venv/bin/ty" venv-dir)))
-      (when (file-executable-p ty-path)
-        (setq-local lsp-python-ty-clients-server-command `(,ty-path "server"))
-        (message "Using project ty: %s" ty-path)))))
 
 
 ;; ------------------------------------
@@ -1449,8 +1423,7 @@
 ;; JSON
 ;; ------------------------------------
 (leaf json-mode
-  :ensure t
-  :mode (("\\.ipynb\\'" . json-mode)))
+  :ensure t)
 
 
 ;; ------------------------------------
@@ -1477,22 +1450,6 @@
             (markdown-use-pandoc-style-yaml-metadata . t)
             (markdown-wiki-link-fontify-missing . t)
             (markdown-wiki-link-search-type . 'project)))
-
-
-;; ------------------------------------
-;; Python
-;; ------------------------------------
-(leaf python-mode
-  :hook ((python-mode-hook . my-python-mode-initialize))
-  :init
-  (defun my-python-mode-initialize ()
-    "Initialize `python-mode' before load."
-    ;; `uv' プロジェクトディレクトリで .venv/bin/python を自動検出する
-    (when-let* ((venv-dir (locate-dominating-file default-directory ".venv"))
-                (python-path (expand-file-name ".venv/bin/python" venv-dir)))
-      (when (file-executable-p python-path)
-        (setq-local python-shell-interpreter python-path)
-        (message "Using project python: %s" python-path)))))
 
 
 ;; ------------------------------------
