@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-23T15:36:59+09:00>
+;; Time-stamp: <2026-07-27T15:03:19+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -200,11 +200,6 @@
 ;; スクロール不能ならバッファ先頭／末尾文字にポイントを移動する
 ;;
 (setopt scroll-error-top-bottom t)
-;;
-;; <tab> キーによる補完を有効にする
-;;
-(setopt tab-always-indent 'complete)
-(setopt tab-first-completion 'word-or-paren-or-punct)
 ;;
 ;; 大文字／小文字の区別を無視する
 ;;
@@ -685,6 +680,116 @@
 
 
 ;; ============================================================================
+;; 補完用バックエンド
+;; ============================================================================
+(leaf consult
+  :ensure t
+  :bind (;; リマップ
+         ([remap goto-line] . consult-goto-line)
+         ([remap imenu] . consult-imenu)
+         ([remap project-switch-to-buffer] . consult-project-buffer)
+         ([remap switch-to-buffer] . consult-buffer)
+         ;; 上書き
+         ("C-s" . consult-line)
+         ("C-x 4 b" . consult-buffer-other-window)
+         ("C-x 5 b" . consult-buffer-other-frame)
+         ;; ミニバッファ
+         (minibuffer-local-map
+          :package emacs
+          ("C-r" . consult-history)))
+  :hook ((completion-list-mode-hook . consult-preview-at-point-mode))
+  :custom ((register-preview-function . #'consult-register-format)
+           (xref-show-xrefs-function . #'consult-xref)
+           (xref-show-definitions-function . #'consult-xref))
+  :advice ((:override register-preview consult-register-window)))
+
+
+;; ============================================================================
+;; 補完用フロントエンド
+;; ============================================================================
+;; ------------------------------------
+;; バッファ用
+;; ------------------------------------
+(leaf corfu
+  :ensure t
+  :bind ((:corfu-map
+          ("RET" . corfu-send)))
+  :hook ((lsp-completion-mode . my-lsp-mode-setup-completion))
+  :custom ((corfu-auto . t)
+           (corfu-auto-prefix . 2)
+           (corfu-auto-trigger . ".")
+           (corfu-count . 21)
+           (corfu-preselect . 'directory)
+           (corfu-scroll-margin . 10))
+  :init
+  ;;
+  ;; See:
+  ;; https://github.com/minad/corfu/wiki#configuring-corfu-for-lsp-mode
+  ;;
+  (defun my-orderless-dispatch-flex-first (_pattern index _total)
+    "Configure the first word (eq INDEX 0) as flex filtered."
+    (and (eq index 0) 'orderless-flex))
+  (defun my-lsp-mode-setup-completion ()
+    "Use `corfu' for completion of `lsp'."
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless))
+    (setq-local orderless-style-dispatchers (list #'my-orderless-dispatch-flex-first)))
+  :global-minor-mode global-corfu-mode)
+
+
+;; ------------------------------------
+;; ミニバッファ用
+;; ------------------------------------
+(leaf vertico
+  :ensure t
+  :bind ((:vertico-map
+          ("<DEL>" . vertico-directory-delete-char)
+          ("RET" . vertico-directory-enter)))
+  :custom ((vertico-count . 21)
+           (vertico-resize . t)
+           (vertico-scroll-margin . 10))
+  :global-minor-mode t)
+
+
+;; ------------------------------------
+;; ミニバッファ用拡張：注釈 UI
+;; ------------------------------------
+(leaf marginalia
+  :ensure t
+  :custom ((marginalia-field-width . 200)
+           (marginalia-max-relative-age . 0))
+  :global-minor-mode t)
+
+
+;; ============================================================================
+;; 補完スタイル用バックエンド
+;;
+;; See:
+;; https://github.com/oantolin/orderless
+;; ============================================================================
+(leaf orderless
+  :ensure t
+  :custom ((completion-category-overrides . '((file (styles partial-completion))))
+           (completion-pcm-leading-wildcard . t)
+           (completion-styles . '(orderless partial-completion basic)))
+  :defer-config
+  ;;
+  ;; `migemo' があれば `orderless' のマッチングスタイル第1候補にする
+  ;;
+  ;; See:
+  ;; https://nyoho.jp/diary/?date=20210615
+  ;;
+  (with-eval-after-load 'migemo
+    (defun my-orderless-matching-style-migemo (component)
+      "Match COMPONENT as `migemo'."
+      (let ((pattern (migemo-get-pattern component)))
+        (condition-case nil
+            (progn (string-match-p pattern "") pattern)
+          (invalid-regexp nil))))
+    (add-to-list 'orderless-matching-styles #'my-orderless-matching-style-migemo)))
+
+
+;; ============================================================================
 ;; マイナーモード：外部パッケージ
 ;; ============================================================================
 ;; ------------------------------------
@@ -750,25 +855,10 @@
   ;;       文字化けが発生する
   ;;
   :when (member 'unicode
-                (flatten-tree
-                 (mapcar #'coding-system-charset-list
-                         (flatten-tree default-process-coding-system))))
+                (flatten-tree (mapcar #'coding-system-charset-list
+                                      (flatten-tree default-process-coding-system))))
   :ensure t
-  :hook ((apheleia-mode-on-hook . my-apheleia-initialize))
   :custom ((apheleia-mode-lighter . ""))
-  :init
-  (defun my-apheleia-initialize ()
-    "Initialize `apheleia' before load."
-    ;; `uv' プロジェクトディレクトリで .venv/bin/ruff を自動検出
-    (when-let* ((venv-dir (locate-dominating-file default-directory ".venv"))
-                (ruff-path (expand-file-name ".venv/bin/ruff" venv-dir)))
-      (when (file-executable-p ruff-path)
-        (with-eval-after-load 'apheleia-formatters
-          (let ((local-apheleia-formatters (copy-tree apheleia-formatters)))
-            (setcar (member "ruff" (assoc 'ruff local-apheleia-formatters)) ruff-path)
-            (setcar (member "ruff" (assoc 'ruff-isort local-apheleia-formatters)) ruff-path)
-            (setq-local apheleia-formatters local-apheleia-formatters)
-            (message "Using project ruff: %s" ruff-path))))))
   :defer-config
   ;;
   ;; JavaScript
@@ -798,93 +888,6 @@
 (leaf auto-dim-other-buffers
   :ensure t
   :hook ((window-setup-hook . auto-dim-other-buffers-mode)))
-
-
-;; ------------------------------------
-;; 補完フレームワーク
-;; ------------------------------------
-(leaf company
-  :ensure t
-  :custom (;; `company'
-           (company-abort-manual-when-too-short . t)
-           (company-idle-delay . 0.25)
-           (company-minimum-prefix-length . 1)
-           (company-selection-wrap-around . t)
-           (company-tooltip-align-annotations . t)
-           (company-tooltip-flip-when-above . t)
-           (company-tooltip-limit . 20)
-           (company-tooltip-maximum-width . 200)
-           (company-tooltip-minimum . 10)
-           (company-tooltip-minimum-width . 20)
-           (company-tooltip-offset-display . 'lines)
-           (company-tooltip-width-grow-only . 100)
-           (company-transformers . '(company-sort-by-occurrence))
-           ;; `company-dabbrev'
-           (company-dabbrev-downcase . nil)
-           (company-dabbrev-other-buffers . t)
-           ;; `company-dabbrev-code'
-           (company-dabbrev-code-everywhere . t)
-           (company-dabbrev-code-ignore-case . t)
-           (company-dabbrev-code-modes . '(;; 追加で認識させたいメジャーモード
-                                           ;; 降順 (DESC) ソート済
-                                           nxml-mode
-                                           sgml-mode
-                                           ;; WARNING: 既定値のためソート禁止
-                                           prog-mode
-                                           batch-file-mode
-                                           csharp-mode
-                                           css-mode
-                                           erlang-mode
-                                           haskell-mode
-                                           jde-mode
-                                           lua-mode
-                                           python-mode))
-           (company-dabbrev-code-other-buffers . t))
-  :global-minor-mode global-company-mode)
-
-
-;; ------------------------------------
-;; 補完フレームワーク：拡張（ポップアップ）
-;; ------------------------------------
-(leaf company-box
-  :ensure t
-  :hook ((company-mode-hook . company-box-mode)))
-
-
-;; ------------------------------------
-;; 補完フレームワーク：拡張（補完候補のソート）
-;; ------------------------------------
-(leaf company-statistics
-  :ensure t
-  :custom ((company-statistics-size . 500)
-           ;; ローカル環境にのみ保存させる
-           (company-statistics-file . "~/.emacs-company-statistics-cache.eld"))
-  :global-minor-mode t)
-
-
-;; ------------------------------------
-;; 補完
-;; ------------------------------------
-(leaf consult
-  :ensure t
-  :bind (;; リマップ
-         ([remap goto-line] . consult-goto-line)
-         ([remap imenu] . consult-imenu)
-         ([remap project-switch-to-buffer] . consult-project-buffer)
-         ([remap switch-to-buffer] . consult-buffer)
-         ;; 上書き
-         ("C-s" . consult-line)
-         ("C-x 4 b" . consult-buffer-other-window)
-         ("C-x 5 b" . consult-buffer-other-frame)
-         ;; ミニバッファ
-         (minibuffer-local-map
-          :package emacs
-          ("C-r" . consult-history)))
-  :hook ((completion-list-mode-hook . consult-preview-at-point-mode))
-  :custom ((register-preview-function . #'consult-register-format)
-           (xref-show-xrefs-function . #'consult-xref)
-           (xref-show-definitions-function . #'consult-xref))
-  :advice ((:override register-preview consult-register-window)))
 
 
 ;; ------------------------------------
@@ -969,19 +972,6 @@
   :custom ((easysession-directory . "~/.emacs-easysession.d"))
   :config
   (easysession-setup))
-
-
-;; ------------------------------------
-;; 補完候補へのアクション提供
-;; ------------------------------------
-(leaf embark-consult
-  :ensure t
-  :bind ((:minibuffer-mode-map
-          :package emacs
-          ("M-." . embark-dwim)
-          ("C-." . embark-act)))
-  :hook ((embark-collect-mode . consult-preview-at-point-mode))
-  :custom ((prefix-help-command . #'embark-prefix-help-command)))
 
 
 ;; ------------------------------------
@@ -1115,8 +1105,9 @@
          (web-mode-hook . lsp-deferred)
          (yaml-mode-hook . lsp-deferred))
   :custom (;;
-           ;; `lsp-mode'
+           ;; `lsp'
            ;;
+           (lsp-completion-provider . :none)
            (lsp-semantic-tokens-enable . t)
            (lsp-restart . 'auto-restart)
            ;; ローカル環境にのみ保存させる
@@ -1218,16 +1209,6 @@
 
 
 ;; ------------------------------------
-;; 補完候補に拡張情報を追加
-;; ------------------------------------
-(leaf marginalia
-  :ensure t
-  :custom ((marginalia-field-width . 200)
-           (marginalia-max-relative-age . 0))
-  :global-minor-mode t)
-
-
-;; ------------------------------------
 ;; 日本語インクリメンタル検索
 ;; ------------------------------------
 (leaf migemo
@@ -1283,34 +1264,7 @@
 
 
 ;; ------------------------------------
-;; 正規表現を任意順でマッチさせる補完スタイル
-;; ------------------------------------
-(leaf orderless
-  :ensure t
-  :custom ((completion-category-defaults . nil)
-           (completion-category-overrides . '((file (styles partial-completion))))
-           (completion-pcm-leading-wildcard . t)
-           (completion-styles . '(orderless basic))))
-;;
-;; `migemo' が準備できたら使いはじめる
-;;
-;; See:
-;; https://nyoho.jp/diary/?date=20210615
-;;
-(leaf orderless-migemo
-  :after (migemo orderless)
-  :config
-  (defun my-orderless-matching-style-migemo (component)
-    "Match COMPONENT as `migemo'."
-    (let ((pattern (migemo-get-pattern component)))
-      (condition-case nil
-          (progn (string-match-p pattern "") pattern)
-        (invalid-regexp nil))))
-  (add-to-list 'orderless-matching-styles #'my-orderless-matching-style-migemo))
-
-
-;; ------------------------------------
-;; 汎用プロジェクト管理
+;; プロジェクト管理
 ;; ------------------------------------
 (leaf projectile
   :ensure t
@@ -1329,24 +1283,6 @@
   :ensure t
   :bind (("C-/" . undo-fu-only-undo)
          ("C-?" . undo-fu-only-redo)))
-
-
-;; ------------------------------------
-;; 垂直インタラクティブ補完
-;; ------------------------------------
-(leaf vertico
-  :ensure t
-  :bind ((:vertico-map
-          ("<DEL>" . vertico-directory-delete-char)
-          ("<backspace>" . vertico-directory-delete-char)
-          ("<escape>" . minibuffer-keyboard-quit)
-          ("C-v" . vertico-scroll-up)
-          ("M-v" . vertico-scroll-down)
-          ("RET" . vertico-directory-enter)))
-  :custom ((vertico-count . 21)
-           (vertico-resize . t)
-           (vertico-scroll-margin . 10))
-  :global-minor-mode t)
 
 
 ;; ============================================================================
