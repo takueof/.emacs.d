@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-27T15:03:19+09:00>
+;; Time-stamp: <2026-07-27T15:40:42+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -713,7 +713,9 @@
 (leaf corfu
   :ensure t
   :bind ((:corfu-map
-          ("RET" . corfu-send)))
+          ("RET" . corfu-send)
+          ("C-v" . corfu-scroll-up)
+          ("M-v" . corfu-scroll-down)))
   :hook ((lsp-completion-mode . my-lsp-mode-setup-completion))
   :custom ((corfu-auto . t)
            (corfu-auto-prefix . 2)
@@ -744,6 +746,8 @@
   :ensure t
   :bind ((:vertico-map
           ("<DEL>" . vertico-directory-delete-char)
+          ("C-v" . vertico-scroll-up)
+          ("M-v" . vertico-scroll-down)
           ("RET" . vertico-directory-enter)))
   :custom ((vertico-count . 21)
            (vertico-resize . t)
