@@ -1,7 +1,7 @@
 ;;; early-init.el --- "GNU Emacs" early initialize -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2021-2026 Taku WATABE
-;; Time-stamp: <2026-07-22T07:40:45+09:00>
+;; Time-stamp: <2026-07-27T15:26:22+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -45,6 +45,10 @@
 ;;
 (setopt undo-limit 600000)
 (setopt undo-strong-limit 900000) ; (= 1.5 (/ undo-strong-limit undo-limit))
+;;
+;; Don't use natively-compiled GNU Emacs Lisp (.eln) files.
+;;
+(setopt native-comp-jit-compilation nil)
 ;;
 ;; Don't generate lockfiles.
 ;;
