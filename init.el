@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-27T15:40:42+09:00>
+;; Time-stamp: <2026-07-28T15:02:39+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -383,7 +383,7 @@
 
 
 ;; ------------------------------------
-;; キーワード定義
+;; キーワード定義 `leaf-keywords'
 ;; ------------------------------------
 (leaf leaf-keywords
   :ensure t
