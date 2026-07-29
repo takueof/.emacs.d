@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-28T15:04:54+09:00>
+;; Time-stamp: <2026-07-29T09:13:57+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1491,7 +1491,8 @@
   :bind (("C-c a i" . agent-shell)
          (:agent-shell-mode-map
           ("RET" . newline)
-          ("C-j" . shell-maker-submit)))
+          ("C-j" . shell-maker-submit)
+          ("C-c ?" . agent-shell-help-menu)))
   :custom `((agent-shell-anthropic-default-model-id . ,(getenv "ANTHROPIC_MODEL"))
             (agent-shell-busy-indicator-frames . 'dots-round)
             (agent-shell-confirm-interrupt . nil)
