@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-07-29T09:13:57+09:00>
+;; Time-stamp: <2026-08-03T18:03:50+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1486,14 +1486,16 @@
 ;; LLM と ACP (Agent Client Protocol) 経由で対話するインターフェース (AI)
 ;; ============================================================================
 (leaf agent-shell
-  :when (executable-find "claude-agent-acp")
+  :when (or (executable-find "claude-agent-acp")
+            (executable-find "codex-acp"))
   :ensure t
   :bind (("C-c a i" . agent-shell)
          (:agent-shell-mode-map
           ("RET" . newline)
           ("C-j" . shell-maker-submit)
           ("C-c ?" . agent-shell-help-menu)))
-  :custom `((agent-shell-anthropic-default-model-id . ,(getenv "ANTHROPIC_MODEL"))
+  :custom `(
+            (agent-shell-anthropic-default-model-id . ,(getenv "ANTHROPIC_MODEL"))
             (agent-shell-busy-indicator-frames . 'dots-round)
             (agent-shell-confirm-interrupt . nil)
             (agent-shell-context-sources . '(region))
@@ -1501,8 +1503,8 @@
             (agent-shell-file-completion-enabled . nil)
             (agent-shell-header-style . 'text)
             (agent-shell-highlight-blocks . t)
+            (agent-shell-openai-default-model-id . ,(getenv "ANTHROPIC_MODEL"))
             (agent-shell-permission-icon . "⚠️")
-            (agent-shell-preferred-agent-config . 'claude-code)
             (agent-shell-session-restore-verbosity . 'full)
             (agent-shell-session-strategy . 'latest)
             (agent-shell-show-session-id . t)
