@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-08-03T18:03:50+09:00>
+;; Time-stamp: <2026-08-06T10:50:11+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1029,7 +1029,7 @@
 
 
 ;; ------------------------------------
-;; Google 翻訳
+;; Google 翻訳（実体：`google-translate-default-ui'）
 ;; ------------------------------------
 (leaf google-translate
   :ensure t
@@ -1037,6 +1037,7 @@
          ("C-c t RET" . google-translate-smooth-translate))
   :custom ((google-translate-default-source-language . "en")
            (google-translate-default-target-language . "ja")
+           (google-translate-display-translation-phonetic . nil)
            (google-translate-pop-up-buffer-set-focus . t)
            (google-translate-show-phonetic . t)
            (google-translate-translation-directions-alist . '(("ja" . "en")
@@ -1494,8 +1495,7 @@
           ("RET" . newline)
           ("C-j" . shell-maker-submit)
           ("C-c ?" . agent-shell-help-menu)))
-  :custom `(
-            (agent-shell-anthropic-default-model-id . ,(getenv "ANTHROPIC_MODEL"))
+  :custom `((agent-shell-anthropic-default-model-id . ,(getenv "ANTHROPIC_MODEL"))
             (agent-shell-busy-indicator-frames . 'dots-round)
             (agent-shell-confirm-interrupt . nil)
             (agent-shell-context-sources . '(region))
