@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-08-06T10:50:11+09:00>
+;; Time-stamp: <2026-08-07T19:16:48+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1463,6 +1463,7 @@
           ("C-c M-d" . ignore)))
   :hook ((vterm-mode-hook . my-vterm-initialize))
   :custom ((ghostel-bold-color 'bright)
+           (ghostel-max-scrollback . 104857600) ; 100MB
            (ghostel-module-auto-install . 'download))
   :init
   (defun my-ghostel-initialize ()
