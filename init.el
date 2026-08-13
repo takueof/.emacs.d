@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-08-07T19:16:48+09:00>
+;; Time-stamp: <2026-08-13T17:01:33+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -83,14 +83,10 @@
 
 
 ;; ------------------------------------
-;; 「〜」(U+301C) → 「～」(U+FF5E) 自動変換
-;; ------------------------------------
-(coding-system-put 'japanese-cp932 ; Shift_JIS
-                   :encode-translation-table (get 'japanese-ucs-jis-to-cp932-map 'translation-table))
-
-
-;; ------------------------------------
-;; 「～」(U+FF5E) → 「〜」(U+301C) 自動変換
+;; 「～」(U+FF5E) → 「〜」(U+301C) 自動変換：JIS/Unicode の正は「〜」(U+301C)
+;;
+;; See:
+;; https://ja.wikipedia.org/wiki/%E6%B3%A2%E3%83%80%E3%83%83%E3%82%B7%E3%83%A5
 ;; ------------------------------------
 (coding-system-put 'japanese-iso-8bit ; EUC-JP
                    :encode-translation-table (get 'japanese-ucs-cp932-to-jis-map 'translation-table))
@@ -1547,8 +1543,8 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;;   漢| 漢字
 ;;   〇| 全角記号
 ;;   　| IDEOGRAPHIC SPACE (U+3000)
+;;   〜| WAVE DASH (U+301C)
 ;;   ～| FULLWIDTH TILDE (U+FF5E)
-;;   〜| WAVE DASH (U+301C) `cp932' ONLY
 ;;   😊| Emoji
 ;;
 ;; 関連コマンド
