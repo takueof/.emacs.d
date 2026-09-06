@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-08-13T17:01:33+09:00>
+;; Time-stamp: <2026-09-06T10:09:38+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -197,6 +197,11 @@
 ;;
 (setopt scroll-error-top-bottom t)
 ;;
+;; `transient-mark-mode' によるリージョン範囲の視覚化を、
+;; ユーザーがリージョン選択を明示的に実行した場合に限定する
+;;
+(setopt exchange-point-and-mark-highlight-region nil)
+;;
 ;; 大文字／小文字の区別を無視する
 ;;
 (setopt dabbrev-case-fold-search t)
@@ -391,14 +396,15 @@
 ;; 自作ユーティリティ
 ;; ============================================================================
 (leaf my-utils
-  :load-path* "utils"
-  :require t
+  :init
+  (leaf my-utils-before-emacs-31
+    :when (version< emacs-version "31")
+    :load-path* "user-lisp"
+    :require t)
   :bind (;; 行頭移動は物理行とする
          ("C-a" . my-beginning-of-smart-indented-line)
          ;; 前のウインドウに移動する
          ("C-x p" . my-other-window-reverse)
-         ;; 前のフレームに移動する
-         ("C-x 5 p" . my-other-frame-reverse)
          ;; カーソル位置に YEN SIGN (U+00A5) を挿入する
          ("C-c i \\" . my-insert-yen-sign)
          ;; カーソル位置にファイル名を挿入する
@@ -539,49 +545,50 @@
             ;;
             ;; See:
             ;; https://ja.wikipedia.org/wiki/ISO_8601
-            ;;
-            ;; WARNING: `time-stamp-time-zone' を "+09:00" にしても、
-            ;;          コロン以降が無視される
-            ;;
-            ;; タイムゾーンは別途指定、以下理由：
-            ;;
-            ;; `time-stamp-string' の "%Z" は
-            ;; (format-time-string "%Z") と同義
-            ;; この値をそのまま扱うため、
-            ;; 環境の差異が出やすくマトモに使えない
-            ;;
-            ;; `time-stamp-string' の "%z" は
-            ;; (format-time-string "%#Z") と同義
-            ;; (format-time-string "%z") ではない点に注意
-            ;; この値をそのまま扱うため、
-            ;; 環境の差異が出やすくマトモに使えない
-            ;; また `format-time-string' 側のバグにより、
-            ;; 環境次第で文字化けする
-            ;;
-            ;; Windows 環境（環境変数 %TZ% 未指定かつ +09:00 ゾーン）では
-            ;; 次の値が使用されてしまう
-            ;; （どちらもエンコーディングは `cp932-2-byte'）：
-            ;;
-            ;; "%Z" (≒ "%Z"):  #("東京 (標準時)" 0 8
-            ;; "%z" (≒ "%#Z"): #("東京 (婦準時)" 0 8
-            ;;
-            ;; 「標」→「婦」に文字化けしているのがわかる
-            ;; また、`propertize' されている
-            ;;
-            ;; FIXME: 現状、OS 側の動的なタイムゾーン変更に追従不能
-            ;;        都度評価にしたい
-            ;;
-            (time-stamp-format . ,(concat "%:y-%02m-%02dT%02H:%02M:%02S"
-                                          (replace-regexp-in-string
-                                           ;; 強制的にコロンを付与する
-                                           ;; コロンなし形式を返されるため
-                                           ;; 厳密チェックで "±1259" のみ利用する
-                                           ;;   → 他は無視する
-                                           "\\`\\([\\+\\-]\\(?:0[0-9]\\|1[0-2]\\)\\)\\([0-5][0-9]\\)\\'"
-                                           "\\1:\\2"
-                                           ;; タイムゾーンが "+0000" を返す
-                                           ;; あえて "Z" への変換はしない
-                                           (format-time-string "%z"))))))
+            (time-stamp-format . ,(if (version< emacs-version "31")
+                                      ;; WARNING: `time-stamp-time-zone' を "+09:00" にしても、
+                                      ;;          コロン以降が無視される
+                                      ;;
+                                      ;; タイムゾーンは別途指定、以下理由：
+                                      ;;
+                                      ;; `time-stamp-string' の "%Z" は
+                                      ;; (format-time-string "%Z") と同義
+                                      ;; この値をそのまま扱うため、
+                                      ;; 環境の差異が出やすくマトモに使えない
+                                      ;;
+                                      ;; `time-stamp-string' の "%z" は
+                                      ;; (format-time-string "%#Z") と同義
+                                      ;; (format-time-string "%z") ではない点に注意
+                                      ;; この値をそのまま扱うため、
+                                      ;; 環境の差異が出やすくマトモに使えない
+                                      ;; また `format-time-string' 側のバグにより、
+                                      ;; 環境次第で文字化けする
+                                      ;;
+                                      ;; Windows 環境（環境変数 %TZ% 未指定かつ +09:00 ゾーン）では
+                                      ;; 次の値が使用されてしまう
+                                      ;; （どちらもエンコーディングは `cp932-2-byte'）：
+                                      ;;
+                                      ;; "%Z" (≒ "%Z"):  #("東京 (標準時)" 0 8
+                                      ;; "%z" (≒ "%#Z"): #("東京 (婦準時)" 0 8
+                                      ;;
+                                      ;; 「標」→「婦」に文字化けしているのがわかる
+                                      ;; また、`propertize' されている
+                                      ;;
+                                      ;; FIXME: 現状、OS 側の動的なタイムゾーン変更に追従不能
+                                      ;;        都度評価にしたい
+                                      (concat "%:y-%02m-%02dT%02H:%02M:%02S"
+                                              (replace-regexp-in-string
+                                               ;; 強制的にコロンを付与する
+                                               ;; コロンなし形式を返されるため
+                                               ;; 厳密チェックで "±1259" のみ利用する
+                                               ;;   → 他は無視する
+                                               "\\`\\([\\+\\-]\\(?:0[0-9]\\|1[0-2]\\)\\)\\([0-5][0-9]\\)\\'"
+                                               "\\1:\\2"
+                                               ;; タイムゾーンが "+0000" を返す
+                                               ;; あえて "Z" への変換はしない
+                                               (format-time-string "%:z")))
+                                    "%Y-%m-%dT%H:%M:%S%:z"))))
+
 
 
 ;; ------------------------------------
@@ -1630,7 +1637,6 @@ F is inner function in `agent-shell', ARGS are F arguments."
   ;; NOTE: GUI のみ設定する（ターミナルでは設定できないし、する意味もない）
   ;;
   :when window-system
-  :after my-utils
   :config
   ;; ----------------------------------
   ;; スケール変換

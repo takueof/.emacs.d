@@ -1,7 +1,7 @@
 ;;; my-utils.el --- 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-06-26T23:05:22+09:00>
+;; Time-stamp: <2026-09-06T09:55:34+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -41,6 +41,7 @@
 ;; See also:
 ;; http://gifnksm.hatenablog.jp/entry/20100131/1264956220
 ;; ============================================================================
+;;;###autoload
 (defmacro my-visual-line-beginning-position (&optional n)
   "Get cursor point of visual line beginning position.
 
@@ -49,6 +50,7 @@ N is same meaning of `beginning-of-visual-line' argument."
      (beginning-of-visual-line ,n)
      (point)))
 
+;;;###autoload
 (defun my-beginning-of-smart-indented-line ()
   "Move curosr to beginning of indent.
 
@@ -77,6 +79,7 @@ Move to the beginning of the line if the cursor is at the beginning or middle of
 ;; ============================================================================
 ;; ウインドウ移動
 ;; ============================================================================
+;;;###autoload
 (defun my-other-window-reverse (count &optional all-frames)
   "Move before window, reverse behavior of `other-window'.
 
@@ -86,19 +89,9 @@ COUNT and ALL-FRAMES are same arguments of `other-window'."
 
 
 ;; ============================================================================
-;; フレーム移動
-;; ============================================================================
-(defun my-other-frame-reverse (arg)
-  "Move before frame, reverse behavior of `other-frame'.
-
-ARG is same argument of `other-frame'."
-  (interactive "p")
-  (other-frame (- arg)))
-
-
-;; ============================================================================
 ;; バッファ
 ;; ============================================================================
+;;;###autoload
 (defun my-revert-buffer (&optional auto-save)
   "Run `revert-buffer-quick' and `normal-mode'.
 
@@ -114,11 +107,13 @@ AUTO-SAVE is same as 1st argument of `revert-buffer-quick'"
 ;; ============================================================================
 ;; 挿入
 ;; ============================================================================
+;;;###autoload
 (defun my-insert-yen-sign ()
   "Insert YEN SIGN (U+00A5) character to cursor position."
   (interactive)
   (insert "¥"))
 
+;;;###autoload
 (defun my-insert-file-name (&optional name)
   "Insert current buffer's file name to cursor position.
 
@@ -137,6 +132,7 @@ Return string of file name."
                                          name
                                        (current-buffer)))))))))
 
+;;;###autoload
 (defun my-insert-file-path (&optional name)
   "Insert current buffer's file path (full path) to cursor position.
 
@@ -158,6 +154,7 @@ Return string of file path."
 ;; ============================================================================
 ;; フォントセット
 ;; ============================================================================
+;;;###autoload
 (defmacro my-fallback-font-family (&rest families)
   "Return a first matched avaliable font-family in FAMILIES.
 
@@ -171,6 +168,7 @@ Return nil to all FAMILIES are unavailable."
          (if (find-font (font-spec :family ,family))
              (throw ',founded ,family))))))
 
+;;;###autoload
 (defmacro my-set-fontset-font-safe (&rest args)
   "Return the result of `set-fontset-font' if don't cause error, or else nil.
 
