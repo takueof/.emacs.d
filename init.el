@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-09-06T10:09:38+09:00>
+;; Time-stamp: <2026-09-07T12:33:53+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -135,6 +135,24 @@
 (keymap-global-unset "C-M-t")
 ;; `suspend-frame' キーバインドを明示的に解除する
 (keymap-global-unset "C-z")
+
+
+;; ============================================================================
+;; 自作ユーティリティ
+;; ============================================================================
+(when (require 'my (concat user-emacs-directory "user-lisp/my.el") :noerror)
+  ;; 行頭移動は物理行とする
+  (keymap-global-set "C-a" #'my-beginning-of-smart-indented-line)
+  ;; カーソル位置に YEN SIGN (U+00A5) を挿入する
+  (keymap-global-set "C-c i \\" #'my-insert-yen-sign)
+  ;; カーソル位置にファイル名を挿入する
+  (keymap-global-set "C-c i f" #'my-insert-file-name)
+  ;; カーソル位置にファイルパスを挿入する
+  (keymap-global-set "C-c i p" #'my-insert-file-path)
+  ;; バッファリロード実行後にメジャーモードを読みなおす
+  (keymap-global-set "C-c r" #'my-revert-buffer)
+  ;; 前のウインドウに移動する
+  (keymap-global-set "C-x p" #'my-other-window-reverse))
 
 
 ;; ============================================================================
@@ -390,29 +408,6 @@
   :ensure t
   :config
   (leaf-keywords-init))
-
-
-;; ============================================================================
-;; 自作ユーティリティ
-;; ============================================================================
-(leaf my-utils
-  :init
-  (leaf my-utils-before-emacs-31
-    :when (version< emacs-version "31")
-    :load-path* "user-lisp"
-    :require t)
-  :bind (;; 行頭移動は物理行とする
-         ("C-a" . my-beginning-of-smart-indented-line)
-         ;; 前のウインドウに移動する
-         ("C-x p" . my-other-window-reverse)
-         ;; カーソル位置に YEN SIGN (U+00A5) を挿入する
-         ("C-c i \\" . my-insert-yen-sign)
-         ;; カーソル位置にファイル名を挿入する
-         ("C-c i f" . my-insert-file-name)
-         ;; カーソル位置にファイルパスを挿入する
-         ("C-c i p" . my-insert-file-path)
-         ;; バッファリロード実行後にメジャーモードを読みなおす
-         ("C-c r" . my-revert-buffer)))
 
 
 ;; ============================================================================
@@ -1575,7 +1570,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;; 関連パッケージ
 ;;   `mule': Basic commands for multilingual environment
 ;;   `faces': フェイス実装
-;;   `my-utils': 独自サポート関数＆マクロ定義
+;;   `my': 独自サポート関数＆マクロ定義
 ;;
 ;; 文字セット
 ;;   ISO/IEC 8859-1 (`iso-8859-1') → `ascii' の拡張

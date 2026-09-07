@@ -1,7 +1,7 @@
-;;; my-utils.el --- 独自ユーティリティ -*- lexical-binding: t; -*-
+;;; my.el --- 独自ユーティリティ -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-09-06T09:55:34+09:00>
+;; Time-stamp: <2026-09-07T12:22:15+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 ;; Keywords: display, mule, i18n, fontset, extensions lisp
@@ -22,7 +22,7 @@
 ;;; Commentary:
 
 ;; 独自定義した関数・マクロの集合。
-;; `feature' 名 `my-utils'。
+;; `feature' 名 `my'。
 
 ;; 疑似名前空間プレフィクスは `my-'。
 
@@ -180,7 +180,7 @@ This feature seems to `car-safe' and `cdr-safe'."
   ;; 例外を無視
   `(ignore-errors (set-fontset-font ,@args)))
 
-(provide 'my-utils)
+(provide 'my)
 ;; ============================================================================
 ;; Local Variables:
 ;; coding: utf-8-unix
@@ -188,4 +188,4 @@ This feature seems to `car-safe' and `cdr-safe'."
 ;; no-byte-compile: t
 ;; End:
 
-;;; my-utils.el ends here
+;;; my.el ends here
