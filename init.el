@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-09-07T12:33:53+09:00>
+;; Time-stamp: <2026-10-09T05:05:31+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -28,6 +28,7 @@
 ;;          Because this file is VERY LONG.
 
 ;; (emacs-init-time)
+;; (emacs-version)
 
 ;;; Code:
 (set-language-environment "Japanese")
