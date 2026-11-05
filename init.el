@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-11-05T18:38:49+09:00>
+;; Time-stamp: <2026-11-07T22:05:12+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -71,7 +71,7 @@
 ;; HACK: `japanese-shift-jis' を `japanese-cp932' のエイリアスに変更する
 ;;       GNU Emacs における Shift_JIS 定義 `japanese-shift-jis' は、
 ;;       「JIS X 0208 附属書1」を厳格に実装している
-;;       そのため一部文字（例：「～」(U+FF5E)）が未定義であるなどし、
+;;       そのため一部文字（例："～" (U+FF5E)）が未定義であるなどし、
 ;;       実用するうえで問題が出やすい
 ;;       そこで Microsoft の Shift_JIS 実装 `japanese-cp932' を、
 ;;       デフォルトの Shift_JIS 実装として認識させる
@@ -84,7 +84,8 @@
 
 
 ;; ------------------------------------
-;; 「～」(U+FF5E) → 「〜」(U+301C) 自動変換：JIS/Unicode の正は「〜」(U+301C)
+;; "～" (U+FF5E) → "〜" (U+301C) 自動変換
+;; JIS/Unicode の正は "〜" (U+301C)
 ;;
 ;; See:
 ;; https://ja.wikipedia.org/wiki/%E6%B3%A2%E3%83%80%E3%83%83%E3%82%B7%E3%83%A5
@@ -613,20 +614,23 @@
            ;;
            ;; HACK: 全角空白 (U+3000) を SPACE カテゴリに含めて強調する
            ;;
-           ;; U+00A0: " "
-           ;; U+0020: " "
-           ;; U+3000: "　"
-           ;; U+0009: "	"
-           ;;
            (whitespace-space-regexp . "\\([\u0020\u3000]+\\)")
-           (whitespace-display-mappings . '(;; LF (U+000A) → "↵" DOWNWARDS ARROW WITH CORNER LEFTWARDS (U+21B5)
-                                            (newline-mark ?\u000A [?\u21B5 ?\n])
-                                            ;; IDEOGRAPHIC SPACE (U+3000) → "￩￫" HALFWIDTH LEFTWARDS ARROW (U+FFE9), HALFWIDTH RIGHTWARDS ARROW (U+FFEB)
-                                            (space-mark ?\u3000 [?\uFFE9 ?\uFFEB])
-                                            ;; NO-BREAK SPACE (U+00A0) → "¤" CURRENCY SIGN (U+00A4)
-                                            (space-mark ?\u00A0 [?\u00A4])
-                                            ;; TAB (U+0009) → "»" RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK (U+00BB)
-                                            (tab-mark ?\u0009 [?\u00BB ?\t]))))
+           ;;
+           ;; " "
+           ;; "　"
+           ;; " "
+           ;; "	"
+           ;;
+           (whitespace-display-mappings . '((newline-mark ?\u000A ; LF
+                                                          [?\u00B6 ?\n]) ; "¶" PILCROW SIGN
+                                            (space-mark ?\u3000 ; IDEOGRAPHIC SPACE
+                                                        [?\uFFE9 ; "￩" HALFWIDTH LEFTWARDS ARROW
+                                                         ?\uFFEB]) ; "￫" HALFWIDTH RIGHTWARDS ARROW
+                                            (space-mark ?\u00A0 ; NO-BREAK SPACE
+                                                        [?\u00A4]) ; "¤" CURRENCY SIGN
+                                            (tab-mark ?\u0009 ; TAB
+                                                      [?\u00BB ?\t]) ; "»" RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
+                                            )))
   :init
   (defun my-whitespace-mode-initialize ()
     "Initialize `whitespace' before load."
@@ -1373,7 +1377,7 @@
 ;; Markdown
 ;; ------------------------------------
 ;;
-;; NOTE: `markdown-open' → <C-c C-c o>
+;; NOTE: `markdown-open' → C-c C-c o
 ;;
 (leaf markdown-mode
   :ensure t
@@ -1539,12 +1543,13 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;;
 ;; 文字幅調整テスト
 ;;   0O| ASCII
-;;   Øø| `iso-8859-1'
+;;   ©Ø| `iso-8859-1'
 ;;   αı| `cp850'
 ;;   €€| `cp858'
+;;   ￢| `cp932'
 ;;   ⌐░| 記号
 ;;   ぱ| ひらがな
-;;   バ| カタカナ
+;;   パ| カタカナ
 ;;   漢| 漢字
 ;;   〇| 全角記号
 ;;   　| IDEOGRAPHIC SPACE (U+3000)
@@ -1554,11 +1559,11 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;;
 ;; 関連コマンド
 ;;   文字拡大／縮小モードに入る：
-;;     <C-x C-0>
+;;     C-x C-0
 ;;   カーソルがポイントしている文字の「簡易」情報を表示する：
-;;     <C-x =>
+;;     C-x =
 ;;   カーソルがポイントしている文字の「詳細」情報を表示する：
-;;     <C-u C-x =>
+;;     C-u C-x =
 ;;   定義済フォントセットを表示する：
 ;;     M-x describe-fontset
 ;;   利用可能なフォントのリストを取得する：
@@ -1580,7 +1585,8 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;;     追加文字：
 ;;       ¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ
 ;;     フォント側が考慮していないと判別しにくい文字：
-;;       "Ø" (U+00d8: LATIN CAPITAL LETTER O WITH STROKE)
+;;       "Ø" LATIN CAPITAL LETTER O WITH STROKE (U+00d8)
+;;       "∅" EMPTY SET (U+2205)
 ;;     See:
 ;;       https://en.wikipedia.org/wiki/ISO/IEC_8859-1
 ;;
@@ -1641,12 +1647,8 @@ F is inner function in `agent-shell', ARGS are F arguments."
   ;; ----------------------------------
   (cond
    (;; ユーザーカスタム
-    (and (my-fallback-font-family "Moralerspace Neon HW")
-         (my-fallback-font-family "Migu 1M"))
+    (my-fallback-font-family "Cyroit EH")
     (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.785))
-    (add-to-list 'face-font-rescale-alist '("-Consolas-" . 0.950))
-    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.950))
-    (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.785)))
    (;; macOS プリインストール ONLY
     (and (equal window-system 'mac)
@@ -1674,7 +1676,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
          ;;
          (font-size (if (equal window-system 'w32) 12.0 14.0))
          ;; 基礎フォント
-         (base-font-family (my-fallback-font-family "Moralerspace Neon HW"
+         (base-font-family (my-fallback-font-family "Cyroit EH"
                                                     "Menlo"
                                                     "Consolas"))
          ;; フォントセット生成
@@ -1690,7 +1692,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
     ;;
     (my-set-fontset-font-safe fontset
                               'cp932-2-byte ; `ascii' と `katakana-sjis' は含めない
-                              (font-spec :family (my-fallback-font-family "Moralerspace Neon HW"
+                              (font-spec :family (my-fallback-font-family "Cyroit EH"
                                                                           "Hiragino Sans"
                                                                           "メイリオ"
                                                                           "ＭＳ ゴシック")))
@@ -1698,37 +1700,27 @@ F is inner function in `agent-shell', ARGS are F arguments."
                        japanese-jisx0213-2))
       (my-set-fontset-font-safe fontset
                                 charset
-                                (font-spec :family (my-fallback-font-family "Moralerspace Neon HW"
+                                (font-spec :family (my-fallback-font-family "Cyroit EH"
                                                                             "Hiragino Sans"
                                                                             "メイリオ"
                                                                             "ＭＳ ゴシック"))))
-    (my-set-fontset-font-safe fontset
-                              ;; 濁点＆半濁点文字が識別しやすいフォントがあれば差し替える
-                              ;; 例：「ぱ」「バ」
-                              ;; ひらがな＆カタカナ文字全域に適用する
-                              `(,(string-to-char "ぁ") . ,(string-to-char "ㇿ"))
-                              (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                          "Moralerspace Neon HW"
-                                                                          "Hiragino Sans"
-                                                                          "メイリオ"
-                                                                          "ＭＳ ゴシック")))
-
-    (dolist (code (mapcar #'string-to-char
-                          ;; WAVE DASH (U+301C), FULLWIDTH TILDE (U+FF5E)
-                          (split-string "〜～" "" t)))
+    (dolist (code (mapcar #'string-to-char '("〜" ; WAVE DASH (U+301C)
+                                             "～" ; FULLWIDTH TILDE (U+FF5E)
+                                             )))
       ;;
       ;; HACK: フォントによっては「同字形」の別文字を「別字形」にする
       ;;
       (my-set-fontset-font-safe fontset
                                 (cons code code)
-                                (font-spec :family (my-fallback-font-family "Migu 1M"
+                                (font-spec :family (my-fallback-font-family "Cyroit EH"
                                                                             "ＭＳ ゴシック"))))
     ;;
     ;; ラテン文字（特に記号類）
     ;;
     (my-set-fontset-font-safe fontset
                               'cp858
-                              (font-spec :family (my-fallback-font-family "Menlo"
+                              (font-spec :family (my-fallback-font-family "Cyroit EH"
+                                                                          "Menlo"
                                                                           "Courier New")))
     ;;
     ;; Emoji
