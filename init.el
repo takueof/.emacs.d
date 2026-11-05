@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-11-05T18:36:45+09:00>
+;; Time-stamp: <2026-11-05T18:38:49+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -108,6 +108,8 @@
 ;; 文字 C-h を <backspace> とみなす
 ;; NOTE: v30.1 未満の (keyboard-translate ?\C-h ?\C-?) と同義
 (key-translate "C-h" "<backspace>")
+;; リージョン範囲も削除する
+(keymap-global-set "C-d" #'delete-forward-char)
 ;; ヘルプ表示を割り当てなおす
 (keymap-global-set "C-x ?" #'help-command)
 ;; 1つ前のエラーを表示する
