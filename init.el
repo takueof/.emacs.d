@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-11-05T18:38:49+09:00>
+;; Time-stamp: <2026-11-05T19:10:33+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1541,7 +1541,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
 ;;   0O| ASCII
 ;;   Øø| `iso-8859-1'
 ;;   αı| `cp850'
-;;   €€| `cp858'
+;;   ∅€| `cp858'
 ;;   ⌐░| 記号
 ;;   ぱ| ひらがな
 ;;   バ| カタカナ
@@ -1641,12 +1641,8 @@ F is inner function in `agent-shell', ARGS are F arguments."
   ;; ----------------------------------
   (cond
    (;; ユーザーカスタム
-    (and (my-fallback-font-family "Moralerspace Neon HW")
-         (my-fallback-font-family "Migu 1M"))
+    (my-fallback-font-family "Cyroit EH")
     (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.785))
-    (add-to-list 'face-font-rescale-alist '("-Consolas-" . 0.950))
-    (add-to-list 'face-font-rescale-alist '("-Courier New-" . 0.950))
-    (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.900))
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.785)))
    (;; macOS プリインストール ONLY
     (and (equal window-system 'mac)
@@ -1674,7 +1670,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
          ;;
          (font-size (if (equal window-system 'w32) 12.0 14.0))
          ;; 基礎フォント
-         (base-font-family (my-fallback-font-family "Moralerspace Neon HW"
+         (base-font-family (my-fallback-font-family "Cyroit EH"
                                                     "Menlo"
                                                     "Consolas"))
          ;; フォントセット生成
@@ -1690,7 +1686,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
     ;;
     (my-set-fontset-font-safe fontset
                               'cp932-2-byte ; `ascii' と `katakana-sjis' は含めない
-                              (font-spec :family (my-fallback-font-family "Moralerspace Neon HW"
+                              (font-spec :family (my-fallback-font-family "Cyroit EH"
                                                                           "Hiragino Sans"
                                                                           "メイリオ"
                                                                           "ＭＳ ゴシック")))
@@ -1698,37 +1694,27 @@ F is inner function in `agent-shell', ARGS are F arguments."
                        japanese-jisx0213-2))
       (my-set-fontset-font-safe fontset
                                 charset
-                                (font-spec :family (my-fallback-font-family "Moralerspace Neon HW"
+                                (font-spec :family (my-fallback-font-family "Cyroit EH"
                                                                             "Hiragino Sans"
                                                                             "メイリオ"
                                                                             "ＭＳ ゴシック"))))
-    (my-set-fontset-font-safe fontset
-                              ;; 濁点＆半濁点文字が識別しやすいフォントがあれば差し替える
-                              ;; 例：「ぱ」「バ」
-                              ;; ひらがな＆カタカナ文字全域に適用する
-                              `(,(string-to-char "ぁ") . ,(string-to-char "ㇿ"))
-                              (font-spec :family (my-fallback-font-family "Migu 1M"
-                                                                          "Moralerspace Neon HW"
-                                                                          "Hiragino Sans"
-                                                                          "メイリオ"
-                                                                          "ＭＳ ゴシック")))
-
-    (dolist (code (mapcar #'string-to-char
-                          ;; WAVE DASH (U+301C), FULLWIDTH TILDE (U+FF5E)
-                          (split-string "〜～" "" t)))
+    (dolist (code (mapcar #'string-to-char("〜" ; WAVE DASH (U+301C)
+                                           "～" ; FULLWIDTH TILDE (U+FF5E)
+                                           )))
       ;;
       ;; HACK: フォントによっては「同字形」の別文字を「別字形」にする
       ;;
       (my-set-fontset-font-safe fontset
                                 (cons code code)
-                                (font-spec :family (my-fallback-font-family "Migu 1M"
+                                (font-spec :family (my-fallback-font-family "Cyroit EH"
                                                                             "ＭＳ ゴシック"))))
     ;;
     ;; ラテン文字（特に記号類）
     ;;
     (my-set-fontset-font-safe fontset
                               'cp858
-                              (font-spec :family (my-fallback-font-family "Menlo"
+                              (font-spec :family (my-fallback-font-family "Cyroit EH"
+                                                                          "Menlo"
                                                                           "Courier New")))
     ;;
     ;; Emoji
