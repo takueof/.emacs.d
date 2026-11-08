@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-11-08T20:49:03+09:00>
+;; Time-stamp: <2026-11-09T08:25:38+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1676,7 +1676,7 @@ F is inner function in `agent-shell', ARGS are F arguments."
          ;; NOTE: pt → 浮動小数点型
          ;;       px → 整数型
          ;;
-         (font-size (if (equal window-system 'w32) 12.0 14.0))
+         (font-size (if (equal window-system 'w32) 12.0 16.0))
          ;; 基礎フォント
          (base-font-family (my-fallback-font-family "Cyroit EH"
                                                     "Menlo"
