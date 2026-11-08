@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-11-07T22:09:07+09:00>
+;; Time-stamp: <2026-11-08T20:49:03+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -677,11 +677,13 @@
             (input-method-verbose-flag . nil)
             (tr-ime-font-post-command-p . t)
             (tr-ime-isearch-defsubclassproc-p . t)
+            (w32-ime-buffer-switch-p . nil) ; OS 側 IM の SKK 利用では不要
             (w32-ime-mode-line-state-indicator . "[Aa]")
             (w32-ime-mode-line-state-indicator-list . '("[--]" "[あ]" "[Aa]")))
   :config
   (tr-ime-advanced-install t)
-  (w32-ime-initialize))
+  (w32-ime-initialize)
+  (activate-input-method "W32-IME"))
 
 
 ;; ============================================================================
