@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-11-09T08:25:38+09:00>
+;; Time-stamp: <2026-11-13T07:45:23+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1650,20 +1650,22 @@ F is inner function in `agent-shell', ARGS are F arguments."
   (cond
    (;; ユーザーカスタム
     (my-fallback-font-family "Cyroit EH")
+    (add-to-list 'face-font-rescale-alist '("-Menlo-" . 0.825))
+    (add-to-list 'face-font-rescale-alist '("-Consolas-" . 0.825))
     (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.785))
     (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.785)))
    (;; macOS プリインストール ONLY
     (and (equal window-system 'mac)
          (my-fallback-font-family "Menlo"))
-    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.950))
-    (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.300)))
+    (add-to-list 'face-font-rescale-alist '("-Apple Color Emoji-" . 0.95))
+    (add-to-list 'face-font-rescale-alist '("-Hiragino Sans-" . 1.3)))
    (;; Windows プリインストール ONLY
     (and (equal window-system 'w32)
          (my-fallback-font-family "Consolas"))
-    (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.900))
-    (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.200))
-    (add-to-list 'face-font-rescale-alist '("-メイリオ-" . 1.200))
-    (add-to-list 'face-font-rescale-alist '("-ＭＳ ゴシック-" . 1.200))))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Emoji-" . 0.9))
+    (add-to-list 'face-font-rescale-alist '("-Segoe UI Symbol-" . 1.2))
+    (add-to-list 'face-font-rescale-alist '("-メイリオ-" . 1.2))
+    (add-to-list 'face-font-rescale-alist '("-ＭＳ ゴシック-" . 1.2))))
 
 
   ;; ----------------------------------
@@ -1724,6 +1726,13 @@ F is inner function in `agent-shell', ARGS are F arguments."
                               (font-spec :family (my-fallback-font-family "Cyroit EH"
                                                                           "Menlo"
                                                                           "Courier New")))
+    ;;
+    ;; PATCH: "Cyroit EH" v5.0.0 から "⌐" が抜けている問題を回避する
+    ;;
+    (my-set-fontset-font-safe fontset
+                              (cons #x2310 #x2310) ; "⌐" REVERSED NOT SIGN
+                              (font-spec :family (my-fallback-font-family "Menlo"
+                                                                          "Consolas")))
     ;;
     ;; Emoji
     ;;
