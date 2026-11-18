@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-11-13T07:45:23+09:00>
+;; Time-stamp: <2026-11-18T19:25:44+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -1739,7 +1739,6 @@ F is inner function in `agent-shell', ARGS are F arguments."
     (my-set-fontset-font-safe fontset
                               'emoji
                               (font-spec :family (my-fallback-font-family "Apple Color Emoji"
-                                                                          "Symbola"
                                                                           "Segoe UI Emoji"
                                                                           "Segoe UI Symbol")))
     ;;
