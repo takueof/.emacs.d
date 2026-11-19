@@ -1,7 +1,7 @@
 ;;; init.el --- "GNU Emacs" main config file -*- mode: Emacs-Lisp; coding: utf-8-unix; lexical-binding: t; -*-
 
 ;; Copyright (C) 2013-2026 Taku WATABE
-;; Time-stamp: <2026-11-18T19:25:44+09:00>
+;; Time-stamp: <2026-11-20T05:18:46+09:00>
 
 ;; Author: Taku WATABE <taku.eof@gmail.com>
 
@@ -616,20 +616,19 @@
            ;;
            (whitespace-space-regexp . "\\([\u0020\u3000]+\\)")
            ;;
-           ;; " "
-           ;; "　"
-           ;; " "
-           ;; "	"
+           ;; U+0020: " "
+           ;; U+3000: "　"
+           ;; U+00A4: " "
+           ;; U+0009: "	"
            ;;
            (whitespace-display-mappings . '((newline-mark ?\u000A ; LF
                                                           [?\u00B6 ?\n]) ; "¶" PILCROW SIGN
                                             (space-mark ?\u3000 ; IDEOGRAPHIC SPACE
-                                                        [?\uFFE9 ; "￩" HALFWIDTH LEFTWARDS ARROW
-                                                         ?\uFFEB]) ; "￫" HALFWIDTH RIGHTWARDS ARROW
+                                                        [?\uFF3F]) ; "＿" FULLWIDTH LOW LINE
                                             (space-mark ?\u00A0 ; NO-BREAK SPACE
                                                         [?\u00A4]) ; "¤" CURRENCY SIGN
                                             (tab-mark ?\u0009 ; TAB
-                                                      [?\u00BB ?\t]) ; "»" RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
+                                                      [?\u00BB ?\u0009]) ; "»" RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK
                                             )))
   :init
   (defun my-whitespace-mode-initialize ()
